@@ -30,7 +30,7 @@ $sql = "SELECT students.admission_no moe, students.first_name name, students.gen
         . "\n"
         . "FROM (((((((\n"
         . "students\n"
-        . "LEFT JOIN student_categories on students.student_category_id) \n "
+        . "LEFT JOIN student_categories on students.student_category_id = student_categories.id ) \n "
         . "INNER JOIN batches ON students.batch_id = batches.id) \n"
         . "	INNER JOIN courses ON batches.course_id = courses.id)     \n"
         . "	INNER JOIN exam_groups ON students.batch_id = exam_groups.batch_id)\n"
