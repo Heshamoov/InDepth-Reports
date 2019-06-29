@@ -16,7 +16,7 @@ $category = $_REQUEST["category"];
 //            " INNER JOIN students ON marks.moe = students.admission_no " .
 //            " WHERE $terms $grades $batches $gender $subjects";
 
-if ($years == "" and $terms == "" and $grades == "" and $batches == "" and $gender == "" and $category == "" and  $subjects == "") {
+if ($years == "" and $terms == "" and $grades == "" and $batches == "" and $gender == "" and $category == "" and $subjects == "") {
 
     $sql = "SELECT students.admission_no moe, students.first_name name, students.gender gender, batches.name batch_name, courses.course_name grade,exam_groups.name exam_name, exam_scores.marks marks,subjects.name subject_name\n"
             . "\n"
@@ -57,16 +57,28 @@ if ($years == "" and $terms == "" and $grades == "" and $batches == "" and $gend
 $result = $conn->query($sql);
 $rownumber = 1;
 if ($result->num_rows > 0) {
-    echo "<thead><tr id =out class= w3-custom  ><th>SI No.</th><th>Name</th>" .
+    echo "<thead><tr id =out class= w3-custom  ><th>SI No.</th><th>MOE</th>" .
+    "<th>Name</th>" .
+    "<th>Gender</th>" .
     "<th>Exam Group</th>" .
     "<th>Grade</th><th>Section</th>" .
     "<th>Subject</th><th>Score</th></tr></thead><tbody>";
 
-    while ($row = $result->fetch_assoc())
+
+    while ($row = $result->fetch_assoc()) {
+
         echo "<tr><td>" . $rownumber++ . "</td><td>" . $row["moe"] .
-        "</td><td>" . $row["exam_name"] . "</td><td>" . $row["grade"] .
+        "</td><td>" . $row["name"] . "</td><td>";
+
+        if ($row["gender"] == 'f') {
+            $row["gender"] = "F";
+        } else {
+            $row["gender"] = "M";
+        }
+        echo $row["gender"] . "</td><td>" . $row["exam_name"] . "</td><td>" . $row["grade"] .
         "</td><td>" . $row["batch_name"] . "</td><td>" . $row["subject_name"] .
         "</td><td>" . $row["marks"] . "</td></tr>";
+    }
     echo "</tbody>";
 } else
     echo "Data Not Found, try to import it to DB";
