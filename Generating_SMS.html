@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Generating SMS</title>
+        <link rel = "stylesheet" type = "text/css" href = "css/style.css">
+        <link rel="stylesheet" href="css/www.w3schools.com_w3css_4_w3.css">
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <link href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+        <style>
+            td, tr {
+                border: solid 2px;
+                width: fit-content; 
+            }
+        </style>
+        <script>
+            $(function () {
+                $("#student").click(function () {
+                    var xmlhttpD = new XMLHttpRequest();
+                    xmlhttpD.onreadystatechange = function () {
+                        if (this.readyState === 4) {
+                            document.getElementById("t1").innerHTML = this.responseText;
+                        }
+                    };
+                    xmlhttpD.open("POST", "sqldb/StudentCard.php", true);
+                    xmlhttpD.send();
+                });
+            });
+        </script>
+        <script>
+            $(function () {
+                $("#parent").click(function () {
+                    var xmlhttpD = new XMLHttpRequest();
+                    xmlhttpD.onreadystatechange = function () {
+                        if (this.readyState === 4) {
+                            document.getElementById("output").innerHTML = this.responseText;
+                        }
+                    };
+                    xmlhttpD.open("POST", "sqldb/parent_sms.php", true);
+                    xmlhttpD.send();
+                });
+            });
+        </script>
+    </head>
+    <body>
+        <input class="w3-button w3-blue" style="width: 45%;" type="button" value="Student's SMS" id="student"/>
+        <input class="w3-button w3-blue" style="width: 45%;" type="button" value="Parent's SMS" id="parent"/>
+        <br>
+        <br>
+        <!--<textarea id="output" cols="100" rows="100" style="font-size: 18px" ></textarea>-->
+
+        <div id="output" style="background-color: whitesmoke; width: 40%; font-size: 8px; margin-top: 2rem" >
+            <table id="t1" style="border: solid 2px;" >
+                <tr style="border: none;">
+                    <td style="margin-left: 0px;">Hello</td>
+                </tr>
+            </table>
+        </div>
+    </body>
+
+</html>
