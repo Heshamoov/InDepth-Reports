@@ -13,6 +13,7 @@ $category = $_REQUEST["category"];
 
 
 $sql = "SELECT "
+        . "T2.academic academic, "
         . "T2.s2_name s2_name, "
         . "T1.exams exams, "
         . "T1.batch batch, "
@@ -35,7 +36,7 @@ $sql = "SELECT "
         . "FROM "
         . "( "
         . " SELECT "
-        . "    COUNT(*) Total, "
+        . "    COUNT(*) Total, academic_years.name academic, "
         . "     subjects.name s2_name, "
         . "     courses.course_name grade, "
         . "     exam_groups.name exams "
@@ -67,7 +68,7 @@ if ($terms == "" and $grades == "" and $years == "" and $batches == "" and $gend
 
 
     $sql = $sql . " GROUP BY "
-            . "     courses.course_name, ";
+            . "     courses.course_name, academic_years.name,";
 } else {
     $sql = $sql . "WHERE  $terms $grades $years $batches $gender $category $subjects"
             . "GROUP BY courses.course_name, ";
@@ -357,16 +358,18 @@ $sql = $sql . "     exam_groups.name, "
 $result = $conn->query($sql);
 $rownumber = 1;
 if ($result->num_rows > 0) {
-    echo "<thead><tr id =out class= w3-custom  ><th>Grade</th>"
+    echo "<thead><tr id =out class= w3-custom  ><th>Academic</th>"
+    . "<th>Grade</th>"
     . "<th>Exam</th>"
     . "<th>Subject</th>"
-    . "<th>Total Students Attended</th>"
-    . "<th>Students Scored Above Scale</th>"
+    . "<th>Total  Attended</th>"
+    . "<th>Scored Above Scale</th>"
     . "<th>Average</th>"
     . "<th>Status<th></tr></thead><tbody>";
 
     while ($row = $result->fetch_assoc()) {
-        echo "<tr><td>" . $row["grade"] . "</td>"
+        echo "<tr><td>" . $row["academic"] . "</td>"
+        . "<td>" . $row["grade"] . "</td>"
         . "<td>" . $row["exams"] . "</td>"
         . "<td>" . $row["s2_name"] . "</td>"
         . "<td>" . $row["Total"] . "</td>";
