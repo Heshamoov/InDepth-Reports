@@ -25,6 +25,7 @@ $sql = "SELECT "
         . "T6.Count more_than_50, "
         . "T7.Count equal_to_60, "
         . "T8.Count equal_to_50, "
+        . "T9.Count below_50, "        
         . "T2.Total Total, "
         . "ROUND(((T1.Count * 100) / T2.Total),2) AVG_M75, "
         . "ROUND(((T3.Count * 100) / T2.Total),2) AVG_M65, "
@@ -32,7 +33,8 @@ $sql = "SELECT "
         . "ROUND(((T5.Count * 100) / T2.Total),2) AVG_M70, "
         . "ROUND(((T6.Count * 100) / T2.Total),2) AVG_M50, "
         . "ROUND(((T7.Count * 100) / T2.Total),2) AVG_E60, "
-        . "ROUND(((T8.Count * 100) / T2.Total),2) AVG_E50 "
+        . "ROUND(((T8.Count * 100) / T2.Total),2) AVG_E50, "
+        . "ROUND(((T9.Count * 100) / T2.Total),2) AVG_B50 "
         . "FROM "
         . "( "
         . " SELECT "
@@ -350,7 +352,48 @@ $sql = $sql . "     exam_groups.name, "
         . "      subjects.name "
         . ") AS T8 "
         . "ON "
-        . " T2.s2_name = T8.s8_name AND T2.grade = T8.grade AND T2.exams = T8.exams; ";
+        . " T2.s2_name = T8.s8_name AND T2.grade = T8.grade AND T2.exams = T8.exams"
+        . " "
+        . "LEFT JOIN( "
+        . "   SELECT "
+        . "       COUNT(*) COUNT, "
+        . "      exam_groups.name exams, "
+        . "      subjects.name s9_name, "
+        . "      courses.course_name grade, "
+        . "     batches.name batch "
+        . "  FROM "
+        . "     ( "
+        . "         ( "
+        . "            ( "
+        . "                 ( "
+        . "                    ( "
+        . "                        ((( "
+        . "                            students "
+        . "LEFT JOIN student_categories on students.student_category_id = student_categories.id )  "
+        . "                         INNER JOIN batches ON students.batch_id = batches.id "
+        . "                         ) "
+        . "                         LEFT JOIN academic_years ON academic_years.id = batches.academic_year_id "
+        . "                         ) "
+        . "                    INNER JOIN courses ON batches.course_id = courses.id "
+        . "                    ) "
+        . "                INNER JOIN exam_groups ON students.batch_id = exam_groups.batch_id "
+        . "                ) "
+        . "            INNER JOIN exams ON exam_groups.id = exams.exam_group_id "
+        . "           ) "
+        . "       INNER JOIN exam_scores ON students.id = exam_scores.student_id AND exam_scores.exam_id = exams.id "
+        . "        ) "
+        . "   INNER JOIN subjects ON exams.subject_id = subjects.id "
+        . "     ) "
+        . "  WHERE "
+        . "     exam_scores.marks < 50 "
+        . " GROUP BY "
+        . "     courses.course_name, "
+        . "      exam_groups.name, "
+        . "      subjects.name "
+        . ") AS T9 "
+        . "ON "
+        . " T2.s2_name = T9.s9_name AND T2.grade = T9.grade AND T2.exams = T9.exams; ";
+
 
 
 
@@ -410,8 +453,8 @@ if ($result->num_rows > 0) {
             echo "<td>" . $row["AVG_E50"] . "</td>";
             echo "<td>Acceptible</td>";
         } else {
-            echo "<td>" . $row["equal_to_50"] . "</td>";
-            echo "<td>" . $row["AVG_E50"] . "</td>";
+            echo "<td>" . $row["below_50"] . "</td>";
+            echo "<td>" . $row["AVG_B50"] . "</td>";
             echo "<td>Failed</td>";
         }
 
