@@ -6,7 +6,7 @@
 
 <!--loder initialization-->
 <script>
-  $(window).load(function () {
+    $(window).load(function () {
         // Animate loader off screen
         $(".se-pre-con").fadeOut("slow");
         ;
@@ -22,10 +22,10 @@
         $('#grade').multiselect({includeSelectAllOption: true});
         $('#batch').multiselect({includeSelectAllOption: true});
         $('#subject').multiselect({includeSelectAllOption: true});
-        $('#gender').multiselect({includeSelectAllOption: true});     
+        $('#gender').multiselect({includeSelectAllOption: true});
         $('#category').multiselect({includeSelectAllOption: true});
 
-        
+
 
         $(document).on("ready click", function () {
 
@@ -38,7 +38,7 @@
             var selected_batches = $("#batch option:selected");
             var selected_subjects = $("#subject option:selected");
             var selected_gender = $("#gender option:selected");
-             var selected_category = $("#category option:selected");
+            var selected_category = $("#category option:selected");
 
 
             //Terms
@@ -84,7 +84,7 @@
                 selected_grades = "";
 
 
- //Academic Years                
+            //Academic Years                
             var message = "";
             var academicHeader = "";
             selected_years.each(function () {
@@ -108,33 +108,33 @@
                 selected_years = message + ")";
             else
                 selected_years = "";
-            
-             //Category               
-                var message = "";
-                var categoryHeader = "";
-                selected_category.each(function () {
-                    var currentCategory = $(this).text();
-                    if (currentCategory.indexOf("(") !== -1) {
-                        var bracketIndex = currentCategory.indexOf("(");
-                        currentCategory = currentCategory.slice(0, bracketIndex);
-                    }
-                    if (message === "") {
-                        if (selected_category !== "")
-                            message = "  (student_categories.name = '" + currentCategory + "' ";
-                        else
-                            message = " AND (student_categories.name = '" + currentCategory + "'";
-                        categoryHeader = " - " + currentCategory;
-                    } else {
-                        message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                        categoryHeader += " , " + currentCategory;
-                    }
-                });
-                if (message !== "")
-                    selected_category = message + ")";
-                else
-                    selected_category = "";
 
-            
+            //Category               
+            var message = "";
+            var categoryHeader = "";
+            selected_category.each(function () {
+                var currentCategory = $(this).text();
+                if (currentCategory.indexOf("(") !== -1) {
+                    var bracketIndex = currentCategory.indexOf("(");
+                    currentCategory = currentCategory.slice(0, bracketIndex);
+                }
+                if (message === "") {
+                    if (selected_category !== "")
+                        message = "  (student_categories.name = '" + currentCategory + "' ";
+                    else
+                        message = " AND (student_categories.name = '" + currentCategory + "'";
+                    categoryHeader = " - " + currentCategory;
+                } else {
+                    message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                    categoryHeader += " , " + currentCategory;
+                }
+            });
+            if (message !== "")
+                selected_category = message + ")";
+            else
+                selected_category = "";
+
+
 
             //Batches
             var message = "";
@@ -250,7 +250,7 @@
                         table2.rows[2].cells[1].innerHTML = this.responseText;
                     }
                 };
-                httpTotal.open("POST", "sqldb/subjectCount.php?terms=" + selected_terms  + "&years=" + selected_years +   "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + currentSubject + "&gender=" + selected_gender + "&category=" + selected_category, false);
+                httpTotal.open("POST", "sqldb/subjectCount.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + currentSubject + "&gender=" + selected_gender + "&category=" + selected_category, false);
                 httpTotal.send();
 
 
@@ -270,7 +270,7 @@
 
                         }
                     };
-                    httpBetween.open("POST", "sqldb/subjectBetween.php?terms=" + selected_terms + "&years=" +  selected_years  + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + currentSubject + "&gender=" + selected_gender+ "&category=" + selected_category + "&min=" + min + "&max=" + max, false);
+                    httpBetween.open("POST", "sqldb/subjectBetween.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + currentSubject + "&gender=" + selected_gender + "&category=" + selected_category + "&min=" + min + "&max=" + max, false);
                     httpBetween.send();
                 }
             });
@@ -288,7 +288,7 @@
                 if (this.readyState === 4)
                     document.getElementById("out").innerHTML = this.responseText;
             };
-            xmlhttp.open("POST", "sqldb/statisticsSearch.php?terms=" + selected_terms + "&years=" +  selected_years  +"&grades=" + selected_grades +  "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" + selected_gender + "&category=" + selected_category, false);
+            xmlhttp.open("POST", "sqldb/statisticsSearch.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" + selected_gender + "&category=" + selected_category, false);
             xmlhttp.send();
 
             //Total Count
@@ -301,7 +301,7 @@
                     drawChart();
                 }
             };
-            xmlhttp.open("POST", "sqldb/count.php?terms=" + selected_terms + "&years=" +  selected_years  + "&grades=" +  selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" + selected_gender + "&category=" + selected_category , false);
+            xmlhttp.open("POST", "sqldb/count.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" + selected_gender + "&category=" + selected_category, false);
             xmlhttp.send();
 
             //Statistics Min-Max
@@ -320,7 +320,7 @@
                         drawChart();
                     }
                 };
-                xmlhttpm1.open("POST", "sqldb/between.php?terms=" + selected_terms + "&years=" + selected_years  + "&grades=" +  selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" +  selected_gender + "&category=" + selected_category + "&min=" + min + "&max=" + max, false);
+                xmlhttpm1.open("POST", "sqldb/between.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" + selected_gender + "&category=" + selected_category + "&min=" + min + "&max=" + max, false);
                 xmlhttpm1.send();
             }
         });
@@ -422,7 +422,7 @@
 
 </script>
 
-<body>
+<body onload="fillSections()">
 
     <div class="se-pre-con"></div>
 
@@ -444,8 +444,8 @@
             <table id= "table1">
 
                 <tr>
-                    <td></td><td>Academic Year</td><td>Term</td>
-                    <td>Grade</td>  <td>Section</td>  <td>Subject</td><td>Gender</td><td>Category</td><td></td>
+                    <td></td><td>Academic Year</td><td>Grade</td>
+                    <td>Section</td>  <td>Subject</td>  <td>Term</td><td>Gender</td><td>Category</td><td></td>
                 </tr>
                 <tr>
                     <td>
@@ -455,17 +455,17 @@
                         <select   id="academic_year"   multiple="multiple"></select>   
                     </td>
                     <td>
-                        <select   id="term"   multiple="multiple"></select>   
+                        <select   id="grade"  multiple="multiple"  ></select>   
                     </td>
                     <td >
 
-                        <select  id ="grade" multiple="multiple"  ></select>  
+                        <select onload="fillSections()" id ="batch" multiple="multiple"  ></select>  
                     </td>
                     <td>
-                        <select id="batch"  multiple="multiple"></select>
+                        <select id="subject"  multiple="multiple"></select>
                     </td>
                     <td>
-                        <select id="subject" multiple="multiple"></select>         
+                        <select id="term" multiple="multiple"></select>         
                     </td>
                     <td>
                         <select id="gender"  multiple="multiple"> 
@@ -880,35 +880,35 @@
         ;
     </script>
 
-Initialize Academic Years->     
-<script type="text/javascript">
-    var yearArray = ["Your Data Base is Empty!."];
+    Initialize Academic Years->     
+    <script type="text/javascript">
+        var yearArray = ["Your Data Base is Empty!."];
 
-    var httpyear = new XMLHttpRequest();
-    httpyear.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            var str = this.responseText;
-            yearArray = str.split("\t");
+        var httpyear = new XMLHttpRequest();
+        httpyear.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                var str = this.responseText;
+                yearArray = str.split("\t");
+            }
+        };
+        httpyear.open("GET", "sqldb/initAcademicYears.php", false);
+        httpyear.send();
+
+        var select = document.getElementById('academic_year');
+        delete yearArray[yearArray.length - 1];
+        for (var i in yearArray) {
+            select.add(new Option(yearArray[i]));
         }
-    };
-    httpyear.open("GET", "sqldb/initAcademicYears.php", false);
-    httpyear.send();
-
-    var select = document.getElementById('academic_year');
-    delete yearArray[yearArray.length - 1];
-    for (var i in yearArray) {
-        select.add(new Option(yearArray[i]));
-    }
-    ;
-    $(function () {
-        $('#academic_year').multiselect({
-            includeSelectAllOption: true
+        ;
+        $(function () {
+            $('#academic_year').multiselect({
+                includeSelectAllOption: true
+            });
         });
-    });
 
-</script><!--
-
-         
+    </script><!--
+    
+             
     <!--Term drop down  AND Tables initializer-->  
     <script type="text/javascript">
         for (var i = 1; i < 13; i++)
@@ -970,7 +970,7 @@ Initialize Academic Years->
         });
     </script>
 
-    <!--Initialize Batch drop down-->     
+    Initialize Batch drop down     
     <script type="text/javascript">
         var batchesArray = ["Your Data Base is Empty!."];
 
@@ -997,6 +997,44 @@ Initialize Academic Years->
             });
         });
     </script>
+
+<!--Sections VIA Grades 
+<script type="text/javascript">
+    function fillSections() { 
+        var grade = document.getElementById("grade").options[document.getElementById("grade").selectedIndex].text;
+        if (grade !== 'Select Grade') {
+
+            var select = document.getElementById('batch');
+            while (select.length > 0)
+                select.remove(0);
+
+            var httpSections = new XMLHttpRequest();
+            httpSections.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                    sectionsArray = str.split("\?");
+                }
+            };                    
+
+            httpSections.open("GET", "sqldb/distinctBatches.php?grade=" + grade, false);
+            httpSections.send();
+
+            $('batch').multiselect('destroy');
+            delete sectionsArray[sectionsArray.length - 1];
+            for (var i in sectionsArray) {
+                select.add(new Option(sectionsArray[i]));
+            }
+            ;
+            $(function () {
+                $('#batch').multiselect({
+                    includeSelectAllOption: true
+                });
+            });
+        }
+    }
+    ;
+</script>-->
+
 
     <!--Initialize Subject drop down-->     
     <script type="text/javascript">
@@ -1025,34 +1063,34 @@ Initialize Academic Years->
             });
         });
     </script>
-    
-    <!--Initialize Student Category drop down for table 2-->     
-<script type="text/javascript">
-    var categoryArray = ["Your Data Base is Empty!."];
 
-    var httpcategory = new XMLHttpRequest();
-    httpcategory.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            var str = this.responseText;
-            categoryArray = str.split("\t");
+    <!--Initialize Student Category -->     
+    <script type="text/javascript">
+        var categoryArray = ["Your Data Base is Empty!."];
+
+        var httpcategory = new XMLHttpRequest();
+        httpcategory.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                var str = this.responseText;
+                categoryArray = str.split("\t");
+            }
+        };
+        httpcategory.open("GET", "sqldb/distinctStudentCategory.php", false);
+        httpcategory.send();
+
+        var select = document.getElementById('category');
+        delete categoryArray[categoryArray.length - 1];
+        for (var i in categoryArray) {
+            select.add(new Option(categoryArray[i]));
         }
-    };
-    httpcategory.open("GET", "sqldb/distinctStudentCategory.php", false);
-    httpcategory.send();
-
-    var select = document.getElementById('category');
-    delete categoryArray[categoryArray.length - 1];
-    for (var i in categoryArray) {
-        select.add(new Option(categoryArray[i]));
-    }
-    ;
-    $(function () {
-        $('#category').multiselect({
-            includeSelectAllOption: true
+        ;
+        $(function () {
+            $('#category').multiselect({
+                includeSelectAllOption: true
+            });
         });
-    });
 
-</script>
+    </script>
 
     <!--Batches via Grades-->
     <!--<script type="text/javascript">

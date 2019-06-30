@@ -682,7 +682,7 @@ function fetchTerms(table) {
 </script>
 
 
-<!--Sections VIA Grades for table 1-->
+<!--Sections VIA Grades -->
 <script type="text/javascript">
     function fillSections1() {
         var grade = document.getElementById("T1-GR").options[document.getElementById("T1-GR").selectedIndex].text;
