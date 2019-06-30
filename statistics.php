@@ -39,25 +39,32 @@
             var selected_subjects = $("#subject option:selected");
             var selected_gender = $("#gender option:selected");
             var selected_category = $("#category option:selected");
-
-
-            //Terms
+            
+            
+                   //Academic Years                
             var message = "";
-            var termHeader = "";
-            selected_terms.each(function () {
+            var academicHeader = "";
+            selected_years.each(function () {
+                var currentYear = $(this).text();
+                if (currentYear.indexOf("(") !== -1) {
+                    var bracketIndex = currentYear.indexOf("(");
+                    currentYear = currentYear.slice(0, bracketIndex);
+                }
                 if (message === "") {
-                    message = " (exam_groups.name = '" + $(this).text() + "'";
-                    termHeader = $(this).text();
+                        message = "   (academic_years.name = '" + currentYear + "' ";
+                   
+                    academicHeader = " - " + currentYear;
                 } else {
-                    message += " OR exam_groups.name = '" + $(this).text() + "'";
-                    termHeader += " , " + $(this).text();
+                    message += " OR academic_years.name = '" + currentYear + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                    academicHeader += " , " + currentYear;
                 }
             });
             if (message !== "")
-                selected_terms = message + ")";
+                selected_years = message + ")";
             else
-                selected_terms = "";
-
+                selected_years = "";
+            
+            
             //Grades                
             var message = "";
             var gradeHeader = "";
@@ -68,7 +75,7 @@
                     currentGrade = currentGrade.slice(0, bracketIndex);
                 }
                 if (message === "") {
-                    if (selected_terms !== "")
+                    if (selected_years !== "")
                         message = " AND (courses.course_name = '" + currentGrade + "' ";
                     else
                         message = " (courses.course_name = '" + currentGrade + "'";
@@ -82,60 +89,8 @@
                 selected_grades = message + ")";
             else
                 selected_grades = "";
-
-
-            //Academic Years                
-            var message = "";
-            var academicHeader = "";
-            selected_years.each(function () {
-                var currentYear = $(this).text();
-                if (currentYear.indexOf("(") !== -1) {
-                    var bracketIndex = currentYear.indexOf("(");
-                    currentYear = currentYear.slice(0, bracketIndex);
-                }
-                if (message === "") {
-                    if (selected_years !== "")
-                        message = "  (academic_years.name = '" + currentYear + "' ";
-                    else
-                        message = " AND (academic_years.name = '" + currentYear + "'";
-                    academicHeader = " - " + currentYear;
-                } else {
-                    message += " OR academic_years.name = '" + currentYear + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                    academicHeader += " , " + currentYear;
-                }
-            });
-            if (message !== "")
-                selected_years = message + ")";
-            else
-                selected_years = "";
-
-            //Category               
-            var message = "";
-            var categoryHeader = "";
-            selected_category.each(function () {
-                var currentCategory = $(this).text();
-                if (currentCategory.indexOf("(") !== -1) {
-                    var bracketIndex = currentCategory.indexOf("(");
-                    currentCategory = currentCategory.slice(0, bracketIndex);
-                }
-                if (message === "") {
-                    if (selected_category !== "")
-                        message = "  (student_categories.name = '" + currentCategory + "' ";
-                    else
-                        message = " AND (student_categories.name = '" + currentCategory + "'";
-                    categoryHeader = " - " + currentCategory;
-                } else {
-                    message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                    categoryHeader += " , " + currentCategory;
-                }
-            });
-            if (message !== "")
-                selected_category = message + ")";
-            else
-                selected_category = "";
-
-
-
+            
+            
             //Batches
             var message = "";
             var batchHeader = "";
@@ -155,6 +110,29 @@
                 selected_batches = message + ")";
             else
                 selected_batches = "";
+
+
+            //Terms
+            var message = "";
+            var termHeader = "";
+            selected_terms.each(function () {
+                if (message === "") {
+                    if(selected_batches !== "")
+                    message = " AND (exam_groups.name = '" + $(this).text() + "'";
+                    else 
+                         message = "   (exam_groups.name = '" + $(this).text() + "'";
+
+                    termHeader = $(this).text();
+                } else {
+                    message += " OR exam_groups.name = '" + $(this).text() + "'";
+                    termHeader += " , " + $(this).text();
+                }
+            });
+            if (message !== "")
+                selected_terms = message + ")";
+            else
+                selected_terms = "";
+
 
             //Gender
             var message = "";
@@ -183,6 +161,36 @@
             else
                 selected_gender = "";
 
+     
+            //Category               
+            var message = "";
+            var categoryHeader = "";
+            selected_category.each(function () {
+                var currentCategory = $(this).text();
+                if (currentCategory.indexOf("(") !== -1) {
+                    var bracketIndex = currentCategory.indexOf("(");
+                    currentCategory = currentCategory.slice(0, bracketIndex);
+                }
+                if (message === "") {
+                    if (selected_gender !== "")
+                        message = "  AND (student_categories.name = '" + currentCategory + "' ";
+                    else
+                        message = "  (student_categories.name = '" + currentCategory + "'";
+                    categoryHeader = " - " + currentCategory;
+                } else {
+                    message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                    categoryHeader += " , " + currentCategory;
+                }
+            });
+            if (message !== "")
+                selected_category = message + ")";
+            else
+                selected_category = "";
+
+
+
+          
+
             //Generate Tables
             for (var i = 1; i < 13; i++)
             {
@@ -210,7 +218,7 @@
                 tableNumber++;
                 if (message === "") {
                     if (selected_terms !== "" || selected_grades !== "" || selected_batches !== "" || selected_gender !== "" || selected_years !== "" || selected_category !== "")
-                        message = " AND (subjects.name  LIKE '" + currentSubject + "%' ";  //Add '%' to the end of the subject name: WHERE subject LIKE 'Math%' 
+                        message = "  AND (subjects.name  LIKE '" + currentSubject + "%' ";  //Add '%' to the end of the subject name: WHERE subject LIKE 'Math%' 
                     else
                         message = "  (subjects.name LIKE '" + currentSubject + "%' ";
                     subjectHeader = " - " + currentSubject;
@@ -218,6 +226,7 @@
                     message += "OR subjects.name  LIKE '" + currentSubject + "%' ";
                     subjectHeader += " , " + currentSubject;
                 }
+             
 
 
                 tableName = "T" + tableNumber;
@@ -250,7 +259,7 @@
                         table2.rows[2].cells[1].innerHTML = this.responseText;
                     }
                 };
-                httpTotal.open("POST", "sqldb/subjectCount.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + currentSubject + "&gender=" + selected_gender + "&category=" + selected_category, false);
+                httpTotal.open("POST", "sqldb/subjectCount.php?years=" +  selected_years  + "&grades=" + selected_grades +  "&batches=" + selected_batches +"&terms=" + selected_terms + "&gender=" + selected_gender   + "&category=" + selected_category + "&subject=" + currentSubject , false);
                 httpTotal.send();
 
 
@@ -270,12 +279,13 @@
 
                         }
                     };
-                    httpBetween.open("POST", "sqldb/subjectBetween.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + currentSubject + "&gender=" + selected_gender + "&category=" + selected_category + "&min=" + min + "&max=" + max, false);
+                    httpBetween.open("POST", "sqldb/subjectBetween.php?years=" +  selected_years  + "&grades=" + selected_grades +  "&batches=" + selected_batches +"&terms=" + selected_terms + "&gender=" + selected_gender   + "&category=" + selected_category + "&subject=" + currentSubject +  "&min=" + min + "&max=" + max, false);
                     httpBetween.send();
                 }
             });
 
-            if (message !== "")
+               
+                if (message !== "")
                 selected_subjects = message + ")";
             else
                 selected_subjects = "";
@@ -288,7 +298,7 @@
                 if (this.readyState === 4)
                     document.getElementById("out").innerHTML = this.responseText;
             };
-            xmlhttp.open("POST", "sqldb/statisticsSearch.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" + selected_gender + "&category=" + selected_category, false);
+            xmlhttp.open("POST", "sqldb/statisticsSearch.php?years=" +  selected_years  + "&grades=" + selected_grades +  "&batches=" + selected_batches +"&terms=" + selected_terms + "&gender=" + selected_gender   + "&category=" + selected_category + "&subject=" + selected_subjects, false);
             xmlhttp.send();
 
             //Total Count
@@ -301,7 +311,7 @@
                     drawChart();
                 }
             };
-            xmlhttp.open("POST", "sqldb/count.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" + selected_gender + "&category=" + selected_category, false);
+            xmlhttp.open("POST", "sqldb/count.php?years=" +  selected_years  + "&grades=" + selected_grades +  "&batches=" + selected_batches +"&terms=" + selected_terms + "&gender=" + selected_gender   + "&category=" + selected_category  + "&subject=" + selected_subjects, false);
             xmlhttp.send();
 
             //Statistics Min-Max
@@ -320,7 +330,7 @@
                         drawChart();
                     }
                 };
-                xmlhttpm1.open("POST", "sqldb/between.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" + selected_gender + "&category=" + selected_category + "&min=" + min + "&max=" + max, false);
+                xmlhttpm1.open("POST", "sqldb/between.php?years=" +  selected_years  + "&grades=" + selected_grades +  "&batches=" + selected_batches +"&terms=" + selected_terms + "&gender=" + selected_gender   + "&category=" + selected_category + "&subject=" + selected_subjects + "&min=" + min + "&max=" + max, false);
                 xmlhttpm1.send();
             }
         });
@@ -422,7 +432,7 @@
 
 </script>
 
-<body onload="fillSections()">
+<body  onload="fillSections();">
 
     <div class="se-pre-con"></div>
 
@@ -455,11 +465,11 @@
                         <select   id="academic_year"   multiple="multiple"></select>   
                     </td>
                     <td>
-                        <select   id="grade"  multiple="multiple"  ></select>   
+                        <select     id="grade" multiple="multiple"   ></select>   
                     </td>
                     <td >
 
-                        <select onload="fillSections()" id ="batch" multiple="multiple"  ></select>  
+                        <select  id ="batch" multiple="multiple"  ></select>  
                     </td>
                     <td>
                         <select id="subject"  multiple="multiple"></select>
@@ -970,7 +980,8 @@
         });
     </script>
 
-    Initialize Batch drop down     
+    
+    <!--Initialize Batch drop down-->     
     <script type="text/javascript">
         var batchesArray = ["Your Data Base is Empty!."];
 
@@ -998,42 +1009,41 @@
         });
     </script>
 
-<!--Sections VIA Grades 
-<script type="text/javascript">
-    function fillSections() { 
-        var grade = document.getElementById("grade").options[document.getElementById("grade").selectedIndex].text;
-        if (grade !== 'Select Grade') {
-
-            var select = document.getElementById('batch');
-            while (select.length > 0)
-                select.remove(0);
-
-            var httpSections = new XMLHttpRequest();
-            httpSections.onreadystatechange = function () {
-                if (this.readyState === 4) {
-                    var str = this.responseText;
-                    sectionsArray = str.split("\?");
+    <!--Sections VIA Grades 
+    <script type="text/javascript">
+        function fillSections() { 
+            var grade = document.getElementById("grade").options[document.getElementById("grade").selectedIndex].text;
+            if (grade !== 'Select Grade') {
+    
+                var select = document.getElementById('batch');
+                while (select.length > 0)
+                    select.remove(0); 
+    
+                var httpSections = new XMLHttpRequest();
+                httpSections.onreadystatechange = function () {
+                    if (this.readyState === 4) {
+                        var str = this.responseText;
+                        sectionsArray = str.split("\?");
+                    }
+                };                    
+                httpSections.open("GET", "sqldb/distinctBatches.php?grade=" + grade, false);
+                httpSections.send();
+    
+    //            $('batch').multiselect('destroy');
+                delete sectionsArray[sectionsArray.length - 1];
+                for (var i in sectionsArray) {
+                    select.add(new Option(sectionsArray[i]));
                 }
-            };                    
-
-            httpSections.open("GET", "sqldb/distinctBatches.php?grade=" + grade, false);
-            httpSections.send();
-
-            $('batch').multiselect('destroy');
-            delete sectionsArray[sectionsArray.length - 1];
-            for (var i in sectionsArray) {
-                select.add(new Option(sectionsArray[i]));
-            }
-            ;
-            $(function () {
-                $('#batch').multiselect({
-                    includeSelectAllOption: true
+                ;
+                $(function () {
+                    $('#batch').multiselect({
+                        includeSelectAllOption: true
+                    });
                 });
-            });
+            }
         }
-    }
-    ;
-</script>-->
+        ;
+    </script>-->
 
 
     <!--Initialize Subject drop down-->     
