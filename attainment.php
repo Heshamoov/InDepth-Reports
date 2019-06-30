@@ -40,26 +40,9 @@
             var selected_category = $("#category option:selected");
 	    var selected_gender = $("#gender option:selected");
 
+      
 
-
-            //Terms
-            var message = "";
-            var termHeader = "";
-            selected_terms.each(function () {
-                if (message === "") {
-                    message = " (exam_groups.name = '" + $(this).text() + "'";
-                    termHeader = $(this).text();
-                } else {
-                    message += " OR exam_groups.name = '" + $(this).text() + "'";
-                    termHeader += " , " + $(this).text();
-                }
-            });
-            if (message !== "")
-                selected_terms = message + ")";
-            else
-                selected_terms = "";
-
-      //Academic Years                
+                   //Academic Years                
             var message = "";
             var academicHeader = "";
             selected_years.each(function () {
@@ -69,10 +52,8 @@
                     currentYear = currentYear.slice(0, bracketIndex);
                 }
                 if (message === "") {
-                    if (selected_years !== "")
-                        message = "  (academic_years.name = '" + currentYear + "' ";
-                    else
-                        message = " AND (academic_years.name = '" + currentYear + "'";
+                        message = "   (academic_years.name = '" + currentYear + "' ";
+                   
                     academicHeader = " - " + currentYear;
                 } else {
                     message += " OR academic_years.name = '" + currentYear + "'";  //  grade like 'GR1' OR grade like 'GR10';
@@ -84,33 +65,7 @@
             else
                 selected_years = "";
             
-         
-             //Category               
-                var message = "";
-                var categoryHeader = "";
-                selected_category.each(function () {
-                    var currentCategory = $(this).text();
-                    if (currentCategory.indexOf("(") !== -1) {
-                        var bracketIndex = currentCategory.indexOf("(");
-                        currentCategory = currentCategory.slice(0, bracketIndex);
-                    }
-                    if (message === "") {
-                        if (selected_category !== "")
-                            message = "  (student_categories.name = '" + currentCategory + "' ";
-                        else
-                            message = " AND (student_categories.name = '" + currentCategory + "'";
-                        categoryHeader = " - " + currentCategory;
-                    } else {
-                        message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                        categoryHeader += " , " + currentCategory;
-                    }
-                });
-                if (message !== "")
-                    selected_category = message + ")";
-                else
-                    selected_category = "";
-
-
+            
             //Grades                
             var message = "";
             var gradeHeader = "";
@@ -121,7 +76,7 @@
                     currentGrade = currentGrade.slice(0, bracketIndex);
                 }
                 if (message === "") {
-                    if (selected_terms !== "")
+                    if (selected_years !== "")
                         message = " AND (courses.course_name = '" + currentGrade + "' ";
                     else
                         message = " (courses.course_name = '" + currentGrade + "'";
@@ -135,8 +90,8 @@
                 selected_grades = message + ")";
             else
                 selected_grades = "";
-
-
+            
+            
             //Batches
             var message = "";
             var batchHeader = "";
@@ -156,6 +111,29 @@
                 selected_batches = message + ")";
             else
                 selected_batches = "";
+
+
+            //Terms
+            var message = "";
+            var termHeader = "";
+            selected_terms.each(function () {
+                if (message === "") {
+                    if(selected_batches !== "")
+                    message = " AND (exam_groups.name = '" + $(this).text() + "'";
+                    else 
+                         message = "   (exam_groups.name = '" + $(this).text() + "'";
+
+                    termHeader = $(this).text();
+                } else {
+                    message += " OR exam_groups.name = '" + $(this).text() + "'";
+                    termHeader += " , " + $(this).text();
+                }
+            });
+            if (message !== "")
+                selected_terms = message + ")";
+            else
+                selected_terms = "";
+
 
             //Gender
             var message = "";
@@ -183,6 +161,35 @@
                 selected_gender = message + ")";
             else
                 selected_gender = "";
+
+     
+            //Category               
+            var message = "";
+            var categoryHeader = "";
+            selected_category.each(function () {
+                var currentCategory = $(this).text();
+                if (currentCategory.indexOf("(") !== -1) {
+                    var bracketIndex = currentCategory.indexOf("(");
+                    currentCategory = currentCategory.slice(0, bracketIndex);
+                }
+                if (message === "") {
+                    if (selected_gender !== "")
+                        message = "  AND (student_categories.name = '" + currentCategory + "' ";
+                    else
+                        message = "  (student_categories.name = '" + currentCategory + "'";
+                    categoryHeader = " - " + currentCategory;
+                } else {
+                    message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                    categoryHeader += " , " + currentCategory;
+                }
+            });
+            if (message !== "")
+                selected_category = message + ")";
+            else
+                selected_category = "";
+
+
+
 
             //Generate Tables
             for (var i = 1; i < 13; i++)
@@ -302,7 +309,7 @@
                     drawChart();
                 }
             };
-            xmlhttp.open("POST", "sqldb/count.php?terms=" + selected_terms +  "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" + selected_gender +  "&category=" + selected_category, false);
+            xmlhttp.open("POST", "sqldb/count.php?terms=" + selected_terms +  "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + selected_subjects + "&gender=" + selected_gender +  "&category=" + selected_category, false);
             xmlhttp.send();
 
             //Statistics Min-Max
@@ -321,7 +328,7 @@
                         drawChart();
                     }
                 };
-                xmlhttpm1.open("POST", "sqldb/between.php?terms=" + selected_terms +  "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" + selected_gender +  "&category=" + selected_category + "&min=" + min + "&max=" + max, false);
+                xmlhttpm1.open("POST", "sqldb/between.php?terms=" + selected_terms +  "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + selected_subjects + "&gender=" + selected_gender +  "&category=" + selected_category + "&min=" + min + "&max=" + max, false);
                 xmlhttpm1.send();
             }
         });
