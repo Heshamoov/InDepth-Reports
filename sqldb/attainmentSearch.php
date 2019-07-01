@@ -72,7 +72,7 @@ if ($terms == "" and $grades == "" and $years == "" and $batches == "" and $gend
     $sql = $sql . " GROUP BY "
             . "     courses.course_name, academic_years.name,";
 } else {
-    $sql = $sql . "WHERE  $terms $grades $years $batches $gender $category $subjects"
+    $sql = $sql . "WHERE $years $grades  $batches $terms    $gender $category $subjects"
             . "GROUP BY courses.course_name, ";
 }
 
