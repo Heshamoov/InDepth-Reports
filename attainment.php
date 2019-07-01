@@ -97,7 +97,7 @@
             var batchHeader = "";
             selected_batches.each(function () {
                 if (message === "") {
-                    if (selected_grades !== "")
+                    if (selected_grades !== "" || selected_years !== "")
                         message = " AND (batches.name = '" + $(this).text() + "' ";
                     else
                         message = " (batches.name = '" + $(this).text() + "' ";
@@ -118,7 +118,7 @@
             var termHeader = "";
             selected_terms.each(function () {
                 if (message === "") {
-                    if(selected_batches !== "")
+                    if(selected_batches !== "" || selected_grades !== "" || selected_years !== "")
                     message = " AND (exam_groups.name = '" + $(this).text() + "'";
                     else 
                          message = "   (exam_groups.name = '" + $(this).text() + "'";
@@ -147,7 +147,7 @@
                     DB_Gender = 'f';
 
                 if (message === "") {
-                    if (selected_terms !== "" || selected_grades !== "" || selected_batches !== "")
+                    if (selected_terms !== "" || selected_grades !== "" || selected_batches !== "" ||  selected_years !== "")
                         message = " AND (gender = '" + DB_Gender + "' ";
                     else
                         message = " (gender = '" + DB_Gender + "' ";
@@ -173,7 +173,7 @@
                     currentCategory = currentCategory.slice(0, bracketIndex);
                 }
                 if (message === "") {
-                    if (selected_gender !== "")
+                    if (selected_gender !== "" || selected_terms !== "" || selected_grades !== "" || selected_batches !== "" ||  selected_years !== "")
                         message = "  AND (student_categories.name = '" + currentCategory + "' ";
                     else
                         message = "  (student_categories.name = '" + currentCategory + "'";

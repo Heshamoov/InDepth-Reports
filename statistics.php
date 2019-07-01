@@ -4,7 +4,7 @@
 
 </head>
 
-<!--loder initialization-->
+<!--loader initialization-->
 <script>
     $(window).load(function () {
         // Animate loader off screen
@@ -12,6 +12,12 @@
         ;
     });
 </script>
+
+
+
+
+
+
 
 <script type="text/javascript">
 
@@ -39,9 +45,9 @@
             var selected_subjects = $("#subject option:selected");
             var selected_gender = $("#gender option:selected");
             var selected_category = $("#category option:selected");
-            
-            
-                   //Academic Years                
+
+
+            //Academic Years                
             var message = "";
             var academicHeader = "";
             selected_years.each(function () {
@@ -51,8 +57,8 @@
                     currentYear = currentYear.slice(0, bracketIndex);
                 }
                 if (message === "") {
-                        message = "   (academic_years.name = '" + currentYear + "' ";
-                   
+                    message = "   (academic_years.name = '" + currentYear + "' ";
+
                     academicHeader = " - " + currentYear;
                 } else {
                     message += " OR academic_years.name = '" + currentYear + "'";  //  grade like 'GR1' OR grade like 'GR10';
@@ -63,8 +69,8 @@
                 selected_years = message + ")";
             else
                 selected_years = "";
-            
-            
+
+
             //Grades                
             var message = "";
             var gradeHeader = "";
@@ -89,14 +95,14 @@
                 selected_grades = message + ")";
             else
                 selected_grades = "";
-            
-            
+
+
             //Batches
             var message = "";
             var batchHeader = "";
             selected_batches.each(function () {
                 if (message === "") {
-                    if (selected_grades !== "")
+                    if (selected_grades !== "" || selected_years !== "")
                         message = " AND (batches.name = '" + $(this).text() + "' ";
                     else
                         message = " (batches.name = '" + $(this).text() + "' ";
@@ -117,10 +123,10 @@
             var termHeader = "";
             selected_terms.each(function () {
                 if (message === "") {
-                    if(selected_batches !== "")
-                    message = " AND (exam_groups.name = '" + $(this).text() + "'";
-                    else 
-                         message = "   (exam_groups.name = '" + $(this).text() + "'";
+                    if (selected_batches !== "" || selected_grades !== "" || selected_years !== "")
+                        message = " AND (exam_groups.name = '" + $(this).text() + "'";
+                    else
+                        message = "   (exam_groups.name = '" + $(this).text() + "'";
 
                     termHeader = $(this).text();
                 } else {
@@ -146,7 +152,7 @@
                     DB_Gender = 'f';
 
                 if (message === "") {
-                    if (selected_terms !== "" || selected_grades !== "" || selected_batches !== "")
+                    if (selected_terms !== "" || selected_grades !== "" || selected_batches !== "" || selected_years !== "")
                         message = " AND (gender = '" + DB_Gender + "' ";
                     else
                         message = " (gender = '" + DB_Gender + "' ";
@@ -161,7 +167,7 @@
             else
                 selected_gender = "";
 
-     
+
             //Category               
             var message = "";
             var categoryHeader = "";
@@ -172,7 +178,7 @@
                     currentCategory = currentCategory.slice(0, bracketIndex);
                 }
                 if (message === "") {
-                    if (selected_gender !== "")
+                    if (selected_gender !== "" || selected_terms !== "" || selected_grades !== "" || selected_batches !== "" || selected_years !== "")
                         message = "  AND (student_categories.name = '" + currentCategory + "' ";
                     else
                         message = "  (student_categories.name = '" + currentCategory + "'";
@@ -189,7 +195,7 @@
 
 
 
-          
+
 
             //Generate Tables
             for (var i = 1; i < 13; i++)
@@ -226,7 +232,7 @@
                     message += "OR subjects.name  LIKE '" + currentSubject + "%' ";
                     subjectHeader += " , " + currentSubject;
                 }
-             
+
 
 
                 tableName = "T" + tableNumber;
@@ -259,7 +265,7 @@
                         table2.rows[2].cells[1].innerHTML = this.responseText;
                     }
                 };
-                httpTotal.open("POST", "sqldb/subjectCount.php?years=" +  selected_years  + "&grades=" + selected_grades +  "&batches=" + selected_batches +"&terms=" + selected_terms + "&gender=" + selected_gender   + "&category=" + selected_category + "&subject=" + currentSubject , false);
+                httpTotal.open("POST", "sqldb/subjectCount.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject, false);
                 httpTotal.send();
 
 
@@ -279,13 +285,13 @@
 
                         }
                     };
-                    httpBetween.open("POST", "sqldb/subjectBetween.php?years=" +  selected_years  + "&grades=" + selected_grades +  "&batches=" + selected_batches +"&terms=" + selected_terms + "&gender=" + selected_gender   + "&category=" + selected_category + "&subject=" + currentSubject +  "&min=" + min + "&max=" + max, false);
+                    httpBetween.open("POST", "sqldb/subjectBetween.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject + "&min=" + min + "&max=" + max, false);
                     httpBetween.send();
                 }
             });
 
-               
-                if (message !== "")
+
+            if (message !== "")
                 selected_subjects = message + ")";
             else
                 selected_subjects = "";
@@ -298,7 +304,7 @@
                 if (this.readyState === 4)
                     document.getElementById("out").innerHTML = this.responseText;
             };
-            xmlhttp.open("POST", "sqldb/statisticsSearch.php?years=" +  selected_years  + "&grades=" + selected_grades +  "&batches=" + selected_batches +"&terms=" + selected_terms + "&gender=" + selected_gender   + "&category=" + selected_category + "&subject=" + selected_subjects, false);
+            xmlhttp.open("POST", "sqldb/statisticsSearch.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects, false);
             xmlhttp.send();
 
             //Total Count
@@ -311,7 +317,7 @@
                     drawChart();
                 }
             };
-            xmlhttp.open("POST", "sqldb/count.php?years=" +  selected_years  + "&grades=" + selected_grades +  "&batches=" + selected_batches +"&terms=" + selected_terms + "&gender=" + selected_gender   + "&category=" + selected_category  + "&subject=" + selected_subjects, false);
+            xmlhttp.open("POST", "sqldb/count.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects, false);
             xmlhttp.send();
 
             //Statistics Min-Max
@@ -330,9 +336,11 @@
                         drawChart();
                     }
                 };
-                xmlhttpm1.open("POST", "sqldb/between.php?years=" +  selected_years  + "&grades=" + selected_grades +  "&batches=" + selected_batches +"&terms=" + selected_terms + "&gender=" + selected_gender   + "&category=" + selected_category + "&subject=" + selected_subjects + "&min=" + min + "&max=" + max, false);
+                xmlhttpm1.open("POST", "sqldb/between.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects + "&min=" + min + "&max=" + max, false);
                 xmlhttpm1.send();
             }
+            
+            fillSections();
         });
     });
 
@@ -432,7 +440,7 @@
 
 </script>
 
-<body  onload="fillSections();">
+<body onload="fillSections()">
 
     <div class="se-pre-con"></div>
 
@@ -890,7 +898,7 @@
         ;
     </script>
 
-    Initialize Academic Years->     
+    <!--Initialize Academic Years->-->     
     <script type="text/javascript">
         var yearArray = ["Your Data Base is Empty!."];
 
@@ -916,7 +924,8 @@
             });
         });
 
-    </script><!--
+    </script>
+    <!--
     
              
     <!--Term drop down  AND Tables initializer-->  
@@ -951,36 +960,86 @@
         });
     </script>
 
-
+    <!--
+        Initialize Grade drop down     
+        <script type="text/javascript">
+            var gradesArray = ["Your Data Base is Empty!."];
+    
+            var httpgrades = new XMLHttpRequest();
+            httpgrades.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                    gradesArray = str.split("\t");
+                }
+            };
+            httpgrades.open("GET", "sqldb/initGrades.php", false);
+            httpgrades.send();
+    
+            var select = document.getElementById('grade');
+            delete gradesArray[gradesArray.length - 1];
+            for (var i in gradesArray) {
+                select.add(new Option(gradesArray[i]));
+            }
+            ;
+    
+            $(function () {
+                $('#grade').multiselect({
+                    includeSelectAllOption: true
+                });
+            });
+        </script>-->
+    
     <!--Initialize Grade drop down-->     
     <script type="text/javascript">
-        var gradesArray = ["Your Data Base is Empty!."];
+        
+//     function fillSections() {
+       
+            var selected_years = $("#academic_year option:selected");
 
-        var httpgrades = new XMLHttpRequest();
-        httpgrades.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var str = this.responseText;
-                gradesArray = str.split("\t");
-            }
-        };
-        httpgrades.open("GET", "sqldb/initGrades.php", false);
-        httpgrades.send();
-
-        var select = document.getElementById('grade');
-        delete gradesArray[gradesArray.length - 1];
-        for (var i in gradesArray) {
-            select.add(new Option(gradesArray[i]));
-        }
-        ;
-
-        $(function () {
-            $('#grade').multiselect({
-                includeSelectAllOption: true
+            var message = "";
+            selected_years.each(function () {
+                if (message === "") {
+                    message = "   (academic_years.name = '" + $(this).text() + "'";
+                } else {
+                    message += " OR academic_years.name = '" + $(this).text() + "'";
+                }
             });
-        });
+
+            if (message !== "")
+                selected_years = message + ")";
+            else
+                selected_years = "";
+
+            var httpgrades = new XMLHttpRequest();
+            httpgrades.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                     gradesArray = str.split("\t");
+                }
+            };
+            httpgrades.open("GET", "sqldb/distinctGrades.php?years=" + selected_years, false);
+            httpgrades.send();
+
+            var select = document.getElementById('grade');
+             while (select.length > 0)
+                select.remove(0);
+            delete gradesArray[gradesArray.length - 1];
+            for (var i in gradesArray) {
+                select.add(new Option(gradesArray[i]));
+//                document.write(gradeArray[i]);
+
+            }
+            ;
+
+            $(function () {
+                $('#grade').multiselect({
+                    includeSelectAllOption: true
+                });
+            });
+//            };
+
     </script>
 
-    
     <!--Initialize Batch drop down-->     
     <script type="text/javascript">
         var batchesArray = ["Your Data Base is Empty!."];
@@ -1008,42 +1067,6 @@
             });
         });
     </script>
-
-    <!--Sections VIA Grades 
-    <script type="text/javascript">
-        function fillSections() { 
-            var grade = document.getElementById("grade").options[document.getElementById("grade").selectedIndex].text;
-            if (grade !== 'Select Grade') {
-    
-                var select = document.getElementById('batch');
-                while (select.length > 0)
-                    select.remove(0); 
-    
-                var httpSections = new XMLHttpRequest();
-                httpSections.onreadystatechange = function () {
-                    if (this.readyState === 4) {
-                        var str = this.responseText;
-                        sectionsArray = str.split("\?");
-                    }
-                };                    
-                httpSections.open("GET", "sqldb/distinctBatches.php?grade=" + grade, false);
-                httpSections.send();
-    
-    //            $('batch').multiselect('destroy');
-                delete sectionsArray[sectionsArray.length - 1];
-                for (var i in sectionsArray) {
-                    select.add(new Option(sectionsArray[i]));
-                }
-                ;
-                $(function () {
-                    $('#batch').multiselect({
-                        includeSelectAllOption: true
-                    });
-                });
-            }
-        }
-        ;
-    </script>-->
 
 
     <!--Initialize Subject drop down-->     
@@ -1102,181 +1125,8 @@
 
     </script>
 
-    <!--Batches via Grades-->
-    <!--<script type="text/javascript">
-    document.getElementById("grade").onchange = function() {fetchBatches();};
-    function fetchBatches() {
-            output.value = "";
-            var str ="";
-            var fillBatch = document.getElementById('batch'); var fillSubject = document.getElementById('subject');
-            var selectedGrades = $("#grade option:selected");
-            var distinctArray = []; var distinctIndex = 0;  var gradesBatches = [];      
-            var distinctArraySubject = []; var distinctIndexSubject = 0;  var gradesSubjects = [];      
-            while (fillBatch.length > 0)
-                    fillBatch.remove(0);
-            while (fillSubject.length > 0)
-                    fillSubject.remove(0);
-            
-            selectedGrades.each(function() {
-                    var currentGrade = $(this).text().slice(0,4);
-                    if (currentGrade.indexOf(" ") === 3)
-                            currentGrade = currentGrade.slice(0,3);
-                    var httpbatches = new XMLHttpRequest();
-                    httpbatches.onreadystatechange = function() {
-                            if (this.readyState === 4) {
-                                    str = this.responseText;  output.value += str + "\n";
-                                    var strArray = str.split(" ");
-                                    var lastindex = strArray.length - 1;      delete strArray[lastindex];
-                                    for (var i in strArray) {
-    output.value += "distinctArray[" + distinctIndex + "] = " + distinctArray[distinctIndex] + "= strArray[" + i + "] = " + strArray[i] + "\n";
-                                            distinctArray[distinctIndex] = strArray[i];
-                                            gradesBatches[distinctIndex] = currentGrade;
-                                            distinctIndex++;
-                                    }
-                            }
-                    };
-                    httpbatches.open("GET", "sqldb/distinctBatches.php?grade=" + currentGrade, false);
-                    httpbatches.send();
-             });
-             var duplicated = false;
-             $('#batch').multiselect('destroy');
-             var length = distinctArray.length;
-             for ( var i = 0; i < length; i++) {  output.value += "inside first for " + length + "\n";
-                    var transferGrade = " (" + gradesBatches[i];
-                    for (var j = i+1; j < length; j++) { 
-                            output.value += "inside second for\n";
-                            output.value += "distinctArray[" + i + "] = " + distinctArray[i] + " = distinctArray[" + j + "] = " + distinctArray[j] + "\n";
-                            if ( distinctArray[i] === distinctArray[j]) {
-                                    transferGrade += " - " + gradesBatches[j];
-                                    var start = j+1;
-                                    for (start ; start < length; start++) {
-                                        distinctArray[start - 1] = distinctArray[start];
-                                        gradesBatches[start -1] = gradesBatches[start];
-                                    }
-                                    delete distinctArray[start];        delete gradesBatches[start];
-                                    length--;                                duplicated = true;                      j--;                
-                            }
-                    }
-                    if (duplicated) {
-                            fillBatch.add(new Option (distinctArray[i] + " " + transferGrade + ")"));
-                            duplicated = false;
-                      } else 
-                               fillBatch.add(new Option (distinctArray[i] + " " + transferGrade + ")"));
-            }
-             $('#batch').multiselect('rebuild');
-             output.value += "\n Subject \n";
-             
-             
-    // Fetch & Fill Subjects
-            selectedGrades.each(function() {
-                    var currentGrade = $(this).text().slice(0,4);
-                    var httpSubjects = new XMLHttpRequest();
-                    httpSubjects.onreadystatechange = function() {
-                            if (this.readyState === 4) {
-                                    str = this.responseText;  output.value += str + "\n";
-                                    var strArray = str.split("?");
-                                    var lastindex = strArray.length - 1;      delete strArray[lastindex];
-                                    for (var i in strArray) {
-    output.value += "distinctArray[" + distinctIndexSubject + "] = " + distinctArraySubject[distinctIndexSubject] + "= strArray[" + i + "] = " + strArray[i] + "\n";
-                                            distinctArraySubject[distinctIndexSubject] = strArray[i];
-                                            gradesSubjects[distinctIndexSubject] = currentGrade;
-                                            distinctIndexSubject++;
-                                    }
-                            }
-                    };
-                    httpSubjects.open("GET", "sqldb/distinctSubjects.php?grade=" + currentGrade, false);
-                    httpSubjects.send();
-             });
-             var duplicated = false;
-             $('#subject').multiselect('destroy');
-             var length = distinctArraySubject.length;
-             for ( var i = 0; i < length; i++) {  output.value += "inside first for " + length + "\n";
-                    var transferGrade = " (" + gradesSubjects[i];
-                    for (var j = i+1; j < length; j++) { 
-                            output.value += "inside second for\n";
-                            output.value += "distinctArray[" + i + "] = " + distinctArraySubject[i] + " = distinctArray[" + j + "] = " + distinctArraySubject[j] + "\n";
-                            if ( distinctArraySubject[i] === distinctArraySubject[j]) {
-                                    output.value += "Equal => ";
-                                    transferGrade += " - " + gradesSubjects[j];
-                                    output.value += transferGrade + "\n";
-                                    var start = j+1;
-                                    for (start ; start < length; start++) {
-                                        distinctArraySubject[start - 1] = distinctArraySubject[start];
-                                        gradesSubjects[start -1] = gradesSubjects[start];
-                                    }
-                                    delete distinctArraySubject[start];        delete gradesSubjects[start];
-                                    length--;                                duplicated = true;                      j--;                
-                            }
-                    }
-                    if (duplicated) {
-                            fillSubject.add(new Option (distinctArraySubject[i] + " " + transferGrade + ")"));
-                            duplicated = false;
-                      } else 
-                               fillSubject.add(new Option (distinctArraySubject[i] + " " + transferGrade + ")"));
-            }
-             $('#subject').multiselect('rebuild');
-    };
-    </script>-->
 
-    <!--Grades via Terms-->
-   <!-- <script type="text/javascript">
-   document.getElementById("term").onchange = function() {fetchGrades();};
-   function fetchGrades() {
-           var str =""; var fillGrades = document.getElementById('grade');               
-           var selectedTerms = $("#term option:selected");
-           var distinctArray = []; var distinctIndex = 0;  var termsGrades = [];      
-           while (fillGrades.length > 0)
-                   fillGrades.remove(0);
-           
-           selectedTerms.each(function() {
-                   var currentTerm = $(this).text();
-                   var httpGrades = new XMLHttpRequest();
-                   httpGrades.onreadystatechange = function() {
-                           if (this.readyState === 4) {
-                                   str = this.responseText;  output.value += str + "\n";
-                                   var strArray = str.split(" ");
-                                   var lastindex = strArray.length - 1;      delete strArray[lastindex];
-                                   for (var i in strArray) {
-   output.value += "distinctArray[" + distinctIndex + "] = " + distinctArray[distinctIndex] + "= strArray[" + i + "] = " + strArray[i] + "\n";
-                                           distinctArray[distinctIndex] = strArray[i];
-                                           termsGrades[distinctIndex] = currentTerm;
-                                           distinctIndex++;
-                                   }
-                           }
-                   };
-                   httpGrades.open("GET", "sqldb/distinctGrades.php?term=" + currentTerm, false);
-                   httpGrades.send();
-            });
-            var duplicated = false;
-            $('#grade').multiselect('destroy');
-            var length = distinctArray.length;
-            for ( var i = 0; i < length; i++) {  output.value += "inside first for " + length + "\n";
-                   var transferTerm = " (" + termsGrades[i];
-                   for (var j = i+1; j < length; j++) { 
-                           output.value += "inside second for\n";
-                           output.value += "distinctArray[" + i + "] = " + distinctArray[i] + " = distinctArray[" + j + "] = " + distinctArray[j] + "\n";
-                           if ( distinctArray[i] === distinctArray[j]) {
-                                   transferTerm += " - " + termsGrades[j];
-                                   var start = j+1;
-                                   for (start ; start < length; start++) {
-                                       distinctArray[start - 1] = distinctArray[start];
-                                       termsGrades[start -1] = termsGrades[start];
-                                   }
-                                   delete distinctArray[start];        delete termsGrades[start];
-                                   length--;                                duplicated = true;                      j--;                
-                           }
-                   }
-                   if (duplicated) {
-                           fillGrades.add(new Option (distinctArray[i] + " " + transferTerm + ")"));
-                           duplicated = false;
-                     } else 
-                              fillGrades.add(new Option (distinctArray[i] + " " + transferTerm + ")"));
-           }
-            $('#grade').multiselect('rebuild');
-   };
-   </script>
-   
-   
+
     --><script>
         function downloadStudents() {
 
