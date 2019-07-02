@@ -479,7 +479,7 @@
                         <select  id ="batch"  onchange="fillSubjects()"  multiple="multiple"  ></select>  
                     </td>
                     <td>
-                        <select id="subject"  multiple="multiple"></select>
+                        <select id="subject" onchange="fillTerms()"   multiple="multiple"></select>
                     </td>
                     <td>
                         <select id="term" multiple="multiple"></select>         
@@ -1175,40 +1175,139 @@
     </script>
     
     
+    <!--
+    Initialize Term drop down     --> 
+<script type="text/javascript">
     
-    
-    
+        document.getElementById("subject").addEventListener("change", fillTerms());
 
-<!--    Initialize Subject drop down     
-    <script type="text/javascript">
-        var subjectsArray = ["Your Data Base is Empty!."];
 
-        var httpSubjects = new XMLHttpRequest();
-        httpSubjects.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var str = this.responseText;
-                subjectsArray = str.split("\t");
-            }
-        };
-        httpSubjects.open("GET", "sqldb/initSubjects.php", false);
-        httpSubjects.send();
+        function fillTerms() {
 
-        var select = document.getElementById('subject');
+            var selected_years = $("#academic_year option:selected");
+            var selected_grades = $("#grade option:selected");
+            var selected_batches = $("#batch option:selected");
+            var selected_subjects = $("#subject option:selected");
 
-        delete subjectsArray[subjectsArray.length - 1];
-        for (var i in subjectsArray) {
-            select.add(new Option(subjectsArray[i]));
-        }
-        ;
 
-        $(function () {
-            $('#subject').multiselect({
-                includeSelectAllOption: true
+            var select = document.getElementById('term');
+
+            while (select.length > 0)
+                select.remove(0);
+
+            var message = "";
+            selected_years.each(function () {
+                if (message === "") {
+
+                    message = "   (academic_years.name = '" + $(this).text() + "'";
+                } else {
+                    message += " OR academic_years.name = '" + $(this).text() + "'";
+                }
             });
-        });
-    </script>-->
 
-    <!--Term drop down  AND Tables initializer-->  
+            if (message !== "") {
+
+                selected_years = message + ")";
+            } else
+                selected_years = "";
+            
+                
+            var message = "";
+            selected_grades.each(function () {
+                if (message === "") {
+                    if (selected_years !== "")
+                        message = " AND (courses.course_name = '" + $(this).text() + "' ";
+                    else
+                        message = " (courses.course_name = '" + $(this).text() + "' ";
+                } else {
+                    message += " OR courses.course_name = '" + $(this).text() + "' ";
+                }
+            });
+
+            if (message !== "") {
+
+                selected_grades = message + ")";
+            } else
+                selected_grades = "";
+            
+            
+              var message = "";
+            selected_batches.each(function () {
+                if (message === "") {
+                    if (selected_years !== "" || selected_grades !== "")
+                        message = " AND (batches.name = '" + $(this).text() + "' ";
+                    else
+                        message = " (batches.name = '" + $(this).text() + "' ";
+                } else {
+                    message += " OR batches.name = '" + $(this).text() + "' ";
+                }
+            });
+
+            if (message !== "") {
+
+                selected_batches = message + ")";
+            } else
+                selected_batches = "";
+            
+            
+                 var message = "";
+            selected_subjects.each(function () {
+                if (message === "") {
+                    if (selected_years !== "" || selected_grades !== "" || selected_batches !== "")
+                        message = " AND (subjects.name = '" + $(this).text() + "' ";
+                    else
+                        message = " (subjects.name = '" + $(this).text() + "' ";
+                } else {
+                    message += " OR subjects.name = '" + $(this).text() + "' ";
+                }
+            });
+
+            if (message !== "") {
+
+                selected_subjects = message + ")";
+            } else
+                selected_subjects = "";
+
+
+            
+        
+        
+        var httpTerms = new XMLHttpRequest();
+            httpTerms.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                    termsArray = str.split("\t");
+                }
+            };
+            
+            httpTerms.open("GET", "sqldb/_TermsViaYearGradeSectionSubject.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects, false);
+            httpTerms.send();
+            $('#term').multiselect('destroy');
+
+            delete termsArray[termsArray.length - 1];
+            for (var i in termsArray) {
+                select.add(new Option(termsArray[i]));
+//                 document.write(termsArray[i]);
+            }
+            ;
+
+
+            $(function () {
+                $('#term').multiselect({
+                    includeSelectAllOption: true
+                });
+            });
+        }
+
+    </script>
+    
+    
+    
+    
+
+
+
+<!--    Term drop down  AND Tables initializer  
     <script type="text/javascript">
         for (var i = 1; i < 13; i++)
         {
@@ -1238,7 +1337,7 @@
                 includeSelectAllOption: true
             });
         });
-    </script>
+    </script>-->
 
 
     <!--Initialize Student Category -->     
