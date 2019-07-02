@@ -1,7 +1,11 @@
 <?php include('Header.php'); ?>
 
 <title>attainment</title>
-
+<style> 
+    .selector select  {
+  background: red;
+}
+    </style>
 </head>
 
 <!--loder initialization-->
@@ -54,7 +58,7 @@
                 if (message === "") {
                         message = "   (academic_years.name = '" + currentYear + "' ";
                    
-                    academicHeader = " - " + currentYear;
+                    academicHeader = "  " + currentYear;
                 } else {
                     message += " OR academic_years.name = '" + currentYear + "'";  //  grade like 'GR1' OR grade like 'GR10';
                     academicHeader += " , " + currentYear;
@@ -288,7 +292,7 @@
             else
                 selected_subjects = "";
 
-            stable.rows[0].cells[0].innerHTML = "Statistics: " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
+            stable.rows[0].cells[0].innerHTML = academicHeader + " " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
             stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;
 
             var xmlhttp = new XMLHttpRequest();
@@ -457,7 +461,7 @@
                 </tr>
                 <tr>
                  <td>
-                        <select id="academic_year" onchange="fillGrades()"  multiple="multiple"></select>
+                        <select id="academic_year"  onchange="fillGrades()"  multiple="multiple"></select>
                     </td>
                     <td>
                         <select   id="grade"  onchange="fillBatches()"  multiple="multiple"></select>   
@@ -467,7 +471,7 @@
                         <select  id ="batch"  onchange="fillSubjects()" multiple="multiple"  ></select>  
                     </td>
                     <td>
-                        <select id="subject" onchange="fillTerms()"   multiple="multiple"></select>
+                        <select id="subject"    onchange="fillTerms()"   multiple="multiple"></select>
                     </td>
                     <td>
                         <select id="term" multiple="multiple"></select>         

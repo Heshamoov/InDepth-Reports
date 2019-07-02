@@ -401,12 +401,12 @@ $sql = $sql . "     exam_groups.name, "
 $result = $conn->query($sql);
 $rownumber = 1;
 if ($result->num_rows > 0) {
-    echo "<thead><tr id =out class= w3-custom  ><th>Academic</th>"
+    echo "<thead><tr id =out class= w3-custom  ><th>Year</th>"
     . "<th>Grade</th>"
-    . "<th>Exam</th>"
+    . "<th>Term</th>"
     . "<th>Subject</th>"
-    . "<th>Total  Attended</th>"
-    . "<th>Scored Above Scale</th>"
+    . "<th>Attended</th>"
+    . "<th>Qualified</th>"
     . "<th>Average</th>"
     . "<th>Status<th></tr></thead><tbody>";
 
@@ -419,15 +419,15 @@ if ($result->num_rows > 0) {
         if ($row["AVG_M75"] >= 75) {
             echo "<td>" . $row["more_than_75"] . "</td>";
             echo "<td>" . $row["AVG_M75"] . "</td>";
-            echo "<td> Outstanding</td>";
+            echo "<td style= 'background:green; color:white' > Outstanding</td>";
         } else if ($row["AVG_M75"] >= 60) {
             echo "<td>" . $row["more_than_75"] . "</td>";
             echo "<td>" . $row["AVG_M75"] . "</td>";
-            echo "<td> Very Good</td>";
+            echo "<td style= 'background:orange; color:white' > Very Good</td>";
         } else if ($row["AVG_M65"] >= 50) {
             echo "<td>" . $row["more_than_65"] . "</td>";
             echo "<td>" . $row["AVG_M65"] . "</td>";
-            echo "<td>Good</td>";
+            echo "<td style= 'background:yellow; color:black'>Good</td>";
         } else if ($row["AVG_E65"] >= 75) {
             echo "<td>" . $row["equal_to_65"] . "</td>";
             echo "<td>" . $row["AVG_E65"] . "</td>";
@@ -435,7 +435,7 @@ if ($result->num_rows > 0) {
         } else if ($row["AVG_M75"] >= 75) {
             echo "<td>" . $row["more_than_75"] . "</td>";
             echo "<td>" . $row["AVG_M75"] . "</td>";
-            echo "<td>Outstanding</td>";
+            echo "<td style= 'background:green; color:white' >Outstanding</td>";
         } else if ($row["AVG_M70"] >= 60) {
             echo "<td>" . $row["more_than_70"] . "</td>";
             echo "<td>" . $row["AVG_M70"] . "</td>";
@@ -443,11 +443,11 @@ if ($result->num_rows > 0) {
         } else if ($row["AVG_M50"] >= 50) {
             echo "<td>" . $row["more_than_50"] . "</td>";
             echo "<td>" . $row["AVG_M50"] . "</td>";
-            echo "<td>Good</td>";
+            echo "<td style= 'background:yellow; color:black' >Good</td>";
         } else if ($row["AVG_E60"] >= 75) {
             echo "<td>" . $row["equal_to_60"] . "</td>";
             echo "<td>" . $row["AVG_E60"] . "</td>";
-            echo "<td>Acceptible</td>";
+            echo "<td style= 'background:blue; color:white'>Acceptible</td>";
         } else if ($row["AVG_E50"] >= 75) {
             echo "<td>" . $row["equal_to_50"] . "</td>";
             echo "<td>" . $row["AVG_E50"] . "</td>";
@@ -455,7 +455,7 @@ if ($result->num_rows > 0) {
         } else {
             echo "<td>" . $row["below_50"] . "</td>";
             echo "<td>" . $row["AVG_B50"] . "</td>";
-            echo "<td>Failed</td>";
+            echo "<td style= 'background:red; color:white'>Failed</td>";
         }
 
 
