@@ -1307,37 +1307,6 @@
 
 
 
-<!--    Term drop down  AND Tables initializer  
-    <script type="text/javascript">
-        for (var i = 1; i < 13; i++)
-        {
-            var tableName = 'T' + i;
-            document.getElementById(tableName).style.visibility = "hidden";
-        }
-        var termsArray = ["Your Data Base is Empty!."];
-        var httpterms = new XMLHttpRequest();
-        httpterms.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var str = this.responseText;
-                termsArray = str.split("\t");
-            }
-        };
-        httpterms.open("GET", "sqldb/displayTerms.php", false);
-        httpterms.send();
-
-        var select = document.getElementById('term');
-        delete termsArray[termsArray.length - 1];
-        for (var i in termsArray) {
-            select.add(new Option(termsArray[i]));
-        }
-        ;
-
-        $(function () {
-            $('#term').multiselect({
-                includeSelectAllOption: true
-            });
-        });
-    </script>-->
 
 
     <!--Initialize Student Category -->     
