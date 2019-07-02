@@ -339,8 +339,7 @@
                 xmlhttpm1.open("POST", "sqldb/between.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects + "&min=" + min + "&max=" + max, false);
                 xmlhttpm1.send();
             }
-            
-            fillSections();
+
         });
     });
 
@@ -440,7 +439,7 @@
 
 </script>
 
-<body onload="fillSections()">
+<body >
 
     <div class="se-pre-con"></div>
 
@@ -470,14 +469,14 @@
                         <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportS" onclick="downloadStatistics()()" title="Export Statistics as PDF">                          <span class="material-icons">save_alt</span></button>
                     </td>
                     <td>
-                        <select   id="academic_year"   multiple="multiple"></select>   
+                        <select   id="academic_year" onchange="fillGrades()"  multiple="multiple"></select>   
                     </td>
                     <td>
-                        <select     id="grade" multiple="multiple"   ></select>   
+                        <select     id="grade" onchange="fillBatches()" multiple="multiple"   ></select>   
                     </td>
                     <td >
 
-                        <select  id ="batch" multiple="multiple"  ></select>  
+                        <select  id ="batch"  onchange="fillSubjects()"  multiple="multiple"  ></select>  
                     </td>
                     <td>
                         <select id="subject"  multiple="multiple"></select>
@@ -928,6 +927,287 @@
     <!--
     
              
+
+    <!--Initialize Grade drop down-->     
+    <script type="text/javascript">
+        document.getElementById("academic_year").addEventListener("change", fillGrades());
+
+
+        function fillGrades() {
+
+            var selected_years = $("#academic_year option:selected");
+            var select = document.getElementById('grade');
+            while (select.length > 0)
+                select.remove(0);
+
+            var message = "";
+            selected_years.each(function () {
+                if (message === "") {
+
+                    message = "   (academic_years.name = '" + $(this).text() + "'";
+                } else {
+                    message += " OR academic_years.name = '" + $(this).text() + "'";
+                }
+            });
+
+            if (message !== "") {
+
+                selected_years = message + ")";
+            } else
+                selected_years = "";
+
+            var httpgrades = new XMLHttpRequest();
+            httpgrades.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                    gradesArray = str.split("\t");
+                }
+            };
+            httpgrades.open("GET", "sqldb/distinctGrades.php?years=" + selected_years, false);
+            httpgrades.send();
+            $('#grade').multiselect('destroy');
+
+            delete gradesArray[gradesArray.length - 1];
+            for (var i in gradesArray) {
+                select.add(new Option(gradesArray[i]));
+
+            }
+            ;
+
+
+            $(function () {
+                $('#grade').multiselect({
+                    includeSelectAllOption: true
+                });
+            });
+        }
+
+    </script>
+
+<!--
+    Initialize Batch drop down     --> 
+<script type="text/javascript">
+    
+        document.getElementById("grade").addEventListener("change", fillBatches());
+
+
+        function fillBatches() {
+
+            var selected_years = $("#academic_year option:selected");
+            var selected_grades = $("#grade option:selected");
+
+            var select = document.getElementById('batch');
+
+            while (select.length > 0)
+                select.remove(0);
+
+            var message = "";
+            selected_years.each(function () {
+                if (message === "") {
+
+                    message = "   (academic_years.name = '" + $(this).text() + "'";
+                } else {
+                    message += " OR academic_years.name = '" + $(this).text() + "'";
+                }
+            });
+
+            if (message !== "") {
+
+                selected_years = message + ")";
+            } else
+                selected_years = "";
+            
+                
+            var message = "";
+            selected_grades.each(function () {
+                if (message === "") {
+                    if (selected_years !== "")
+                        message = " AND (courses.course_name = '" + $(this).text() + "' ";
+                    else
+                        message = " (courses.course_name = '" + $(this).text() + "' ";
+                } else {
+                    message += " OR courses.course_name = '" + $(this).text() + "' ";
+                }
+            });
+
+            if (message !== "") {
+
+                selected_grades = message + ")";
+            } else
+                selected_grades = "";
+
+            var httpBatches = new XMLHttpRequest();
+            httpBatches.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                    batchesArray = str.split("\t");
+                }
+            };
+            
+            httpBatches.open("GET", "sqldb/_batchesViaGradeYear.php?years=" + selected_years + "&grades=" + selected_grades, false);
+            httpBatches.send();
+            $('#batch').multiselect('destroy');
+
+            delete batchesArray[batchesArray.length - 1];
+            for (var i in batchesArray) {
+                select.add(new Option(batchesArray[i]));
+//                 document.write(batchesArray[i]);
+            }
+            ;
+
+
+            $(function () {
+                $('#batch').multiselect({
+                    includeSelectAllOption: true
+                });
+            });
+        }
+
+    </script>
+
+    
+    
+    
+    
+    <!--
+    Initialize Subject drop down     --> 
+<script type="text/javascript">
+    
+        document.getElementById("batch").addEventListener("change", fillSubjects());
+
+
+        function fillSubjects() {
+
+            var selected_years = $("#academic_year option:selected");
+            var selected_grades = $("#grade option:selected");
+            var selected_batches = $("#batch option:selected");
+
+            var select = document.getElementById('subject');
+
+            while (select.length > 0)
+                select.remove(0);
+
+            var message = "";
+            selected_years.each(function () {
+                if (message === "") {
+
+                    message = "   (academic_years.name = '" + $(this).text() + "'";
+                } else {
+                    message += " OR academic_years.name = '" + $(this).text() + "'";
+                }
+            });
+
+            if (message !== "") {
+
+                selected_years = message + ")";
+            } else
+                selected_years = "";
+            
+                
+            var message = "";
+            selected_grades.each(function () {
+                if (message === "") {
+                    if (selected_years !== "")
+                        message = " AND (courses.course_name = '" + $(this).text() + "' ";
+                    else
+                        message = " (courses.course_name = '" + $(this).text() + "' ";
+                } else {
+                    message += " OR courses.course_name = '" + $(this).text() + "' ";
+                }
+            });
+
+            if (message !== "") {
+
+                selected_grades = message + ")";
+            } else
+                selected_grades = "";
+            
+            
+              var message = "";
+            selected_batches.each(function () {
+                if (message === "") {
+                    if (selected_years !== "" || selected_grades !== "")
+                        message = " AND (batches.name = '" + $(this).text() + "' ";
+                    else
+                        message = " (batches.name = '" + $(this).text() + "' ";
+                } else {
+                    message += " OR batches.name = '" + $(this).text() + "' ";
+                }
+            });
+
+            if (message !== "") {
+
+                selected_batches = message + ")";
+            } else
+                selected_batches = "";
+
+
+            
+        
+        
+        var httpSubjects = new XMLHttpRequest();
+            httpSubjects.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                    subjectsArray = str.split("\t");
+                }
+            };
+            
+            httpSubjects.open("GET", "sqldb/_subjectsViaBatchGradeYear.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches, false);
+            httpSubjects.send();
+            $('#subject').multiselect('destroy');
+
+            delete subjectsArray[subjectsArray.length - 1];
+            for (var i in subjectsArray) {
+                select.add(new Option(subjectsArray[i]));
+//                 document.write(batchesArray[i]);
+            }
+            ;
+
+
+            $(function () {
+                $('#subject').multiselect({
+                    includeSelectAllOption: true
+                });
+            });
+        }
+
+    </script>
+    
+    
+    
+    
+    
+
+<!--    Initialize Subject drop down     
+    <script type="text/javascript">
+        var subjectsArray = ["Your Data Base is Empty!."];
+
+        var httpSubjects = new XMLHttpRequest();
+        httpSubjects.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                var str = this.responseText;
+                subjectsArray = str.split("\t");
+            }
+        };
+        httpSubjects.open("GET", "sqldb/initSubjects.php", false);
+        httpSubjects.send();
+
+        var select = document.getElementById('subject');
+
+        delete subjectsArray[subjectsArray.length - 1];
+        for (var i in subjectsArray) {
+            select.add(new Option(subjectsArray[i]));
+        }
+        ;
+
+        $(function () {
+            $('#subject').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+    </script>-->
+
     <!--Term drop down  AND Tables initializer-->  
     <script type="text/javascript">
         for (var i = 1; i < 13; i++)
@@ -960,142 +1240,6 @@
         });
     </script>
 
-    <!--
-        Initialize Grade drop down     
-        <script type="text/javascript">
-            var gradesArray = ["Your Data Base is Empty!."];
-    
-            var httpgrades = new XMLHttpRequest();
-            httpgrades.onreadystatechange = function () {
-                if (this.readyState === 4) {
-                    var str = this.responseText;
-                    gradesArray = str.split("\t");
-                }
-            };
-            httpgrades.open("GET", "sqldb/initGrades.php", false);
-            httpgrades.send();
-    
-            var select = document.getElementById('grade');
-            delete gradesArray[gradesArray.length - 1];
-            for (var i in gradesArray) {
-                select.add(new Option(gradesArray[i]));
-            }
-            ;
-    
-            $(function () {
-                $('#grade').multiselect({
-                    includeSelectAllOption: true
-                });
-            });
-        </script>-->
-    
-    <!--Initialize Grade drop down-->     
-    <script type="text/javascript">
-        
-//     function fillSections() {
-       
-            var selected_years = $("#academic_year option:selected");
-
-            var message = "";
-            selected_years.each(function () {
-                if (message === "") {
-                    message = "   (academic_years.name = '" + $(this).text() + "'";
-                } else {
-                    message += " OR academic_years.name = '" + $(this).text() + "'";
-                }
-            });
-
-            if (message !== "")
-                selected_years = message + ")";
-            else
-                selected_years = "";
-
-            var httpgrades = new XMLHttpRequest();
-            httpgrades.onreadystatechange = function () {
-                if (this.readyState === 4) {
-                    var str = this.responseText;
-                     gradesArray = str.split("\t");
-                }
-            };
-            httpgrades.open("GET", "sqldb/distinctGrades.php?years=" + selected_years, false);
-            httpgrades.send();
-
-            var select = document.getElementById('grade');
-             while (select.length > 0)
-                select.remove(0);
-            delete gradesArray[gradesArray.length - 1];
-            for (var i in gradesArray) {
-                select.add(new Option(gradesArray[i]));
-//                document.write(gradeArray[i]);
-
-            }
-            ;
-
-            $(function () {
-                $('#grade').multiselect({
-                    includeSelectAllOption: true
-                });
-            });
-//            };
-
-    </script>
-
-    <!--Initialize Batch drop down-->     
-    <script type="text/javascript">
-        var batchesArray = ["Your Data Base is Empty!."];
-
-        var httpBatches = new XMLHttpRequest();
-        httpBatches.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var str = this.responseText;
-                batchesArray = str.split("\t");
-            }
-        };
-        httpBatches.open("GET", "sqldb/initBatches.php", false);
-        httpBatches.send();
-
-        var select = document.getElementById('batch');
-        delete batchesArray[batchesArray.length - 1];
-        for (var i in batchesArray) {
-            select.add(new Option(batchesArray[i]));
-        }
-        ;
-
-        $(function () {
-            $('#batch').multiselect({
-                includeSelectAllOption: true
-            });
-        });
-    </script>
-
-
-    <!--Initialize Subject drop down-->     
-    <script type="text/javascript">
-        var subjectsArray = ["Your Data Base is Empty!."];
-
-        var httpSubjects = new XMLHttpRequest();
-        httpSubjects.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var str = this.responseText;
-                subjectsArray = str.split("\t");
-            }
-        };
-        httpSubjects.open("GET", "sqldb/initSubjects.php", false);
-        httpSubjects.send();
-
-        var select = document.getElementById('subject');
-        delete subjectsArray[subjectsArray.length - 1];
-        for (var i in subjectsArray) {
-            select.add(new Option(subjectsArray[i]));
-        }
-        ;
-
-        $(function () {
-            $('#subject').multiselect({
-                includeSelectAllOption: true
-            });
-        });
-    </script>
 
     <!--Initialize Student Category -->     
     <script type="text/javascript">
