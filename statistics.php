@@ -243,12 +243,12 @@
                 table.rows[0].cells[0].innerHTML = currentSubject;  //head
                 table2.rows[0].cells[0].innerHTML = currentSubject; //head                        
                 //Academic //Total
-                var min = 0, max = 0;                                                                    // Head values
+                var min = 0, max = 0;                                                                    
                 for (var i = 2; i < 5; i++)
                 {
                     min = stable.rows[1].cells[i].childNodes[0].value;
                     max = stable.rows[1].cells[i].childNodes[2].value;
-                    table.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
+                    table.rows[1].cells[i].innerHTML  =  min + "% - " + max + "%";
                     table2.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
                 }
 
@@ -472,7 +472,7 @@
                         <select   id="academic_year" onchange="fillGrades()"  multiple="multiple"></select>   
                     </td>
                     <td>
-                        <select     id="grade" onchange="fillBatches()" multiple="multiple"   ></select>   
+                        <select   id="grade" onchange="fillBatches()" multiple="multiple"   ></select>   
                     </td>
                     <td >
 
