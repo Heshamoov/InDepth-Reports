@@ -482,11 +482,11 @@
                     </td>
                    
                     <td>
-                        <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="Get students marks">View Results    <span class="fa fa-search"></span></button>
+                        <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View attainment analysis"><span class="fa fa-search"></span></button>
                     </td>
 
                     <td>
-                        <button  class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="exportM" onclick="downloadStudents()" title="Export Marks as PDF">Export Marks <span class="material-icons ">save_alt</span></button>
+                        <button  class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="exportM" onclick="downloadStudents()" title="Download result"><span class="material-icons ">save_alt</span></button>
                     </td>
 
                 </tr>
