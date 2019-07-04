@@ -11,22 +11,35 @@
 </script>
 
 <script type="text/javascript">
+
     var imgData = new Array();
-    $(function () {
+    
+         $(function () {
+
         $('#search, #charttype').click(function () {
+            
+//            var indexYear;
             var indexGrade;
             var indexSubject;
             var indexSection;
             var indexCategory;
+
             for (var index = 1; index < 3; index++) {
+
+//                indexYear = "T" + index + "-YR";
                 indexGrade = "T" + index + "-GR";
                 indexSubject = "T" + index + "-SB";
                 indexSection = "T" + index + "-SC";
                 indexCategory = "T" + index + "-CA";
+
+//``              var years = document.getElementById(indexYear).options[document.getElementById(indexYear).selectedIndex].text;
                 var grade = document.getElementById(indexGrade).options[document.getElementById(indexGrade).selectedIndex].text;
                 var category = $("#" + indexCategory + " option:selected");
                 var subject = $("#" + indexSubject + " option:selected");
                 var section = $("#" + indexSection + " option:selected");
+
+
+
                 //Section            
                 var message = "";
                 var sectionHeader = "";
@@ -51,6 +64,8 @@
                     section = message + ")";
                 else
                     section = "";
+
+
                 //Subject              
                 var message = "";
                 var subjectHeader = "";
@@ -75,6 +90,7 @@
                     subject = message + ")";
                 else
                     subject = "";
+
                 //Category               
                 var message = "";
                 var categoryHeader = "";
@@ -99,6 +115,9 @@
                     category = message + ")";
                 else
                     category = "";
+
+
+
                 // Between values Subject wise
                 var min = 0, tableName, term, gender;
                 t = index;
@@ -116,6 +135,7 @@
                             gender = tableName + "-Gender2";
                             gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
                         }
+
                         output.value += term + " " + gender;
                         min = document.getElementById(tableName).rows[2].cells[i].childNodes[0].value;
                         var httpAbove = new XMLHttpRequest();
@@ -127,37 +147,46 @@
                         httpAbove.open("POST", "sqldb/marksAbove.php?term=" + term +
                                 "&grade=" + grade + "&subject=" + subject + "&category=" + category +
                                 "&gender=" + gender + "&min=" + min + "&section=" + section, false);
+
                         httpAbove.send();
                     }
                 }
+
                 google.charts.load('current', {packages: ['corechart', 'bar']});
                 google.charts.setOnLoadCallback(drawMaterial);
+
             }
+
+
             function drawMaterial() {
+
                 for (var i = 1; i < 3; i++) {
-                    var indexGrade = "T" + i + "-GR";
-                    var indexSubject = "T" + i + "-SB";
-                    var indexSection = "T" + i + "-SC";
-//        var grade = document.getElementById(indexGrade).options[document.getElementById(indexGrade).selectedIndex].text;
-//        var subject = document.getElementById(indexSubject).options[document.getElementById(indexSubject).selectedIndex].text;
-//        var section = document.getElementById(indexSection).options[document.getElementById(indexSection).selectedIndex].text;
-//        
+                        
+           
+        
                     var value1, value2, value3, value4, result1, result2, result3, result4, tableName, chartName, gender1, gender2;
                     var value1, value2, value3, value4, result1, result2, result3, result4, tableName, table1, chartName, gender1, gender2;
+
+
                     tableName = 'T' + i;
                     table1 = 'TT' + i;
                     var tableName1 = document.getElementById(table1);
+
                     var term1 = document.getElementById(tableName + '-Term1').options[document.getElementById(tableName + '-Term1').selectedIndex].text;
                     var term2 = document.getElementById(tableName + '-Term2').options[document.getElementById(tableName + '-Term2').selectedIndex].text;
                     tableName1.rows[0].cells[3].innerHTML = subject;
+
                     var gender1 = document.getElementById(tableName + '-Gender1').options[document.getElementById(tableName + '-Gender1').selectedIndex].text;
+                   
                     if (gender1 === 'Both')
                     {
                         tableName1.rows[1].cells[1].innerHTML = term1 + 'Boys & Girls';
                     } else
                     {
                         tableName1.rows[1].cells[1].innerHTML = term1 + gender1;
+
                     }
+
                     var gender2 = document.getElementById(tableName + '-Gender2').options[document.getElementById(tableName + '-Gender2').selectedIndex].text;
                     if (gender2 === 'Both')
                     {
@@ -165,66 +194,99 @@
                     } else
                     {
                         tableName1.rows[1].cells[5].innerHTML = term2 + gender2;
+
                     }
+
+
                     value1 = document.getElementById(tableName).rows[2].cells[0].childNodes[0].value;
-                    tableName1.rows[2].cells[0].innerHTML = 'Above ' + value1 + ' %';
+                    tableName1.rows[2].cells[0].innerHTML = 'Above ' + value1 + ' % in' + term1;
+
                     value2 = document.getElementById(tableName).rows[2].cells[1].childNodes[0].value;
-                    tableName1.rows[2].cells[2].innerHTML = 'Above ' + value2 + ' %';
+                    tableName1.rows[2].cells[2].innerHTML = 'Above ' + value2 + ' % in' + term1;
+
                     value3 = document.getElementById(tableName).rows[2].cells[2].childNodes[0].value;
-                    tableName1.rows[2].cells[4].innerHTML = 'Above ' + value3 + ' %';
+                    tableName1.rows[2].cells[4].innerHTML = 'Above ' + value3 + ' % in' + term2;
+
                     value4 = document.getElementById(tableName).rows[2].cells[3].childNodes[0].value;
-                    tableName1.rows[2].cells[6].innerHTML = 'Above ' + value4 + ' %';
+                    tableName1.rows[2].cells[6].innerHTML = 'Above ' + value4 + ' % in' + term2;
+
                     result1 = document.getElementById(tableName).rows[3].cells[0].innerHTML;
                     tableName1.rows[3].cells[0].innerHTML = result1;
+
                     result2 = document.getElementById(tableName).rows[3].cells[1].innerHTML;
                     tableName1.rows[3].cells[2].innerHTML = result2;
+
                     result3 = document.getElementById(tableName).rows[3].cells[2].innerHTML;
                     tableName1.rows[3].cells[4].innerHTML = result3;
+
                     result4 = document.getElementById(tableName).rows[3].cells[3].innerHTML;
                     tableName1.rows[3].cells[6].innerHTML = result4;
+
                     var data = new google.visualization.DataTable();
-                    data.addColumn('string', 'Number of Students');
-                    data.addColumn('number', 'Students');
+                  data.addColumn('string', 'Number of Students');
+                    data.addColumn('number', 'Marks');
+
                     data.addColumn({type: 'string', role: 'style'});
+
                     data.addRows([
-                        [gender1 + "-" + value1.toString() + '% and above', Number(result1), ' #0066cc'],
-                        [gender1 + "-" + value2.toString() + '% and above', Number(result2), '#ff0000'],
-                        [gender2 + "-" + value3.toString() + '% and above', Number(result3), ' #0066cc'],
-                        [gender2 + "-" + value4.toString() + '% and above', Number(result4), '#ff0000'],
+                        [gender1 + "-" + value1.toString() + '% and above in ' + term1, Number(result1), ' #006666'],
+                        [gender1 + "-" + value2.toString() + '% and above in ' + term1, Number(result2), '#800000'],
+                        [gender2 + "-" + value3.toString() + '% and above in ' + term2, Number(result3), ' #002f5a'],
+                        [gender2 + "-" + value4.toString() + '% and above in ' + term2, Number(result4), '#d81c01'],
                     ]);
                     var options = {
                         title: '(' + term1 + " " + gender1 + ') VS (' + term2 + " " + gender2 + ") ",
-//                        + grade + '-' + subject + '  for batch ' + section ,
-                    };
+                        curveType: 'smooth'
+                }
+                
+                    var view = new google.visualization.DataView(data);
+                    view.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" },
+                       2]);
+                    
                     chartName = 'chart' + i;
+
                     var e = document.getElementById("charttype");
                     var type = e.options[e.selectedIndex].value;
+
                     if (type === "coloumn") {
                         var materialChart = new google.visualization.ColumnChart(document.getElementById(chartName));
-                        materialChart.draw(data, options);
+                        materialChart.draw(view, options);
                     }
                     if (type === "pie") {
+
                         var materialChart = new google.visualization.PieChart(document.getElementById(chartName));
                         materialChart.draw(data, options);
                     }
-                    if (type === "histogram") {
-                        var materialChart = new google.visualization.Histogram(document.getElementById(chartName));
+
+                    if (type === "barchart") {
+                        var materialChart = new google.visualization.BarChart(document.getElementById(chartName));
                         materialChart.draw(data, options);
                     }
                     if (type === "linechart") {
                         var materialChart = new google.visualization.LineChart(document.getElementById(chartName));
-                        materialChart.draw(data, options);
+                        materialChart.draw(view, options);
                     }
+
                     imgData[i] = materialChart.getImageURI();
+
+
+
                 }
             }
             ;
+
+
         }
         );
     });
 </script>
 
-<body  onload="fillSections1(), fillSections2(), fillSubjects1(), fillSubjects2()">
+
+<body  onload=" fillGrades1(), fillGrades2(),fillSections1(), fillTerms1(), fillTerms2(),  fillSections2(), fillSubjects1(), fillSubjects2()">
     <div class="se-pre-con"></div>
 
     <div class=" w3-responsive header">
@@ -247,7 +309,7 @@
                             <option class="w3-round-xlarge" style="text-align: center;" selected="selected" value="pie">Pie Chart</option> 
                             <option class="w3-round-xlarge"style="text-align: center"  value="coloumn">Column Chart</option>
                             <option class="w3-round-xlarge"style="text-align: center"  value="linechart">Line Chart</option> 
-                            <option class="w3-round-xlarge"style="text-align: center"  value="histogram">Histogram</option> 
+                            <option class="w3-round-xlarge"style="text-align: center"  value="barchart">Bar Chart</option> 
 
 
                         </select></td>
@@ -268,11 +330,15 @@
                         <th colspan="4" class="w3-teal" style="font-size: 18px">
                             <button style="float: left;"type='button'class="w3-button w3-hover-blue-gray" hidden onclick="printDiv(chart1)"id='printbtn'  title="Print chart"value='Print'>
                                 <i class="glyphicon glyphicon-print"></i></button>
+                             <select id="T1-YR" ></select>   
                             <select id="T1-GR" ></select>
-                            <select id="T1-SC" multiple></select>
-                            <select id="T1-SB" multiple></select>
-                            <select id="T1-CA" multiple></select>
-                        </th>
+                            <select id="T1-SC" multiple></select> 
+                            
+                     
+                                <select id="T1-SB" multiple></select>
+                                <select id="T1-CA" multiple></select>           
+                            </th> 
+                            
                         <tr>
                             <th colspan="2" class="w3-border-right">
                                 <select id="T1-Term1"></select>
@@ -327,11 +393,16 @@
                         <th colspan="4" class="w3-teal" style="font-size: 18px">
                             <button style="float: left;"type='button'class="w3-button w3-hover-blue-gray" hidden onclick="printDiv(chart2)"id='printbtn'  title="Print chart"value='Print'>
                                 <i class="glyphicon glyphicon-print"></i></button>
+                          <select id="T2-YR" ></select>   
+
                             <select id="T2-GR" ></select>
                             <select id="T2-SC" multiple ></select>
-                            <select id="T2-SB" multiple ></select>
-                            <select id="T2-CA" multiple></select>
-                        </th>
+                        
+                                <select id="T2-SB" multiple></select>
+                                <select id="T2-CA" multiple></select>           
+                            </th> 
+                            
+                       
                         <tr>
                             <th colspan="2" class="w3-border-right">
                                 <select id="T2-Term1"></select>
@@ -429,17 +500,63 @@
         doc.save("Statistics.pdf");
     }
 </script>
-</div>
+
+
+
 <!--Onchange event listener -->
 <script type="text/javascript">
+     document.getElementById("T1-YR").onchange = function () {
+        fillGrades1();
+        fillSections1();
+        fillSubjects1();
+        fillTerms1();
+       
+
+        Result();
+    };
+       document.getElementById("T2-YR").onchange = function () {
+        fillGrades2();
+        fillSections2();
+        fillSubjects2();
+        fillTerms2();
+
+
+        Result();
+    };
     document.getElementById("T1-GR").onchange = function () {
         fillSections1();
         fillSubjects1();
+        fillTerms1();
+        
+        Result();
+    };
+    
+     document.getElementById("T2-GR").onchange = function () {
+        fillSections2();
+        fillSubjects2();
+        fillTerms2();
+        
+        Result();
+    };
+    
+      document.getElementById("T1-SC").onchange = function () {
+        fillSubjects1();
+        fillTerms1();
+        
+        Result();
+    };
+    
+       document.getElementById("T2-SC").onchange = function () {
+        fillSubjects2();
+        fillTerms2();
+        
         Result();
     };
     document.getElementById("T2-GR").onchange = function () {
         fillSections2();
         fillSubjects2();
+        fillTerms2();
+
         Result();
     };
     document.getElementById('T1-Gender1').onchange = function () {
@@ -466,70 +583,136 @@
     document.getElementById('T2-Term2').onchange = function () {
         Result();
     };
-//document.getElementById('T1-SC').onchange = function() {Result();};
-//document.getElementById('T1-SB').onchange = function() {Result();};
-//document.getElementById('T1-SR').onchange = function() {Result();};
-//document.getElementById('T2-SC').onchange = function() {Result();};
-//document.getElementById('T2-SB').onchange = function() {Result();};
-//document.getElementById('T2-SR').onchange = function() {Result();};
-//document.getElementById('T2-CA').onchange = function() {Result();};
-//document.getElementById('T1-CA').onchange = function() {Result();};
+
     function Result() {
         document.getElementById("search").click();
     }
 </script>    
-<!--Terms VIA Year-->
-<!--<script type="text/javascript">
-document.getElementById('T1-Year').onchange = function() {fetchTerms("T1");};
-document.getElementById('T2-Year').onchange = function() {fetchTerms("T2");};
-document.getElementById('T3-Year').onchange = function() {fetchTerms("T3");};
-document.getElementById('T4-Year').onchange = function() {fetchTerms("T4");};
-function fetchTerms(table) {
-        var tableYear= table + '-Year';
-        for (var T=1; T<3; T++) {
-                var year = document.getElementById(tableYear).options[document.getElementById(tableYear).selectedIndex].text;
-                var tableTerm = table + '-Term' + T;
-                var select = document.getElementById(tableTerm);
-                while (select.length > 0)
-                        select.remove(0);
-                $('#T1-Term1').multiselect('destroy');
-                         select.add( new Option(year));
-                $(function () {$('#T1-Term1').multiselect({includeSelectAllOption: true});});
-        }
-}; 
-</script>-->
 
-<!--Initialize Terms-->
+
+<!--Initialize Terms Table 1-->
+
 <script type="text/javascript">
-    var termsArray = ["Your Data Base is Empty!."];
-    var httpterms = new XMLHttpRequest();
-    httpterms.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            var str = this.responseText;
-            termsArray = str.split("\t");
-        }
-    };
-    httpterms.open("GET", "sqldb/displayTerms.php", false);
-    httpterms.send();
-    for (T = 1; T < 3; T++) {
-//                var select = document.getElementById('T' + T + '-Year');
-//                while (select.length > 0)
-//                        select.remove(0);
-        delete termsArray[termsArray.length - 1];
-//                for( var i in termsArray )
-//                        select.add( new Option( termsArray[i] ) );    
-        for (c = 1; c < 3; c++) {
-            var tableName = 'T' + T + '-Term' + c;
-            var select = document.getElementById(tableName);
-            while (select.length > 0)
-                select.remove(0);
+    function fillTerms1() {
+        var grade = document.getElementById("T1-GR").options[document.getElementById("T1-GR").selectedIndex].text;
+         var year = document.getElementById("T1-YR").options[document.getElementById("T1-YR").selectedIndex].text;
+         
+        if (grade !== 'Select Grade') {
+            var select1 = document.getElementById('T1-Term1');
+            var select2 = document.getElementById('T1-Term2');
+            
+            
+            while (select1.length > 0)
+                select1.remove(0);
+                
+             while (select2.length > 0)
+                select2.remove(0);
+                
+            var httpTerms = new XMLHttpRequest();
+            httpTerms.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                    termsArray = str.split("\t");
+                }
+            };
+            httpTerms.open("GET", "sqldb/distinctTerms.php?grade=" + grade + "&year=" + year, false);
+            httpTerms.send();
+            $('#T1-Term1').multiselect('destroy');
+            $('#T1-Term2').multiselect('destroy');
+
             delete termsArray[termsArray.length - 1];
-            for (var i in termsArray)
-                select.add(new Option(termsArray[i]));
+            for (var i in termsArray) {
+                select1.add(new Option(termsArray[i])); 
+                 select2.add(new Option(termsArray[i])); 
+
+            }
+            ;
+          
         }
+         $(function () {
+            $('#T1-Term1').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+         $(function () {
+            $('#T1-Term2').multiselect({
+                includeSelectAllOption: true
+            });
+        });
     }
+    ;
+</script>
+
+
+<!--Initialize Terms Table 2-->
+
+<script type="text/javascript">
+    function fillTerms2() {
+        var grade = document.getElementById("T2-GR").options[document.getElementById("T2-GR").selectedIndex].text;
+         var year = document.getElementById("T2-YR").options[document.getElementById("T2-YR").selectedIndex].text;
+         
+        if (grade !== 'Select Grade') {
+            var select1 = document.getElementById('T2-Term1');
+            var select2 = document.getElementById('T2-Term2');
+            
+            
+            while (select1.length > 0)
+                select1.remove(0);
+                
+             while (select2.length > 0)
+                select2.remove(0);
+                
+            var httpTerms = new XMLHttpRequest();
+            httpTerms.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                    termsArray = str.split("\t");
+                }
+            };
+            httpTerms.open("GET", "sqldb/distinctTerms.php?grade=" + grade + "&year=" + year, false);
+            httpTerms.send();
+            $('#T2-Term1').multiselect('destroy');
+            $('#T2-Term2').multiselect('destroy');
+
+            delete termsArray[termsArray.length - 1];
+            for (var i in termsArray) {
+                select1.add(new Option(termsArray[i])); 
+                 select2.add(new Option(termsArray[i])); 
+
+            }
+            ;
+          
+        }
+         $(function () {
+            $('#T2-Term1').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+         $(function () {
+            $('#T2-Term2').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+    }
+    ;
+</script>
+
+<script type="text/javascript">
     $(function () {
         $('#T1-Term1').multiselect({includeSelectAllOption: true});
+    });
+       $(function () {
+        $('#T1-SC').multiselect({includeSelectAllOption: true});
+    });
+       $(function () {
+        $('#T1-SB').multiselect({includeSelectAllOption: true});
+    });
+       
+       $(function () {
+        $('#T2-SC').multiselect({includeSelectAllOption: true});
+    });
+       $(function () {
+        $('#T2-SB').multiselect({includeSelectAllOption: true});
     });
     $(function () {
         $('#T1-Term2').multiselect({includeSelectAllOption: true});
@@ -555,61 +738,150 @@ function fetchTerms(table) {
 </script>
 
 
-<!--Initialize Grade drop down for table1-->     
-<script type="text/javascript">
-    var gradesArray = ["Your Data Base is Empty!."];
-    var httpgrades = new XMLHttpRequest();
-    httpgrades.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            var str = this.responseText;
-            gradesArray = str.split("\t");
+    <!--Initialize Academic Years for Table 1->-->     
+    <script type="text/javascript">
+  
+        var yearArray = ["Your Data Base is Empty!."];
+
+        var httpyear = new XMLHttpRequest();
+        httpyear.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                var str = this.responseText;
+                yearArray = str.split("\t");
+            }
+        };
+        httpyear.open("GET", "sqldb/initAcademicYears.php", false);
+        httpyear.send();
+
+        var select = document.getElementById('T1-YR');
+        delete yearArray[yearArray.length - 1];
+        for (var i in yearArray) {
+            select.add(new Option(yearArray[i]));
         }
-    };
-    httpgrades.open("GET", "sqldb/initGrades.php", false);
-    httpgrades.send();
-    var select = document.getElementById('T1-GR');
-    delete gradesArray[gradesArray.length - 1];
-    for (var i in gradesArray) {
-        select.add(new Option(gradesArray[i]));
-    }
-    ;
-    $(function () {
+        ;
+        $(function () {
+            $('#T1-YR').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+    
+    </script>
+    
+    
+
+    
+    <!--Initialize Academic Years for Table 2->-->     
+    <script type="text/javascript">
+        var yearArray = ["Your Data Base is Empty!."];
+
+        var httpyear = new XMLHttpRequest();
+        httpyear.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                var str = this.responseText;
+                yearArray = str.split("\t");
+            }
+        };
+        httpyear.open("GET", "sqldb/initAcademicYears.php", false);
+        httpyear.send();
+
+        var select = document.getElementById('T2-YR');
+        delete yearArray[yearArray.length - 1];
+        for (var i in yearArray) {
+            select.add(new Option(yearArray[i]));
+        }
+        ;
+        $(function () {
+            $('#T2-YR').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+
+    </script>
+    
+    
+    
+<!--Grades VIA Years Table 1--> 
+<script type="text/javascript">
+    function fillGrades1(){
+        var selected_years = document.getElementById("T1-YR").options[document.getElementById("T1-YR").selectedIndex].text;
+            var select = document.getElementById('T1-GR');
+            while (select.length > 0)
+                select.remove(0);
+
+         
+
+            var httpgrades = new XMLHttpRequest();
+            httpgrades.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                    gradesArray = str.split("\t");
+                }
+            };
+            httpgrades.open("GET", "sqldb/distinctGrades.php?years=" + selected_years, false);
+            httpgrades.send();
+
+            delete gradesArray[gradesArray.length - 1];
+            for (var i in gradesArray) {
+                select.add(new Option(gradesArray[i]));
+
+            }
+            ;
+
+$(function () {
         $('#T1-GR').multiselect({
             includeSelectAllOption: true
         });
     });
+    };   
+      
 </script>
 
-<!--Initialize Grade drop down for table 2-->     
+<!--Grades VIA Years table 2--> 
 <script type="text/javascript">
-    var gradesArray = ["Your Data Base is Empty!."];
-    var httpgrades = new XMLHttpRequest();
-    httpgrades.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            var str = this.responseText;
-            gradesArray = str.split("\t");
-        }
-    };
-    httpgrades.open("GET", "sqldb/initGrades.php", false);
-    httpgrades.send();
-    var select = document.getElementById('T2-GR');
-    delete gradesArray[gradesArray.length - 1];
-    for (var i in gradesArray) {
-        select.add(new Option(gradesArray[i]));
-    }
-    ;
-    $(function () {
+    function fillGrades2(){
+        var selected_years = document.getElementById("T2-YR").options[document.getElementById("T2-YR").selectedIndex].text;
+            var select = document.getElementById('T2-GR');
+            while (select.length > 0)
+                select.remove(0);
+
+         
+
+            var httpgrades = new XMLHttpRequest();
+            httpgrades.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                    gradesArray = str.split("\t");
+                }
+            };
+            httpgrades.open("GET", "sqldb/distinctGrades.php?years=" + selected_years, false);
+            httpgrades.send();
+
+            delete gradesArray[gradesArray.length - 1];
+            for (var i in gradesArray) {
+                select.add(new Option(gradesArray[i]));
+
+            }
+            ;
+
+$(function () {
         $('#T2-GR').multiselect({
             includeSelectAllOption: true
         });
     });
+    };   
+      
 </script>
 
 
-<!--Sections VIA Grades -->
+
+
+
+<!--Sections VIA Grades  Table 1-->
 <script type="text/javascript">
     function fillSections1() {
         var grade = document.getElementById("T1-GR").options[document.getElementById("T1-GR").selectedIndex].text;
+         var year = document.getElementById("T1-YR").options[document.getElementById("T1-YR").selectedIndex].text;
+         
         if (grade !== 'Select Grade') {
             var select = document.getElementById('T1-SC');
             while (select.length > 0)
@@ -621,12 +893,12 @@ function fetchTerms(table) {
                     sectionsArray = str.split("\t");
                 }
             };
-            httpSections.open("GET", "sqldb/distinctBatches.php?grade=" + grade, false);
+            httpSections.open("GET", "sqldb/distinctBatches.php?grades=" + grade + "&years=" + year, false);
             httpSections.send();
             $('#T1-SC').multiselect('destroy');
             delete sectionsArray[sectionsArray.length - 1];
             for (var i in sectionsArray) {
-                select.add(new Option(sectionsArray[i]));
+                select.add(new Option(sectionsArray[i])); 
             }
             ;
             $(function () {
@@ -643,6 +915,8 @@ function fetchTerms(table) {
 <script type="text/javascript">
     function fillSections2() {
         var grade = document.getElementById("T2-GR").options[document.getElementById("T2-GR").selectedIndex].text;
+         var year = document.getElementById("T2-YR").options[document.getElementById("T2-YR").selectedIndex].text;
+         
         if (grade !== 'Select Grade') {
             var select = document.getElementById('T2-SC');
             while (select.length > 0)
@@ -654,12 +928,12 @@ function fetchTerms(table) {
                     sectionsArray = str.split("\t");
                 }
             };
-            httpSections.open("GET", "sqldb/distinctBatches.php?grade=" + grade, false);
+            httpSections.open("GET", "sqldb/distinctBatches.php?grades=" + grade + "&years=" + year, false);
             httpSections.send();
             $('#T2-SC').multiselect('destroy');
             delete sectionsArray[sectionsArray.length - 1];
             for (var i in sectionsArray) {
-                select.add(new Option(sectionsArray[i]));
+                select.add(new Option(sectionsArray[i])); 
             }
             ;
             $(function () {
@@ -726,7 +1000,9 @@ function fetchTerms(table) {
 <script type="text/javascript">
     function fillSubjects1() {
         var grade = document.getElementById("T1-GR").options[document.getElementById("T1-GR").selectedIndex].text;
-        if (grade !== 'Select Grade') {
+        var year = document.getElementById("T1-YR").options[document.getElementById("T1-YR").selectedIndex].text;
+        
+        if (grade !== 'Select Grade' || year !== 'Select Grade') {
             var select = document.getElementById('T1-SB');
             while (select.length > 0)
                 select.remove(0);
@@ -734,10 +1010,10 @@ function fetchTerms(table) {
             httpSubjects.onreadystatechange = function () {
                 if (this.readyState === 4) {
                     var str = this.responseText;
-                    subjectsArray = str.split("\?");
+                    subjectsArray = str.split("\t");
                 }
             };
-            httpSubjects.open("GET", "sqldb/distinctSubjects.php?grade=" + grade, false);
+            httpSubjects.open("GET", "sqldb/distinctSubjects.php?grade=" + grade + "&year=" + year , false);
             httpSubjects.send();
             $('#T1-SB').multiselect('destroy');
             delete subjectsArray[subjectsArray.length - 1];
@@ -758,7 +1034,9 @@ function fetchTerms(table) {
 <script type="text/javascript">
     function fillSubjects2() {
         var grade = document.getElementById("T2-GR").options[document.getElementById("T2-GR").selectedIndex].text;
-        if (grade !== 'Select Grade') {
+        var year = document.getElementById("T2-YR").options[document.getElementById("T2-YR").selectedIndex].text;
+        
+        if (grade !== 'Select Grade' || year !== 'Select Grade') {
             var select = document.getElementById('T2-SB');
             while (select.length > 0)
                 select.remove(0);
@@ -766,10 +1044,10 @@ function fetchTerms(table) {
             httpSubjects.onreadystatechange = function () {
                 if (this.readyState === 4) {
                     var str = this.responseText;
-                    subjectsArray = str.split("\?");
+                    subjectsArray = str.split("\t");
                 }
             };
-            httpSubjects.open("GET", "sqldb/distinctSubjects.php?grade=" + grade, false);
+            httpSubjects.open("GET", "sqldb/distinctSubjects.php?grade=" + grade + "&year=" + year , false);
             httpSubjects.send();
             $('#T2-SB').multiselect('destroy');
             delete subjectsArray[subjectsArray.length - 1];
@@ -786,7 +1064,6 @@ function fetchTerms(table) {
     }
     ;
 </script>
-
 
 
 <!----------Save PDF for table----------------->

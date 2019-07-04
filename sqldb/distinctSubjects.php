@@ -2,30 +2,30 @@
 
 include ('../config/dbConfig.php');
 
+$years = $_REQUEST["year"];
+$grades = $_REQUEST["grade"];
 
-$grade = $_REQUEST["grade"];
-//        $sql = "SELECT DISTINCT subject FROM gold WHERE grade = '$grade'";
-$sql = "SELECT  DISTINCT subjects.name subject_name \n"
-        . "\n"
-        . "FROM (((((( students\n"
-        . "           INNER JOIN batches \n"
-        . "           ON batches.id = students.batch_id)\n"
-        . "           INNER JOIN courses \n"
-        . "           ON batches.course_id = courses.id)\n"
-        . "           INNER JOIN exam_groups\n"
-        . "           ON exam_groups.batch_id = students.batch_id)\n"
-        . "           INNER JOIN exam_scores \n"
-        . "           ON exam_scores.student_id = students.id)\n"
-        . "           INNER JOIN exams\n"
-        . "           ON exams.id = exam_scores.exam_id)\n"
-        . "           INNER JOIN subjects\n"
-        . "           ON subjects.id = exams.subject_id)\n"
-        . "WHERE courses.course_name = '$grade'";
+$sql = "SELECT DISTINCT subjects.name subject  \n"
 
-//      echo $sql;
+    . "FROM subjects\n"
+
+    . "left JOIN batches ON batches.id = subjects.batch_id\n"
+
+    . "left JOIN courses ON course_id = batches.course_id\n";
+
+if ($years == "" && $grades == "" ){
+    $sql = $sql . " LEFT JOIN academic_years ON academic_years.id = batches.academic_year_id WHERE subjects.is_deleted = 0 ";}
+else{
+    $sql = $sql . "INNER JOIN academic_years ON batches.academic_year_id = academic_years.id WHERE academic_years.name = '$years' "
+. "AND courses.course_name = '$grades'  AND subjects.is_deleted = 0";}
+
+    $sql = $sql . " ORDER BY subjects.name ASC ;";
+
+//echo $sql;
 $result = $conn->query($sql);
 
 while ($row = mysqli_fetch_array($result))
-    echo $row['subject_name'] . "?";
+    echo $row['subject'] . "\t";
 
 $conn->close();
+
