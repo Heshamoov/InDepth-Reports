@@ -2,7 +2,7 @@
 
 include ('../config/dbConfig.php');
 
-
+//$year = $_REQUEST["year"];
 $term = $_REQUEST["term"];
 $grade = $_REQUEST["grade"];
 $subject = $_REQUEST["subject"];
@@ -11,6 +11,7 @@ $category = $_REQUEST["category"];
 $min = $_REQUEST["min"];
 $section = $_REQUEST["section"];
 
+//echo $min;
 
 if ($gender === 'Both')
     $gender = "";
@@ -42,6 +43,7 @@ $sql = "SELECT students.admission_no moe, students.first_name name, students.gen
         . "	INNER JOIN subjects ON exams.subject_id = subjects.id) "
         . "    WHERE ((exam_groups.name = '$term' ) AND (courses.course_name = '$grade') "
         . "    AND (exam_scores.marks >= $min )  $subject $section $category  $gender )";
+
 // echo $sql;
 
 $result = $conn->query($sql);
