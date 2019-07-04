@@ -300,8 +300,7 @@
 
             <table id= "table1">
                 <tr>
-                    <td><button style="text-align: center ;" class="w3-button w3-round-xlarge w3-medium w3-hover-blue-gray w3-center w3-custom" id="exportS" onclick="downloadStatistics()" title="Export Data as PDF" >Export Data  <span class="material-icons">print</span></button>
-                    </td>
+                    
                     <td></td>
                     <td><button style="text-align: center ;" class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="search" title="Get students marks">View Results  <span class="fa fa-search"></span></button></td>
                     <td></td>
@@ -313,7 +312,9 @@
 
 
                         </select></td>
-                    <td><button  style="text-align: center ;" class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="exportM" onclick="downloadStudents()" title="Export Marks as PDF">Export Mark  <span class="material-icons ">save_alt</span></button></td>
+                        <td><button style="text-align: center ;" class="w3-button w3-round-xlarge w3-medium w3-hover-blue-gray w3-center w3-custom" id="exportS" onclick="downloadStatistics()" title="Export Data as PDF" ><span class="material-icons">print</span></button>
+                    </td>
+                    <!--<td><button  style="text-align: center ;" class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="exportM" onclick="downloadStudents()" title="Export Marks as PDF">Export Mark  <span class="material-icons ">save_alt</span></button></td>-->
                 </tr>
             </table>
         </div>
