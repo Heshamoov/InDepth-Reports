@@ -137,10 +137,10 @@
         <br>
 
         <!--API Connecting with Alsanawbar--> 
-        <input  id="instanceurl" type="hidden" name="instanceurl" value="https://alsanawbar.school"/>
-        <input  id="client_id" type="hidden" value="807ee0dddf6b79166323a61f2d8e8473865f8fb7455052e2d9a47c05200b6822"/>
-        <input  id="client_secret" type="hidden" value="86e7e63d9f030b770e7152c632ddda32daeb8cef5c5c7eb8a44bf0736231a8af"/>
-        <input  id="redirect_uri" type="hidden" value="http://indepthreports.online/"/>
+        <input  id="instanceurl" type="hidden" name="instanceurl" value="http://demo.indepth.ae"/>
+        <input  id="client_id" type="hidden" value="00f4e2946c95694ac4c4cb86d44a4b48ab7281f94faf95ec2c6d181d50db801d"/>
+        <input  id="client_secret" type="hidden" value="819793f943fbc9a2320cd87a824e5ad29e51bb0ae77699ed91956a8f995e7719"/>
+        <input  id="redirect_uri" type="hidden" value="http://reports.demo.indepth.ae"/>
 
         <input  id="username" type="text" placeholder="Your Admin account username" autofocus/>
         <input  id="password" type="password" placeholder="Password"/>
