@@ -1,62 +1,41 @@
+<?php
+
+session_start();
+if (isset($_SESSION['login']))
+    header('Location: statistics.php');
+ ?>
+
 <!doctype html>
 <head>
     <title>Login</title>
-    <link rel="icon" type="image/png" href="CSS/imges/PageLogo.PNG" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://s3.amazonaws.com/api_play/src/js/jquery-2.1.1.min.js"></script> 
     <script src="https://s3.amazonaws.com/api_play/src/js/vkbeautify.0.99.00.beta.js"></script>
-    <link rel="stylesheet" href="css/www.w3schools.com_w3css_4_w3.css">
-
-    <style>   
-        /*CSS*/
-        body {font-family: Arial, Helvetica, sans-serif;}
-        form {border: 3px solid #f1f1f1;}
-
-        input[type=text],input[type=password], select {
-            font-size: 25px;
-            width: 50%;
-            padding: 12px 20px;
-            margin: 8px 0;
-            display: inline-block;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
-
-        input[type=submit] {
-            width: 50%;
-            background-color: #4CAF50;
-            color: white;
-            padding: 14px 20px;
-            margin: 8px 0;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-        input[type=submit]:hover {
-            background-color: #45a049;
-        }
-
-        .imgcontainer {
-            text-align: center;
-            margin: 24px 0 12px 0;
-        }
+    <!--===============================================================================================-->	
+    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+    <!--===============================================================================================-->	
+    <link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+    <!--===============================================================================================-->	
+    <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" href="css/util.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <!--===============================================================================================-->
 
 
-        .container {
-            padding: 16px;
-        }
-
-        /* Change styles for span and cancel button on extra small screens */
-        @media screen and (max-width: 300px) {
-            span.psw {
-                display: block;
-                float: none;
-            }
-        }
-
-    </style>
 
     <script>
         $(function () {
@@ -67,9 +46,8 @@
                 var redirect_uri = $("#redirect_uri").val();
                 var username = $("#username").val();
                 var password = $("#password").val();
-                if (username === "" || password === "")
-                    alert("Username or Password can not be empty");
-                else
+                if (username !== "" || password !== "")
+
                 {
                     var token_input = $("#token");
                     var result_div = $("#result");
@@ -97,14 +75,22 @@
                         var a = JSON.parse(e.target.responseText);
                         token_input.val(a["access_token"]);
                         if (token_input.val() !== "")
-                        {
-                            alert("Welcome, Login Successful.");
+                        {   document.getElementById('invalidCredentials').style.display = 'none';
+
+                            $('#welcome-modal').modal('show');
+                            setTimeout(function () {
+                                $('#welcome-modal').modal('hide');
+                            }, 6000);
                             document.getElementById("generate-report").click();
-                        }
+                        } else
+                             document.getElementById('invalidCredentials').style.display = 'inline';
+
                         result_div.html(show_response(e.target.responseText));
                         xmlDoc = this.responseText;
                         txt = "";
                     }
+
+
                 };
                 xhr.send("client_id=" + client_id + "&client_secret=" + client_secret + "&grant_type=password&username=" + username + "&password=" + password + "&redirect_uri=" + redirect_uri);
             } catch (err)
@@ -131,36 +117,129 @@
     </script>
 </head>
 <body>
-    <div class="imgcontainer">
-        <img src="css/imges/Alsanawbar-Logo.jpg" style="width: 15rem" alt="Alsanawbar School">
-        <img src="css/imges/InDepth-Logo.png" style="width: 19rem" alt="InDepth">
-        <br>
 
-        <!--API Connecting with Alsanawbar--> 
-        <input  id="instanceurl" type="hidden" name="instanceurl" value="http://demo.indepth.ae"/>
-        <input  id="client_id" type="hidden" value="00f4e2946c95694ac4c4cb86d44a4b48ab7281f94faf95ec2c6d181d50db801d"/>
-        <input  id="client_secret" type="hidden" value="819793f943fbc9a2320cd87a824e5ad29e51bb0ae77699ed91956a8f995e7719"/>
-        <input  id="redirect_uri" type="hidden" value="http://reports.demo.indepth.ae"/>
+    <!--API Connecting with demo--> 
+    <input  id="instanceurl" type="hidden" name="instanceurl" value="http://demo.indepth.ae"/>
+    <input  id="client_id" type="hidden" value="00f4e2946c95694ac4c4cb86d44a4b48ab7281f94faf95ec2c6d181d50db801d"/>
+    <input  id="client_secret" type="hidden" value="819793f943fbc9a2320cd87a824e5ad29e51bb0ae77699ed91956a8f995e7719"/>
+    <input  id="redirect_uri" type="hidden" value="http://reports.demo.indepth.ae"/>
 
-        <input  id="username" type="text" placeholder="Your Admin account username" autofocus/>
-        <input  id="password" type="password" placeholder="Password"/>
 
-        <input  type= "submit" id="generate-button" value ="Login" class="w3-xlarge">
 
-        <form name="frm" onsubmit="return validateForm()" action="statistics.php" method="POST" style="display: none">
-            <input id="token" type="hidden" name="token">
-            <input id="iurl" type="hidden" name="iurl">
-            <input type= "submit" id="generate-report" value ="Generate Reports">
-        </form>
+
+
+
+    <div class="limiter">
+        <div class="container-login100">
+            <div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
+                <form class="login100-form validate-form flex-sb flex-w" onsubmit = "event.preventDefault();">
+                    <span class="login100-form-title p-b-32">
+                        REPORT CENTER Login
+                    </span>
+                      <?php
+                    if (isset($_SESSION['notloggedin'])) {
+                        ?>
+
+                        <div id='noaccess' class="alert alert-warning wrap-input100  m-b-12">
+                            <strong>Not Logged in!</strong> Please login first to continue.
+                        </div>
+
+                        <?php
+                        unset($_SESSION['notloggedin']);
+                    }
+                    ?>
+
+                    <?php
+                    if (isset($_SESSION['noaccess'])) {
+                        ?>
+
+                        <div id='noaccess' class="alert alert-danger wrap-input100  m-b-12">
+                            <strong>Unauthorized!</strong> You are unauthorized to use this system. Only admins & teachers have the access. <br>Please contact system administrator.
+                        </div>
+
+                        <?php
+                        unset($_SESSION['noaccess']);
+                    }
+                    ?>
+                     <div id='invalidCredentials' class="alert alert-danger wrap-input100  m-b-12" style="display: none;">
+                        <strong>Invalid!</strong> Username/Password is inavlid.
+                    </div>
+                    <span class="txt1 p-b-11">
+                        Username
+                    </span>
+                    <div class="wrap-input100 validate-input m-b-36" data-validate = "Username is required">
+                        <input class="input100"   id="username" type="text" placeholder="Username" autofocus/>
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <span class="txt1 p-b-11">
+                        Password
+                    </span>
+                    <div class="wrap-input100 validate-input m-b-12" data-validate = "Password is required">
+                        <span class="btn-show-pass">
+                            <i class="fa fa-eye"></i>
+                        </span>
+                        <input class="input100"  id="password" type="password" placeholder="Password"/>
+                        <span class="focus-input100"></span>
+                    </div>
+
+                    <div class="flex-sb-m w-full p-b-48">
+
+                    </div>
+
+                    <div class="container-login100-form-btn">
+                        <input class="login100-form-btn" type= "submit" id="generate-button" value ="Login" >
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+    <form name="frm" onsubmit="return validateForm()" action="login.php" method="POST" style="display: none">
+        <input id="token" type="hidden" name="token">
+        <input id="iurl" type="hidden" name="iurl">
+        <input id="user"  name="user">
+        <input type= "submit" id="generate-report" value ="Generate Reports">
+    </form>
+    <div id="welcome-modal" class="modal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <p style="text-align: center"><strong> Successfully Logged in. </strong></p>
+                </div>
+            </div>
+        </div>
     </div>
 
+
     <script>
+
+
+
         var input = document.getElementById("password");
         input.addEventListener("keyup", function (event) {
+            document.getElementById("user").value = document.getElementById("username").value;
             if (event.keyCode === 13)
                 document.getElementById("generate-button").click();
         });
     </script>
+    <!--===============================================================================================-->
+    <script src="vendor/jquery/jquery.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/animsition/js/animsition.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/bootstrap/js/popper.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/select2/select2.min.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/daterangepicker/moment.min.js"></script>
+    <script src="vendor/daterangepicker/daterangepicker.js"></script>
+    <!--===============================================================================================-->
+    <script src="vendor/countdowntime/countdowntime.js"></script>
+    <!--===============================================================================================-->
+    <script src="js/main.js"></script>
 </body>
 </html>
 
