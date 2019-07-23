@@ -59,7 +59,7 @@ if ($result->num_rows > 0) {
         }
         echo $row["gender"] . "</td><td>" . $row["exam_name"] . "</td><td>" . $row["grade"] .
         "</td><td>" . $row["batch_name"] . "</td><td>" . $row["subject_name"] .
-        "</td><td>" . $row["marks"] . "</td></tr>";
+        "</td><td>" . $row["marks"] . " \n </td></tr>";
     }
     echo "</tbody>";
 } else

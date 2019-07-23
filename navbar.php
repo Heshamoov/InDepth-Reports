@@ -31,6 +31,15 @@
 <!--    <form name="frm" style="float: right" action="batch_wise.php" method="POST">
         <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" value="Batch Wise" type="submit">
     </form>   -->
+    <form action="logout.php" style="float: right;padding-top: 5px; padding-right: 10px;" >
+        <button  type ='submit' href='logout.php' class="btn btn-danger btn-sm">
+            <span class="glyphicon glyphicon-log-out"></span> Log out
+        </button>
+    </form>
+
+
+
+
 <form name="frm" style="float: right" action="attainment.php" method="POST">
         <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navAttainment" value="Attainment Analysis" type="submit">
     </form>   
@@ -45,4 +54,5 @@
     <!--     <form name="frm" style="float: right"action="import.php" method="POST">
                     <input class="w3-bar-item w3-button w3-hide-small  w3-right-align w3-hover-white w3-mobile" value="Home" type="submit">
                 </form>  -->
+
 </div>
