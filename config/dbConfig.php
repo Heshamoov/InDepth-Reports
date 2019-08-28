@@ -6,9 +6,9 @@
  */
 
 $servername = "localhost";
-$username = "reports2018";
-$password = "Indepth2018";
-$DB = "indepth_pro";
+$username = "wps";
+$password = "Indepth@2019";
+$DB = "alsanawabar";
 
 $conn = new mysqli($servername, $username, $password, $DB);
 

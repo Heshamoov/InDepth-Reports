@@ -1,9 +1,8 @@
 <?php
-
 session_start();
 if (isset($_SESSION['login']))
     header('Location: statistics.php');
- ?>
+?>
 
 <!doctype html>
 <head>
@@ -75,7 +74,8 @@ if (isset($_SESSION['login']))
                         var a = JSON.parse(e.target.responseText);
                         token_input.val(a["access_token"]);
                         if (token_input.val() !== "")
-                        {   document.getElementById('invalidCredentials').style.display = 'none';
+                        {
+                            document.getElementById('invalidCredentials').style.display = 'none';
 
                             $('#welcome-modal').modal('show');
                             setTimeout(function () {
@@ -83,7 +83,7 @@ if (isset($_SESSION['login']))
                             }, 6000);
                             document.getElementById("generate-report").click();
                         } else
-                             document.getElementById('invalidCredentials').style.display = 'inline';
+                            document.getElementById('invalidCredentials').style.display = 'inline';
 
                         result_div.html(show_response(e.target.responseText));
                         xmlDoc = this.responseText;
@@ -119,10 +119,10 @@ if (isset($_SESSION['login']))
 <body>
 
     <!--API Connecting with demo--> 
-    <input  id="instanceurl" type="hidden" name="instanceurl" value="http://demo.indepth.ae"/>
-    <input  id="client_id" type="hidden" value="00f4e2946c95694ac4c4cb86d44a4b48ab7281f94faf95ec2c6d181d50db801d"/>
-    <input  id="client_secret" type="hidden" value="819793f943fbc9a2320cd87a824e5ad29e51bb0ae77699ed91956a8f995e7719"/>
-    <input  id="redirect_uri" type="hidden" value="http://reports.demo.indepth.ae"/>
+    <input  id="instanceurl" type="hidden" name="instanceurl" value="https://alsanawbar.school/"/>
+    <input  id="client_id" type="hidden" value="807ee0dddf6b79166323a61f2d8e8473865f8fb7455052e2d9a47c05200b6822"/>
+    <input  id="client_secret" type="hidden" value="86e7e63d9f030b770e7152c632ddda32daeb8cef5c5c7eb8a44bf0736231a8af"/>
+    <input  id="redirect_uri" type="hidden" value="http://indepthreports.online/"/>
 
 
 
@@ -136,7 +136,7 @@ if (isset($_SESSION['login']))
                     <span class="login100-form-title p-b-32">
                         REPORT CENTER Login
                     </span>
-                      <?php
+                    <?php
                     if (isset($_SESSION['notloggedin'])) {
                         ?>
 
@@ -161,7 +161,7 @@ if (isset($_SESSION['login']))
                         unset($_SESSION['noaccess']);
                     }
                     ?>
-                     <div id='invalidCredentials' class="alert alert-danger wrap-input100  m-b-12" style="display: none;">
+                    <div id='invalidCredentials' class="alert alert-danger wrap-input100  m-b-12" style="display: none;">
                         <strong>Invalid!</strong> Username/Password is inavlid.
                     </div>
                     <span class="txt1 p-b-11">

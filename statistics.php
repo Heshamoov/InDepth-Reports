@@ -7,10 +7,10 @@ if (!isset($_SESSION['login'])) {
     include('Header.php');
     ?>
 
-    <title>Statistics</title>
+    <title>STATISTICS</title>
 
     </head>
-
+    <body>
     <!--loader initialization-->
     <script>
         $(window).load(function () {
@@ -21,8 +21,6 @@ if (!isset($_SESSION['login'])) {
     </script>
 
     <script type="text/javascript">
-
-
         $(function () {
             $('#academic_year').multiselect({includeSelectAllOption: true});
             $('#term').multiselect({includeSelectAllOption: true});
@@ -31,8 +29,6 @@ if (!isset($_SESSION['login'])) {
             $('#subject').multiselect({includeSelectAllOption: true});
             $('#gender').multiselect({includeSelectAllOption: true});
             $('#category').multiselect({includeSelectAllOption: true});
-
-
 
             $(document).on("ready click", function () {
 
@@ -46,7 +42,6 @@ if (!isset($_SESSION['login'])) {
                 var selected_subjects = $("#subject option:selected");
                 var selected_gender = $("#gender option:selected");
                 var selected_category = $("#category option:selected");
-
 
                 //Academic Years                
                 var message = "";
@@ -194,10 +189,6 @@ if (!isset($_SESSION['login'])) {
                 else
                     selected_category = "";
 
-
-
-
-
                 //Generate Tables
                 for (var i = 1; i < 13; i++)
                 {
@@ -234,8 +225,6 @@ if (!isset($_SESSION['login'])) {
                         subjectHeader += " , " + currentSubject;
                     }
 
-
-
                     tableName = "T" + tableNumber;
                     var tableNeme2 = 'TT' + tableNumber;
                     document.getElementById(tableName).style.visibility = "Visible";
@@ -254,9 +243,10 @@ if (!isset($_SESSION['login'])) {
                     }
 
                     //Academic Year value
-                    stablePDF.rows[2].cells[0].innerHTML = "2018-2019";
-                    table.rows[2].cells[0].innerHTML = "2018-2019";
-                    table2.rows[2].cells[0].innerHTML = "2018-2019";
+                    stable.rows[2].cells[0].innerHTML = academicHeader;
+                    stablePDF.rows[2].cells[0].innerHTML = academicHeader;
+                    table.rows[2].cells[0].innerHTML = academicHeader;
+                    table2.rows[2].cells[0].innerHTML = academicHeader;
 
                     // Total value Subject wise
                     var httpTotal = new XMLHttpRequest();
@@ -268,8 +258,6 @@ if (!isset($_SESSION['login'])) {
                     };
                     httpTotal.open("POST", "sqldb/subjectCount.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject, false);
                     httpTotal.send();
-
-
 
 
                     //Between values Subject wise
@@ -297,7 +285,7 @@ if (!isset($_SESSION['login'])) {
                 else
                     selected_subjects = "";
 
-                stable.rows[0].cells[0].innerHTML = "Statistics: " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
+                stable.rows[0].cells[0].innerHTML = "STATISTICS on: " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
                 stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;
 
                 var xmlhttp = new XMLHttpRequest();
@@ -343,10 +331,6 @@ if (!isset($_SESSION['login'])) {
 
             });
         });
-
-
-
-
     </script>
 
     <script>
@@ -372,8 +356,6 @@ if (!isset($_SESSION['login'])) {
             result3 = tableName.rows[2].cells[4].innerHTML;
             header = tableName.rows[0].cells[0].innerHTML;
 
-
-
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Number of Students');
             data.addColumn('number', 'Students');
@@ -390,11 +372,8 @@ if (!isset($_SESSION['login'])) {
             var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
             chart.draw(data, options);
             imgData[0] = chart.getImageURI();
-
-
         }
         ;
-
 
 
 
@@ -435,58 +414,53 @@ if (!isset($_SESSION['login'])) {
             }
         }
         ;
-
-
-
     </script>
 
-    <body >
+    
 
         <div class="se-pre-con"></div>
 
-
         <div class=" w3-responsive header" >
-
-            <!-- Navigation bar -->        
-    <?php include('navbar.php'); ?>
+        <!-- Navigation bar -->        
+            <?php include('navbar.php'); ?>
 
             <!--set color for current tab-->
             <script>
                 document.getElementById("navStatistics").style.backgroundColor = '#009688';
             </script>
+        <!--End of Navictacoin bar-->
 
-            <!--End of Navictacoin bar-->
-
-            <!--Drop menus-->
+        <!--Drop menus-->
             <div id="upperdiv" class="w3-container w3-mobile" style="padding-top: 10px; padding-bottom: 10px">
                 <table id= "table1">
-
                     <tr>
                         <td></td><td>Academic Year</td><td>Grade</td>
-                        <td>Section</td>  <td>Subject</td>  <td>Term</td><td>Gender</td><td>Category</td><td></td>
+                        <td>Section</td>  <td>Subject</td>  <td>Term</td>
+                        <td>Gender</td> <td>Category</td>   <td></td>
                     </tr>
                     <tr>
-                        <td>
-                            <button  class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="exportS" onclick="downloadStatistics()" title="Export Sttistics as PDF"> <span class="material-icons ">save_alt</span></button>
+                        <td>   <!--Download Button-->
+                            <button class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="exportS" onclick="downloadStatistics()" title="Export Sttistics as PDF">
+                                <span class="material-icons ">save_alt</span>
+                            </button>                            
                         </td>
                         <td>
-                            <select   id="academic_year" onchange="fillGrades()"  multiple="multiple"></select>   
+                            <select id="academic_year" onchange="fillGrades()" multiple="multiple"></select>   
                         </td>
                         <td>
-                            <select   id="grade" onchange="fillBatches()" multiple="multiple"   ></select>   
-                        </td>
-                        <td >
-
-                            <select  id ="batch"  onchange="fillSubjects()"  multiple="multiple"  ></select>  
+                            <select id="grade" onchange="fillBatches()" multiple="multiple"></select>   
                         </td>
                         <td>
-                            <select id="subject" onchange="fillTerms()"   multiple="multiple"></select>
+                            <select id ="batch" onchange="fillSubjects()" multiple="multiple"></select>  
+                        </td>
+                        <td>
+                            <select id="subject" onchange="fillTerms()" multiple="multiple"></select>
                         </td>
                         <td>
                             <select id="term" multiple="multiple"></select>         
                         </td>
                         <td>
-                            <select id="gender"  multiple="multiple"> 
+                            <select id="gender" multiple="multiple"> 
                                 <option>Male</option>
                                 <option>Female</option> 
                             </select>
@@ -494,38 +468,32 @@ if (!isset($_SESSION['login'])) {
                         <td>
                             <select id="category" multiple="multiple"></select>         
                         </td>
-
-                        <td>
-                            <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results"><span class="fa fa-search"></span></button>
+                        <td> <!--Search Button--> 
+                            <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">
+                                <span class="fa fa-search"></span>
+                            </button>
                         </td>
-
                         <td>
-                       <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" onclick="printJS({ printable: 'outheader', type: 'html',base64: true, showModal:true,documentTitle: 'Statistics',targetStyles : '*',honorColor: true,repeatTableHeader: true,scanstyles: true });" title="Export Statistics as PDF">
-                           <span class="material-icons">save_alt</span></button>
-
-
+                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" onclick="printJS({printable: 'outheader', type: 'html', base64: true, showModal: true, documentTitle: 'Statistics', targetStyles: '*', honorColor: true, repeatTableHeader: true, scanstyles: true});" title="Export Statistics as PDF">
+                                <span class="material-icons">save_alt</span>
+                            </button>
                         </td>
-
                     </tr>
-
                 </table>
-
             </div>
 
             <!--Drop menus-->
-
-            <div class="w3-container w3-col m4 l5 w3-mobile" id="tables" style="overflow: scroll;top: 0;  bottom: 0; height: 100vh; " >
+            <div class="w3-container w3-col m4 l5 w3-mobile" id="tables" style="overflow: scroll;top: 0;  bottom: 0; height: 100vh;">
                 <textarea id="output" rows="10" cols="50" hidden></textarea>
                 <br>
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="stable">  
-                    <th colspan="4" class="w3-custom " style="font-size: 16px">Statistics 
+<!--stable-->   <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="stable">
+                    <th colspan="4" class="w3-custom " style="font-size: 16px">
+                        STATISTICS
                     </th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popover" >
+                    <th colspan="1" class="w3-custom">
+                        <button style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popover">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
-
-
                     <tr>
                         <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Marks Count</th>
                         <th class="w3-border-right"><input id="percent11" type="text" value= 50>% - <input id="percente12" type="text" value=100>%</th>
@@ -533,18 +501,16 @@ if (!isset($_SESSION['login'])) {
                         <th class="w3-border-right"><input id="percent31" type="text" value=75>% - <input id="percente32" type="text" value=100>%</th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right">2017-2018</td>
+                        <td class="w3-border-right"></td>
                         <td class="w3-border-right"></td>
                         <td class="w3-border-right"></td>
                         <td class="w3-border-right"></td>
                         <td class="w3-border-right"></td>
                     </tr>
-
-
                 </table>
                 <br><br>
 
-                <table id="stablePDF" style="font-size: 100px" hidden>
+<!--stablePDF--><table id="stablePDF" style="font-size: 100px" hidden>
                     <thead>
                         <tr>
                             <th colspan="5"></th>
@@ -563,7 +529,7 @@ if (!isset($_SESSION['login'])) {
                             <th></th>
                         </tr>
                         <tr>
-                            <td>2018-2019</td>
+                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -572,14 +538,13 @@ if (!isset($_SESSION['login'])) {
                     </tbody>
                 </table>
 
-                <table id="T1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" >
+<!--T1-->       <table id="T1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" >
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popoverSubject1" onclick="drawChartSubjects();">
+                    <th colspan="1" class="w3-custom">
+                        <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject1" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
-                        </button></th>
-
-
+                        </button>
+                    </th>
                     <tr>
                         <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
@@ -591,10 +556,10 @@ if (!isset($_SESSION['login'])) {
                 </table>
                 <br>
 
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T2">  
+<!--T2-->       <table id="T2" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">  
                     <th colspan="4" class="w3-custom" style="font-size: 16px;">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popoverSubject2" onclick="drawChartSubjects();">
+                    <th colspan="1" class="w3-custom">
+                        <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject2" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
@@ -609,9 +574,9 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T3">  
+<!--T3-->       <table id="T3" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">  
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                    <th colspan="1" class="w3-custom">  <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
                                                                  data-toggle="popoverSubject3" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
@@ -627,10 +592,10 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T4">
+<!--T4-->       <table id="T4" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popoverSubject4" onclick="drawChartSubjects();">
+                    <th colspan="1" class="w3-custom">
+                        <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject4" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
@@ -645,10 +610,10 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T5">  
+<!--T5-->       <table id="T5" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popoverSubject5" onclick="drawChartSubjects();">
+                    <th colspan="1" class="w3-custom">
+                        <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject5" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
@@ -663,10 +628,10 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T6">  
+<!--T6-->       <table id="T6" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popoverSubject6" onclick="drawChartSubjects();">
+                    <th colspan="1" class="w3-custom">
+                        <button style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject6" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
@@ -681,10 +646,10 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T7">  
+<!--T7-->       <table id="T7" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popoverSubject7" onclick="drawChartSubjects();">
+                    <th colspan="1" class="w3-custom">
+                        <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject7" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
@@ -699,10 +664,10 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T8">  
+<!--T8-->       <table id="T8" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popoverSubject8" onclick="drawChartSubjects();">
+                    <th colspan="1" class="w3-custom">
+                        <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject8" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
@@ -717,10 +682,10 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T9">  
+<!--T9-->       <table id="T9" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popoverSubject9" onclick="drawChartSubjects();">
+                    <th colspan="1" class="w3-custom">
+                        <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject9" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
@@ -735,10 +700,10 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T10">  
+<!--T10-->       <table id="T10" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popoverSubject10" onclick="drawChartSubjects();">
+                    <th colspan="1" class="w3-custom">
+                        <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject10" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
@@ -753,10 +718,10 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T11">  
+<!--T11-->       <table id="T11" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popoverSubject11" onclick="drawChartSubjects();">
+                    <th colspan="1" class="w3-custom">
+                        <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject11" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
@@ -771,10 +736,10 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T12">  
+<!--T12-->       <table id="T12" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
-                                                                 data-toggle="popoverSubject12" onclick="drawChartSubjects();">
+                    <th colspan="1" class="w3-custom">
+                        <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject12" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
@@ -786,14 +751,16 @@ if (!isset($_SESSION['login'])) {
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
-
             </div>
 
             <div class="w3-col m8 l7 w3-card-4 w3-mobile" id="rightdiv" style = "height:100vh; overflow: scroll; padding-top: 10px; padding-left: 10px; padding-right: 10px"> 
-                <!--Downloading table  11:52 AM-->   
+            <!--Students List-->   
                 <br>
-                <div id ="outheader"> <h4  style="text-align: center"> STUDENT LIST</h4>
-                    <table class="w3-table-all w3-card-4 w3-striped w3-hoverable" id="out" ></table> </div>
+                <div id ="outheader">
+                    <h4  style="text-align: center">STUDENTS LIST</h4>
+<!--Out Table-->    <table class="w3-table-all w3-card-4 w3-striped w3-hoverable" id="out" >
+                    </table>
+                </div>
                 <table id="TT1" hidden>
                     <thead>
                         <tr>
@@ -878,10 +845,11 @@ if (!isset($_SESSION['login'])) {
                 </table>    
             </div>
 
-            <button onclick="topFunction()" style="left:0; padding: 10px;" class=" w3-hover-blue-gray w3-small w3-round-xxlarge" id="myBtn" title="Scroll to top"><span class="glyphicon glyphicon-arrow-up"style="font-size: 25px;" ></span></button>
-
-            <!--Scroll Handling-->
+            <button onclick="topFunction()" style="left:0; padding: 10px;" class=" w3-hover-blue-gray w3-small w3-round-xxlarge" id="myBtn" title="Scroll to top">
+                <span class="glyphicon glyphicon-arrow-up" style="font-size: 25px;" ></span>
+            </button>
         </div>
+        
         <script>
             document.getElementById("tables").onscroll = function () {
                 scrollFunction();
@@ -895,13 +863,10 @@ if (!isset($_SESSION['login'])) {
             ;
             function topFunction() {
                 document.getElementById("tables").scrollTop = 0;
-
-
-            }
-            ;
+            };
         </script>
 
-        <!--Initialize Academic Years->-->     
+        <!--Initialize Academic Year drop-down-->   
         <script type="text/javascript">
             var yearArray = ["Your Data Base is Empty!."];
 
@@ -919,35 +884,25 @@ if (!isset($_SESSION['login'])) {
             delete yearArray[yearArray.length - 1];
             for (var i in yearArray) {
                 select.add(new Option(yearArray[i]));
-            }
-            ;
+            };
             $(function () {
                 $('#academic_year').multiselect({
                     includeSelectAllOption: true
                 });
             });
-
         </script>
-        <!--
-        
-                 
 
-        <!--Initialize Grade drop down-->     
+        <!--Initialize Grade drop-down-->     
         <script type="text/javascript">
             document.getElementById("academic_year").addEventListener("change", fillGrades());
-
-
             function fillGrades() {
-
                 var selected_years = $("#academic_year option:selected");
                 var select = document.getElementById('grade');
                 while (select.length > 0)
                     select.remove(0);
-
                 var message = "";
                 selected_years.each(function () {
                     if (message === "") {
-
                         message = "   (academic_years.name = '" + $(this).text() + "'";
                     } else {
                         message += " OR academic_years.name = '" + $(this).text() + "'";
@@ -955,7 +910,6 @@ if (!isset($_SESSION['login'])) {
                 });
 
                 if (message !== "") {
-
                     selected_years = message + ")";
                 } else
                     selected_years = "";
@@ -969,15 +923,13 @@ if (!isset($_SESSION['login'])) {
                 };
                 httpgrades.open("GET", "sqldb/distinctGrades.php?years=" + selected_years, false);
                 httpgrades.send();
+                
                 $('#grade').multiselect('destroy');
-
                 delete gradesArray[gradesArray.length - 1];
+                
                 for (var i in gradesArray) {
                     select.add(new Option(gradesArray[i]));
-
-                }
-                ;
-
+                };
 
                 $(function () {
                     $('#grade').multiselect({
@@ -985,43 +937,29 @@ if (!isset($_SESSION['login'])) {
                     });
                 });
             }
-
         </script>
 
-        <!--
-            Initialize Batch drop down     --> 
+        <!--Initialize Section drop-down--> 
         <script type="text/javascript">
-
             document.getElementById("grade").addEventListener("change", fillBatches());
-
-
             function fillBatches() {
-
                 var selected_years = $("#academic_year option:selected");
                 var selected_grades = $("#grade option:selected");
-
                 var select = document.getElementById('batch');
-
                 while (select.length > 0)
                     select.remove(0);
-
                 var message = "";
                 selected_years.each(function () {
                     if (message === "") {
-
                         message = "   (academic_years.name = '" + $(this).text() + "'";
                     } else {
                         message += " OR academic_years.name = '" + $(this).text() + "'";
                     }
                 });
-
                 if (message !== "") {
-
                     selected_years = message + ")";
                 } else
                     selected_years = "";
-
-
                 var message = "";
                 selected_grades.each(function () {
                     if (message === "") {
@@ -1035,7 +973,6 @@ if (!isset($_SESSION['login'])) {
                 });
 
                 if (message !== "") {
-
                     selected_grades = message + ")";
                 } else
                     selected_grades = "";
@@ -1047,18 +984,14 @@ if (!isset($_SESSION['login'])) {
                         batchesArray = str.split("\t");
                     }
                 };
-
                 httpBatches.open("GET", "sqldb/_batchesViaGradeYear.php?years=" + selected_years + "&grades=" + selected_grades, false);
                 httpBatches.send();
-                $('#batch').multiselect('destroy');
 
+                $('#batch').multiselect('destroy');
                 delete batchesArray[batchesArray.length - 1];
                 for (var i in batchesArray) {
                     select.add(new Option(batchesArray[i]));
-        //                 document.write(batchesArray[i]);
-                }
-                ;
-
+                };
 
                 $(function () {
                     $('#batch').multiselect({
@@ -1066,48 +999,30 @@ if (!isset($_SESSION['login'])) {
                     });
                 });
             }
-
         </script>
 
-
-
-
-
-        <!--
-        Initialize Subject drop down     --> 
+        <!--Initialize Subject drop-down--> 
         <script type="text/javascript">
-
             document.getElementById("batch").addEventListener("change", fillSubjects());
-
-
             function fillSubjects() {
-
                 var selected_years = $("#academic_year option:selected");
                 var selected_grades = $("#grade option:selected");
                 var selected_batches = $("#batch option:selected");
-
                 var select = document.getElementById('subject');
-
                 while (select.length > 0)
                     select.remove(0);
-
                 var message = "";
                 selected_years.each(function () {
                     if (message === "") {
-
                         message = "   (academic_years.name = '" + $(this).text() + "'";
                     } else {
                         message += " OR academic_years.name = '" + $(this).text() + "'";
                     }
                 });
-
                 if (message !== "") {
-
                     selected_years = message + ")";
                 } else
                     selected_years = "";
-
-
                 var message = "";
                 selected_grades.each(function () {
                     if (message === "") {
@@ -1119,14 +1034,11 @@ if (!isset($_SESSION['login'])) {
                         message += " OR courses.course_name = '" + $(this).text() + "' ";
                     }
                 });
-
                 if (message !== "") {
 
                     selected_grades = message + ")";
                 } else
                     selected_grades = "";
-
-
                 var message = "";
                 selected_batches.each(function () {
                     if (message === "") {
@@ -1138,17 +1050,12 @@ if (!isset($_SESSION['login'])) {
                         message += " OR batches.name = '" + $(this).text() + "' ";
                     }
                 });
-
                 if (message !== "") {
 
                     selected_batches = message + ")";
                 } else
                     selected_batches = "";
-
-
-
-
-
+                
                 var httpSubjects = new XMLHttpRequest();
                 httpSubjects.onreadystatechange = function () {
                     if (this.readyState === 4) {
@@ -1159,63 +1066,44 @@ if (!isset($_SESSION['login'])) {
 
                 httpSubjects.open("GET", "sqldb/_subjectsViaBatchGradeYear.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches, false);
                 httpSubjects.send();
-                $('#subject').multiselect('destroy');
 
+                $('#subject').multiselect('destroy');
                 delete subjectsArray[subjectsArray.length - 1];
                 for (var i in subjectsArray) {
                     select.add(new Option(subjectsArray[i]));
-        //                 document.write(batchesArray[i]);
-                }
-                ;
-
-
+                };
+                
                 $(function () {
                     $('#subject').multiselect({
                         includeSelectAllOption: true
                     });
                 });
             }
-
         </script>
 
-
-        <!--
-        Initialize Term drop down     --> 
+        <!--Initialize Term drop down--> 
         <script type="text/javascript">
-
             document.getElementById("subject").addEventListener("change", fillTerms());
-
-
             function fillTerms() {
-
                 var selected_years = $("#academic_year option:selected");
                 var selected_grades = $("#grade option:selected");
                 var selected_batches = $("#batch option:selected");
                 var selected_subjects = $("#subject option:selected");
-
-
                 var select = document.getElementById('term');
-
                 while (select.length > 0)
                     select.remove(0);
-
                 var message = "";
                 selected_years.each(function () {
-                    if (message === "") {
-
+                    if (message === "")
                         message = "   (academic_years.name = '" + $(this).text() + "'";
-                    } else {
+                    else
                         message += " OR academic_years.name = '" + $(this).text() + "'";
-                    }
                 });
-
-                if (message !== "") {
-
+                if (message !== "")
                     selected_years = message + ")";
-                } else
+                else
                     selected_years = "";
-
-
+                
                 var message = "";
                 selected_grades.each(function () {
                     if (message === "") {
@@ -1228,12 +1116,10 @@ if (!isset($_SESSION['login'])) {
                     }
                 });
 
-                if (message !== "") {
-
+                if (message !== "")
                     selected_grades = message + ")";
-                } else
+                else
                     selected_grades = "";
-
 
                 var message = "";
                 selected_batches.each(function () {
@@ -1242,17 +1128,14 @@ if (!isset($_SESSION['login'])) {
                             message = " AND (batches.name = '" + $(this).text() + "' ";
                         else
                             message = " (batches.name = '" + $(this).text() + "' ";
-                    } else {
+                    } else
                         message += " OR batches.name = '" + $(this).text() + "' ";
-                    }
                 });
 
-                if (message !== "") {
-
+                if (message !== "")
                     selected_batches = message + ")";
-                } else
+                else
                     selected_batches = "";
-
 
                 var message = "";
                 selected_subjects.each(function () {
@@ -1261,20 +1144,14 @@ if (!isset($_SESSION['login'])) {
                             message = " AND (subjects.name = '" + $(this).text() + "' ";
                         else
                             message = " (subjects.name = '" + $(this).text() + "' ";
-                    } else {
+                    } else
                         message += " OR subjects.name = '" + $(this).text() + "' ";
-                    }
                 });
 
-                if (message !== "") {
-
+                if (message !== "")
                     selected_subjects = message + ")";
-                } else
+                else
                     selected_subjects = "";
-
-
-
-
 
                 var httpTerms = new XMLHttpRequest();
                 httpTerms.onreadystatechange = function () {
@@ -1286,15 +1163,12 @@ if (!isset($_SESSION['login'])) {
 
                 httpTerms.open("GET", "sqldb/_TermsViaYearGradeSectionSubject.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects, false);
                 httpTerms.send();
-                $('#term').multiselect('destroy');
 
+                $('#term').multiselect('destroy');
                 delete termsArray[termsArray.length - 1];
                 for (var i in termsArray) {
                     select.add(new Option(termsArray[i]));
-        //                 document.write(termsArray[i]);
-                }
-                ;
-
+                };
 
                 $(function () {
                     $('#term').multiselect({
@@ -1302,21 +1176,11 @@ if (!isset($_SESSION['login'])) {
                     });
                 });
             }
-
         </script>
 
-
-
-
-
-
-
-
-
-        <!--Initialize Student Category -->     
+        <!--Initialize Student Category drop-down -->     
         <script type="text/javascript">
             var categoryArray = ["Your Data Base is Empty!."];
-
             var httpcategory = new XMLHttpRequest();
             httpcategory.onreadystatechange = function () {
                 if (this.readyState === 4) {
@@ -1331,47 +1195,37 @@ if (!isset($_SESSION['login'])) {
             delete categoryArray[categoryArray.length - 1];
             for (var i in categoryArray) {
                 select.add(new Option(categoryArray[i]));
-            }
-            ;
+            };
             $(function () {
                 $('#category').multiselect({
                     includeSelectAllOption: true
                 });
             });
-
         </script>
 
-
-
-        --><script>
+        <script>
             function downloadStudents() {
-
                 var PTSans = "AAEAAAAUAQA...";
                 var doc = new jsPDF('p', 'pt', 'a3');
                 doc.addFileToVFS("PTSans.ttf", PTSans);
                 doc.addFont('PTSans.ttf', 'PTSans', 'normal');
-
                 doc.setFontStyle('normal');
-
 
                 var table = doc.autoTableHtmlToJson(document.getElementById("out"));
                 var header = function (data) {
-
-
                     doc.setFont('PTSans'); // set font
                     doc.text("Students List", 250, 50);
                     doc.line(250, 53, 335, 53);// Header top margin
                     // Header top margin
                 };
 
-                doc.autoTable(table.columns, table.data, {beforePageContent: header, theme: 'grid', margin: {top: 70}
-                });
+                doc.autoTable(table.columns, table.data, {beforePageContent: header, theme: 'grid', margin: {top: 70}});
                 doc.save("Students.pdf");
             }
-        </script><!--
-        --><script>
+        </script>
+        
+        <script>
             function downloadStatistics() {
-
                 var doc = new jsPDF('p', 'pt', 'a3');
                 var header = function (data) {
                     doc.setFontSize(18);
@@ -1389,8 +1243,7 @@ if (!isset($_SESSION['login'])) {
                     }, styles: {
                         fontSize: 12,
                         font: 'PTSans',
-                    }
-
+                        }
                 });
 
                 var tableName = "";
@@ -1416,7 +1269,7 @@ if (!isset($_SESSION['login'])) {
             }
         </script>
 
-        --><script>
+        <script>
             function downloadPopoverStatistics() {
                 var doc = new jsPDF('p', 'pt');
                 var header = function (data) {
@@ -1438,17 +1291,13 @@ if (!isset($_SESSION['login'])) {
                         fontSize: 12,
                         font: 'PTSans',
                         halign: 'center'
-
                     }
-
                 });
-
-
                 doc.save("Statistics.pdf");
             }
         </script>
 
-        --><script>
+        <script>
             function downloadPopoverSubjects(tno) {
                 var doc = new jsPDF('p', 'pt');
                 var tableName = "";
@@ -1458,8 +1307,7 @@ if (!isset($_SESSION['login'])) {
                     doc.text("Subject wise Statistics", 225, 50);
                     doc.line(226, 53, 390, 53);// Header top margin
                 };
-
-
+                
                 tableName = "TT" + tno;
                 doc.addImage(imgData[tno], 'png', 80, 180, 300, 200);
                 var table = doc.autoTableHtmlToJson(document.getElementById(tableName));
@@ -1474,16 +1322,13 @@ if (!isset($_SESSION['login'])) {
                         font: 'PTSans',
                         halign: 'center'
                     }
-
                 });
 
                 doc.save("Subject.pdf");
             }
         </script>
 
-
         <script>
-
             $(document).ready(function () {
                 $('[data-toggle="popover"]').popover(
                         {
@@ -1502,11 +1347,9 @@ if (!isset($_SESSION['login'])) {
                 });
 
             });
-
         </script>
 
         <script>
-
             $(document).ready(function () {
                 $('[data-toggle="popoverSubject1"]').popover(
                         {
@@ -1525,12 +1368,9 @@ if (!isset($_SESSION['login'])) {
                 });
 
             });
-
         </script>
 
-
         <script>
-
             $(document).ready(function () {
                 $('[data-toggle="popoverSubject2"]').popover(
                         {
@@ -1547,20 +1387,16 @@ if (!isset($_SESSION['login'])) {
                         $(_this).popover('hide');
                     });
                 });
-
             });
-
         </script>
 
         <script>
-
             $(document).ready(function () {
                 $('[data-toggle="popoverSubject3"]').popover(
                         {
                             trigger: "manual",
                             html: true,
                             content: function () {
-
                                 return $('#popcontainerSubject3').html();
                             }
                         }).on("mouseenter", function () {
@@ -1570,13 +1406,10 @@ if (!isset($_SESSION['login'])) {
                         $(_this).popover('hide');
                     });
                 });
-
             });
-
         </script>
 
         <script>
-
             $(document).ready(function () {
                 $('[data-toggle="popoverSubject4"]').popover(
                         {
@@ -1595,7 +1428,6 @@ if (!isset($_SESSION['login'])) {
                 });
 
             });
-
         </script>
 
         <script>
@@ -1618,7 +1450,6 @@ if (!isset($_SESSION['login'])) {
                 });
 
             });
-
         </script>
 
         <script>
@@ -1641,11 +1472,9 @@ if (!isset($_SESSION['login'])) {
                 });
 
             });
-
         </script>
 
         <script>
-
             $(document).ready(function () {
                 $('[data-toggle="popoverSubject7"]').popover(
                         {
@@ -1664,11 +1493,9 @@ if (!isset($_SESSION['login'])) {
                 });
 
             });
-
         </script>
 
         <script>
-
             $(document).ready(function () {
                 $('[data-toggle="popoverSubject8"]').popover(
                         {
@@ -1687,7 +1514,6 @@ if (!isset($_SESSION['login'])) {
                 });
 
             });
-
         </script>
 
         <script>
@@ -1708,14 +1534,11 @@ if (!isset($_SESSION['login'])) {
                         $(_this).popover('hide');
                     });
                 });
-
             });
-
         </script>
 
 
         <script>
-
             $(document).ready(function () {
                 $('[data-toggle="popoverSubject10"]').popover(
                         {
@@ -1732,13 +1555,10 @@ if (!isset($_SESSION['login'])) {
                         $(_this).popover('hide');
                     });
                 });
-
             });
-
         </script>
 
         <script>
-
             $(document).ready(function () {
                 $('[data-toggle="popoverSubject11"]').popover(
                         {
@@ -1755,13 +1575,10 @@ if (!isset($_SESSION['login'])) {
                         $(_this).popover('hide');
                     });
                 });
-
             });
-
         </script>
 
         <script>
-
             $(document).ready(function () {
                 $('[data-toggle="popoverSubject12"]').popover(
                         {
@@ -1778,16 +1595,13 @@ if (!isset($_SESSION['login'])) {
                         $(_this).popover('hide');
                     });
                 });
-
             });
-
         </script>
 
 
         <div id = "popcontainer" class="popover-content-el hide " style="width:400px; "  >
 
             <div id="chart_div" style="width:400px; "  >
-
             </div>
             <h6   style="float: left; cursor: pointer; color: gray">Click to view details</h6>
             <button class="  w3-hover-teal  w3-round-xxlarge " id="exportS" style="float: right; margin-bottom: 10px; color: teal" onclick="downloadPopoverStatistics()" title="Download Graph">
@@ -1892,8 +1706,6 @@ if (!isset($_SESSION['login'])) {
             <button class=" w3-hover-teal  w3-round-xxlarge "  style="float: right;color : teal; margin-bottom: 10px" onclick="downloadPopoverSubjects(12)" title="Download Graph">
                 <span class="material-icons">save_alt</span></button>
         </div>
-
-
     </body>
     </html>
 
