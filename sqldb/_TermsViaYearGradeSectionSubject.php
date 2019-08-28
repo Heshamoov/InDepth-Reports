@@ -10,16 +10,16 @@ $subjects = $_REQUEST["subjects"];
 
 $sql = "SELECT DISTINCT exam_groups.name term FROM exam_groups\n"
 
-    . "LEFT JOIN batches ON batches.id = exam_groups.batch_id \n"
+    . "JOIN batches ON exam_groups.batch_id = batches.id \n"
 
-    . "LEFT JOIN subjects ON subjects.batch_id = batches.id\n"
+    . "JOIN subjects ON batches.id = subjects.batch_id \n"
 
-    . "LEFT JOIN courses ON courses.id = batches.course_id\n";
+    . "JOIN courses ON batches.course_id = courses.id \n";
 
 if ($years == "" && $grades == "" && $batches == "" && $subjects == "")
-    $sql = $sql . " LEFT JOIN academic_years ON academic_years.id = batches.academic_year_id  ";
+    $sql = $sql . " JOIN academic_years ON batches.academic_year_id = academic_years.id ";
 else
-    $sql = $sql . "LEFT JOIN academic_years ON batches.academic_year_id = academic_years.id WHERE $years $grades $batches  $subjects ";
+    $sql = $sql . " JOIN academic_years ON batches.academic_year_id = academic_years.id WHERE $years $grades $batches  $subjects ";
 
     $sql = $sql . " ORDER BY exam_groups.name ASC ;";
 

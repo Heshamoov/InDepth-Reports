@@ -22,6 +22,7 @@ if (!isset($_SESSION['login'])) {
 
     <script type="text/javascript">
         $(function () {
+//            $(document).ready(function(){
             $('#academic_year').multiselect({includeSelectAllOption: true});
             $('#term').multiselect({includeSelectAllOption: true});
             $('#grade').multiselect({includeSelectAllOption: true});
@@ -29,12 +30,12 @@ if (!isset($_SESSION['login'])) {
             $('#subject').multiselect({includeSelectAllOption: true});
             $('#gender').multiselect({includeSelectAllOption: true});
             $('#category').multiselect({includeSelectAllOption: true});
-
+//            document.getElementById("search").click();
             $(document).on("ready click", function () {
-
+//            $("#search").click(function(){
                 google.charts.setOnLoadCallback(drawChart);
                 google.charts.setOnLoadCallback(drawChartSubjects);
-
+                
                 var selected_years = $("#academic_year option:selected");
                 var selected_terms = $("#term option:selected");
                 var selected_grades = $("#grade option:selected");
@@ -338,7 +339,6 @@ if (!isset($_SESSION['login'])) {
                     xmlhttpm1.open("POST", "sqldb/between.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects + "&min=" + min + "&max=" + max, false);
                     xmlhttpm1.send();
                 }
-
             });
         });
     </script>
@@ -479,7 +479,8 @@ if (!isset($_SESSION['login'])) {
                             <select id="category" multiple="multiple"></select>         
                         </td>
                         <td> <!--Search Button--> 
-                            <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">
+<!--<button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">-->
+<button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">    
                                 <span class="fa fa-search"></span>
                             </button>
                         </td>
@@ -1012,8 +1013,11 @@ if (!isset($_SESSION['login'])) {
         </script>
 
         <!--Initialize Subject drop-down--> 
+        <!-- Subjects via Batches-->        
         <script type="text/javascript">
+            document.getElementById("grade").addEventListener("change", fillSubjects());
             document.getElementById("batch").addEventListener("change", fillSubjects());
+            
             function fillSubjects() {
                 var selected_years = $("#academic_year option:selected");
                 var selected_grades = $("#grade option:selected");
@@ -1070,6 +1074,7 @@ if (!isset($_SESSION['login'])) {
                 httpSubjects.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
+//                        document.getElementById("out").innerHTML = this.responseText;
                         subjectsArray = str.split("\t");
                     }
                 };
@@ -1147,26 +1152,27 @@ if (!isset($_SESSION['login'])) {
                 else
                     selected_batches = "";
 
-                var message = "";
-                selected_subjects.each(function () {
-                    if (message === "") {
-                        if (selected_years !== "" || selected_grades !== "" || selected_batches !== "")
-                            message = " AND (subjects.name = '" + $(this).text() + "' ";
-                        else
-                            message = " (subjects.name = '" + $(this).text() + "' ";
-                    } else
-                        message += " OR subjects.name = '" + $(this).text() + "' ";
-                });
-
-                if (message !== "")
-                    selected_subjects = message + ")";
-                else
+//                var message = "";
+//                selected_subjects.each(function () {
+//                    if (message === "") {
+//                        if (selected_years !== "" || selected_grades !== "" || selected_batches !== "")
+//                            message = " AND (subjects.name = '" + $(this).text() + "' ";
+//                        else
+//                            message = " (subjects.name = '" + $(this).text() + "' ";
+//                    } else
+//                        message += " OR subjects.name = '" + $(this).text() + "' ";
+//                });
+//
+//                if (message !== "")
+//                    selected_subjects = message + ")";
+//                else
                     selected_subjects = "";
 
                 var httpTerms = new XMLHttpRequest();
                 httpTerms.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
+//                        document.getElementById("out").innerHTML = this.responseText;                        
                         termsArray = str.split("\t");
                     }
                 };
