@@ -27,11 +27,15 @@ $category = $_REQUEST["category"];
    
  if ($terms == "" and $grades == "" and $years == "" and $batches == "" and $gender == "" and $subjects == "" and $category == "") {
 
-            $sql = $sql . "INNER JOIN subjects ON exams.subject_id = subjects.id) ";
+            $sql = $sql . "INNER JOIN subjects ON exams.subject_id = subjects.id) ".
+                          " WHERE academic_years.name = '2018 - 2019' ".
+                          " AND courses.course_name = 'GR 1' ".
+                          " AND exam_groups.name = 'Term1-2019' ".
+                          " AND batches.name = 'A2019' ";
 } else {
 
    $sql = $sql . " INNER JOIN subjects ON exams.subject_id = subjects.id) "
-            . "WHERE $years $grades $batches  $terms   $gender $category $subjects ";
+               . " WHERE $years $grades $batches  $terms   $gender $category $subjects ";
 }
 
 //        echo $sql;

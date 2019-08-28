@@ -285,9 +285,18 @@ if (!isset($_SESSION['login'])) {
                 else
                     selected_subjects = "";
 
-                stable.rows[0].cells[0].innerHTML = "STATISTICS on: " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
-                stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;
-
+                if (termHeader === "" && gradeHeader === "" && batchHeader === "" && subjectHeader === "" && genderHeader === "")
+                {
+                    stable.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
+                    stable.rows[2].cells[0].innerHTML = "2018-2019";
+                    stablePDF.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
+                    stablePDF.rows[2].cells[0].innerHTML = "2018-2019";
+                } else
+                {
+                    stable.rows[0].cells[0].innerHTML = "STATISTICS on: " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
+                    stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;                    
+                }
+                
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function () {
                     if (this.readyState === 4)
