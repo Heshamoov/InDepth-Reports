@@ -23,10 +23,15 @@ $sql = "SELECT students.admission_no moe, students.first_name name, students.gen
         . "	INNER JOIN exams ON exam_groups.id = exams.exam_group_id)    \n"
         . "	INNER JOIN exam_scores\n"
         . "	ON students.id = exam_scores.student_id\n"
-        . "       AND exam_scores.exam_id = exams.id)\n";
+        . "     AND exam_scores.exam_id = exams.id)\n";
 
 if ($years == "" and $terms == "" and $grades == "" and $batches == "" and $gender == "" and $category == "" and $subjects == "") {
-    $sql = $sql . " INNER JOIN subjects ON exams.subject_id = subjects.id) ORDER BY students.id ASC, exam_groups.name";
+    $sql = $sql . " INNER JOIN subjects ON exams.subject_id = subjects.id) " .
+                  " WHERE academic_years.name = '2018 - 2019' ".
+                  " AND courses.course_name = 'GR 1' ".
+                  " AND exam_groups.name = 'Term1-2019' ".
+                  " AND batches.name = 'A2019' ".
+                  " ORDER BY students.id ASC, exam_groups.name";
 } else {
     $sql =  $sql . "INNER JOIN subjects ON exams.subject_id = subjects.id) WHERE $years $grades $batches $terms  $gender $category $subjects "
             . " ORDER BY students.id ASC, exam_groups.name ";
@@ -62,8 +67,9 @@ if ($result->num_rows > 0) {
         "</td><td>" . $row["marks"] . " \n </td></tr>";
     }
     echo "</tbody>";
-} else
+} else {
     echo "Data Not Found, try to import it to DB";
+}
 
 $conn->close();
 
