@@ -68,7 +68,7 @@ if ($result->num_rows > 0) {
     }
     echo "</tbody>";
 } else {
-    echo "Data Not Found, try to import it to DB";
+    echo "No Data Found! Try another search.";
 }
 
 $conn->close();

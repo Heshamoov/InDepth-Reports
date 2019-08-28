@@ -54,11 +54,10 @@ if (!isset($_SESSION['login'])) {
                     }
                     if (message === "") {
                         message = "   (academic_years.name = '" + currentYear + "' ";
-
-                        academicHeader = " - " + currentYear;
+                        academicHeader = currentYear;
                     } else {
                         message += " OR academic_years.name = '" + currentYear + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                        academicHeader += " , " + currentYear;
+                        academicHeader += ", " + currentYear;
                     }
                 });
                 if (message !== "")
@@ -285,7 +284,7 @@ if (!isset($_SESSION['login'])) {
                 else
                     selected_subjects = "";
 
-                if (termHeader === "" && gradeHeader === "" && batchHeader === "" && subjectHeader === "" && genderHeader === "")
+                if (academicHeader === "" && termHeader === "" && gradeHeader === "" && batchHeader === "" && subjectHeader === "" && genderHeader === "")
                 {
                     stable.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
                     stable.rows[2].cells[0].innerHTML = "2018-2019";
@@ -293,8 +292,10 @@ if (!isset($_SESSION['login'])) {
                     stablePDF.rows[2].cells[0].innerHTML = "2018-2019";
                 } else
                 {
-                    stable.rows[0].cells[0].innerHTML = "STATISTICS on: " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
-                    stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;                    
+                    stable.rows[0].cells[0].innerHTML = "Year (" + academicHeader +") " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
+                    stable.rows[2].cells[0].innerHTML = academicHeader;
+                    stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;
+                    stablePDF.rows[2].cells[0].innerHTML = academicHeader;
                 }
                 
                 var xmlhttp = new XMLHttpRequest();
@@ -522,7 +523,7 @@ if (!isset($_SESSION['login'])) {
 <!--stablePDF--><table id="stablePDF" style="font-size: 100px" hidden>
                     <thead>
                         <tr>
-                            <th colspan="5"></th>
+                            <th colspan="5" style="text-align: center"></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -532,7 +533,7 @@ if (!isset($_SESSION['login'])) {
                     <tbody> 
                         <tr>
                             <th>Year</th>
-                            <th>Total Number</th>
+                            <th>Marks Count</th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -1238,7 +1239,9 @@ if (!isset($_SESSION['login'])) {
                 var doc = new jsPDF('p', 'pt', 'a3');
                 var header = function (data) {
                     doc.setFontSize(18);
+                    doc.setTextColor(0);
                     doc.setFont('PTSans');
+//                    doc.setFontStyle('bold');
                     doc.text("Subject Wise Statistics", 225, 50);
                     doc.line(226, 53, 390, 53);// Header top margin
                 };
@@ -1252,6 +1255,7 @@ if (!isset($_SESSION['login'])) {
                     }, styles: {
                         fontSize: 12,
                         font: 'PTSans',
+                       
                         }
                 });
 
