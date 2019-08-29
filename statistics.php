@@ -81,7 +81,7 @@ if (!isset($_SESSION['login'])) {
                             message = " AND (courses.course_name = '" + currentGrade + "' ";
                         else
                             message = " (courses.course_name = '" + currentGrade + "'";
-                        gradeHeader = " - " + currentGrade;
+                        gradeHeader = currentGrade;
                     } else {
                         message += " OR courses.course_name = '" + currentGrade + "'";  //  grade like 'GR1' OR grade like 'GR10';
                         gradeHeader += " , " + currentGrade;
@@ -102,7 +102,7 @@ if (!isset($_SESSION['login'])) {
                             message = " AND (batches.name = '" + $(this).text() + "' ";
                         else
                             message = " (batches.name = '" + $(this).text() + "' ";
-                        batchHeader = " - " + $(this).text();
+                        batchHeader = $(this).text();
                     } else {
                         message += " OR batches.name = '" + $(this).text() + "' ";
                         batchHeader += " , " + $(this).text();
@@ -152,7 +152,7 @@ if (!isset($_SESSION['login'])) {
                             message = " AND (gender = '" + DB_Gender + "' ";
                         else
                             message = " (gender = '" + DB_Gender + "' ";
-                        genderHeader = " - " + $(this).text();
+                        genderHeader = $(this).text();
                     } else {
                         message += "OR gender = '" + DB_Gender + "' ";
                         genderHeader += " , " + $(this).text();
@@ -178,7 +178,7 @@ if (!isset($_SESSION['login'])) {
                             message = "  AND (student_categories.name = '" + currentCategory + "' ";
                         else
                             message = "  (student_categories.name = '" + currentCategory + "'";
-                        categoryHeader = " - " + currentCategory;
+                        categoryHeader = currentCategory;
                     } else {
                         message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
                         categoryHeader += " , " + currentCategory;
@@ -219,7 +219,7 @@ if (!isset($_SESSION['login'])) {
                             message = "  AND (subjects.name  LIKE '" + currentSubject + "%' ";  //Add '%' to the end of the subject name: WHERE subject LIKE 'Math%' 
                         else
                             message = "  (subjects.name LIKE '" + currentSubject + "%' ";
-                        subjectHeader = " - " + currentSubject;
+                        subjectHeader = currentSubject;
                     } else {
                         message += "OR subjects.name  LIKE '" + currentSubject + "%' ";
                         subjectHeader += " , " + currentSubject;
@@ -234,26 +234,20 @@ if (!isset($_SESSION['login'])) {
                     table2.rows[0].cells[0].innerHTML = currentSubject; //head                        
                     //Academic //Total
                     var min = 0, max = 0;
-                    for (var i = 2; i < 5; i++)
+                    for (var i = 1; i < 4; i++)
                     {
                         min = stable.rows[1].cells[i].childNodes[0].value;
                         max = stable.rows[1].cells[i].childNodes[2].value;
                         table.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
                         table2.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
                     }
-
-                    //Academic Year value
-                    stable.rows[2].cells[0].innerHTML = academicHeader;
-                    stablePDF.rows[2].cells[0].innerHTML = academicHeader;
-                    table.rows[2].cells[0].innerHTML = academicHeader;
-                    table2.rows[2].cells[0].innerHTML = academicHeader;
-
+                   
                     // Total value Subject wise
                     var httpTotal = new XMLHttpRequest();
                     httpTotal.onreadystatechange = function () {
                         if (this.readyState === 4) {
-                            table.rows[2].cells[1].innerHTML = this.responseText;
-                            table2.rows[2].cells[1].innerHTML = this.responseText;
+                            table.rows[2].cells[0].innerHTML = this.responseText;
+                            table2.rows[2].cells[0].innerHTML = this.responseText;
                         }
                     };
                     httpTotal.open("POST", "sqldb/subjectCount.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject, false);
@@ -262,7 +256,7 @@ if (!isset($_SESSION['login'])) {
 
                     //Between values Subject wise
                     var min = 0, max = 0;
-                    for (var i = 2; i < 5; i++)
+                    for (var i = 1; i < 4; i++)
                     {
                         min = stable.rows[1].cells[i].childNodes[0].value;
                         max = stable.rows[1].cells[i].childNodes[2].value;
@@ -287,16 +281,24 @@ if (!isset($_SESSION['login'])) {
 
                 if (academicHeader === "" && termHeader === "" && gradeHeader === "" && batchHeader === "" && subjectHeader === "" && genderHeader === "")
                 {
-                    stable.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
-                    stable.rows[2].cells[0].innerHTML = "2018-2019";
-                    stablePDF.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
-                    stablePDF.rows[2].cells[0].innerHTML = "2018-2019";
+                    StatisticsTitle.rows[0].cells[0].innerHTML = "Year 2018-2019";
+                    StatisticsTitle.rows[0].cells[1].innerHTML = "GR1-A2019";
+                    StatisticsTitle.rows[0].cells[2].innerHTML = "Term1-2019";
+                    StatisticsTitle.rows[1].cells[0].innerHTML = "SUBJECTS";
+
+
+//                    stablePDF.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
+//                    stablePDF.rows[2].cells[0].innerHTML = "2018-2019";
                 } else
                 {
-                    stable.rows[0].cells[0].innerHTML = "Year (" + academicHeader +") " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
+                    StatisticsTitle.rows[0].cells[0].innerHTML = "Year " + academicHeader;
+                    StatisticsTitle.rows[0].cells[1].innerHTML = gradeHeader;
+                    StatisticsTitle.rows[0].cells[2].innerHTML = termHeader;
+                    StatisticsTitle.rows[1].cells[0].innerHTML = subjectHeader;
+//                    + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
                     stable.rows[2].cells[0].innerHTML = academicHeader;
-                    stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;
-                    stablePDF.rows[2].cells[0].innerHTML = academicHeader;
+//                    stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;
+//                    stablePDF.rows[2].cells[0].innerHTML = academicHeader;
                 }
                 
                 var xmlhttp = new XMLHttpRequest();
@@ -311,9 +313,7 @@ if (!isset($_SESSION['login'])) {
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function () {
                     if (this.readyState === 4) {
-
-                        stable.rows[2].cells[1].innerHTML = this.responseText;
-                        stablePDF.rows[2].cells[1].innerHTML = this.responseText;
+                        stable.rows[2].cells[0].innerHTML = this.responseText;
                         drawChart();
                     }
                 };
@@ -322,17 +322,15 @@ if (!isset($_SESSION['login'])) {
 
                 //Statistics Min-Max
                 var min = 0, max = 0;
-                for (var i = 2; i < 5; i++)
+                for (var i = 1; i < 5; i++)
                 {
                     min = stable.rows[1].cells[i].childNodes[0].value;
                     max = stable.rows[1].cells[i].childNodes[2].value;
-                    stablePDF.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
                     var xmlhttpm1 = new XMLHttpRequest();
                     xmlhttpm1.onreadystatechange = function () {
 
                         if (this.readyState === 4) {
                             stable.rows[2].cells[i].innerHTML = this.responseText;
-                            stablePDF.rows[2].cells[i].innerHTML = this.responseText;
                             drawChart();
                         }
                     };
@@ -450,9 +448,17 @@ if (!isset($_SESSION['login'])) {
                     </tr>
                     <tr>
                         <td>   <!--Download Button-->
-                            <button class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="exportS" onclick="downloadStatistics()" title="Export Sttistics as PDF">
+<!--                            <button class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="exportS" onclick="downloadStatistics()" title="Export Sttistics as PDF">
                                 <span class="material-icons ">save_alt</span>
-                            </button>                            
+                            </button>                            -->
+
+                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportS"
+                                    onclick="printJS({printable: 'tables', type: 'html', base64: true, showModal: true, 
+                                    documentTitle: 'Statistics', targetStyles: '*', honorColor: true, repeatTableHeader: true,
+                                    scanstyles: true});" title="Export Statistics as PDF">
+                                <span class="material-icons">save_alt</span>
+                            </button>
+
                         </td>
                         <td>
                             <select id="academic_year" onchange="fillGrades()" multiple="multiple"></select>   
@@ -480,12 +486,16 @@ if (!isset($_SESSION['login'])) {
                         </td>
                         <td> <!--Search Button--> 
 <!--<button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">-->
-<button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">    
+                        <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;"
+                                class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">    
                                 <span class="fa fa-search"></span>
                             </button>
                         </td>
                         <td>
-                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" onclick="printJS({printable: 'outheader', type: 'html', base64: true, showModal: true, documentTitle: 'Statistics', targetStyles: '*', honorColor: true, repeatTableHeader: true, scanstyles: true});" title="Export Statistics as PDF">
+                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM"
+                                    onclick="printJS({printable: 'outheader', type: 'html', base64: true, showModal: true, 
+                                    documentTitle: 'Statistics', targetStyles: '*', honorColor: true, repeatTableHeader: true, 
+                                    scanstyles: true});" title="Export Students List as PDF">
                                 <span class="material-icons">save_alt</span>
                             </button>
                         </td>
@@ -493,12 +503,20 @@ if (!isset($_SESSION['login'])) {
                 </table>
             </div>
 
-            <!--Drop menus-->
             <div class="w3-container w3-col m4 l5 w3-mobile" id="tables" style="overflow: scroll;top: 0;  bottom: 0; height: 100vh;">
-                <textarea id="output" rows="10" cols="50" hidden></textarea>
-                <br>
+                <table align= center; id="StatisticsTitle" style="width: 100%; text-align: center;">
+                    <tr>
+                        <td style="padding:5px;"></td>
+                        <td style="padding:5px;"></td>
+                        <td style="padding:5px;"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3"></td>
+                    </tr>                    
+                </table>
+                
 <!--stable-->   <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="stable">
-                    <th colspan="4" class="w3-custom " style="font-size: 16px">
+                    <th colspan="3" class="w3-custom " style="font-size: 16px">
                         STATISTICS
                     </th>
                     <th colspan="1" class="w3-custom">
@@ -506,13 +524,12 @@ if (!isset($_SESSION['login'])) {
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Marks Count</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"><input id="percent11" type="text" value= 50>% - <input id="percente12" type="text" value=100>%</th>
                         <th class="w3-border-right"><input id="percent21" type="text" value=65>% - <input id="percente22" type="text" value=100>%</th>
                         <th class="w3-border-right"><input id="percent31" type="text" value=75>% - <input id="percente32" type="text" value=100>%</th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td>
                         <td class="w3-border-right"></td>
                         <td class="w3-border-right"></td>
                         <td class="w3-border-right"></td>
@@ -533,7 +550,6 @@ if (!isset($_SESSION['login'])) {
                     </thead>
                     <tbody> 
                         <tr>
-                            <th>Year</th>
                             <th>Marks Count</th>
                             <th></th>
                             <th></th>
@@ -544,41 +560,40 @@ if (!isset($_SESSION['login'])) {
                             <td></td>
                             <td></td>
                             <td></td>
-                            <td></td>
                         </tr>
                     </tbody>
                 </table>
 
 <!--T1-->       <table id="T1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" >
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject1" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button>
                     </th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
                 <br>
 
 <!--T2-->       <table id="T2" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">  
-                    <th colspan="4" class="w3-custom" style="font-size: 16px;">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px;">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject2" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
@@ -586,17 +601,17 @@ if (!isset($_SESSION['login'])) {
                 <br>
 
 <!--T3-->       <table id="T3" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">  
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">  <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
                                                                  data-toggle="popoverSubject3" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
@@ -604,17 +619,17 @@ if (!isset($_SESSION['login'])) {
                 <br>
 
 <!--T4-->       <table id="T4" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject4" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
@@ -622,17 +637,17 @@ if (!isset($_SESSION['login'])) {
                 <br>
 
 <!--T5-->       <table id="T5" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject5" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
@@ -640,17 +655,17 @@ if (!isset($_SESSION['login'])) {
                 <br>
 
 <!--T6-->       <table id="T6" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject6" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
@@ -658,17 +673,17 @@ if (!isset($_SESSION['login'])) {
                 <br>
 
 <!--T7-->       <table id="T7" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject7" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
@@ -676,17 +691,17 @@ if (!isset($_SESSION['login'])) {
                 <br>
 
 <!--T8-->       <table id="T8" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject8" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
@@ -694,17 +709,17 @@ if (!isset($_SESSION['login'])) {
                 <br>
 
 <!--T9-->       <table id="T9" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject9" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>    
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
@@ -712,17 +727,17 @@ if (!isset($_SESSION['login'])) {
                 <br>
 
 <!--T10-->       <table id="T10" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject10" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
@@ -730,17 +745,17 @@ if (!isset($_SESSION['login'])) {
                 <br>
 
 <!--T11-->       <table id="T11" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject11" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
@@ -748,17 +763,17 @@ if (!isset($_SESSION['login'])) {
                 <br>
 
 <!--T12-->       <table id="T12" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject12" onclick="drawChartSubjects();">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
-                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
@@ -1623,7 +1638,8 @@ if (!isset($_SESSION['login'])) {
             <div id="chart_div" style="width:400px; "  >
             </div>
             <h6   style="float: left; cursor: pointer; color: gray">Click to view details</h6>
-            <button class="  w3-hover-teal  w3-round-xxlarge " id="exportS" style="float: right; margin-bottom: 10px; color: teal" onclick="downloadPopoverStatistics()" title="Download Graph">
+            <button class="  w3-hover-teal  w3-round-xxlarge " id="exportSWC" style="float: right; margin-bottom: 10px; color: teal" 
+                    onclick="downloadPopoverStatistics()" title="Download Graph">
                 <span class="material-icons">save_alt</span></button>
         </div>
 

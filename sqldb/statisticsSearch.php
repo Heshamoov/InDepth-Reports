@@ -44,7 +44,7 @@ if ($years == "" and $terms == "" and $grades == "" and $batches == "" and $gend
 $result = $conn->query($sql);
 $rownumber = 1;
 if ($result->num_rows > 0) {
-    echo "<thead><tr id =out class= w3-custom  ><th>SI No.</th><th>MOE</th>" .
+    echo "<thead><tr id =out class= w3-custom  ><th>#</th><th>MOE</th>" .
     "<th>Name</th>" .
     "<th>Gender</th>" .
     "<th>Exam Group</th>" .
