@@ -780,13 +780,13 @@ if (!isset($_SESSION['login'])) {
             </div>
 
             <div class="w3-col m8 l7 w3-card-4 w3-mobile" id="rightdiv" style = "height:100vh; overflow: scroll; padding-top: 10px; padding-left: 10px; padding-right: 10px"> 
-            <!--Students List-->   
-                <br>
+                
+                <!--Students List-->   
                 <div id ="outheader">
                     <h4  style="text-align: center">STUDENTS LIST</h4>
-<!--Out Table-->    <table class="w3-table-all w3-card-4 w3-striped w3-hoverable" id="out" >
-                    </table>
+<!--Out Table-->    <table class="w3-table-all w3-card-4 w3-striped w3-hoverable" id="out" ></table>
                 </div>
+            
                 <table id="TT1" hidden>
                     <thead>
                         <tr>
