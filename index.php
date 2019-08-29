@@ -34,8 +34,6 @@ if (isset($_SESSION['login']))
     <link rel="stylesheet" type="text/css" href="css/main.css">
     <!--===============================================================================================-->
 
-
-
     <script>
         $(function () {
             $("#generate-button").click(function () {
@@ -46,7 +44,6 @@ if (isset($_SESSION['login']))
                 var username = $("#username").val();
                 var password = $("#password").val();
                 if (username !== "" || password !== "")
-
                 {
                     var token_input = $("#token");
                     var result_div = $("#result");
@@ -76,7 +73,6 @@ if (isset($_SESSION['login']))
                         if (token_input.val() !== "")
                         {
                             document.getElementById('invalidCredentials').style.display = 'none';
-
                             $('#welcome-modal').modal('show');
                             setTimeout(function () {
                                 $('#welcome-modal').modal('hide');
@@ -89,22 +85,18 @@ if (isset($_SESSION['login']))
                         xmlDoc = this.responseText;
                         txt = "";
                     }
-
-
                 };
                 xhr.send("client_id=" + client_id + "&client_secret=" + client_secret + "&grant_type=password&username=" + username + "&password=" + password + "&redirect_uri=" + redirect_uri);
             } catch (err)
             {
                 alert(err.message);
             }
-        }
-        ;
+        };
 
         function show_response(str) {
             str = vkbeautify.xml(str, 4);
             return str.replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\n/g, "<br />");
-        }
-        ;
+        };
 
         function validateForm() {
             var x = document.forms["frm"]["token"].value;
@@ -112,38 +104,30 @@ if (isset($_SESSION['login']))
                 alert("Generate an access token first");
                 return false;
             }
-        }
-        ;
+        };
     </script>
 </head>
 <body>
 
-    <!--API Connecting with demo--> 
     <input  id="instanceurl" type="hidden" name="instanceurl" value="https://alsanawbar.school/"/>
     <input  id="client_id" type="hidden" value="807ee0dddf6b79166323a61f2d8e8473865f8fb7455052e2d9a47c05200b6822"/>
     <input  id="client_secret" type="hidden" value="86e7e63d9f030b770e7152c632ddda32daeb8cef5c5c7eb8a44bf0736231a8af"/>
     <input  id="redirect_uri" type="hidden" value="http://indepthreports.online/"/>
-
-
-
-
-
 
     <div class="limiter">
         <div class="container-login100">
             <div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
                 <form class="login100-form validate-form flex-sb flex-w" onsubmit = "event.preventDefault();">
                     <span class="login100-form-title p-b-32">
-                        REPORT CENTER Login
+                        REPORTS CENTER Login
                     </span>
                     <?php
                     if (isset($_SESSION['notloggedin'])) {
                         ?>
-
                         <div id='noaccess' class="alert alert-warning wrap-input100  m-b-12">
                             <strong>Not Logged in!</strong> Please login first to continue.
                         </div>
-
+                        
                         <?php
                         unset($_SESSION['notloggedin']);
                     }
@@ -152,7 +136,6 @@ if (isset($_SESSION['login']))
                     <?php
                     if (isset($_SESSION['noaccess'])) {
                         ?>
-
                         <div id='noaccess' class="alert alert-danger wrap-input100  m-b-12">
                             <strong>Unauthorized!</strong> You are unauthorized to use this system. Only admins & teachers have the access. <br>Please contact system administrator.
                         </div>
@@ -162,7 +145,7 @@ if (isset($_SESSION['login']))
                     }
                     ?>
                     <div id='invalidCredentials' class="alert alert-danger wrap-input100  m-b-12" style="display: none;">
-                        <strong>Invalid!</strong> Username/Password is inavlid.
+                        <strong>Invalid!</strong> Username or Password
                     </div>
                     <span class="txt1 p-b-11">
                         Username
@@ -171,7 +154,6 @@ if (isset($_SESSION['login']))
                         <input class="input100"   id="username" type="text" placeholder="Username" autofocus/>
                         <span class="focus-input100"></span>
                     </div>
-
                     <span class="txt1 p-b-11">
                         Password
                     </span>
@@ -184,17 +166,14 @@ if (isset($_SESSION['login']))
                     </div>
 
                     <div class="flex-sb-m w-full p-b-48">
-
                     </div>
 
                     <div class="container-login100-form-btn">
                         <input class="login100-form-btn" type= "submit" id="generate-button" value ="Login" >
                     </div>
-
                 </form>
             </div>
         </div>
-
     </div>
     <form name="frm" onsubmit="return validateForm()" action="login.php" method="POST" style="display: none">
         <input id="token" type="hidden" name="token">
@@ -202,6 +181,7 @@ if (isset($_SESSION['login']))
         <input id="user"  name="user">
         <input type= "submit" id="generate-report" value ="Generate Reports">
     </form>
+    
     <div id="welcome-modal" class="modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -211,12 +191,7 @@ if (isset($_SESSION['login']))
             </div>
         </div>
     </div>
-
-
     <script>
-
-
-
         var input = document.getElementById("password");
         input.addEventListener("keyup", function (event) {
             document.getElementById("user").value = document.getElementById("username").value;
