@@ -29,7 +29,11 @@ $sql = "SELECT students.admission_no moe, students.first_name name, students.gen
         . "	INNER JOIN subjects ON exams.subject_id = subjects.id) ";
 if ($terms == "" and $grades == "" and $batches == "" and $years == "" and $gender == "" and $subjects == "" and $category == "") {
 
-    $sql = $sql . " WHERE (exam_scores.marks BETWEEN $min AND $max)";
+    $sql = $sql . " WHERE academic_years.name = '2018 - 2019' ".
+                  " AND courses.course_name = 'GR 1' ".
+                  " AND exam_groups.name = 'Term1-2019' ".
+                  " AND batches.name = 'A2019' ".
+                  " AND exam_scores.marks BETWEEN $min AND $max";
 } else {
 
     $sql = $sql . "WHERE  $years $grades  $batches  $terms    $gender $category $subjects AND (exam_scores.marks BETWEEN $min AND $max) ";

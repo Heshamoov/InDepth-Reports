@@ -22,6 +22,7 @@ if (!isset($_SESSION['login'])) {
 
     <script type="text/javascript">
         $(function () {
+//            $(document).ready(function(){
             $('#academic_year').multiselect({includeSelectAllOption: true});
             $('#term').multiselect({includeSelectAllOption: true});
             $('#grade').multiselect({includeSelectAllOption: true});
@@ -29,12 +30,12 @@ if (!isset($_SESSION['login'])) {
             $('#subject').multiselect({includeSelectAllOption: true});
             $('#gender').multiselect({includeSelectAllOption: true});
             $('#category').multiselect({includeSelectAllOption: true});
-
+//            document.getElementById("search").click();
             $(document).on("ready click", function () {
-
+//            $("#search").click(function(){
                 google.charts.setOnLoadCallback(drawChart);
                 google.charts.setOnLoadCallback(drawChartSubjects);
-
+                
                 var selected_years = $("#academic_year option:selected");
                 var selected_terms = $("#term option:selected");
                 var selected_grades = $("#grade option:selected");
@@ -54,11 +55,10 @@ if (!isset($_SESSION['login'])) {
                     }
                     if (message === "") {
                         message = "   (academic_years.name = '" + currentYear + "' ";
-
-                        academicHeader = " - " + currentYear;
+                        academicHeader = currentYear;
                     } else {
                         message += " OR academic_years.name = '" + currentYear + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                        academicHeader += " , " + currentYear;
+                        academicHeader += ", " + currentYear;
                     }
                 });
                 if (message !== "")
@@ -285,9 +285,20 @@ if (!isset($_SESSION['login'])) {
                 else
                     selected_subjects = "";
 
-                stable.rows[0].cells[0].innerHTML = "STATISTICS on: " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
-                stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;
-
+                if (academicHeader === "" && termHeader === "" && gradeHeader === "" && batchHeader === "" && subjectHeader === "" && genderHeader === "")
+                {
+                    stable.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
+                    stable.rows[2].cells[0].innerHTML = "2018-2019";
+                    stablePDF.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
+                    stablePDF.rows[2].cells[0].innerHTML = "2018-2019";
+                } else
+                {
+                    stable.rows[0].cells[0].innerHTML = "Year (" + academicHeader +") " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
+                    stable.rows[2].cells[0].innerHTML = academicHeader;
+                    stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;
+                    stablePDF.rows[2].cells[0].innerHTML = academicHeader;
+                }
+                
                 var xmlhttp = new XMLHttpRequest();
                 xmlhttp.onreadystatechange = function () {
                     if (this.readyState === 4)
@@ -328,7 +339,6 @@ if (!isset($_SESSION['login'])) {
                     xmlhttpm1.open("POST", "sqldb/between.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects + "&min=" + min + "&max=" + max, false);
                     xmlhttpm1.send();
                 }
-
             });
         });
     </script>
@@ -469,7 +479,8 @@ if (!isset($_SESSION['login'])) {
                             <select id="category" multiple="multiple"></select>         
                         </td>
                         <td> <!--Search Button--> 
-                            <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">
+<!--<button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">-->
+<button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">    
                                 <span class="fa fa-search"></span>
                             </button>
                         </td>
@@ -513,7 +524,7 @@ if (!isset($_SESSION['login'])) {
 <!--stablePDF--><table id="stablePDF" style="font-size: 100px" hidden>
                     <thead>
                         <tr>
-                            <th colspan="5"></th>
+                            <th colspan="5" style="text-align: center"></th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -523,7 +534,7 @@ if (!isset($_SESSION['login'])) {
                     <tbody> 
                         <tr>
                             <th>Year</th>
-                            <th>Total Number</th>
+                            <th>Marks Count</th>
                             <th></th>
                             <th></th>
                             <th></th>
@@ -1002,8 +1013,11 @@ if (!isset($_SESSION['login'])) {
         </script>
 
         <!--Initialize Subject drop-down--> 
+        <!-- Subjects via Batches-->        
         <script type="text/javascript">
+            document.getElementById("grade").addEventListener("change", fillSubjects());
             document.getElementById("batch").addEventListener("change", fillSubjects());
+            
             function fillSubjects() {
                 var selected_years = $("#academic_year option:selected");
                 var selected_grades = $("#grade option:selected");
@@ -1060,6 +1074,7 @@ if (!isset($_SESSION['login'])) {
                 httpSubjects.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
+//                        document.getElementById("out").innerHTML = this.responseText;
                         subjectsArray = str.split("\t");
                     }
                 };
@@ -1137,26 +1152,27 @@ if (!isset($_SESSION['login'])) {
                 else
                     selected_batches = "";
 
-                var message = "";
-                selected_subjects.each(function () {
-                    if (message === "") {
-                        if (selected_years !== "" || selected_grades !== "" || selected_batches !== "")
-                            message = " AND (subjects.name = '" + $(this).text() + "' ";
-                        else
-                            message = " (subjects.name = '" + $(this).text() + "' ";
-                    } else
-                        message += " OR subjects.name = '" + $(this).text() + "' ";
-                });
-
-                if (message !== "")
-                    selected_subjects = message + ")";
-                else
+//                var message = "";
+//                selected_subjects.each(function () {
+//                    if (message === "") {
+//                        if (selected_years !== "" || selected_grades !== "" || selected_batches !== "")
+//                            message = " AND (subjects.name = '" + $(this).text() + "' ";
+//                        else
+//                            message = " (subjects.name = '" + $(this).text() + "' ";
+//                    } else
+//                        message += " OR subjects.name = '" + $(this).text() + "' ";
+//                });
+//
+//                if (message !== "")
+//                    selected_subjects = message + ")";
+//                else
                     selected_subjects = "";
 
                 var httpTerms = new XMLHttpRequest();
                 httpTerms.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
+//                        document.getElementById("out").innerHTML = this.responseText;                        
                         termsArray = str.split("\t");
                     }
                 };
@@ -1229,7 +1245,9 @@ if (!isset($_SESSION['login'])) {
                 var doc = new jsPDF('p', 'pt', 'a3');
                 var header = function (data) {
                     doc.setFontSize(18);
+                    doc.setTextColor(0);
                     doc.setFont('PTSans');
+//                    doc.setFontStyle('bold');
                     doc.text("Subject Wise Statistics", 225, 50);
                     doc.line(226, 53, 390, 53);// Header top margin
                 };
@@ -1243,6 +1261,7 @@ if (!isset($_SESSION['login'])) {
                     }, styles: {
                         fontSize: 12,
                         font: 'PTSans',
+                       
                         }
                 });
 
