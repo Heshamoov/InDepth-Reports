@@ -464,7 +464,7 @@ if (!isset($_SESSION['login'])) {
                             <select id="academic_year" onchange="fillGrades()" multiple="multiple"></select>   
                         </td>
                         <td>
-                            <select id="grade" onchange="fillBatches()" multiple="multiple"></select>   
+                            <select id="grade" onchange="fillBatches(); fillSubjects();" multiple="multiple"></select>   
                         </td>
                         <td>
                             <select id ="batch" onchange="fillSubjects()" multiple="multiple"></select>  
@@ -1007,6 +1007,7 @@ if (!isset($_SESSION['login'])) {
                 httpBatches.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
+                        document.getElementById('out').innerHTML = this.responseText;
                         batchesArray = str.split("\t");
                     }
                 };
@@ -1030,8 +1031,8 @@ if (!isset($_SESSION['login'])) {
         <!--Initialize Subject drop-down--> 
         <!-- Subjects via Batches-->        
         <script type="text/javascript">
-            document.getElementById("grade").addEventListener("change", fillSubjects());
-            document.getElementById("batch").addEventListener("change", fillSubjects());
+//            document.getElementById("grade").addEventListener("change", fillSubjects());
+//            document.getElementById("batch").addEventListener("change", fillSubjects());
             
             function fillSubjects() {
                 var selected_years = $("#academic_year option:selected");
@@ -1089,7 +1090,7 @@ if (!isset($_SESSION['login'])) {
                 httpSubjects.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
-//                        document.getElementById("out").innerHTML = this.responseText;
+                        document.getElementById("out").innerHTML = this.responseText;
                         subjectsArray = str.split("\t");
                     }
                 };
