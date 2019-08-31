@@ -21,7 +21,7 @@ else{
 
     $sql = $sql . " ORDER BY subjects.name ASC ;";
 
-echo $sql;
+//echo $sql;
 $result = $conn->query($sql);
 
 while ($row = mysqli_fetch_array($result))

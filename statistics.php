@@ -70,6 +70,7 @@ if (!isset($_SESSION['login'])) {
                 //Grades                
                 var message = "";
                 var gradeHeader = "";
+                var grades_sql = "";
                 selected_grades.each(function () {
                     var currentGrade = $(this).text();
                     if (currentGrade.indexOf("(") !== -1) {
@@ -88,9 +89,9 @@ if (!isset($_SESSION['login'])) {
                     }
                 });
                 if (message !== "")
-                    selected_grades = message + ")";
+                    grades_sql = message + ")";
                 else
-                    selected_grades = "";
+                    grades_sql = "";
 
 
                 //Batches
@@ -148,7 +149,7 @@ if (!isset($_SESSION['login'])) {
                         DB_Gender = 'f';
 
                     if (message === "") {
-                        if (selected_terms !== "" || selected_grades !== "" || selected_batches !== "" || selected_years !== "")
+                        if (selected_terms !== "" || grades_sql !== "" || selected_batches !== "" || selected_years !== "")
                             message = " AND (gender = '" + DB_Gender + "' ";
                         else
                             message = " (gender = '" + DB_Gender + "' ";
@@ -174,7 +175,7 @@ if (!isset($_SESSION['login'])) {
                         currentCategory = currentCategory.slice(0, bracketIndex);
                     }
                     if (message === "") {
-                        if (selected_gender !== "" || selected_terms !== "" || selected_grades !== "" || selected_batches !== "" || selected_years !== "")
+                        if (selected_gender !== "" || selected_terms !== "" || grades_sql !== "" || selected_batches !== "" || selected_years !== "")
                             message = "  AND (student_categories.name = '" + currentCategory + "' ";
                         else
                             message = "  (student_categories.name = '" + currentCategory + "'";
@@ -184,6 +185,7 @@ if (!isset($_SESSION['login'])) {
                         categoryHeader += " , " + currentCategory;
                     }
                 });
+                
                 if (message !== "")
                     selected_category = message + ")";
                 else
@@ -195,16 +197,26 @@ if (!isset($_SESSION['login'])) {
                     var tableName = 'T' + i;
                     document.getElementById(tableName).style.visibility = "hidden";
                 }
-                var message = "";
-                var subjectHeader = "";
-                var tableNumber = 0;
+                
+                var message = "", subjectHeader = "", tableNumber = 0, currentGradeSQL = "";
+
+//              Generate Tables By Grades, Subjects
+                var selected_grades = $("#grade option:selected");
+                selected_grades.each(function () {
+                    var currentGrade = $(this).text();
+                    if (currentGrade !== "")
+                        if (selected_years !== "")
+                            currentGradeSQL = " AND (courses.course_name = '" + currentGrade + "') ";
+                        else
+                            currentGradeSQL = " (courses.course_name = '" + currentGrade + "') ";
 
                 //Subjects
                 selected_subjects.each(function () {
                     var currentSubject = "";
                     var firstSpace = true;
                     var subject = $(this).text();
-                    for (var i = 0; i < subject.length; i++) {       // Extracting English letters and numbers and remove Arabic letters                
+                    
+                    for (var i = 0; i < subject.length; i++) {       // Extracting English letters and numbers and remove Arabic letters
                         if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9'))
                             currentSubject += subject[i];
                         if (subject[i] === ' ' && firstSpace && i > 3) {
@@ -213,9 +225,8 @@ if (!isset($_SESSION['login'])) {
                         }
                     }
 
-                    tableNumber++;
                     if (message === "") {
-                        if (selected_terms !== "" || selected_grades !== "" || selected_batches !== "" || selected_gender !== "" || selected_years !== "" || selected_category !== "")
+                        if (selected_terms !== "" || currentGradeSQL !== "" || selected_batches !== "" || selected_gender !== "" || selected_years !== "" || selected_category !== "")
                             message = "  AND (subjects.name  LIKE '" + currentSubject + "%' ";  //Add '%' to the end of the subject name: WHERE subject LIKE 'Math%' 
                         else
                             message = "  (subjects.name LIKE '" + currentSubject + "%' ";
@@ -224,13 +235,14 @@ if (!isset($_SESSION['login'])) {
                         message += "OR subjects.name  LIKE '" + currentSubject + "%' ";
                         subjectHeader += " , " + currentSubject;
                     }
-
+                        
+                    tableNumber++;
                     tableName = "T" + tableNumber;
                     var tableNeme2 = 'TT' + tableNumber;
                     document.getElementById(tableName).style.visibility = "Visible";
                     var table = document.getElementById(tableName);
                     var table2 = document.getElementById(tableNeme2);
-                    table.rows[0].cells[0].innerHTML = currentSubject;  //head
+                    table.rows[0].cells[0].innerHTML = currentGrade + " - " + currentSubject;  //head
                     table2.rows[0].cells[0].innerHTML = currentSubject; //head                        
                     //Academic //Total
                     var min = 0, max = 0;
@@ -242,15 +254,16 @@ if (!isset($_SESSION['login'])) {
                         table2.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
                     }
                    
-                    // Total value Subject wise
+                    // Total Count Subject-Wise
                     var httpTotal = new XMLHttpRequest();
                     httpTotal.onreadystatechange = function () {
                         if (this.readyState === 4) {
                             table.rows[2].cells[0].innerHTML = this.responseText;
                             table2.rows[2].cells[0].innerHTML = this.responseText;
+                            document.getElementById("out").innerHTML = this.responseText;
                         }
                     };
-                    httpTotal.open("POST", "sqldb/subjectCount.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject, false);
+                    httpTotal.open("POST", "sqldb/subjectCount.php?years=" + selected_years + "&grades=" + currentGradeSQL + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject, false);
                     httpTotal.send();
 
 
@@ -265,15 +278,14 @@ if (!isset($_SESSION['login'])) {
                             if (this.readyState === 4) {
                                 table.rows[2].cells[i].innerHTML = this.responseText;
                                 table2.rows[2].cells[i].innerHTML = this.responseText;
-
                             }
                         };
-                        httpBetween.open("POST", "sqldb/subjectBetween.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject + "&min=" + min + "&max=" + max, false);
+                        httpBetween.open("POST", "sqldb/subjectBetween.php?years=" + selected_years + "&grades=" + currentGradeSQL + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject + "&min=" + min + "&max=" + max, false);
                         httpBetween.send();
                     }
                 });
-
-
+            });
+                
                 if (message !== "")
                     selected_subjects = message + ")";
                 else
@@ -295,10 +307,7 @@ if (!isset($_SESSION['login'])) {
                     StatisticsTitle.rows[0].cells[1].innerHTML = gradeHeader;
                     StatisticsTitle.rows[0].cells[2].innerHTML = termHeader;
                     StatisticsTitle.rows[1].cells[0].innerHTML = subjectHeader;
-//                    + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
                     stable.rows[2].cells[0].innerHTML = academicHeader;
-//                    stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;
-//                    stablePDF.rows[2].cells[0].innerHTML = academicHeader;
                 }
                 
                 var xmlhttp = new XMLHttpRequest();
@@ -306,7 +315,7 @@ if (!isset($_SESSION['login'])) {
                     if (this.readyState === 4)
                         document.getElementById("out").innerHTML = this.responseText;
                 };
-                xmlhttp.open("POST", "sqldb/statisticsSearch.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects, false);
+                xmlhttp.open("POST", "sqldb/statisticsSearch.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects, false);
                 xmlhttp.send();
 
                 //Total Count
@@ -317,12 +326,12 @@ if (!isset($_SESSION['login'])) {
                         drawChart();
                     }
                 };
-                xmlhttp.open("POST", "sqldb/count.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects, false);
+                xmlhttp.open("POST", "sqldb/count.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects, false);
                 xmlhttp.send();
 
                 //Statistics Min-Max
                 var min = 0, max = 0;
-                for (var i = 1; i < 5; i++)
+                for (var i = 1; i < 4; i++)
                 {
                     min = stable.rows[1].cells[i].childNodes[0].value;
                     max = stable.rows[1].cells[i].childNodes[2].value;
@@ -334,7 +343,7 @@ if (!isset($_SESSION['login'])) {
                             drawChart();
                         }
                     };
-                    xmlhttpm1.open("POST", "sqldb/between.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects + "&min=" + min + "&max=" + max, false);
+                    xmlhttpm1.open("POST", "sqldb/between.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects + "&min=" + min + "&max=" + max, false);
                     xmlhttpm1.send();
                 }
             });
@@ -353,15 +362,15 @@ if (!isset($_SESSION['login'])) {
         function drawChart() {
             var value1, value2, value3, value4, value5, value6, result1, result2, result3, tableName, header;
             var tableName = document.getElementById("stable");
-            value1 = tableName.rows[1].cells[2].childNodes[0].value;
-            value2 = tableName.rows[1].cells[2].childNodes[2].value;
-            value3 = tableName.rows[1].cells[3].childNodes[0].value;
-            value4 = tableName.rows[1].cells[3].childNodes[2].value;
-            value5 = tableName.rows[1].cells[4].childNodes[0].value;
-            value6 = tableName.rows[1].cells[4].childNodes[2].value;
-            result1 = tableName.rows[2].cells[2].innerHTML;
-            result2 = tableName.rows[2].cells[3].innerHTML;
-            result3 = tableName.rows[2].cells[4].innerHTML;
+            value1 = tableName.rows[1].cells[1].childNodes[0].value;
+            value2 = tableName.rows[1].cells[1].childNodes[2].value;
+            value3 = tableName.rows[1].cells[2].childNodes[0].value;
+            value4 = tableName.rows[1].cells[2].childNodes[2].value;
+            value5 = tableName.rows[1].cells[3].childNodes[0].value;
+            value6 = tableName.rows[1].cells[3].childNodes[2].value;
+            result1 = tableName.rows[2].cells[1].innerHTML;
+            result2 = tableName.rows[2].cells[2].innerHTML;
+            result3 = tableName.rows[2].cells[3].innerHTML;
             header = tableName.rows[0].cells[0].innerHTML;
 
             var data = new google.visualization.DataTable();
@@ -380,11 +389,7 @@ if (!isset($_SESSION['login'])) {
             var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
             chart.draw(data, options);
             imgData[0] = chart.getImageURI();
-        }
-        ;
-
-
-
+        };
 
         function drawChartSubjects() {
 
@@ -394,12 +399,12 @@ if (!isset($_SESSION['login'])) {
                 var value1, value2, value3, result1, result2, result3, tableName, header;
                 var tableName = document.getElementById(table);
 
-                value1 = tableName.rows[1].cells[2].innerHTML;
-                value2 = tableName.rows[1].cells[3].innerHTML;
-                value3 = tableName.rows[1].cells[4].innerHTML;
-                result1 = tableName.rows[2].cells[2].innerHTML;
-                result2 = tableName.rows[2].cells[3].innerHTML;
-                result3 = tableName.rows[2].cells[4].innerHTML;
+                value1 = tableName.rows[1].cells[1].innerHTML;
+                value2 = tableName.rows[1].cells[2].innerHTML;
+                value3 = tableName.rows[1].cells[3].innerHTML;
+                result1 = tableName.rows[2].cells[1].innerHTML;
+                result2 = tableName.rows[2].cells[2].innerHTML;
+                result3 = tableName.rows[2].cells[3].innerHTML;
                 header = tableName.rows[0].cells[0].innerHTML;
 
                 var data = new google.visualization.DataTable();
@@ -420,8 +425,7 @@ if (!isset($_SESSION['login'])) {
                 imgData[t] = chartS.getImageURI();
 
             }
-        }
-        ;
+        };
     </script>
 
     
@@ -1007,7 +1011,7 @@ if (!isset($_SESSION['login'])) {
                 httpBatches.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
-                        document.getElementById('out').innerHTML = this.responseText;
+//                        document.getElementById('out').innerHTML = this.responseText;
                         batchesArray = str.split("\t");
                     }
                 };
@@ -1090,7 +1094,7 @@ if (!isset($_SESSION['login'])) {
                 httpSubjects.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
-                        document.getElementById("out").innerHTML = this.responseText;
+//                        document.getElementById("out").innerHTML = this.responseText;
                         subjectsArray = str.split("\t");
                     }
                 };
