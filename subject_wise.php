@@ -7,10 +7,11 @@ if (!isset($_SESSION['login'])) {
 } else {
     include('Header.php');
     ?>
-
+<head>
     <title>Statistics based on subject</title>
-    </head>
+</head>
 
+<body  onload="T1FillGrades(), T2FillGrades(), T1FillSections(), fillTerms1(), fillTerms2(), T2FillSections(), fillSubjects1(), fillSubjects2()">
     <script>
         $(window).load(function () {
             // Animate loader off screen
@@ -294,11 +295,9 @@ if (!isset($_SESSION['login'])) {
         });
     </script>
 
+<div class="se-pre-con"></div>
 
-    <body  onload="T1FillGrades(), T2FillGrades(), fillSections1(), fillTerms1(), fillTerms2(), fillSections2(), fillSubjects1(), fillSubjects2()">
-        <div class="se-pre-con"></div>
-
-        <div class=" w3-responsive header">
+<div class=" w3-responsive header">
             <!-- Navigation bar -->
             <?php include('navbar.php'); ?>
             <script>
@@ -351,7 +350,7 @@ if (!isset($_SESSION['login'])) {
                     hidden onclick="printDiv(chart1)"id='printbtn'  title="Print chart"value='Print'>
                     <i class="glyphicon glyphicon-print"></i></button>
                     
-                    <select id="T1-YR" onchange="T1FillGrades()"></select>   
+                    <select id="T1-YR"></select>   
                     <select id="T1-GR" ></select>
                     <select id="T1-SC" multiple></select> 
 
@@ -411,7 +410,7 @@ if (!isset($_SESSION['login'])) {
                                 <button style="float: left;"type='button'class="w3-button w3-hover-blue-gray" hidden onclick="printDiv(chart2)"id='printbtn'  title="Print chart"value='Print'>
                                     <i class="glyphicon glyphicon-print"></i></button>
 
-                                <select id="T2-YR" onchange="T2FillGrades()"></select>   
+                                <select id="T2-YR"></select>   
                                 <select id="T2-GR" ></select>
                                 <select id="T2-SC" multiple ></select>
 
@@ -522,27 +521,27 @@ if (!isset($_SESSION['login'])) {
     <script type="text/javascript">
         document.getElementById("T1-YR").onchange = function () {
             T1FillGrades();
-            fillSections1();
+            T1FillSections();
             fillSubjects1();
             fillTerms1();
             Result();
         };
         document.getElementById("T2-YR").onchange = function () {
             T2FillGrades();
-            fillSections2();
+            T2FillSections();
             fillSubjects2();
             fillTerms2();
             Result();
         };
         document.getElementById("T1-GR").onchange = function () {
-            fillSections1();
+            T1FillSections();
             fillSubjects1();
             fillTerms1();
             Result();
         };
 
         document.getElementById("T2-GR").onchange = function () {
-            fillSections2();
+            T2FillSections();
             fillSubjects2();
             fillTerms2();
             Result();
@@ -560,7 +559,7 @@ if (!isset($_SESSION['login'])) {
             Result();
         };
         document.getElementById("T2-GR").onchange = function () {
-            fillSections2();
+            T2FillSections();
             fillSubjects2();
             fillTerms2();
             Result();
@@ -653,6 +652,8 @@ function T1FillGrades() {
     httpgrades.open("GET", "sqldb/distinctGrades.php?year=" + year, false);
     httpgrades.send();
 
+    $(GradeSelect).multiselect('destroy');
+
     delete gradesArray[gradesArray.length - 1];
 
     for (var i in gradesArray) {
@@ -689,6 +690,8 @@ function T2FillGrades() {
     httpgrades.open("GET", "sqldb/distinctGrades.php?year=" + year, false);
     httpgrades.send();
 
+    $(GradeSelect).multiselect('destroy');
+
     delete gradesArray[gradesArray.length - 1];
 
     for (var i in gradesArray) {
@@ -703,6 +706,80 @@ function T2FillGrades() {
 };
 </script>
 
+<!--Sections VIA Grades  Table 1-->
+<script type="text/javascript">
+function T1FillSections() {
+    var year = document.getElementById("T1-YR").options[document.getElementById("T1-YR").selectedIndex].text;
+    var grade = document.getElementById("T1-GR").options[document.getElementById("T1-GR").selectedIndex].text;
+
+    if (grade !== 'Select Grade') {
+        var select = document.getElementById('T1-SC');
+        
+        while (select.length > 0)
+            select.remove(0);
+
+        var httpSections = new XMLHttpRequest();
+        httpSections.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                var str = this.responseText;
+                document.getElementById('chart2').innerHTML = this.responseText;
+                sectionsArray = str.split("\t");
+            }
+        };
+        httpSections.open("GET", "sqldb/distinctBatches.php?year=" + year + "&grade=" + grade, false);
+        httpSections.send();
+
+        $('#T1-SC').multiselect('destroy');
+        delete sectionsArray[sectionsArray.length - 1];
+        for (var i in sectionsArray) {
+            select.add(new Option(sectionsArray[i]));
+        }
+        ;
+        $(function () {
+            $('#T1-SC').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+    }
+};
+</script>
+<!--Sections VIA Grades  Table 2-->
+<script type="text/javascript">
+function T2FillSections() {
+    var year = document.getElementById("T2-YR").options[document.getElementById("T2-YR").selectedIndex].text;
+    var grade = document.getElementById("T2-GR").options[document.getElementById("T2-GR").selectedIndex].text;
+
+    if (grade !== 'Select Grade') {
+        var select = document.getElementById('T2-SC');
+        
+        while (select.length > 0)
+            select.remove(0);
+
+        var httpSections = new XMLHttpRequest();
+        httpSections.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                var str = this.responseText;
+                document.getElementById('chart2').innerHTML = this.responseText;
+                sectionsArray = str.split("\t");
+            }
+        };
+        httpSections.open("GET", "sqldb/distinctBatches.php?year=" + year + "&grade=" + grade, false);
+        httpSections.send();
+
+        $('#T2-SC').multiselect('destroy');
+        delete sectionsArray[sectionsArray.length - 1];
+        for (var i in sectionsArray) {
+            select.add(new Option(sectionsArray[i]));
+        }
+        ;
+        $(function () {
+            $('#T2-SC').multiselect({
+                includeSelectAllOption: true
+            });
+        });
+    }
+};
+</script>
 
     <!--Initialize Terms Table 1-->
     <script type="text/javascript">
@@ -853,75 +930,7 @@ function T2FillGrades() {
         });
     </script>
 
-    <!--Sections VIA Grades  Table 1-->
-    <script type="text/javascript">
-        function fillSections1() {
-            var grade = document.getElementById("T1-GR").options[document.getElementById("T1-GR").selectedIndex].text;
-            var year = document.getElementById("T1-YR").options[document.getElementById("T1-YR").selectedIndex].text;
 
-            if (grade !== 'Select Grade') {
-                var select = document.getElementById('T1-SC');
-                while (select.length > 0)
-                    select.remove(0);
-                var httpSections = new XMLHttpRequest();
-                httpSections.onreadystatechange = function () {
-                    if (this.readyState === 4) {
-                        var str = this.responseText;
-                        sectionsArray = str.split("\t");
-                    }
-                };
-                httpSections.open("GET", "sqldb/distinctBatches.php?grades=" + grade + "&years=" + year, false);
-                httpSections.send();
-                $('#T1-SC').multiselect('destroy');
-                delete sectionsArray[sectionsArray.length - 1];
-                for (var i in sectionsArray) {
-                    select.add(new Option(sectionsArray[i]));
-                }
-                ;
-                $(function () {
-                    $('#T1-SC').multiselect({
-                        includeSelectAllOption: true
-                    });
-                });
-            }
-        }
-        ;
-    </script>
-
-    <!--Sections VIA Grades for table 2-->
-    <script type="text/javascript">
-        function fillSections2() {
-            var grade = document.getElementById("T2-GR").options[document.getElementById("T2-GR").selectedIndex].text;
-            var year = document.getElementById("T2-YR").options[document.getElementById("T2-YR").selectedIndex].text;
-
-            if (grade !== 'Select Grade') {
-                var select = document.getElementById('T2-SC');
-                while (select.length > 0)
-                    select.remove(0);
-                var httpSections = new XMLHttpRequest();
-                httpSections.onreadystatechange = function () {
-                    if (this.readyState === 4) {
-                        var str = this.responseText;
-                        sectionsArray = str.split("\t");
-                    }
-                };
-                httpSections.open("GET", "sqldb/distinctBatches.php?grades=" + grade + "&years=" + year, false);
-                httpSections.send();
-                $('#T2-SC').multiselect('destroy');
-                delete sectionsArray[sectionsArray.length - 1];
-                for (var i in sectionsArray) {
-                    select.add(new Option(sectionsArray[i]));
-                }
-                ;
-                $(function () {
-                    $('#T2-SC').multiselect({
-                        includeSelectAllOption: true
-                    });
-                });
-            }
-        }
-        ;
-    </script>
 
     <!--Initialize Student Category drop down for table 1-->     
     <script type="text/javascript">
