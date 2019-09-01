@@ -11,397 +11,362 @@ if (!isset($_SESSION['login'])) {
 
     </head>
     <body>
-    <!--loader initialization-->
-    <script>
-        $(window).load(function () {
-            // Animate loader off screen
-            $(".se-pre-con").fadeOut("slow");
-            ;
-        });
-    </script>
-
-    <script type="text/javascript">
-        $(function () {
-//            $(document).ready(function(){
-            $('#academic_year').multiselect({includeSelectAllOption: true});
-            $('#term').multiselect({includeSelectAllOption: true});
-            $('#grade').multiselect({includeSelectAllOption: true});
-            $('#batch').multiselect({includeSelectAllOption: true});
-            $('#subject').multiselect({includeSelectAllOption: true});
-            $('#gender').multiselect({includeSelectAllOption: true});
-            $('#category').multiselect({includeSelectAllOption: true});
-//            document.getElementById("search").click();
-            $(document).on("ready click", function () {
-//            $("#search").click(function(){
-                google.charts.setOnLoadCallback(drawChart);
-                google.charts.setOnLoadCallback(drawChartSubjects);
-                
-                var selected_years = $("#academic_year option:selected");
-                var selected_terms = $("#term option:selected");
-                var selected_grades = $("#grade option:selected");
-                var selected_batches = $("#batch option:selected");
-                var selected_subjects = $("#subject option:selected");
-                var selected_gender = $("#gender option:selected");
-                var selected_category = $("#category option:selected");
-
-                //Academic Years                
-                var message = "";
-                var academicHeader = "";
-                selected_years.each(function () {
-                    var currentYear = $(this).text();
-                    if (currentYear.indexOf("(") !== -1) {
-                        var bracketIndex = currentYear.indexOf("(");
-                        currentYear = currentYear.slice(0, bracketIndex);
-                    }
-                    if (message === "") {
-                        message = "   (academic_years.name = '" + currentYear + "' ";
-                        academicHeader = currentYear;
-                    } else {
-                        message += " OR academic_years.name = '" + currentYear + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                        academicHeader += ", " + currentYear;
-                    }
-                });
-                if (message !== "")
-                    selected_years = message + ")";
-                else
-                    selected_years = "";
-
-
-                //Grades                
-                var message = "";
-                var gradeHeader = "";
-                var grades_sql = "";
-                selected_grades.each(function () {
-                    var currentGrade = $(this).text();
-                    if (currentGrade.indexOf("(") !== -1) {
-                        var bracketIndex = currentGrade.indexOf("(");
-                        currentGrade = currentGrade.slice(0, bracketIndex);
-                    }
-                    if (message === "") {
-                        if (selected_years !== "")
-                            message = " AND (courses.course_name = '" + currentGrade + "' ";
-                        else
-                            message = " (courses.course_name = '" + currentGrade + "'";
-                        gradeHeader = currentGrade;
-                    } else {
-                        message += " OR courses.course_name = '" + currentGrade + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                        gradeHeader += " , " + currentGrade;
-                    }
-                });
-                if (message !== "")
-                    grades_sql = message + ")";
-                else
-                    grades_sql = "";
-
-
-                //Batches
-                var message = "";
-                var batchHeader = "";
-                selected_batches.each(function () {
-                    if (message === "") {
-                        if (selected_grades !== "" || selected_years !== "")
-                            message = " AND (batches.name = '" + $(this).text() + "' ";
-                        else
-                            message = " (batches.name = '" + $(this).text() + "' ";
-                        batchHeader = $(this).text();
-                    } else {
-                        message += " OR batches.name = '" + $(this).text() + "' ";
-                        batchHeader += " , " + $(this).text();
-                    }
-                });
-                if (message !== "")
-                    selected_batches = message + ")";
-                else
-                    selected_batches = "";
-
-
-                //Terms
-                var message = "";
-                var termHeader = "";
-                selected_terms.each(function () {
-                    if (message === "") {
-                        if (selected_batches !== "" || selected_grades !== "" || selected_years !== "")
-                            message = " AND (exam_groups.name = '" + $(this).text() + "'";
-                        else
-                            message = "   (exam_groups.name = '" + $(this).text() + "'";
-
-                        termHeader = $(this).text();
-                    } else {
-                        message += " OR exam_groups.name = '" + $(this).text() + "'";
-                        termHeader += " , " + $(this).text();
-                    }
-                });
-                if (message !== "")
-                    selected_terms = message + ")";
-                else
-                    selected_terms = "";
-
-
-                //Gender
-                var message = "";
-                var genderHeader = "";
-                selected_gender.each(function () {
-
-                    var DB_Gender = "";
-                    if ($(this).text() === 'Male')
-                        DB_Gender = 'm';
-                    else if ($(this).text() === 'Female')
-                        DB_Gender = 'f';
-
-                    if (message === "") {
-                        if (selected_terms !== "" || grades_sql !== "" || selected_batches !== "" || selected_years !== "")
-                            message = " AND (gender = '" + DB_Gender + "' ";
-                        else
-                            message = " (gender = '" + DB_Gender + "' ";
-                        genderHeader = $(this).text();
-                    } else {
-                        message += "OR gender = '" + DB_Gender + "' ";
-                        genderHeader += " , " + $(this).text();
-                    }
-                });
-                if (message !== "")
-                    selected_gender = message + ")";
-                else
-                    selected_gender = "";
-
-
-                //Category               
-                var message = "";
-                var categoryHeader = "";
-                selected_category.each(function () {
-                    var currentCategory = $(this).text();
-                    if (currentCategory.indexOf("(") !== -1) {
-                        var bracketIndex = currentCategory.indexOf("(");
-                        currentCategory = currentCategory.slice(0, bracketIndex);
-                    }
-                    if (message === "") {
-                        if (selected_gender !== "" || selected_terms !== "" || grades_sql !== "" || selected_batches !== "" || selected_years !== "")
-                            message = "  AND (student_categories.name = '" + currentCategory + "' ";
-                        else
-                            message = "  (student_categories.name = '" + currentCategory + "'";
-                        categoryHeader = currentCategory;
-                    } else {
-                        message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                        categoryHeader += " , " + currentCategory;
-                    }
-                });
-                
-                if (message !== "")
-                    selected_category = message + ")";
-                else
-                    selected_category = "";
-
-                //Generate Tables
-                for (var i = 1; i < 13; i++)
-                {
-                    var tableName = 'T' + i;
-                    document.getElementById(tableName).style.visibility = "hidden";
-                }
-                
-                var message = "", subjectHeader = "", tableNumber = 0, currentGradeSQL = "";
-
-//              Generate Tables By Grades, Subjects
-                var selected_grades = $("#grade option:selected");
-                selected_grades.each(function () {
-                    var currentGrade = $(this).text();
-                    if (currentGrade !== "")
-                        if (selected_years !== "")
-                            currentGradeSQL = " AND (courses.course_name = '" + currentGrade + "') ";
-                        else
-                            currentGradeSQL = " (courses.course_name = '" + currentGrade + "') ";
-
-                //Subjects
-                selected_subjects.each(function () {
-                    var currentSubject = "";
-                    var firstSpace = true;
-                    var subject = $(this).text();
-                    
-                    for (var i = 0; i < subject.length; i++) {       // Extracting English letters and numbers and remove Arabic letters
-                        if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9'))
-                            currentSubject += subject[i];
-                        if (subject[i] === ' ' && firstSpace && i > 3) {
-                            currentSubject += subject[i];
-                            firstSpace = false;
-                        }
-                    }
-
-                    if (message === "") {
-                        if (selected_terms !== "" || currentGradeSQL !== "" || selected_batches !== "" || selected_gender !== "" || selected_years !== "" || selected_category !== "")
-                            message = "  AND (subjects.name  LIKE '" + currentSubject + "%' ";  //Add '%' to the end of the subject name: WHERE subject LIKE 'Math%' 
-                        else
-                            message = "  (subjects.name LIKE '" + currentSubject + "%' ";
-                        subjectHeader = currentSubject;
-                    } else {
-                        message += "OR subjects.name  LIKE '" + currentSubject + "%' ";
-                        subjectHeader += " , " + currentSubject;
-                    }
-                        
-                    tableNumber++;
-                    tableName = "T" + tableNumber;
-                    var tableNeme2 = 'TT' + tableNumber;
-                    document.getElementById(tableName).style.visibility = "Visible";
-                    var table = document.getElementById(tableName);
-                    var table2 = document.getElementById(tableNeme2);
-                    table.rows[0].cells[0].innerHTML = currentGrade + " - " + currentSubject;  //head
-                    table2.rows[0].cells[0].innerHTML = currentSubject; //head                        
-                    //Academic //Total
-                    var min = 0, max = 0;
-                    for (var i = 1; i < 4; i++)
-                    {
-                        min = stable.rows[1].cells[i].childNodes[0].value;
-                        max = stable.rows[1].cells[i].childNodes[2].value;
-                        table.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
-                        table2.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
-                    }
-                   
-                    // Total Count Subject-Wise
-                    var httpTotal = new XMLHttpRequest();
-                    httpTotal.onreadystatechange = function () {
-                        if (this.readyState === 4) {
-                            table.rows[2].cells[0].innerHTML = this.responseText;
-                            table2.rows[2].cells[0].innerHTML = this.responseText;
-                            document.getElementById("out").innerHTML = this.responseText;
-                        }
-                    };
-                    httpTotal.open("POST", "sqldb/subjectCount.php?years=" + selected_years + "&grades=" + currentGradeSQL + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject, false);
-                    httpTotal.send();
-
-
-                    //Between values Subject wise
-                    var min = 0, max = 0;
-                    for (var i = 1; i < 4; i++)
-                    {
-                        min = stable.rows[1].cells[i].childNodes[0].value;
-                        max = stable.rows[1].cells[i].childNodes[2].value;
-                        var httpBetween = new XMLHttpRequest();
-                        httpBetween.onreadystatechange = function () {
-                            if (this.readyState === 4) {
-                                table.rows[2].cells[i].innerHTML = this.responseText;
-                                table2.rows[2].cells[i].innerHTML = this.responseText;
-                            }
-                        };
-                        httpBetween.open("POST", "sqldb/subjectBetween.php?years=" + selected_years + "&grades=" + currentGradeSQL + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject + "&min=" + min + "&max=" + max, false);
-                        httpBetween.send();
-                    }
-                });
+        <!--loader initialization-->
+        <script>
+            $(window).load(function () {
+                // Animate loader off screen
+                $(".se-pre-con").fadeOut("slow");
+                ;
             });
-                
-                if (message !== "")
-                    selected_subjects = message + ")";
-                else
-                    selected_subjects = "";
+        </script>
 
-                if (academicHeader === "" && termHeader === "" && gradeHeader === "" && batchHeader === "" && subjectHeader === "" && genderHeader === "")
-                {
-                    StatisticsTitle.rows[0].cells[0].innerHTML = "Year 2018-2019";
-                    StatisticsTitle.rows[0].cells[1].innerHTML = "GR1-A2019";
-                    StatisticsTitle.rows[0].cells[2].innerHTML = "Term1-2019";
-                    StatisticsTitle.rows[1].cells[0].innerHTML = "SUBJECTS";
+        <script type="text/javascript">
+            $(function () {
+                $('#academic_year').multiselect({includeSelectAllOption: true});
+                $('#term').multiselect({includeSelectAllOption: true});
+                $('#grade').multiselect({includeSelectAllOption: true});
+                $('#batch').multiselect({includeSelectAllOption: true});
+                $('#subject').multiselect({includeSelectAllOption: true});
+                $('#gender').multiselect({includeSelectAllOption: true});
+                $('#category').multiselect({includeSelectAllOption: true});
+
+                $(document).on("ready click", function () {
+
+                    google.charts.setOnLoadCallback(drawChart);
+                    google.charts.setOnLoadCallback(drawChartSubjects);
+
+                    var selected_years = $("#academic_year option:selected");
+                    var selected_terms = $("#term option:selected");
+                    var selected_grades = $("#grade option:selected");
+                    var selected_batches = $("#batch option:selected");
+                    var selected_subjects = $("#subject option:selected");
+                    var selected_gender = $("#gender option:selected");
+                    var selected_category = $("#category option:selected");
+
+                    //Academic Years                
+                    var message = "";
+                    var academicHeader = "";
+                    selected_years.each(function () {
+                        var currentYear = $(this).text();
+                        if (currentYear.indexOf("(") !== -1) {
+                            var bracketIndex = currentYear.indexOf("(");
+                            currentYear = currentYear.slice(0, bracketIndex);
+                        }
+                        if (message === "") {
+                            message = "   (academic_years.name = '" + currentYear + "' ";
+                            academicHeader = currentYear;
+                        } else {
+                            message += " OR academic_years.name = '" + currentYear + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                            academicHeader += ", " + currentYear;
+                        }
+                    });
+                    if (message !== "")
+                        selected_years = message + ")";
+                    else
+                        selected_years = "";
 
 
-//                    stablePDF.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
-//                    stablePDF.rows[2].cells[0].innerHTML = "2018-2019";
-                } else
-                {
-                    StatisticsTitle.rows[0].cells[0].innerHTML = "Year " + academicHeader;
-                    StatisticsTitle.rows[0].cells[1].innerHTML = gradeHeader;
-                    StatisticsTitle.rows[0].cells[2].innerHTML = termHeader;
-                    StatisticsTitle.rows[1].cells[0].innerHTML = subjectHeader;
-                    stable.rows[2].cells[0].innerHTML = academicHeader;
-                }
-                
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.onreadystatechange = function () {
-                    if (this.readyState === 4)
-                        document.getElementById("out").innerHTML = this.responseText;
-                };
-                xmlhttp.open("POST", "sqldb/statisticsSearch.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects, false);
-                xmlhttp.send();
+                    //Grades                
+                    var message = "";
+                    var gradeHeader = "";
+                    var grades_sql = "";
+                    selected_grades.each(function () {
+                        var currentGrade = $(this).text();
+                        if (currentGrade.indexOf("(") !== -1) {
+                            var bracketIndex = currentGrade.indexOf("(");
+                            currentGrade = currentGrade.slice(0, bracketIndex);
+                        }
+                        if (message === "") {
+                            if (selected_years !== "")
+                                message = " AND (courses.course_name = '" + currentGrade + "' ";
+                            else
+                                message = " (courses.course_name = '" + currentGrade + "'";
+                            gradeHeader = currentGrade;
+                        } else {
+                            message += " OR courses.course_name = '" + currentGrade + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                            gradeHeader += " , " + currentGrade;
+                        }
+                    });
+                    if (message !== "")
+                        grades_sql = message + ")";
+                    else
+                        grades_sql = "";
 
-                //Total Count
-                var xmlhttp = new XMLHttpRequest();
-                xmlhttp.onreadystatechange = function () {
-                    if (this.readyState === 4) {
-                        stable.rows[2].cells[0].innerHTML = this.responseText;
-                        drawChart();
+
+                    //Batches
+                    var message = "";
+                    var batchHeader = "";
+                    selected_batches.each(function () {
+                        if (message === "") {
+                            if (selected_grades !== "" || selected_years !== "")
+                                message = " AND (batches.name = '" + $(this).text() + "' ";
+                            else
+                                message = " (batches.name = '" + $(this).text() + "' ";
+                            batchHeader = $(this).text();
+                        } else {
+                            message += " OR batches.name = '" + $(this).text() + "' ";
+                            batchHeader += " , " + $(this).text();
+                        }
+                    });
+                    if (message !== "")
+                        selected_batches = message + ")";
+                    else
+                        selected_batches = "";
+
+
+                    //Terms
+                    var message = "";
+                    var termHeader = "";
+                    selected_terms.each(function () {
+                        if (message === "") {
+                            if (selected_batches !== "" || selected_grades !== "" || selected_years !== "")
+                                message = " AND (exam_groups.name = '" + $(this).text() + "'";
+                            else
+                                message = "   (exam_groups.name = '" + $(this).text() + "'";
+
+                            termHeader = $(this).text();
+                        } else {
+                            message += " OR exam_groups.name = '" + $(this).text() + "'";
+                            termHeader += " , " + $(this).text();
+                        }
+                    });
+                    if (message !== "")
+                        selected_terms = message + ")";
+                    else
+                        selected_terms = "";
+
+
+                    //Gender
+                    var message = "";
+                    var genderHeader = "";
+                    selected_gender.each(function () {
+
+                        var DB_Gender = "";
+                        if ($(this).text() === 'Male')
+                            DB_Gender = 'm';
+                        else if ($(this).text() === 'Female')
+                            DB_Gender = 'f';
+
+                        if (message === "") {
+                            if (selected_terms !== "" || grades_sql !== "" || selected_batches !== "" || selected_years !== "")
+                                message = " AND (gender = '" + DB_Gender + "' ";
+                            else
+                                message = " (gender = '" + DB_Gender + "' ";
+                            genderHeader = $(this).text();
+                        } else {
+                            message += "OR gender = '" + DB_Gender + "' ";
+                            genderHeader += " , " + $(this).text();
+                        }
+                    });
+                    if (message !== "")
+                        selected_gender = message + ")";
+                    else
+                        selected_gender = "";
+
+
+                    //Category               
+                    var message = "";
+                    var categoryHeader = "";
+                    selected_category.each(function () {
+                        var currentCategory = $(this).text();
+                        if (currentCategory.indexOf("(") !== -1) {
+                            var bracketIndex = currentCategory.indexOf("(");
+                            currentCategory = currentCategory.slice(0, bracketIndex);
+                        }
+                        if (message === "") {
+                            if (selected_gender !== "" || selected_terms !== "" || grades_sql !== "" || selected_batches !== "" || selected_years !== "")
+                                message = "  AND (student_categories.name = '" + currentCategory + "' ";
+                            else
+                                message = "  (student_categories.name = '" + currentCategory + "'";
+                            categoryHeader = currentCategory;
+                        } else {
+                            message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                            categoryHeader += " , " + currentCategory;
+                        }
+                    });
+
+                    if (message !== "")
+                        selected_category = message + ")";
+                    else
+                        selected_category = "";
+
+                    //Generate Tables
+                    for (var i = 1; i < 13; i++)
+                    {
+                        var tableName = 'T' + i;
+                        document.getElementById(tableName).style.visibility = "hidden";
                     }
-                };
-                xmlhttp.open("POST", "sqldb/count.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects, false);
-                xmlhttp.send();
 
-                //Statistics Min-Max
-                var min = 0, max = 0;
-                for (var i = 1; i < 4; i++)
-                {
-                    min = stable.rows[1].cells[i].childNodes[0].value;
-                    max = stable.rows[1].cells[i].childNodes[2].value;
-                    var xmlhttpm1 = new XMLHttpRequest();
-                    xmlhttpm1.onreadystatechange = function () {
+                    var message = "", subjectHeader = "", tableNumber = 0, currentGradeSQL = "";
 
+    //              Generate Tables By Grades, Subjects
+                    var selected_grades = $("#grade option:selected");
+                    selected_grades.each(function () {
+                        var currentGrade = $(this).text();
+                        if (currentGrade !== "")
+                            if (selected_years !== "")
+                                currentGradeSQL = " AND (courses.course_name = '" + currentGrade + "') ";
+                            else
+                                currentGradeSQL = " (courses.course_name = '" + currentGrade + "') ";
+
+                        //Subjects
+                        selected_subjects.each(function () {
+                            var currentSubject = "";
+                            var firstSpace = true;
+                            var subject = $(this).text();
+
+                            for (var i = 0; i < subject.length; i++) {       // Extracting English letters and numbers and remove Arabic letters
+                                if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9'))
+                                    currentSubject += subject[i];
+                                if (subject[i] === ' ' && firstSpace && i > 3) {
+                                    currentSubject += subject[i];
+                                    firstSpace = false;
+                                }
+                            }
+
+                            if (message === "") {
+                                if (selected_terms !== "" || currentGradeSQL !== "" || selected_batches !== "" || selected_gender !== "" || selected_years !== "" || selected_category !== "")
+                                    message = "  AND (subjects.name  LIKE '" + currentSubject + "%' ";  //Add '%' to the end of the subject name: WHERE subject LIKE 'Math%' 
+                                else
+                                    message = "  (subjects.name LIKE '" + currentSubject + "%' ";
+                                subjectHeader = currentSubject;
+                            } else {
+                                message += "OR subjects.name  LIKE '" + currentSubject + "%' ";
+                                subjectHeader += " , " + currentSubject;
+                            }
+
+                            tableNumber++;
+                            tableName = "T" + tableNumber;
+                            var tableNeme2 = 'TT' + tableNumber;
+                            document.getElementById(tableName).style.visibility = "Visible";
+                            var table = document.getElementById(tableName);
+                            var table2 = document.getElementById(tableNeme2);
+                            table.rows[0].cells[0].innerHTML = currentGrade + " - " + currentSubject;  //head
+                            table2.rows[0].cells[0].innerHTML = currentSubject; //head                        
+                            //Academic //Total
+                            var min = 0, max = 0;
+                            for (var i = 1; i < 4; i++)
+                            {
+                                min = stable.rows[1].cells[i].childNodes[0].value;
+                                max = stable.rows[1].cells[i].childNodes[2].value;
+                                table.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
+                                table2.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
+                            }
+
+                            // Total Count Subject-Wise
+                            var httpTotal = new XMLHttpRequest();
+                            httpTotal.onreadystatechange = function () {
+                                if (this.readyState === 4) {
+                                    table.rows[2].cells[0].innerHTML = this.responseText;
+                                    table2.rows[2].cells[0].innerHTML = this.responseText;
+                                    document.getElementById("out").innerHTML = this.responseText;
+                                }
+                            };
+                            httpTotal.open("POST", "sqldb/subjectCount.php?years=" + selected_years + "&grades=" + currentGradeSQL + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject, false);
+                            httpTotal.send();
+
+
+                            //Between values Subject wise
+                            var min = 0, max = 0;
+                            for (var i = 1; i < 4; i++)
+                            {
+                                min = stable.rows[1].cells[i].childNodes[0].value;
+                                max = stable.rows[1].cells[i].childNodes[2].value;
+                                var httpBetween = new XMLHttpRequest();
+                                httpBetween.onreadystatechange = function () {
+                                    if (this.readyState === 4) {
+                                        table.rows[2].cells[i].innerHTML = this.responseText;
+                                        table2.rows[2].cells[i].innerHTML = this.responseText;
+                                    }
+                                };
+                                httpBetween.open("POST", "sqldb/subjectBetween.php?years=" + selected_years + "&grades=" + currentGradeSQL + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject + "&min=" + min + "&max=" + max, false);
+                                httpBetween.send();
+                            }
+                        });
+                    });
+
+                    if (message !== "")
+                        selected_subjects = message + ")";
+                    else
+                        selected_subjects = "";
+
+                    if (academicHeader === "" && termHeader === "" && gradeHeader === "" && batchHeader === "" && subjectHeader === "" && genderHeader === "")
+                    {
+                        StatisticsTitle.rows[0].cells[0].innerHTML = "Year 2018-2019";
+                        StatisticsTitle.rows[0].cells[1].innerHTML = "GR1-A2019";
+                        StatisticsTitle.rows[0].cells[2].innerHTML = "Term1-2019";
+                        StatisticsTitle.rows[1].cells[0].innerHTML = "SUBJECTS";
+
+
+    //                    stablePDF.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
+    //                    stablePDF.rows[2].cells[0].innerHTML = "2018-2019";
+                    } else
+                    {
+                        StatisticsTitle.rows[0].cells[0].innerHTML = "Year " + academicHeader;
+                        StatisticsTitle.rows[0].cells[1].innerHTML = gradeHeader;
+                        StatisticsTitle.rows[0].cells[2].innerHTML = termHeader;
+                        StatisticsTitle.rows[1].cells[0].innerHTML = subjectHeader;
+                        stable.rows[2].cells[0].innerHTML = academicHeader;
+                    }
+
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function () {
+                        if (this.readyState === 4)
+                            document.getElementById("out").innerHTML = this.responseText;
+                    };
+                    xmlhttp.open("POST", "sqldb/statisticsSearch.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects, false);
+                    xmlhttp.send();
+
+                    //Total Count
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onreadystatechange = function () {
                         if (this.readyState === 4) {
-                            stable.rows[2].cells[i].innerHTML = this.responseText;
+                            stable.rows[2].cells[0].innerHTML = this.responseText;
                             drawChart();
                         }
                     };
-                    xmlhttpm1.open("POST", "sqldb/between.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects + "&min=" + min + "&max=" + max, false);
-                    xmlhttpm1.send();
-                }
+                    xmlhttp.open("POST", "sqldb/count.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects, false);
+                    xmlhttp.send();
+
+                    //Statistics Min-Max
+                    var min = 0, max = 0;
+                    for (var i = 1; i < 4; i++)
+                    {
+                        min = stable.rows[1].cells[i].childNodes[0].value;
+                        max = stable.rows[1].cells[i].childNodes[2].value;
+                        var xmlhttpm1 = new XMLHttpRequest();
+                        xmlhttpm1.onreadystatechange = function () {
+
+                            if (this.readyState === 4) {
+                                stable.rows[2].cells[i].innerHTML = this.responseText;
+                                drawChart();
+                            }
+                        };
+                        xmlhttpm1.open("POST", "sqldb/between.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects + "&min=" + min + "&max=" + max, false);
+                        xmlhttpm1.send();
+                    }
+                });
             });
-        });
-    </script>
+        </script>
 
-    <script>
-        var imgData = new Array();
+        <script>
+            var imgData = new Array();
 
-        google.charts.load("current", {
-            packages: ['corechart']
-        });
-        google.charts.setOnLoadCallback(drawChart);
-        google.charts.setOnLoadCallback(drawChartSubjects);
+            google.charts.load("current", {
+                packages: ['corechart']
+            });
+            google.charts.setOnLoadCallback(drawChart);
+            google.charts.setOnLoadCallback(drawChartSubjects);
 
-        function drawChart() {
-            var value1, value2, value3, value4, value5, value6, result1, result2, result3, tableName, header;
-            var tableName = document.getElementById("stable");
-            value1 = tableName.rows[1].cells[1].childNodes[0].value;
-            value2 = tableName.rows[1].cells[1].childNodes[2].value;
-            value3 = tableName.rows[1].cells[2].childNodes[0].value;
-            value4 = tableName.rows[1].cells[2].childNodes[2].value;
-            value5 = tableName.rows[1].cells[3].childNodes[0].value;
-            value6 = tableName.rows[1].cells[3].childNodes[2].value;
-            result1 = tableName.rows[2].cells[1].innerHTML;
-            result2 = tableName.rows[2].cells[2].innerHTML;
-            result3 = tableName.rows[2].cells[3].innerHTML;
-            header = tableName.rows[0].cells[0].innerHTML;
-
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Number of Students');
-            data.addColumn('number', 'Students');
-            data.addColumn({type: 'string', role: 'style'});
-
-            data.addRows([
-                [value1.toString() + '% - ' + value2.toString() + "% ", Number(result1), ' yellow'],
-                [value3.toString() + '% - ' + value4.toString() + "% ", Number(result2), 'orange'],
-                [value5.toString() + '% - ' + value6.toString() + "%", Number(result3), ' lime'],
-            ]);
-            var options = {title: header, legend: {position: "none"}};
-
-
-            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
-            imgData[0] = chart.getImageURI();
-        };
-
-        function drawChartSubjects() {
-
-            for (t = 1; t < 13; t++)
-            {
-                table = "T" + t;
-                var value1, value2, value3, result1, result2, result3, tableName, header;
-                var tableName = document.getElementById(table);
-
-                value1 = tableName.rows[1].cells[1].innerHTML;
-                value2 = tableName.rows[1].cells[2].innerHTML;
-                value3 = tableName.rows[1].cells[3].innerHTML;
+            function drawChart() {
+                var value1, value2, value3, value4, value5, value6, result1, result2, result3, tableName, header;
+                var tableName = document.getElementById("stable");
+                value1 = tableName.rows[1].cells[1].childNodes[0].value;
+                value2 = tableName.rows[1].cells[1].childNodes[2].value;
+                value3 = tableName.rows[1].cells[2].childNodes[0].value;
+                value4 = tableName.rows[1].cells[2].childNodes[2].value;
+                value5 = tableName.rows[1].cells[3].childNodes[0].value;
+                value6 = tableName.rows[1].cells[3].childNodes[2].value;
                 result1 = tableName.rows[2].cells[1].innerHTML;
                 result2 = tableName.rows[2].cells[2].innerHTML;
                 result3 = tableName.rows[2].cells[3].innerHTML;
@@ -413,36 +378,72 @@ if (!isset($_SESSION['login'])) {
                 data.addColumn({type: 'string', role: 'style'});
 
                 data.addRows([
-                    [value1.toString(), Number(result1), ' yellow'],
-                    [value2.toString(), Number(result2), 'orange'],
-                    [value3.toString(), Number(result3), ' lime'],
+                    [value1.toString() + '% - ' + value2.toString() + "% ", Number(result1), ' yellow'],
+                    [value3.toString() + '% - ' + value4.toString() + "% ", Number(result2), 'orange'],
+                    [value5.toString() + '% - ' + value6.toString() + "%", Number(result3), ' lime'],
                 ]);
                 var options = {title: header, legend: {position: "none"}};
 
-                chartName = "chart" + t;
-                var chartS = new google.visualization.ColumnChart(document.getElementById(chartName));
-                chartS.draw(data, options);
-                imgData[t] = chartS.getImageURI();
 
+                var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+                imgData[0] = chart.getImageURI();
             }
-        };
-    </script>
+            ;
 
-    
+            function drawChartSubjects() {
+
+                for (t = 1; t < 13; t++)
+                {
+                    table = "T" + t;
+                    var value1, value2, value3, result1, result2, result3, tableName, header;
+                    var tableName = document.getElementById(table);
+
+                    value1 = tableName.rows[1].cells[1].innerHTML;
+                    value2 = tableName.rows[1].cells[2].innerHTML;
+                    value3 = tableName.rows[1].cells[3].innerHTML;
+                    result1 = tableName.rows[2].cells[1].innerHTML;
+                    result2 = tableName.rows[2].cells[2].innerHTML;
+                    result3 = tableName.rows[2].cells[3].innerHTML;
+                    header = tableName.rows[0].cells[0].innerHTML;
+
+                    var data = new google.visualization.DataTable();
+                    data.addColumn('string', 'Number of Students');
+                    data.addColumn('number', 'Students');
+                    data.addColumn({type: 'string', role: 'style'});
+
+                    data.addRows([
+                        [value1.toString(), Number(result1), ' yellow'],
+                        [value2.toString(), Number(result2), 'orange'],
+                        [value3.toString(), Number(result3), ' lime'],
+                    ]);
+                    var options = {title: header, legend: {position: "none"}};
+
+                    chartName = "chart" + t;
+                    var chartS = new google.visualization.ColumnChart(document.getElementById(chartName));
+                    chartS.draw(data, options);
+                    imgData[t] = chartS.getImageURI();
+
+                }
+            }
+            ;
+        </script>
+
+
 
         <div class="se-pre-con"></div>
 
         <div class=" w3-responsive header" >
-        <!-- Navigation bar -->        
+            <!-- Navigation bar -->        
             <?php include('navbar.php'); ?>
 
             <!--set color for current tab-->
             <script>
                 document.getElementById("navStatistics").style.backgroundColor = '#009688';
             </script>
-        <!--End of Navictacoin bar-->
+            <!--End of Navictacoin bar-->
 
-        <!--Drop menus-->
+            <!--Drop menus-->
             <div id="upperdiv" class="w3-container w3-mobile" style="padding-top: 10px; padding-bottom: 10px">
                 <table id= "table1">
                     <tr>
@@ -452,20 +453,25 @@ if (!isset($_SESSION['login'])) {
                     </tr>
                     <tr>
                         <td>   <!--Download Button-->
-<!--                            <button class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="exportS" onclick="downloadStatistics()" title="Export Sttistics as PDF">
-                                <span class="material-icons ">save_alt</span>
-                            </button>                            -->
-
-                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportS"
-                                    onclick="printJS({printable: 'tables', type: 'html', base64: true, showModal: true, 
-                                    documentTitle: 'Statistics', targetStyles: '*', honorColor: true, repeatTableHeader: true,
-                                    scanstyles: true});" title="Export Statistics as PDF">
-                                <span class="material-icons">save_alt</span>
+                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom"
+                                    id="exportS" onclick="printJS({
+                                        printable: 'tables',
+                                        type: 'html',
+                                        base64: true,
+                                        showModal: true,
+                                        documentTitle: 'Statistics',
+                                        targetStyles: '*',
+                                        honorColor: true,
+                                        repeatTableHeader: true,
+                                        scanstyles: true,
+                                        ignoreElements: ['signal1'] 
+                                    });" title="Export Statistics as PDF">
+                            <span class="material-icons">save_alt</span>
                             </button>
-
                         </td>
                         <td>
-                            <select id="academic_year" onchange="fillGrades()" multiple="multiple"></select>   
+                            <select id="academic_year" 
+                            onchange="fillGrades(); fillBatches(); fillSubjects(); fillTerms();" multiple="multiple"></select>
                         </td>
                         <td>
                             <select id="grade" onchange="fillBatches(); fillSubjects();" multiple="multiple"></select>   
@@ -489,19 +495,18 @@ if (!isset($_SESSION['login'])) {
                             <select id="category" multiple="multiple"></select>         
                         </td>
                         <td> <!--Search Button--> 
-<!--<button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">-->
                         <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;"
-                                class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">    
-                                <span class="fa fa-search"></span>
-                            </button>
+                        class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">
+                        <span class="fa fa-search"></span>
+                        </button>
                         </td>
                         <td>
-                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM"
-                                    onclick="printJS({printable: 'outheader', type: 'html', base64: true, showModal: true, 
-                                    documentTitle: 'Statistics', targetStyles: '*', honorColor: true, repeatTableHeader: true, 
-                                    scanstyles: true});" title="Export Students List as PDF">
-                                <span class="material-icons">save_alt</span>
-                            </button>
+                        <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM"
+                        onclick="printJS({printable: 'outheader', type: 'html', base64: true, showModal: true,
+                        documentTitle: 'Students List', targetStyles: '*', honorColor: true, repeatTableHeader: true,
+                        scanstyles: true});" title="Export Students List as PDF">
+                        <span class="material-icons">save_alt</span>
+                        </button>
                         </td>
                     </tr>
                 </table>
@@ -518,13 +523,13 @@ if (!isset($_SESSION['login'])) {
                         <td colspan="3"></td>
                     </tr>                    
                 </table>
-                
-<!--stable-->   <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="stable">
+
+                <!--stable-->   <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="stable">
                     <th colspan="3" class="w3-custom " style="font-size: 16px">
                         STATISTICS
                     </th>
                     <th colspan="1" class="w3-custom">
-                        <button style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popover">
+                        <button id="signal1" style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popover">
                             <span class="material-icons ">signal_cellular_alt</span>
                         </button></th>
                     <tr>
@@ -542,7 +547,7 @@ if (!isset($_SESSION['login'])) {
                 </table>
                 <br><br>
 
-<!--stablePDF--><table id="stablePDF" style="font-size: 100px" hidden>
+                <!--stablePDF--><table id="stablePDF" style="font-size: 100px" hidden>
                     <thead>
                         <tr>
                             <th colspan="5" style="text-align: center"></th>
@@ -568,7 +573,7 @@ if (!isset($_SESSION['login'])) {
                     </tbody>
                 </table>
 
-<!--T1-->       <table id="T1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" >
+                <!--T1-->       <table id="T1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" >
                     <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject1" onclick="drawChartSubjects();">
@@ -586,7 +591,7 @@ if (!isset($_SESSION['login'])) {
                 </table>
                 <br>
 
-<!--T2-->       <table id="T2" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">  
+                <!--T2-->       <table id="T2" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">  
                     <th colspan="3" class="w3-custom" style="font-size: 16px;">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject2" onclick="drawChartSubjects();">
@@ -604,7 +609,7 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-<!--T3-->       <table id="T3" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">  
+                <!--T3-->       <table id="T3" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">  
                     <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">  <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
                                                                  data-toggle="popoverSubject3" onclick="drawChartSubjects();">
@@ -622,7 +627,7 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-<!--T4-->       <table id="T4" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <!--T4-->       <table id="T4" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject4" onclick="drawChartSubjects();">
@@ -640,7 +645,7 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-<!--T5-->       <table id="T5" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <!--T5-->       <table id="T5" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject5" onclick="drawChartSubjects();">
@@ -658,7 +663,7 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-<!--T6-->       <table id="T6" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <!--T6-->       <table id="T6" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject6" onclick="drawChartSubjects();">
@@ -676,7 +681,7 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-<!--T7-->       <table id="T7" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <!--T7-->       <table id="T7" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject7" onclick="drawChartSubjects();">
@@ -694,7 +699,7 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-<!--T8-->       <table id="T8" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <!--T8-->       <table id="T8" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject8" onclick="drawChartSubjects();">
@@ -712,7 +717,7 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-<!--T9-->       <table id="T9" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <!--T9-->       <table id="T9" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float:right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject9" onclick="drawChartSubjects();">
@@ -730,7 +735,7 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-<!--T10-->       <table id="T10" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <!--T10-->       <table id="T10" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject10" onclick="drawChartSubjects();">
@@ -748,7 +753,7 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-<!--T11-->       <table id="T11" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <!--T11-->       <table id="T11" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject11" onclick="drawChartSubjects();">
@@ -766,7 +771,7 @@ if (!isset($_SESSION['login'])) {
 
                 <br>
 
-<!--T12-->       <table id="T12" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <!--T12-->       <table id="T12" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                     <th colspan="3" class="w3-custom" style="font-size: 16px">Subject</th>
                     <th colspan="1" class="w3-custom">
                         <button  style="float: right" type="button" class="btn w3-button w3-hover-blue-gray w3-custom" data-toggle="popoverSubject12" onclick="drawChartSubjects();">
@@ -784,13 +789,13 @@ if (!isset($_SESSION['login'])) {
             </div>
 
             <div class="w3-col m8 l7 w3-card-4 w3-mobile" id="rightdiv" style = "height:100vh; overflow: scroll; padding-top: 10px; padding-left: 10px; padding-right: 10px"> 
-                
+
                 <!--Students List-->   
                 <div id ="outheader">
                     <h4  style="text-align: center">STUDENTS LIST</h4>
-<!--Out Table-->    <table class="w3-table-all w3-card-4 w3-striped w3-hoverable" id="out" ></table>
+                    <!--Out Table-->    <table class="w3-table-all w3-card-4 w3-striped w3-hoverable" id="out" ></table>
                 </div>
-            
+
                 <table id="TT1" hidden>
                     <thead>
                         <tr>
@@ -879,7 +884,7 @@ if (!isset($_SESSION['login'])) {
                 <span class="glyphicon glyphicon-arrow-up" style="font-size: 25px;" ></span>
             </button>
         </div>
-        
+
         <script>
             document.getElementById("tables").onscroll = function () {
                 scrollFunction();
@@ -893,7 +898,8 @@ if (!isset($_SESSION['login'])) {
             ;
             function topFunction() {
                 document.getElementById("tables").scrollTop = 0;
-            };
+            }
+            ;
         </script>
 
         <!--Initialize Academic Year drop-down-->   
@@ -914,7 +920,8 @@ if (!isset($_SESSION['login'])) {
             delete yearArray[yearArray.length - 1];
             for (var i in yearArray) {
                 select.add(new Option(yearArray[i]));
-            };
+            }
+            ;
             $(function () {
                 $('#academic_year').multiselect({
                     includeSelectAllOption: true
@@ -953,13 +960,14 @@ if (!isset($_SESSION['login'])) {
                 };
                 httpgrades.open("GET", "sqldb/distinctGrades.php?years=" + selected_years, false);
                 httpgrades.send();
-                
+
                 $('#grade').multiselect('destroy');
                 delete gradesArray[gradesArray.length - 1];
-                
+
                 for (var i in gradesArray) {
                     select.add(new Option(gradesArray[i]));
-                };
+                }
+                ;
 
                 $(function () {
                     $('#grade').multiselect({
@@ -1011,7 +1019,7 @@ if (!isset($_SESSION['login'])) {
                 httpBatches.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
-//                        document.getElementById('out').innerHTML = this.responseText;
+    //                        document.getElementById('out').innerHTML = this.responseText;
                         batchesArray = str.split("\t");
                     }
                 };
@@ -1022,7 +1030,8 @@ if (!isset($_SESSION['login'])) {
                 delete batchesArray[batchesArray.length - 1];
                 for (var i in batchesArray) {
                     select.add(new Option(batchesArray[i]));
-                };
+                }
+                ;
 
                 $(function () {
                     $('#batch').multiselect({
@@ -1035,9 +1044,9 @@ if (!isset($_SESSION['login'])) {
         <!--Initialize Subject drop-down--> 
         <!-- Subjects via Batches-->        
         <script type="text/javascript">
-//            document.getElementById("grade").addEventListener("change", fillSubjects());
-//            document.getElementById("batch").addEventListener("change", fillSubjects());
-            
+    //            document.getElementById("grade").addEventListener("change", fillSubjects());
+    //            document.getElementById("batch").addEventListener("change", fillSubjects());
+
             function fillSubjects() {
                 var selected_years = $("#academic_year option:selected");
                 var selected_grades = $("#grade option:selected");
@@ -1089,12 +1098,12 @@ if (!isset($_SESSION['login'])) {
                     selected_batches = message + ")";
                 } else
                     selected_batches = "";
-                
+
                 var httpSubjects = new XMLHttpRequest();
                 httpSubjects.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
-//                        document.getElementById("out").innerHTML = this.responseText;
+    //                        document.getElementById("out").innerHTML = this.responseText;
                         subjectsArray = str.split("\t");
                     }
                 };
@@ -1106,8 +1115,9 @@ if (!isset($_SESSION['login'])) {
                 delete subjectsArray[subjectsArray.length - 1];
                 for (var i in subjectsArray) {
                     select.add(new Option(subjectsArray[i]));
-                };
-                
+                }
+                ;
+
                 $(function () {
                     $('#subject').multiselect({
                         includeSelectAllOption: true
@@ -1138,7 +1148,7 @@ if (!isset($_SESSION['login'])) {
                     selected_years = message + ")";
                 else
                     selected_years = "";
-                
+
                 var message = "";
                 selected_grades.each(function () {
                     if (message === "") {
@@ -1172,27 +1182,27 @@ if (!isset($_SESSION['login'])) {
                 else
                     selected_batches = "";
 
-//                var message = "";
-//                selected_subjects.each(function () {
-//                    if (message === "") {
-//                        if (selected_years !== "" || selected_grades !== "" || selected_batches !== "")
-//                            message = " AND (subjects.name = '" + $(this).text() + "' ";
-//                        else
-//                            message = " (subjects.name = '" + $(this).text() + "' ";
-//                    } else
-//                        message += " OR subjects.name = '" + $(this).text() + "' ";
-//                });
-//
-//                if (message !== "")
-//                    selected_subjects = message + ")";
-//                else
-                    selected_subjects = "";
+    //                var message = "";
+    //                selected_subjects.each(function () {
+    //                    if (message === "") {
+    //                        if (selected_years !== "" || selected_grades !== "" || selected_batches !== "")
+    //                            message = " AND (subjects.name = '" + $(this).text() + "' ";
+    //                        else
+    //                            message = " (subjects.name = '" + $(this).text() + "' ";
+    //                    } else
+    //                        message += " OR subjects.name = '" + $(this).text() + "' ";
+    //                });
+    //
+    //                if (message !== "")
+    //                    selected_subjects = message + ")";
+    //                else
+                selected_subjects = "";
 
                 var httpTerms = new XMLHttpRequest();
                 httpTerms.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
-//                        document.getElementById("out").innerHTML = this.responseText;                        
+    //                        document.getElementById("out").innerHTML = this.responseText;                        
                         termsArray = str.split("\t");
                     }
                 };
@@ -1204,7 +1214,8 @@ if (!isset($_SESSION['login'])) {
                 delete termsArray[termsArray.length - 1];
                 for (var i in termsArray) {
                     select.add(new Option(termsArray[i]));
-                };
+                }
+                ;
 
                 $(function () {
                     $('#term').multiselect({
@@ -1231,7 +1242,8 @@ if (!isset($_SESSION['login'])) {
             delete categoryArray[categoryArray.length - 1];
             for (var i in categoryArray) {
                 select.add(new Option(categoryArray[i]));
-            };
+            }
+            ;
             $(function () {
                 $('#category').multiselect({
                     includeSelectAllOption: true
@@ -1259,7 +1271,7 @@ if (!isset($_SESSION['login'])) {
                 doc.save("Students.pdf");
             }
         </script>
-        
+
         <script>
             function downloadStatistics() {
                 var doc = new jsPDF('p', 'pt', 'a3');
@@ -1267,7 +1279,7 @@ if (!isset($_SESSION['login'])) {
                     doc.setFontSize(18);
                     doc.setTextColor(0);
                     doc.setFont('PTSans');
-//                    doc.setFontStyle('bold');
+    //                    doc.setFontStyle('bold');
                     doc.text("Subject Wise Statistics", 225, 50);
                     doc.line(226, 53, 390, 53);// Header top margin
                 };
@@ -1281,8 +1293,8 @@ if (!isset($_SESSION['login'])) {
                     }, styles: {
                         fontSize: 12,
                         font: 'PTSans',
-                       
-                        }
+
+                    }
                 });
 
                 var tableName = "";
@@ -1346,7 +1358,7 @@ if (!isset($_SESSION['login'])) {
                     doc.text("Subject wise Statistics", 225, 50);
                     doc.line(226, 53, 390, 53);// Header top margin
                 };
-                
+
                 tableName = "TT" + tno;
                 doc.addImage(imgData[tno], 'png', 80, 180, 300, 200);
                 var table = doc.autoTableHtmlToJson(document.getElementById(tableName));
