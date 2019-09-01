@@ -5,12 +5,12 @@ $year = $_REQUEST["year"];
 
 $sql = "SELECT DISTINCT courses.course_name courses FROM\n"
         . "courses \n"
-        . "INNER JOIN batches on courses.id = batches.course_id \n";
+        . "JOIN batches on courses.id = batches.course_id \n";
 
 if ($year == "")
     $sql .= "JOIN academic_years ON batches.academic_year_id = academic_years.id WHERE courses.is_deleted = 0 ";
 else
-    $sql .= "JOIN academic_years ON batches.academic_year_id = academic_years.id WHERE academic_years.name = " . "'" . $year . "' AND courses.is_deleted = 0 ";
+    $sql .= "JOIN academic_years ON batches.academic_year_id = academic_years.id WHERE $year  AND courses.is_deleted = 0 ";
 
     $sql .= "ORDER BY courses.course_name ASC;";
 
