@@ -306,96 +306,103 @@ if (!isset($_SESSION['login'])) {
             </script>
             <!-- End of Navigation bar -->
             <div id="upperdiv" class="w3-container" style="padding-top: 10px; padding-bottom: 10px;">   
+            <table id= "table1">
+            <tr>
+                <td></td>
+                <td><button style="text-align: center ;"
+                    class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge"
+                    id="search" title="Get students marks">View Results
+                    <span class="fa fa-search"></span></button>
+                </td>
+                <td></td>           
+                <td>
+                    <select  class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge"
+                        style="text-align: center" id="charttype" > 
 
-                <table id= "table1">
-                    <tr>
-
-                        <td></td>
-                        <td><button style="text-align: center ;" class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="search" title="Get students marks">View Results  <span class="fa fa-search"></span></button></td>
-                        <td></td>
-                        <td><select  class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" style="text-align: center" id="charttype" > 
-                                <option class="w3-round-xlarge" style="text-align: center;" selected="selected" value="pie">Pie Chart</option> 
-                                <option class="w3-round-xlarge"style="text-align: center"  value="coloumn">Column Chart</option>
-                                <option class="w3-round-xlarge"style="text-align: center"  value="linechart">Line Chart</option> 
-                                <option class="w3-round-xlarge"style="text-align: center"  value="barchart">Bar Chart</option> 
-
-
-                            </select></td>
-                        <td><button style="text-align: center ;" class="w3-button w3-round-xlarge w3-medium w3-hover-blue-gray w3-center w3-custom" id="exportS" onclick="downloadStatistics()" title="Export Data as PDF" ><span class="material-icons">print</span></button>
-                        </td>
-                        <!--<td><button  style="text-align: center ;" class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="exportM" onclick="downloadStudents()" title="Export Marks as PDF">Export Mark  <span class="material-icons ">save_alt</span></button></td>-->
-                    </tr>
-                </table>
+                        <option class="w3-round-xlarge" style="text-align: center;"selected="selected" 
+                            value="pie">Pie Chart</option> 
+                        
+                        <option class="w3-round-xlarge"style="text-align: center" 
+                            value="coloumn">Column Chart</option>
+                        
+                        <option class="w3-round-xlarge"style="text-align: center"  
+                            value="linechart">Line Chart</option> 
+                        
+                        <option class="w3-round-xlarge"style="text-align: center" 
+                            value="barchart">Bar Chart</option>
+                    </select>
+                </td>
+                <td><button style="text-align: center ;" 
+                    class="w3-button w3-round-xlarge w3-medium w3-hover-blue-gray w3-center w3-custom"
+                    id="exportS" onclick="downloadStatistics()" title="Export Data as PDF" >
+                    <span class="material-icons">print</span></button>
+                </td>               
+            </tr>
+            </table>
             </div>
 
             <div id="tables" style="height: 100vh; overflow: auto">
-
-                <!--Tables-->
-                <!--////////////////////////            Table 1     ///////////////////////////////////////////////////-->
-                <textarea id="output" rows="10" cols="50" hidden></textarea>
                 <div class="w3-row w3-border">
                     <div class="w3-container w3-half">
-                        <br>
-                        <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T1">  
-                            <th colspan="4" class="w3-teal" style="font-size: 18px">
-                                <button style="float: left;"type='button'class="w3-button w3-hover-blue-gray" hidden onclick="printDiv(chart1)"id='printbtn'  title="Print chart"value='Print'>
-                                    <i class="glyphicon glyphicon-print"></i></button>
-                                <select id="T1-YR" ></select>   
-                                <select id="T1-GR" ></select>
-                                <select id="T1-SC" multiple></select> 
+                    <br>
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T1">
+                <th colspan="4" class="w3-teal" style="font-size: 18px">
+                    <button style="float: left;"type='button'class="w3-button w3-hover-blue-gray"
+                    hidden onclick="printDiv(chart1)"id='printbtn'  title="Print chart"value='Print'>
+                    <i class="glyphicon glyphicon-print"></i></button>
+                    
+                    <select id="T1-YR" ></select>   
+                    <select id="T1-GR" ></select>
+                    <select id="T1-SC" multiple></select> 
 
+                    <select id="T1-SB" multiple></select>
+                    <select id="T1-CA" multiple></select>           
+                </th>
 
-                                <select id="T1-SB" multiple></select>
-                                <select id="T1-CA" multiple></select>           
-                            </th> 
+                <tr>
+                    <th colspan="2" class="w3-border-right">
+                        <select id="T1-Term1"></select>
+                        <select id="T1-Gender1">
+                            <option>Boys</option>
+                            <option>Girls</option>
+                            <option>Both</option>
+                        </select>            
+                    </th>
+                    <th colspan="2" class="w3-border-right">
+                        <select id="T1-Term2"></select>
+                        <select id="T1-Gender2">
+                            <option>Girls</option>
+                            <option>Boys</option>
+                            <option>Both</option>
+                        </select>            
+                    </th>
+                </tr>
+                <tr>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 80> % and above</td>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 85> % and above</td>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 90> % and above</td>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 95> % and above</td>
+                </tr>
+                <tr>
+                    <td class="w3-border-right">--</td>
+                    <td class="w3-border-right">--</td>
+                    <td class="w3-border-right">--</td>
+                    <td class="w3-border-right">--</td>
+                </tr>
+            </table>
+            <table id="TT1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" hidden>
+                <thead>
+                <td> </td><td></td><td ></td><td ></td><td ></td><td ></td><td ></td></thead>
+                <tbody>
+                    <tr><td></td><td></td><td></td><td></td><td ></td><td ></td><td ></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td ></td><td ></td><td ></td></tr>
+                    <tr><td ></td><td></td><td></td><td></td><td ></td><td ></td><td></td></tr>
+                </tbody>
+            </table>
+            <br>
 
-                            <tr>
-                                <th colspan="2" class="w3-border-right">
-                                    <select id="T1-Term1"></select>
-                                    <select id="T1-Gender1">
-                                        <option>Boys</option>
-                                        <option>Girls</option>
-                                        <option>Both</option>
-                                    </select>            
-                                </th>
-                                <th colspan="2" class="w3-border-right">
-                                    <select id="T1-Term2"></select>
-                                    <select id="T1-Gender2">
-                                        <option>Girls</option>
-                                        <option>Boys</option>
-                                        <option>Both</option>
-                                    </select>            
-                                </th>
-                            </tr>
-                            <tr>
-                                <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 80> % and above</td>
-                                <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 85> % and above</td>
-                                <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 90> % and above</td>
-                                <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 95> % and above</td>
-                            </tr>
-                            <tr>
-                                <td class="w3-border-right">--</td>
-                                <td class="w3-border-right">--</td>
-                                <td class="w3-border-right">--</td>
-                                <td class="w3-border-right">--</td>
-                            </tr>
-                        </table>
-
-
-
-                        <table id="TT1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" hidden>
-                            <thead>
-                            <td> </td><td></td><td ></td><td ></td><td ></td><td ></td><td ></td></thead>
-                            <tbody>
-                                <tr><td></td><td></td><td></td><td></td><td ></td><td ></td><td ></td></tr>
-                                <tr><td></td><td></td><td></td><td></td><td ></td><td ></td><td ></td></tr>
-                                <tr><td ></td><td></td><td></td><td></td><td ></td><td ></td><td></td></tr>
-                            </tbody>
-                        </table>
-                        <br>
-
-                        <div class="w3-half w3-card-4"  id="chart1"></div>
-                    </div>
+            <div class="w3-half w3-card-4"  id="chart1"></div>
+        </div>
 
                     <div class="w3-container w3-half">
                         <br>
@@ -455,7 +462,7 @@ if (!isset($_SESSION['login'])) {
                             </tbody>
                         </table>
                         <br>
-                        <div class="w3-half w3-card-4" id="chart2"></div>
+                        <div class="w3-half w3-card-4" id="chart2"><h1>Chart2</h1></div>
                     </div>
 
                 </div>
@@ -472,23 +479,23 @@ if (!isset($_SESSION['login'])) {
     <script src="js/jspdf.debug.js"></script>
     <script src="js/jspdf.plugin.autotable.js"></script>
     <script>
-                                    function generate() {
-                                        var doc = new jsPDF('p', 'pt');
-                                        var res = doc.autoTableHtmlToJson(document.getElementById("out"));
-                                        doc.autoTable(res.columns, res.data, {margin: {top: 80}});
-                                        var header = function (data) {
-                                            doc.setFontSize(18);
-                                            doc.setTextColor(40);
-                                            doc.setFontStyle('normal');
-                                            doc.text("Testing Report", data.settings.margin.left, 50);
-                                        };
-                                        var options = {
-                                            beforePageContent: header,
-                                            margin: {top: 80}, startY: doc.autoTableEndPosY() + 20
-                                        };
-                                        doc.autoTable(res.columns, res.data, options);
-                                        doc.save("Students.pdf");
-                                    }
+    function generate() {
+        var doc = new jsPDF('p', 'pt');
+        var res = doc.autoTableHtmlToJson(document.getElementById("out"));
+        doc.autoTable(res.columns, res.data, {margin: {top: 80}});
+        var header = function (data) {
+            doc.setFontSize(18);
+            doc.setTextColor(40);
+            doc.setFontStyle('normal');
+            doc.text("Testing Report", data.settings.margin.left, 50);
+        };
+        var options = {
+            beforePageContent: header,
+            margin: {top: 80}, startY: doc.autoTableEndPosY() + 20
+        };
+        doc.autoTable(res.columns, res.data, options);
+        doc.save("Students.pdf");
+    }
     </script>
 
     <script type="text/javascript">
@@ -511,8 +518,6 @@ if (!isset($_SESSION['login'])) {
         }
     </script>
 
-
-
     <!--Onchange event listener -->
     <script type="text/javascript">
         document.getElementById("T1-YR").onchange = function () {
@@ -520,8 +525,6 @@ if (!isset($_SESSION['login'])) {
             fillSections1();
             fillSubjects1();
             fillTerms1();
-
-
             Result();
         };
         document.getElementById("T2-YR").onchange = function () {
@@ -529,15 +532,12 @@ if (!isset($_SESSION['login'])) {
             fillSections2();
             fillSubjects2();
             fillTerms2();
-
-
             Result();
         };
         document.getElementById("T1-GR").onchange = function () {
             fillSections1();
             fillSubjects1();
             fillTerms1();
-
             Result();
         };
 
@@ -545,28 +545,24 @@ if (!isset($_SESSION['login'])) {
             fillSections2();
             fillSubjects2();
             fillTerms2();
-
             Result();
         };
 
         document.getElementById("T1-SC").onchange = function () {
             fillSubjects1();
             fillTerms1();
-
             Result();
         };
 
         document.getElementById("T2-SC").onchange = function () {
             fillSubjects2();
             fillTerms2();
-
             Result();
         };
         document.getElementById("T2-GR").onchange = function () {
             fillSections2();
             fillSubjects2();
             fillTerms2();
-
             Result();
         };
         document.getElementById('T1-Gender1').onchange = function () {
@@ -597,20 +593,57 @@ if (!isset($_SESSION['login'])) {
         function Result() {
             document.getElementById("search").click();
         }
-    </script>    
+    </script>  
+
+
+<!--Initialize Academic Years for Table 1 & Table 2->-->     
+<script type="text/javascript">
+    var yearArray = ["Your Data Base is Empty!."];
+
+    var httpyear = new XMLHttpRequest();
+    httpyear.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            var str = this.responseText;
+            document.getElementById("chart2").innerHTML = this.responseText;
+            yearArray = str.split("\t");
+        }
+    };
+    httpyear.open("GET", "sqldb/initAcademicYears.php", false);
+    httpyear.send();
+
+    var select = document.getElementById('T1-YR');
+    var select2 = document.getElementById('T2-YR');
+
+    delete yearArray[yearArray.length - 1];
+    
+    for (var i in yearArray){
+        select.add(new Option(yearArray[i]));
+        select2.add(new Option(yearArray[i]));
+    }
+    
+    $(function () {
+        $('#T1-YR').multiselect({
+            includeSelectAllOption: true
+            });
+         $('#T2-YR').multiselect({
+            includeSelectAllOption: true
+            });
+        });
+</script>  
 
 
     <!--Initialize Terms Table 1-->
-
     <script type="text/javascript">
         function fillTerms1() {
-            var grade = document.getElementById("T1-GR").options[document.getElementById("T1-GR").selectedIndex].text;
-            var year = document.getElementById("T1-YR").options[document.getElementById("T1-YR").selectedIndex].text;
+            var year = document.getElementById("T1-YR").options[
+                document.getElementById("T1-YR").selectedIndex].text;
+
+            var grade = document.getElementById("T1-GR").options[
+                document.getElementById("T1-GR").selectedIndex].text;
 
             if (grade !== 'Select Grade') {
                 var select1 = document.getElementById('T1-Term1');
                 var select2 = document.getElementById('T1-Term2');
-
 
                 while (select1.length > 0)
                     select1.remove(0);
@@ -627,6 +660,7 @@ if (!isset($_SESSION['login'])) {
                 };
                 httpTerms.open("GET", "sqldb/distinctTerms.php?grade=" + grade + "&year=" + year, false);
                 httpTerms.send();
+
                 $('#T1-Term1').multiselect('destroy');
                 $('#T1-Term2').multiselect('destroy');
 
@@ -746,69 +780,6 @@ if (!isset($_SESSION['login'])) {
             $('#T2-Gender2').multiselect({includeSelectAllOption: true});
         });
     </script>
-
-
-    <!--Initialize Academic Years for Table 1->-->     
-    <script type="text/javascript">
-
-        var yearArray = ["Your Data Base is Empty!."];
-
-        var httpyear = new XMLHttpRequest();
-        httpyear.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var str = this.responseText;
-                yearArray = str.split("\t");
-            }
-        };
-        httpyear.open("GET", "sqldb/initAcademicYears.php", false);
-        httpyear.send();
-
-        var select = document.getElementById('T1-YR');
-        delete yearArray[yearArray.length - 1];
-        for (var i in yearArray) {
-            select.add(new Option(yearArray[i]));
-        }
-        ;
-        $(function () {
-            $('#T1-YR').multiselect({
-                includeSelectAllOption: true
-            });
-        });
-
-    </script>
-
-
-
-
-    <!--Initialize Academic Years for Table 2->-->     
-    <script type="text/javascript">
-        var yearArray = ["Your Data Base is Empty!."];
-
-        var httpyear = new XMLHttpRequest();
-        httpyear.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var str = this.responseText;
-                yearArray = str.split("\t");
-            }
-        };
-        httpyear.open("GET", "sqldb/initAcademicYears.php", false);
-        httpyear.send();
-
-        var select = document.getElementById('T2-YR');
-        delete yearArray[yearArray.length - 1];
-        for (var i in yearArray) {
-            select.add(new Option(yearArray[i]));
-        }
-        ;
-        $(function () {
-            $('#T2-YR').multiselect({
-                includeSelectAllOption: true
-            });
-        });
-
-    </script>
-
-
 
     <!--Grades VIA Years Table 1--> 
     <script type="text/javascript">
