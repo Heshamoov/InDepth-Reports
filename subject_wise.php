@@ -28,8 +28,9 @@ if (!isset($_SESSION['login'])) {
         $(function () {
 
             $('#search, #charttype').click(function () {
+                document.getElementById("chart2").innerHTML += 'Hello';
 
-    //            var indexYear;
+                var indexYear;
                 var indexGrade;
                 var indexSubject;
                 var indexSection;
@@ -37,13 +38,13 @@ if (!isset($_SESSION['login'])) {
 
                 for (var index = 1; index < 3; index++) {
 
-    //                indexYear = "T" + index + "-YR";
+                   indexYear = "T" + index + "-YR";
                     indexGrade = "T" + index + "-GR";
                     indexSubject = "T" + index + "-SB";
                     indexSection = "T" + index + "-SC";
                     indexCategory = "T" + index + "-CA";
 
-    //``              var years = document.getElementById(indexYear).options[document.getElementById(indexYear).selectedIndex].text;
+                    var years = document.getElementById(indexYear).options[document.getElementById(indexYear).selectedIndex].text;
                     var grade = document.getElementById(indexGrade).options[document.getElementById(indexGrade).selectedIndex].text;
                     var category = $("#" + indexCategory + " option:selected");
                     var subject = $("#" + indexSubject + " option:selected");
@@ -81,19 +82,28 @@ if (!isset($_SESSION['login'])) {
                     var message = "";
                     var subjectHeader = "";
                     subject.each(function () {
-                        var currentSubject = $(this).text();
-                        if (currentSubject.indexOf("(") !== -1) {
-                            var bracketIndex = currentSubject.indexOf("(");
-                            currentSubject = currentSubject.slice(0, bracketIndex);
+                        var currentSubject = "";
+                        var firstSpace = true;
+                        var subject = $(this).text();
+
+                        // Extracting English letters and numbers and remove Arabic letters
+                        for (var i = 0; i < subject.length; i++) {
+                            if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9'))
+                                currentSubject += subject[i];
+                            if (subject[i] === ' ' && firstSpace && i > 3) {
+                                currentSubject += subject[i];
+                                firstSpace = false;
+                            }
                         }
+
                         if (message === "") {
                             if (subject !== "")
-                                message = " AND (subjects.name = '" + currentSubject + "' ";
+                                message = " AND (subjects.name LIKE '" + currentSubject + "%' ";
                             else
-                                message = " (subjects.name = '" + currentSubject + "'";
+                                message = " (subjects.name LIKE '" + currentSubject + "'%";
                             subjectHeader = " - " + currentSubject;
                         } else {
-                            message += " OR subjects.name = '" + currentSubject + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                            message += " OR subjects.name LIKE '" + currentSubject + "'%";  //  grade like 'GR1' OR grade like 'GR10';
                             subjectHeader += " , " + currentSubject;
                         }
                     });
@@ -127,46 +137,50 @@ if (!isset($_SESSION['login'])) {
                     else
                         category = "";
 
+        document.getElementById("chart2").innerHTML += 'Between';
 
 
-                    // Between values Subject wise
-                    var min = 0, tableName, term, gender;
-                    t = index;
-                    {
-                        tableName = 'T' + t;
-                        for (var i = 0; i < 4; i++) {
-                            if (i < 2) {
-                                term = tableName + "-Term1";
-                                term = document.getElementById(term).options[document.getElementById(term).selectedIndex].text;
-                                gender = tableName + "-Gender1";
-                                gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
-                            } else {
-                                term = tableName + "-Term2";
-                                term = document.getElementById(term).options[document.getElementById(term).selectedIndex].text;
-                                gender = tableName + "-Gender2";
-                                gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
-                            }
-
-                            output.value += term + " " + gender;
-                            min = document.getElementById(tableName).rows[2].cells[i].childNodes[0].value;
-                            var httpAbove = new XMLHttpRequest();
-                            httpAbove.onreadystatechange = function () {
-                                if (this.readyState === 4)
-                                    document.getElementById(tableName).rows[3].cells[i].innerHTML =
-                                            this.responseText;
-                            };
-                            httpAbove.open("POST", "sqldb/marksAbove.php?term=" + term +
-                                    "&grade=" + grade + "&subject=" + subject + "&category=" + category +
-                                    "&gender=" + gender + "&min=" + min + "&section=" + section, false);
-
-                            httpAbove.send();
-                        }
-                    }
-
-                    google.charts.load('current', {packages: ['corechart', 'bar']});
-                    google.charts.setOnLoadCallback(drawMaterial);
-
+        // Between values Subject wise
+        var min = 0, tableName, term, gender;
+        t = index;
+        {
+            tableName = 'T' + t;
+            for (var i = 0; i < 4; i++) {
+                if (i < 2) {
+                    term = tableName + "-Term1";
+                    term = document.getElementById(term).options[document.getElementById(term).selectedIndex].text;
+                    gender = tableName + "-Gender1";
+                    gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
+                } else {
+                    term = tableName + "-Term2";
+                    term = document.getElementById(term).options[document.getElementById(term).selectedIndex].text;
+                    gender = tableName + "-Gender2";
+                    gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
                 }
+
+                document.getElementById("chart2").innerHTML += term + gender;
+                min = document.getElementById(tableName).rows[2].cells[i].childNodes[0].value;
+
+                document.getElementById("chart2").innerHTML += 'befor http';
+                
+                var httpAbove = new XMLHttpRequest();
+                httpAbove.onreadystatechange = function () {
+                    if (this.readyState === 4)
+                        document.getElementById(tableName).rows[3].cells[i].innerHTML = this.responseText;
+                        document.getElementById("chart2").innerHTML = this.responseText;
+                };
+                httpAbove.open("POST", "sqldb/marksAbove.php?term=" + term +
+                        "&grade=" + grade + "&subject=" + subject + "&category=" + category +
+                        "&gender=" + gender + "&min=" + min + "&section=" + section, false);
+
+                httpAbove.send();
+            }
+        }
+
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawMaterial);
+
+    }
 
 
                 function drawMaterial() {
