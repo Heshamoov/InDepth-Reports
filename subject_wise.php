@@ -28,7 +28,7 @@ if (!isset($_SESSION['login'])) {
         $(function () {
 
             $('#search, #charttype').click(function () {
-                document.getElementById("chart2").innerHTML += 'Hello';
+//                document.getElementById("chart2").innerHTML += 'Hello';
 
                 var indexYear;
                 var indexGrade;
@@ -137,7 +137,7 @@ if (!isset($_SESSION['login'])) {
                     else
                         category = "";
 
-        document.getElementById("chart2").innerHTML += 'Between';
+//        document.getElementById("chart2").innerHTML += 'Between';
 
 
         // Between values Subject wise
@@ -313,65 +313,51 @@ if (!isset($_SESSION['login'])) {
 <div class="se-pre-con"></div>
 
 <div class=" w3-responsive header">
-            <!-- Navigation bar -->
-            <?php include('navbar.php'); ?>
-            <script>
-                document.getElementById("navSubjectWise").style.backgroundColor = '#009688';
-            </script>
-            <!-- End of Navigation bar -->
-            <div id="upperdiv" class="w3-container" style="padding-top: 10px; padding-bottom: 10px;">   
-            <table id= "table1">
-            <tr>
-                <td></td>
-                <td><button style="text-align: center ;"
-                    class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge"
-                    id="search" title="Get students marks">View Results
-                    <span class="fa fa-search"></span></button>
-                </td>
-                <td></td>           
-                <td>
-                    <select  class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge"
-                        style="text-align: center" id="charttype" > 
+<!-- Navigation bar -->
+<?php include('navbar.php'); ?>
+<script>document.getElementById("navSubjectWise").style.backgroundColor = '#009688';</script>
 
-                        <option class="w3-round-xlarge" style="text-align: center;"selected="selected" 
-                            value="pie">Pie Chart</option> 
-                        
-                        <option class="w3-round-xlarge"style="text-align: center" 
-                            value="coloumn">Column Chart</option>
-                        
-                        <option class="w3-round-xlarge"style="text-align: center"  
-                            value="linechart">Line Chart</option> 
-                        
-                        <option class="w3-round-xlarge"style="text-align: center" 
-                            value="barchart">Bar Chart</option>
-                    </select>
-                </td>
-                <td><button style="text-align: center ;" 
-                    class="w3-button w3-round-xlarge w3-medium w3-hover-blue-gray w3-center w3-custom"
-                    id="exportS" onclick="downloadStatistics()" title="Export Data as PDF" >
-                    <span class="material-icons">print</span></button>
-                </td>               
-            </tr>
-            </table>
-            </div>
+<div id="upperdiv" class="w3-container" style="padding-top: 10px; padding-bottom: 10px;">   
+<table id= "table1">
+<tr>
+    <td></td>
+    <td>
+        <button style="text-align: center ;" class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge"
+        id="search" title="Get students marks">View Results<span class="fa fa-search"></span></button>
+    </td>
+    <td></td>           
+    <td>
+        <select  class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" style="text-align: center" id="charttype" > 
+            <option class="w3-round-xlarge" style="text-align: center"  value="barchart">Bar</option>
+            <option class="w3-round-xlarge" style="text-align: center" value="coloumn">Column</option>
+            <option class="w3-round-xlarge" style="text-align: center" value="linechart">Line</option>
+            <option class="w3-round-xlarge" style="text-align: center;" value="pie" selected="selected">Pie Chart</option>            
+        </select>
+    </td>
+    <td><button style="text-align: center ;" class="w3-button w3-round-xlarge w3-medium w3-hover-blue-gray w3-center w3-custom"
+            id="exportS" onclick="downloadStatistics()" title="Export Data as PDF" > <span class="material-icons">print</span></button>
+    </td>               
+</tr>
+</table>
+</div> <!--End of Upper Div Section-->
 
-            <div id="tables" style="height: 100vh; overflow: auto">
-                <div class="w3-row w3-border">
-                    <div class="w3-container w3-half">
-                    <br>
-                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T1">
-                <th colspan="4" class="w3-teal" style="font-size: 18px">
-                    <button style="float: left;"type='button'class="w3-button w3-hover-blue-gray"
-                    hidden onclick="printDiv(chart1)"id='printbtn'  title="Print chart"value='Print'>
-                    <i class="glyphicon glyphicon-print"></i></button>
-                    
-                    <select id="T1-YR"></select>   
-                    <select id="T1-GR" ></select>
-                    <select id="T1-SC" multiple></select> 
+<div id="tables" style="height: 100vh; overflow: auto">
+    <div class="w3-row w3-border">
+        <div class="w3-container w3-half">
+        <br>
+        <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T1">
+            <th colspan="4" class="w3-teal" style="font-size: 18px">
+            <button style="float: left;" type='button' class="w3-button w3-hover-blue-gray"
+            hidden onclick="printDiv(chart1)" id='printbtn'  title="Print chart" value='Print'>
+            <i class="glyphicon glyphicon-print"></i></button>
 
-                    <select id="T1-SB" multiple></select>
-                    <select id="T1-CA" multiple></select>           
-                </th>
+        <select id="T1-YR"></select>   
+        <select id="T1-GR" ></select>
+        <select id="T1-SC" multiple></select> 
+
+        <select id="T1-SB" multiple></select>
+        <select id="T1-CA" multiple></select>           
+    </th>
 
                 <tr>
                     <th colspan="2" class="w3-border-right">
@@ -392,10 +378,10 @@ if (!isset($_SESSION['login'])) {
                     </th>
                 </tr>
                 <tr>
-                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 80> % and above</td>
-                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 85> % and above</td>
-                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 90> % and above</td>
-                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 95> % and above</td>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;" value= 80> % and above</td>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;" value= 85> % and above</td>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;" value= 90> % and above</td>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;" value= 95> % and above</td>
                 </tr>
                 <tr>
                     <td class="w3-border-right">--</td>
@@ -414,7 +400,6 @@ if (!isset($_SESSION['login'])) {
                 </tbody>
             </table>
             <br>
-
             <div class="w3-half w3-card-4"  id="chart1"></div>
         </div>
 
@@ -422,7 +407,7 @@ if (!isset($_SESSION['login'])) {
                         <br>
                         <table class=" w3-table-all w3-striped w3-centered w3-card-4" id="T2">  
                             <th colspan="4" class="w3-teal" style="font-size: 18px">
-                                <button style="float: left;"type='button'class="w3-button w3-hover-blue-gray" hidden onclick="printDiv(chart2)"id='printbtn'  title="Print chart"value='Print'>
+                                <button style="float: left;" type='button' class="w3-button w3-hover-blue-gray" hidden onclick="printDiv(chart2)" id='printbtn'  title="Print chart" value='Print'>
                                     <i class="glyphicon glyphicon-print"></i></button>
 
                                 <select id="T2-YR"></select>   
@@ -476,19 +461,13 @@ if (!isset($_SESSION['login'])) {
                             </tbody>
                         </table>
                         <br>
-                        <div class="w3-half w3-card-4" id="chart2"><h1>Chart2</h1></div>
+                        <div class="w3-half w3-card-4" id="chart2"></div>
                     </div>
 
                 </div>
                 <br><br>
-                <!--////////////////////////            Table 2     ///////////////////////////////////////////////////-->
-
             </div>
-
-            <!--////////////////////////            Table 3     ///////////////////////////////////////////////////-->
-
         </div>
-    </div>
 
     <script src="js/jspdf.debug.js"></script>
     <script src="js/jspdf.plugin.autotable.js"></script>
