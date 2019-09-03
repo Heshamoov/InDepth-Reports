@@ -21,7 +21,7 @@ if (!isset($_SESSION['login'])) {
 
     <script type="text/javascript">
 
-        var imgData = new Array();
+         imgData = new Array();
 
         $(function () {
 
@@ -338,7 +338,7 @@ if (!isset($_SESSION['login'])) {
                         <br>
                         <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T1">  
                             <th colspan="4" class="w3-teal" style="font-size: 18px">
-                                <button style="float: left;"type='button'class="w3-button w3-hover-blue-gray" hidden onclick="printDiv(chart1)"id='printbtn'  title="Print chart"value='Print'>
+                                <button style="float: left;"type='button'class="w3-button w3-hover-blue-gray"  onclick="printDiv1()"id='printbtn'  title="Print chart"value='Print'>
                                     <i class="glyphicon glyphicon-print"></i></button>
                                 <select id="T1-YR" ></select>   
                                 <select id="T1-GR" ></select>
@@ -401,7 +401,7 @@ if (!isset($_SESSION['login'])) {
                         <br>
                         <table class=" w3-table-all w3-striped w3-centered w3-card-4" id="T2">  
                             <th colspan="4" class="w3-teal" style="font-size: 18px">
-                                <button style="float: left;"type='button'class="w3-button w3-hover-blue-gray" hidden onclick="printDiv(chart2)"id='printbtn'  title="Print chart"value='Print'>
+                                <button style="float: left;"type='button'class="w3-button w3-hover-blue-gray"  onclick="printDiv(chart2)"id='printbtn'  title="Print chart"value='Print'>
                                     <i class="glyphicon glyphicon-print"></i></button>
                                 <select id="T2-YR" ></select>   
 
@@ -471,45 +471,8 @@ if (!isset($_SESSION['login'])) {
 
     <script src="js/jspdf.debug.js"></script>
     <script src="js/jspdf.plugin.autotable.js"></script>
-    <script>
-                                    function generate() {
-                                        var doc = new jsPDF('p', 'pt');
-                                        var res = doc.autoTableHtmlToJson(document.getElementById("out"));
-                                        doc.autoTable(res.columns, res.data, {margin: {top: 80}});
-                                        var header = function (data) {
-                                            doc.setFontSize(18);
-                                            doc.setTextColor(40);
-                                            doc.setFontStyle('normal');
-                                            doc.text("Testing Report", data.settings.margin.left, 50);
-                                        };
-                                        var options = {
-                                            beforePageContent: header,
-                                            margin: {top: 80}, startY: doc.autoTableEndPosY() + 20
-                                        };
-                                        doc.autoTable(res.columns, res.data, options);
-                                        doc.save("Students.pdf");
-                                    }
-    </script>
 
-    <script type="text/javascript">
-        function generate2() {
-            var doc = new jsPDF('p', 'pt');
-            var res = doc.autoTableHtmlToJson(document.getElementById("stablePDF"));
-            doc.autoTable(res.columns, res.data, {margin: {top: 80}});
-            var header = function (data) {
-                doc.setFontSize(18);
-                doc.setTextColor(40);
-                doc.setFontStyle('normal');
-                doc.text("Statistics Report", data.settings.margin.left, 50);
-            };
-            var options = {
-                beforePageContent: header,
-                margin: {top: 80}, startY: doc.autoTableEndPosY() + 20
-            };
-            doc.autoTable(res.columns, res.data, options);
-            doc.save("Statistics.pdf");
-        }
-    </script>
+
 
 
 
@@ -1081,6 +1044,26 @@ if (!isset($_SESSION['login'])) {
     <!----------Save PDF for table----------------->
 
     <script>
+        function printDiv1() {
+            var doc = new jsPDF('pt', 'pt', 'a4');
+            var header = function (data) {
+                doc.setFontSize(16);
+                doc.setFontStyle('PTSans');
+                doc.text("Statistics Based on Subject", 210, 80);        // Header top margin
+            };
+            var tableName = "";
+            tableName = 'TT1';
+            var table = doc.autoTableHtmlToJson(document.getElementById(tableName));
+            doc.autoTable(table.columns, table.data, {beforePageContent: header, margin: {top: 100, left: 40, right: 40}, styles: {
+                    fontSize: 12,
+                    halign: 'center',
+                    font: 'PTSans'
+                }});
+//            doc.addImage(imgData[1], 'png', 80, 180, 420, 250);
+          
+            doc.save("Statistics.pdf");
+        }
+  
         function downloadStatistics() {
             var doc = new jsPDF('pt', 'pt', 'a3');
             var header = function (data) {
