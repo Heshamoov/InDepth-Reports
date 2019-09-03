@@ -33,7 +33,7 @@ if (!isset($_SESSION['login'])) {
 
     <script type="text/javascript">
 
-        var imgData = new Array();
+         imgData = new Array();
 
         $(function () {
 
@@ -254,6 +254,9 @@ function drawMaterial() {
 
         data.addColumn({type: 'string', role: 'style'});
 
+
+             
+
         data.addRows([
             [gender1 + "-" + value1.toString() + '% and above in ' + term1, Number(result1), ' #006666'],
             [gender1 + "-" + value2.toString() + '% and above in ' + term1, Number(result2), '#800000'],
@@ -264,6 +267,7 @@ function drawMaterial() {
             title: '(' + term1 + " " + gender1 + ') VS (' + term2 + " " + gender2 + ") ",
             curveType: 'smooth'
         }
+
 
         var view = new google.visualization.DataView(data);
         view.setColumns([0, 1,
@@ -413,7 +417,10 @@ function drawMaterial() {
                         <br>
                         <table class=" w3-table-all w3-striped w3-centered w3-card-4" id="T2">  
                             <th colspan="4" class="w3-teal" style="font-size: 18px">
+
+
                                 <button style="float: left;" type='button' class="w3-button w3-hover-blue-gray" hidden onclick="printDiv(chart2)" id='printbtn'  title="Print chart" value='Print'>
+
                                     <i class="glyphicon glyphicon-print"></i></button>
 
                                 <select id="T2-YR"></select>   
@@ -474,6 +481,9 @@ function drawMaterial() {
                 <br><br>
             </div>
         </div>
+
+ 
+
 
 <!--On-change event listener -->
 <script type="text/javascript">
@@ -563,6 +573,7 @@ function drawMaterial() {
             };
             httpTerms.open("GET", "sqldb/distinctTerms.php?grade=" + grade + "&year=" + year, false);
             httpTerms.send();
+
 
             $('#T1-Term1').multiselect('destroy');
             $('#T1-Term2').multiselect('destroy');
@@ -742,6 +753,26 @@ function drawMaterial() {
     <!----------Save PDF for table----------------->
 
     <script>
+        function printDiv1() {
+            var doc = new jsPDF('pt', 'pt', 'a4');
+            var header = function (data) {
+                doc.setFontSize(16);
+                doc.setFontStyle('PTSans');
+                doc.text("Statistics Based on Subject", 210, 80);        // Header top margin
+            };
+            var tableName = "";
+            tableName = 'TT1';
+            var table = doc.autoTableHtmlToJson(document.getElementById(tableName));
+            doc.autoTable(table.columns, table.data, {beforePageContent: header, margin: {top: 100, left: 40, right: 40}, styles: {
+                    fontSize: 12,
+                    halign: 'center',
+                    font: 'PTSans'
+                }});
+//            doc.addImage(imgData[1], 'png', 80, 180, 420, 250);
+          
+            doc.save("Statistics.pdf");
+        }
+  
         function downloadStatistics() {
             var doc = new jsPDF('pt', 'pt', 'a3');
             var header = function (data) {
