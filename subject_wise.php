@@ -183,132 +183,126 @@ if (!isset($_SESSION['login'])) {
     }
 
 
-                function drawMaterial() {
+function drawMaterial() {
+    for (var i = 1; i < 3; i++) {
+        var value1, value2, value3, value4, result1, result2, result3, result4, tableName, chartName, gender1, gender2;
+        var value1, value2, value3, value4, result1, result2, result3, result4, tableName, table1, chartName, gender1, gender2;
+        
+        tableName = 'T' + i;
+        table1 = 'TT' + i;
+        var tableName1 = document.getElementById(table1);
+        var term1 = document.getElementById(tableName + '-Term1').options[document.getElementById(tableName + '-Term1').selectedIndex].text;
+        var term2 = document.getElementById(tableName + '-Term2').options[document.getElementById(tableName + '-Term2').selectedIndex].text;
+        tableName1.rows[0].cells[3].innerHTML = subject;
 
-                    for (var i = 1; i < 3; i++) {
+        var gender1 = document.getElementById(tableName + '-Gender1').options[document.getElementById(tableName + '-Gender1').selectedIndex].text;
 
+        if (gender1 === 'Both')
+        {
+            tableName1.rows[1].cells[1].innerHTML = term1 + 'Boys & Girls';
+        } else
+        {
+            tableName1.rows[1].cells[1].innerHTML = term1 + gender1;
 
+        }
 
-                        var value1, value2, value3, value4, result1, result2, result3, result4, tableName, chartName, gender1, gender2;
-                        var value1, value2, value3, value4, result1, result2, result3, result4, tableName, table1, chartName, gender1, gender2;
+        var gender2 = document.getElementById(tableName + '-Gender2').options[document.getElementById(tableName + '-Gender2').selectedIndex].text;
+        if (gender2 === 'Both')
+        {
+            tableName1.rows[1].cells[5].innerHTML = term1 + 'Boys & Girls';
+        } else
+        {
+            tableName1.rows[1].cells[5].innerHTML = term2 + gender2;
 
-
-                        tableName = 'T' + i;
-                        table1 = 'TT' + i;
-                        var tableName1 = document.getElementById(table1);
-
-                        var term1 = document.getElementById(tableName + '-Term1').options[document.getElementById(tableName + '-Term1').selectedIndex].text;
-                        var term2 = document.getElementById(tableName + '-Term2').options[document.getElementById(tableName + '-Term2').selectedIndex].text;
-                        tableName1.rows[0].cells[3].innerHTML = subject;
-
-                        var gender1 = document.getElementById(tableName + '-Gender1').options[document.getElementById(tableName + '-Gender1').selectedIndex].text;
-
-                        if (gender1 === 'Both')
-                        {
-                            tableName1.rows[1].cells[1].innerHTML = term1 + 'Boys & Girls';
-                        } else
-                        {
-                            tableName1.rows[1].cells[1].innerHTML = term1 + gender1;
-
-                        }
-
-                        var gender2 = document.getElementById(tableName + '-Gender2').options[document.getElementById(tableName + '-Gender2').selectedIndex].text;
-                        if (gender2 === 'Both')
-                        {
-                            tableName1.rows[1].cells[5].innerHTML = term1 + 'Boys & Girls';
-                        } else
-                        {
-                            tableName1.rows[1].cells[5].innerHTML = term2 + gender2;
-
-                        }
+        }
 
 
-                        value1 = document.getElementById(tableName).rows[2].cells[0].childNodes[0].value;
-                        tableName1.rows[2].cells[0].innerHTML = 'Above ' + value1 + ' % in' + term1;
+        value1 = document.getElementById(tableName).rows[2].cells[0].childNodes[0].value;
+        tableName1.rows[2].cells[0].innerHTML = 'Above ' + value1 + ' % in' + term1;
 
-                        value2 = document.getElementById(tableName).rows[2].cells[1].childNodes[0].value;
-                        tableName1.rows[2].cells[2].innerHTML = 'Above ' + value2 + ' % in' + term1;
+        value2 = document.getElementById(tableName).rows[2].cells[1].childNodes[0].value;
+        tableName1.rows[2].cells[2].innerHTML = 'Above ' + value2 + ' % in' + term1;
 
-                        value3 = document.getElementById(tableName).rows[2].cells[2].childNodes[0].value;
-                        tableName1.rows[2].cells[4].innerHTML = 'Above ' + value3 + ' % in' + term2;
+        value3 = document.getElementById(tableName).rows[2].cells[2].childNodes[0].value;
+        tableName1.rows[2].cells[4].innerHTML = 'Above ' + value3 + ' % in' + term2;
 
-                        value4 = document.getElementById(tableName).rows[2].cells[3].childNodes[0].value;
-                        tableName1.rows[2].cells[6].innerHTML = 'Above ' + value4 + ' % in' + term2;
+        value4 = document.getElementById(tableName).rows[2].cells[3].childNodes[0].value;
+        tableName1.rows[2].cells[6].innerHTML = 'Above ' + value4 + ' % in' + term2;
 
-                        result1 = document.getElementById(tableName).rows[3].cells[0].innerHTML;
-                        tableName1.rows[3].cells[0].innerHTML = result1;
+        result1 = document.getElementById(tableName).rows[3].cells[0].innerHTML;
+        tableName1.rows[3].cells[0].innerHTML = result1;
 
-                        result2 = document.getElementById(tableName).rows[3].cells[1].innerHTML;
-                        tableName1.rows[3].cells[2].innerHTML = result2;
+        result2 = document.getElementById(tableName).rows[3].cells[1].innerHTML;
+        tableName1.rows[3].cells[2].innerHTML = result2;
 
-                        result3 = document.getElementById(tableName).rows[3].cells[2].innerHTML;
-                        tableName1.rows[3].cells[4].innerHTML = result3;
+        result3 = document.getElementById(tableName).rows[3].cells[2].innerHTML;
+        tableName1.rows[3].cells[4].innerHTML = result3;
 
-                        result4 = document.getElementById(tableName).rows[3].cells[3].innerHTML;
-                        tableName1.rows[3].cells[6].innerHTML = result4;
+        result4 = document.getElementById(tableName).rows[3].cells[3].innerHTML;
+        tableName1.rows[3].cells[6].innerHTML = result4;
 
-                        var data = new google.visualization.DataTable();
-                        data.addColumn('string', 'Number of Students');
-                        data.addColumn('number', 'Marks');
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Number of Students');
+        data.addColumn('number', 'Marks');
 
-                        data.addColumn({type: 'string', role: 'style'});
+        data.addColumn({type: 'string', role: 'style'});
 
-                        data.addRows([
-                            [gender1 + "-" + value1.toString() + '% and above in ' + term1, Number(result1), ' #006666'],
-                            [gender1 + "-" + value2.toString() + '% and above in ' + term1, Number(result2), '#800000'],
-                            [gender2 + "-" + value3.toString() + '% and above in ' + term2, Number(result3), ' #002f5a'],
-                            [gender2 + "-" + value4.toString() + '% and above in ' + term2, Number(result4), '#d81c01'],
-                        ]);
-                        var options = {
-                            title: '(' + term1 + " " + gender1 + ') VS (' + term2 + " " + gender2 + ") ",
-                            curveType: 'smooth'
-                        }
+        data.addRows([
+            [gender1 + "-" + value1.toString() + '% and above in ' + term1, Number(result1), ' #006666'],
+            [gender1 + "-" + value2.toString() + '% and above in ' + term1, Number(result2), '#800000'],
+            [gender2 + "-" + value3.toString() + '% and above in ' + term2, Number(result3), ' #002f5a'],
+            [gender2 + "-" + value4.toString() + '% and above in ' + term2, Number(result4), '#d81c01'],
+        ]);
+        var options = {
+            title: '(' + term1 + " " + gender1 + ') VS (' + term2 + " " + gender2 + ") ",
+            curveType: 'smooth'
+        }
 
-                        var view = new google.visualization.DataView(data);
-                        view.setColumns([0, 1,
-                            {calc: "stringify",
-                                sourceColumn: 1,
-                                type: "string",
-                                role: "annotation"},
-                            2]);
+        var view = new google.visualization.DataView(data);
+        view.setColumns([0, 1,
+            {calc: "stringify",
+                sourceColumn: 1,
+                type: "string",
+                role: "annotation"},
+            2]);
 
-                        chartName = 'chart' + i;
+        chartName = 'chart' + i;
 
-                        var e = document.getElementById("charttype");
-                        var type = e.options[e.selectedIndex].value;
+        var e = document.getElementById("charttype");
+        var type = e.options[e.selectedIndex].value;
 
-                        if (type === "coloumn") {
-                            var materialChart = new google.visualization.ColumnChart(document.getElementById(chartName));
-                            materialChart.draw(view, options);
-                        }
-                        if (type === "pie") {
+        if (type === "coloumn") {
+            var materialChart = new google.visualization.ColumnChart(document.getElementById(chartName));
+            materialChart.draw(view, options);
+        }
+        if (type === "pie") {
 
-                            var materialChart = new google.visualization.PieChart(document.getElementById(chartName));
-                            materialChart.draw(data, options);
-                        }
+            var materialChart = new google.visualization.PieChart(document.getElementById(chartName));
+            materialChart.draw(data, options);
+        }
 
-                        if (type === "barchart") {
-                            var materialChart = new google.visualization.BarChart(document.getElementById(chartName));
-                            materialChart.draw(data, options);
-                        }
-                        if (type === "linechart") {
-                            var materialChart = new google.visualization.LineChart(document.getElementById(chartName));
-                            materialChart.draw(view, options);
-                        }
+        if (type === "barchart") {
+            var materialChart = new google.visualization.BarChart(document.getElementById(chartName));
+            materialChart.draw(data, options);
+        }
+        if (type === "linechart") {
+            var materialChart = new google.visualization.LineChart(document.getElementById(chartName));
+            materialChart.draw(view, options);
+        }
 
-                        imgData[i] = materialChart.getImageURI();
+        imgData[i] = materialChart.getImageURI();
 
 
 
-                    }
-                }
-                ;
+    }
+}
+;
 
 
-            }
-            );
-        });
-    </script>
+}
+);
+});
+</script>
 
 <div class="se-pre-con"></div>
 
@@ -320,7 +314,10 @@ if (!isset($_SESSION['login'])) {
 <div id="upperdiv" class="w3-container" style="padding-top: 10px; padding-bottom: 10px;">   
 <table id= "table1">
 <tr>
-    <td></td>
+    <td>
+        <button style="text-align: center ;" class="w3-button w3-round-xlarge w3-medium w3-hover-blue-gray w3-center w3-custom"
+        onclick="PrintTable('TT1')" title="Export Data as PDF" > <span class="material-icons">print</span></button>
+    </td>
     <td>
         <button style="text-align: center ;" class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge"
         id="search" title="Get students marks">View Results<span class="fa fa-search"></span></button>
@@ -334,8 +331,9 @@ if (!isset($_SESSION['login'])) {
             <option class="w3-round-xlarge" style="text-align: center;" value="pie" selected="selected">Pie Chart</option>            
         </select>
     </td>
-    <td><button style="text-align: center ;" class="w3-button w3-round-xlarge w3-medium w3-hover-blue-gray w3-center w3-custom"
-            id="exportS" onclick="downloadStatistics()" title="Export Data as PDF" > <span class="material-icons">print</span></button>
+    <td>
+        <button style="text-align: center ;" class="w3-button w3-round-xlarge w3-medium w3-hover-blue-gray w3-center w3-custom"
+        onclick="PrintTable('TT2')" title="Export Data as PDF" > <span class="material-icons">print</span></button>
     </td>               
 </tr>
 </table>
@@ -390,7 +388,8 @@ if (!isset($_SESSION['login'])) {
                     <td class="w3-border-right">--</td>
                 </tr>
             </table>
-            <table id="TT1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" hidden>
+        
+            <table id="TT1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                 <thead>
                 <td> </td><td></td><td ></td><td ></td><td ></td><td ></td><td ></td></thead>
                 <tbody>
@@ -451,7 +450,7 @@ if (!isset($_SESSION['login'])) {
                             </tr>
                         </table>
 
-                        <table id="TT2" hidden>
+                        <table id="TT2"  class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
                             <thead>
                             <td> </td><td ></td><td ></td><td ></td><td ></td><td ></td><td ></td></thead>
                             <tbody>
@@ -469,124 +468,88 @@ if (!isset($_SESSION['login'])) {
             </div>
         </div>
 
-    <script src="js/jspdf.debug.js"></script>
-    <script src="js/jspdf.plugin.autotable.js"></script>
-    <script>
-    function generate() {
-        var doc = new jsPDF('p', 'pt');
-        var res = doc.autoTableHtmlToJson(document.getElementById("out"));
-        doc.autoTable(res.columns, res.data, {margin: {top: 80}});
-        var header = function (data) {
-            doc.setFontSize(18);
-            doc.setTextColor(40);
-            doc.setFontStyle('normal');
-            doc.text("Testing Report", data.settings.margin.left, 50);
-        };
-        var options = {
-            beforePageContent: header,
-            margin: {top: 80}, startY: doc.autoTableEndPosY() + 20
-        };
-        doc.autoTable(res.columns, res.data, options);
-        doc.save("Students.pdf");
-    }
-    </script>
 
-    <script type="text/javascript">
-        function generate2() {
-            var doc = new jsPDF('p', 'pt');
-            var res = doc.autoTableHtmlToJson(document.getElementById("stablePDF"));
-            doc.autoTable(res.columns, res.data, {margin: {top: 80}});
-            var header = function (data) {
-                doc.setFontSize(18);
-                doc.setTextColor(40);
-                doc.setFontStyle('normal');
-                doc.text("Statistics Report", data.settings.margin.left, 50);
-            };
-            var options = {
-                beforePageContent: header,
-                margin: {top: 80}, startY: doc.autoTableEndPosY() + 20
-            };
-            doc.autoTable(res.columns, res.data, options);
-            doc.save("Statistics.pdf");
-        }
-    </script>
+<script src="js/jspdf.debug.js"></script>
+<script src="js/jspdf.plugin.autotable.js"></script>
+<script>
+function PrintTable(table) {
+    var doc = new jsPDF('p', 'pt');
+    var res = doc.autoTableHtmlToJson(document.getElementById(table));
+    doc.autoTable(res.columns, res.data, {margin: {top: 80}});
+    var header = function (data) {
+        doc.setFontSize(18);
+        doc.setTextColor(40);
+        doc.setFontStyle('normal');
+        doc.text("Testing Report", data.settings.margin.left, 50);
+    };
+    var options = {
+        beforePageContent: header,
+        margin: {top: 80}, startY: doc.autoTableEndPosY() + 20
+    };
+    doc.autoTable(res.columns, res.data, options);
+    doc.save("Students.pdf");
+}
+</script>
 
-    <!--Onchange event listener -->
-    <script type="text/javascript">
-        document.getElementById("T1-YR").onchange = function () {
-            T1FillGrades();
-            T1FillSections();
-            T1FillSubjects();
-            fillTerms1();
-            Result();
-        };
-        document.getElementById("T2-YR").onchange = function () {
-            T2FillGrades();
-            T2FillSections();
-            fillSubjects2();
-            fillTerms2();
-            Result();
-        };
-        document.getElementById("T1-GR").onchange = function () {
-            T1FillSections();
-            T1FillSubjects();
-            fillTerms1();
-            Result();
-        };
+<!--Onchange event listener -->
+<script type="text/javascript">
+    document.getElementById("T1-YR").onchange = function () {
+        T1FillGrades();
+        T1FillSections();
+        T1FillSubjects();
+        fillTerms1();
+        Result();
+    };
+    document.getElementById("T2-YR").onchange = function () {
+        T2FillGrades();
+        T2FillSections();
+        fillSubjects2();
+        fillTerms2();
+        Result();
+    };
+    document.getElementById("T1-GR").onchange = function () {
+        T1FillSections();
+        T1FillSubjects();
+        fillTerms1();
+        Result();
+    };
 
-        document.getElementById("T2-GR").onchange = function () {
-            T2FillSections();
-            fillSubjects2();
-            fillTerms2();
-            Result();
-        };
+    document.getElementById("T2-GR").onchange = function () {
+        T2FillSections();
+        fillSubjects2();
+        fillTerms2();
+        Result();
+    };
 
-        document.getElementById("T1-SC").onchange = function () {
-            T1FillSubjects();
-            fillTerms1();
-            Result();
-        };
+    document.getElementById("T1-SC").onchange = function () {
+        T1FillSubjects();
+        fillTerms1();
+        Result();
+    };
 
-        document.getElementById("T2-SC").onchange = function () {
-            fillSubjects2();
-            fillTerms2();
-            Result();
-        };
-        document.getElementById("T2-GR").onchange = function () {
-            T2FillSections();
-            fillSubjects2();
-            fillTerms2();
-            Result();
-        };
-        document.getElementById('T1-Gender1').onchange = function () {
-            Result();
-        };
-        document.getElementById('T1-Gender2').onchange = function () {
-            Result();
-        };
-        document.getElementById('T2-Gender1').onchange = function () {
-            Result();
-        };
-        document.getElementById('T2-Gender2').onchange = function () {
-            Result();
-        };
-        document.getElementById('T1-Term1').onchange = function () {
-            Result();
-        };
-        document.getElementById('T1-Term2').onchange = function () {
-            Result();
-        };
-        document.getElementById('T2-Term1').onchange = function () {
-            Result();
-        };
-        document.getElementById('T2-Term2').onchange = function () {
-            Result();
-        };
+    document.getElementById("T2-SC").onchange = function () {
+        fillSubjects2();
+        fillTerms2();
+        Result();
+    };
+    document.getElementById("T2-GR").onchange = function () {
+        T2FillSections();
+        fillSubjects2();
+        fillTerms2();
+        Result();
+    };
+    
+    document.getElementById('T1-Gender1').onchange = function () {Result();};
+    document.getElementById('T1-Gender2').onchange = function () {Result();};
+    document.getElementById('T2-Gender1').onchange = function () {Result();};
+    document.getElementById('T2-Gender2').onchange = function () {Result();};
+    document.getElementById('T1-Term1').onchange   = function () {Result();};
+    document.getElementById('T1-Term2').onchange   = function () {Result();};
+    document.getElementById('T2-Term1').onchange   = function () {Result();};
+    document.getElementById('T2-Term2').onchange   = function () {Result();};
 
-        function Result() {
-            document.getElementById("search").click();
-        }
-    </script>  
+    function Result() {document.getElementById("search").click();}
+</script>  
 
 
 <!--Initialize Academic Years for Table 1 & Table 2-->     
