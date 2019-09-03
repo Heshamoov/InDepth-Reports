@@ -4,7 +4,6 @@ include ('../config/dbConfig.php');
 
 $years = $_REQUEST["years"];
 $grades = $_REQUEST["grades"];
-$batches = $_REQUEST["batches"];
 
 $sql = "SELECT DISTINCT subjects.name subject  \n"
 
@@ -14,10 +13,10 @@ $sql = "SELECT DISTINCT subjects.name subject  \n"
 
     . "JOIN courses ON batches.course_id = courses.id \n";
 
-if ($years == "" && $grades == "" && $batches == "")
+if ($years == "" && $grades == "")
     $sql = $sql . " JOIN academic_years ON batches.academic_year_id = academic_years.id WHERE subjects.is_deleted = 0 ";
 else
-    $sql = $sql . " JOIN academic_years ON batches.academic_year_id = academic_years.id WHERE $years $grades $batches AND subjects.is_deleted = 0";
+    $sql = $sql . " JOIN academic_years ON batches.academic_year_id = academic_years.id WHERE $years $grades AND subjects.is_deleted = 0";
 
     $sql = $sql . " ORDER BY subjects.name ASC ;";
 
