@@ -6,9 +6,9 @@
  */
 
 $servername = "localhost";
-$username = "akaunting";
-$password = "akaunting123";
-$DB = "alsanawbar";
+$username = "wps";
+$password = "Indepth@2019";
+$DB = "alsanawabar";
 
 $conn = new mysqli($servername, $username, $password, $DB);
 

@@ -9,7 +9,11 @@ if (!isset($_SESSION['login'])) {
 
 
     <title>attainment</title>
-    
+    <style> 
+        .selector select  {
+            background: red;
+        }
+    </style>
     </head>
 
     <!--loder initialization-->
@@ -23,207 +27,198 @@ if (!isset($_SESSION['login'])) {
     </script>
 
     <script type="text/javascript">
-        
-
-
 
         $(function () {
-            $('#academic_year').multiselect({includeSelectAllOption: true});
             $('#term').multiselect({includeSelectAllOption: true});
             $('#grade').multiselect({includeSelectAllOption: true});
             $('#batch').multiselect({includeSelectAllOption: true});
             $('#subject').multiselect({includeSelectAllOption: true});
             $('#gender').multiselect({includeSelectAllOption: true});
+            $('#academic_year').multiselect({includeSelectAllOption: true});
             $('#category').multiselect({includeSelectAllOption: true});
-        });
-        window.onload = function () {
-            search();
-        };
-        function search() {
-            google.charts.setOnLoadCallback(drawChart);
-            google.charts.setOnLoadCallback(drawChartSubjects);
 
-            var selected_years = $("#academic_year option:selected");
-            var selected_terms = $("#term option:selected");
-            var selected_grades = $("#grade option:selected");
-            var selected_batches = $("#batch option:selected");
-            var selected_subjects = $("#subject option:selected");
-            var selected_gender = $("#gender option:selected");
-            var selected_category = $("#category option:selected");
 
-            //Academic Years                
-            var message = "";
-            var academicHeader = "";
-            selected_years.each(function () {
-                var currentYear = $(this).text();
-                if (currentYear.indexOf("(") !== -1) {
-                    var bracketIndex = currentYear.indexOf("(");
-                    currentYear = currentYear.slice(0, bracketIndex);
+
+            $(document).on("ready click", function () {
+
+                google.charts.setOnLoadCallback(drawChart);
+                google.charts.setOnLoadCallback(drawChartSubjects);
+
+                var selected_terms = $("#term option:selected");
+                var selected_grades = $("#grade option:selected");
+                var selected_batches = $("#batch option:selected");
+                var selected_subjects = $("#subject option:selected");
+                var selected_years = $("#academic_year option:selected");
+                var selected_category = $("#category option:selected");
+                var selected_gender = $("#gender option:selected");
+
+
+
+                //Academic Years                
+                var message = "";
+                var academicHeader = "";
+                selected_years.each(function () {
+                    var currentYear = $(this).text();
+                    if (currentYear.indexOf("(") !== -1) {
+                        var bracketIndex = currentYear.indexOf("(");
+                        currentYear = currentYear.slice(0, bracketIndex);
+                    }
+                    if (message === "") {
+                        message = "   (academic_years.name = '" + currentYear + "' ";
+
+                        academicHeader = "  " + currentYear;
+                    } else {
+                        message += " OR academic_years.name = '" + currentYear + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                        academicHeader += " , " + currentYear;
+                    }
+                });
+                if (message !== "")
+                    selected_years = message + ")";
+                else
+                    selected_years = "";
+
+
+                //Grades                
+                var message = "";
+                var gradeHeader = "";
+                selected_grades.each(function () {
+                    var currentGrade = $(this).text();
+                    if (currentGrade.indexOf("(") !== -1) {
+                        var bracketIndex = currentGrade.indexOf("(");
+                        currentGrade = currentGrade.slice(0, bracketIndex);
+                    }
+                    if (message === "") {
+                        if (selected_years !== "")
+                            message = " AND (courses.course_name = '" + currentGrade + "' ";
+                        else
+                            message = " (courses.course_name = '" + currentGrade + "'";
+                        gradeHeader = " - " + currentGrade;
+                    } else {
+                        message += " OR courses.course_name = '" + currentGrade + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                        gradeHeader += " , " + currentGrade;
+                    }
+                });
+                if (message !== "")
+                    selected_grades = message + ")";
+                else
+                    selected_grades = "";
+
+
+                //Batches
+                var message = "";
+                var batchHeader = "";
+                selected_batches.each(function () {
+                    if (message === "") {
+                        if (selected_grades !== "" || selected_years !== "")
+                            message = " AND (batches.name = '" + $(this).text() + "' ";
+                        else
+                            message = " (batches.name = '" + $(this).text() + "' ";
+                        batchHeader = " - " + $(this).text();
+                    } else {
+                        message += " OR batches.name = '" + $(this).text() + "' ";
+                        batchHeader += " , " + $(this).text();
+                    }
+                });
+                if (message !== "")
+                    selected_batches = message + ")";
+                else
+                    selected_batches = "";
+
+
+                //Terms
+                var message = "";
+                var termHeader = "";
+                selected_terms.each(function () {
+                    if (message === "") {
+                        if (selected_batches !== "" || selected_grades !== "" || selected_years !== "")
+                            message = " AND (exam_groups.name = '" + $(this).text() + "'";
+                        else
+                            message = "   (exam_groups.name = '" + $(this).text() + "'";
+
+                        termHeader = $(this).text();
+                    } else {
+                        message += " OR exam_groups.name = '" + $(this).text() + "'";
+                        termHeader += " , " + $(this).text();
+                    }
+                });
+                if (message !== "")
+                    selected_terms = message + ")";
+                else
+                    selected_terms = "";
+
+
+                //Gender
+                var message = "";
+                var genderHeader = "";
+                selected_gender.each(function () {
+
+                    var DB_Gender = "";
+                    if ($(this).text() === 'Male')
+                        DB_Gender = 'm';
+                    else if ($(this).text() === 'Female')
+                        DB_Gender = 'f';
+
+                    if (message === "") {
+                        if (selected_terms !== "" || selected_grades !== "" || selected_batches !== "" || selected_years !== "")
+                            message = " AND (gender = '" + DB_Gender + "' ";
+                        else
+                            message = " (gender = '" + DB_Gender + "' ";
+                        genderHeader = " - " + $(this).text();
+                    } else {
+                        message += "OR gender = '" + DB_Gender + "' ";
+                        genderHeader += " , " + $(this).text();
+                    }
+                });
+                if (message !== "")
+                    selected_gender = message + ")";
+                else
+                    selected_gender = "";
+
+
+                //Category               
+                var message = "";
+                var categoryHeader = "";
+                selected_category.each(function () {
+                    var currentCategory = $(this).text();
+                    if (currentCategory.indexOf("(") !== -1) {
+                        var bracketIndex = currentCategory.indexOf("(");
+                        currentCategory = currentCategory.slice(0, bracketIndex);
+                    }
+                    if (message === "") {
+                        if (selected_gender !== "" || selected_terms !== "" || selected_grades !== "" || selected_batches !== "" || selected_years !== "")
+                            message = "  AND (student_categories.name = '" + currentCategory + "' ";
+                        else
+                            message = "  (student_categories.name = '" + currentCategory + "'";
+                        categoryHeader = " - " + currentCategory;
+                    } else {
+                        message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                        categoryHeader += " , " + currentCategory;
+                    }
+                });
+                if (message !== "")
+                    selected_category = message + ")";
+                else
+                    selected_category = "";
+
+
+
+
+                //Generate Tables
+                for (var i = 1; i < 13; i++)
+                {
+                    var tableName = 'T' + i;
+                    document.getElementById(tableName).style.visibility = "hidden";
                 }
-                if (message === "") {
-                    message = "   (academic_years.name = '" + currentYear + "' ";
-                    academicHeader = currentYear;
-                } else {
-                    message += " OR academic_years.name = '" + currentYear + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                    academicHeader += ", " + currentYear;
-                }
-            });
-            if (message !== "")
-                selected_years = message + ")";
-            else
-                selected_years = "";
-
-
-            //Grades                
-            var message = "";
-            var gradeHeader = "";
-            var grades_sql = "";
-            selected_grades.each(function () {
-                var currentGrade = $(this).text();
-                if (currentGrade.indexOf("(") !== -1) {
-                    var bracketIndex = currentGrade.indexOf("(");
-                    currentGrade = currentGrade.slice(0, bracketIndex);
-                }
-                if (message === "") {
-                    if (selected_years !== "")
-                        message = " AND (courses.course_name = '" + currentGrade + "' ";
-                    else
-                        message = " (courses.course_name = '" + currentGrade + "'";
-                    gradeHeader = currentGrade;
-                } else {
-                    message += " OR courses.course_name = '" + currentGrade + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                    gradeHeader += " , " + currentGrade;
-                }
-            });
-            if (message !== "")
-                grades_sql = message + ")";
-            else
-                grades_sql = "";
-
-
-            //Batches
-            var message = "";
-            var batchHeader = "";
-            selected_batches.each(function () {
-                if (message === "") {
-                    if (grades_sql !== "" || selected_years !== "")
-                        message = " AND (batches.name = '" + $(this).text() + "' ";
-                    else
-                        message = " (batches.name = '" + $(this).text() + "' ";
-                    batchHeader = $(this).text();
-                } else {
-                    message += " OR batches.name = '" + $(this).text() + "' ";
-                    batchHeader += " , " + $(this).text();
-                }
-            });
-            if (message !== "")
-                selected_batches = message + ")";
-            else
-                selected_batches = "";
-
-
-            //Terms
-            var message = "";
-            var termHeader = "";
-            selected_terms.each(function () {
-                if (message === "") {
-                    if (selected_batches !== "" || grades_sql !== "" || selected_years !== "")
-                        message = " AND (exam_groups.name = '" + $(this).text() + "'";
-                    else
-                        message = "   (exam_groups.name = '" + $(this).text() + "'";
-
-                    termHeader = $(this).text();
-                } else {
-                    message += " OR exam_groups.name = '" + $(this).text() + "'";
-                    termHeader += " , " + $(this).text();
-                }
-            });
-            if (message !== "")
-                selected_terms = message + ")";
-            else
-                selected_terms = "";
-
-
-            //Gender
-            var message = "";
-            var genderHeader = "";
-            selected_gender.each(function () {
-
-                var DB_Gender = "";
-                if ($(this).text() === 'Male')
-                    DB_Gender = 'm';
-                else if ($(this).text() === 'Female')
-                    DB_Gender = 'f';
-
-                if (message === "") {
-                    if (selected_terms !== "" || grades_sql !== "" || selected_batches !== "" || selected_years !== "")
-                        message = " AND (gender = '" + DB_Gender + "' ";
-                    else
-                        message = " (gender = '" + DB_Gender + "' ";
-                    genderHeader = $(this).text();
-                } else {
-                    message += "OR gender = '" + DB_Gender + "' ";
-                    genderHeader += " , " + $(this).text();
-                }
-            });
-            if (message !== "")
-                selected_gender = message + ")";
-            else
-                selected_gender = "";
-
-
-            //Category               
-            var message = "";
-            var categoryHeader = "";
-            selected_category.each(function () {
-                var currentCategory = $(this).text();
-                if (currentCategory.indexOf("(") !== -1) {
-                    var bracketIndex = currentCategory.indexOf("(");
-                    currentCategory = currentCategory.slice(0, bracketIndex);
-                }
-                if (message === "") {
-                    if (selected_gender !== "" || selected_terms !== "" || grades_sql !== "" || selected_batches !== "" || selected_years !== "")
-                        message = "  AND (student_categories.name = '" + currentCategory + "' ";
-                    else
-                        message = "  (student_categories.name = '" + currentCategory + "'";
-                    categoryHeader = currentCategory;
-                } else {
-                    message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                    categoryHeader += " , " + currentCategory;
-                }
-            });
-
-            if (message !== "")
-                selected_category = message + ")";
-            else
-                selected_category = "";
-
-            //Generate Tables
-            for (var i = 1; i < 13; i++)
-            {
-                var tableName = 'T' + i;
-                document.getElementById(tableName).style.visibility = "hidden";
-            }
-
-            var message = "", subjectHeader = "", tableNumber = 0, currentGradeSQL = "";
-
-    //              Generate Tables By Grades, Subjects
-            var selected_grades = $("#grade option:selected");
-            selected_grades.each(function () {
-                var currentGrade = $(this).text();
-                if (currentGrade !== "")
-                    if (selected_years !== "")
-                        currentGradeSQL = " AND (courses.course_name = '" + currentGrade + "') ";
-                    else
-                        currentGradeSQL = " (courses.course_name = '" + currentGrade + "') ";
+                var message = "";
+                var subjectHeader = "";
+                var tableNumber = 0;
 
                 //Subjects
                 selected_subjects.each(function () {
                     var currentSubject = "";
                     var firstSpace = true;
                     var subject = $(this).text();
-
-                    for (var i = 0; i < subject.length; i++) {       // Extracting English letters and numbers and remove Arabic letters
+                    for (var i = 0; i < subject.length; i++) {       // Extracting English letters and numbers and remove Arabic letters                
                         if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9'))
                             currentSubject += subject[i];
                         if (subject[i] === ' ' && firstSpace && i > 3) {
@@ -232,28 +227,29 @@ if (!isset($_SESSION['login'])) {
                         }
                     }
 
+                    tableNumber++;
                     if (message === "") {
-                        if (selected_terms !== "" || currentGradeSQL !== "" || selected_batches !== "" || selected_gender !== "" || selected_years !== "" || selected_category !== "")
-                            message = "  AND (subjects.name  LIKE '" + currentSubject + "%' ";  //Add '%' to the end of the subject name: WHERE subject LIKE 'Math%' 
+                        if (selected_terms !== "" || selected_grades !== "" || selected_batches !== "" || selected_gender !== "" || selected_years !== "" || selected_category !== "")
+                            message = " AND (subjects.name  LIKE '" + currentSubject + "%' ";  //Add '%' to the end of the subject name: WHERE subject LIKE 'Math%' 
                         else
-                            message = "  (subjects.name LIKE '" + currentSubject + "%' ";
-                        subjectHeader = currentSubject;
+                            message = " (subjects.name LIKE '" + currentSubject + "%' ";
+                        subjectHeader = " - " + currentSubject;
                     } else {
                         message += "OR subjects.name  LIKE '" + currentSubject + "%' ";
                         subjectHeader += " , " + currentSubject;
                     }
 
-                    tableNumber++;
+
                     tableName = "T" + tableNumber;
                     var tableNeme2 = 'TT' + tableNumber;
                     document.getElementById(tableName).style.visibility = "Visible";
                     var table = document.getElementById(tableName);
                     var table2 = document.getElementById(tableNeme2);
-                    table.rows[0].cells[0].innerHTML = currentGrade + " - " + currentSubject;  //head
-                    table2.rows[0].cells[0].innerHTML = currentGrade + " - " + currentSubject; //head                        
+                    table.rows[0].cells[0].innerHTML = currentSubject;  //head
+                    table2.rows[0].cells[0].innerHTML = currentSubject; //head                        
                     //Academic //Total
-                    var min = 0, max = 0;
-                    for (var i = 1; i < 4; i++)
+                    var min = 0, max = 0;                                                                    // Head values
+                    for (var i = 2; i < 5; i++)
                     {
                         min = stable.rows[1].cells[i].childNodes[0].value;
                         max = stable.rows[1].cells[i].childNodes[2].value;
@@ -261,22 +257,28 @@ if (!isset($_SESSION['login'])) {
                         table2.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
                     }
 
-                    // Total Count Subject-Wise
+                    //Academic Year value
+                    stablePDF.rows[2].cells[0].innerHTML = "2018-2019";
+                    table.rows[2].cells[0].innerHTML = "2018-2019";
+                    table2.rows[2].cells[0].innerHTML = "2018-2019";
+
+                    // Total value Subject wise
                     var httpTotal = new XMLHttpRequest();
                     httpTotal.onreadystatechange = function () {
                         if (this.readyState === 4) {
-                            table.rows[2].cells[0].innerHTML = this.responseText;
-                            table2.rows[2].cells[0].innerHTML = this.responseText;
-                            document.getElementById("out").innerHTML = this.responseText;
+                            table.rows[2].cells[1].innerHTML = this.responseText;
+                            table2.rows[2].cells[1].innerHTML = this.responseText;
                         }
                     };
-                    httpTotal.open("POST", "sqldb/subjectCount.php?years=" + selected_years + "&grades=" + currentGradeSQL + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject, false);
+                    httpTotal.open("POST", "sqldb/subjectCount.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + currentSubject + "&gender=" + selected_gender + "&category=" + selected_category, false);
                     httpTotal.send();
+
+
 
 
                     //Between values Subject wise
                     var min = 0, max = 0;
-                    for (var i = 1; i < 4; i++)
+                    for (var i = 2; i < 5; i++)
                     {
                         min = stable.rows[1].cells[i].childNodes[0].value;
                         max = stable.rows[1].cells[i].childNodes[2].value;
@@ -285,86 +287,64 @@ if (!isset($_SESSION['login'])) {
                             if (this.readyState === 4) {
                                 table.rows[2].cells[i].innerHTML = this.responseText;
                                 table2.rows[2].cells[i].innerHTML = this.responseText;
+
                             }
                         };
-                        httpBetween.open("POST", "sqldb/subjectBetween.php?years=" + selected_years + "&grades=" + currentGradeSQL + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + currentSubject + "&min=" + min + "&max=" + max, false);
+                        httpBetween.open("POST", "sqldb/subjectBetween.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + currentSubject + "&gender=" + selected_gender + "&category=" + selected_category + "&min=" + min + "&max=" + max, false);
                         httpBetween.send();
                     }
                 });
-            });
 
-            if (message !== "")
-                selected_subjects = message + ")";
-            else
-                selected_subjects = "";
+                if (message !== "")
+                    selected_subjects = message + ")";
+                else
+                    selected_subjects = "";
 
-            if (academicHeader === "" && termHeader === "" && gradeHeader === "" && batchHeader === "" && subjectHeader === "" && genderHeader === "")
-            {
-                StatisticsTitle.rows[0].cells[0].innerHTML = "Year 2018-2019";
-                StatisticsTitle.rows[0].cells[1].innerHTML = "GR1-A2019";
-                StatisticsTitle.rows[0].cells[2].innerHTML = "Term1-2019";
-                StatisticsTitle.rows[1].cells[0].innerHTML = "SUBJECTS";
-                StatisticsTitlePDF.rows[0].cells[0].innerHTML = "Year 2018-2019 - GR1-A2019 - Term1-2019 ";
-                StatisticsTitlePDF.rows[1].cells[0].innerHTML = "SUBJECTS"
+                stable.rows[0].cells[0].innerHTML = academicHeader + " " + termHeader + " " + gradeHeader + " " + batchHeader + "" + "  " + subjectHeader + "  " + genderHeader;
+                stablePDF.rows[0].cells[0].innerHTML = termHeader + " " + gradeHeader + " " + batchHeader + " " + " ( " + subjectHeader + " ) " + genderHeader;
 
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
+                    if (this.readyState === 4)
+                        document.getElementById("out").innerHTML = this.responseText;
+                };
+                xmlhttp.open("POST", "sqldb/attainmentSearch.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects + "&gender=" + selected_gender + "&category=" + selected_category, false);
+                xmlhttp.send();
 
-    //                    stablePDF.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
-    //                    stablePDF.rows[2].cells[0].innerHTML = "2018-2019";
-            } else
-            {
-                StatisticsTitle.rows[0].cells[0].innerHTML = "Year " + academicHeader;
-                StatisticsTitle.rows[0].cells[1].innerHTML = gradeHeader;
-                StatisticsTitle.rows[0].cells[2].innerHTML = termHeader;
-                StatisticsTitle.rows[1].cells[0].innerHTML = subjectHeader;
-                stable.rows[2].cells[0].innerHTML = academicHeader;
-                stablePDF.rows[2].cells[0].innerHTML = academicHeader;
-                StatisticsTitlePDF.rows[0].cells[0].innerHTML = academicHeader + " - " + gradeHeader + " - " + termHeader;
-                StatisticsTitlePDF.rows[1].cells[0].innerHTML = subjectHeader;
-            }
-
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function () {
-                if (this.readyState === 4)
-                    document.getElementById("out").innerHTML = this.responseText;
-            };
-            xmlhttp.open("POST", "sqldb/attainmentSearch.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subjects=" + selected_subjects, false);
-            xmlhttp.send();
-
-            //Total Count
-            var xmlhttp = new XMLHttpRequest();
-            xmlhttp.onreadystatechange = function () {
-                if (this.readyState === 4) {
-                    stable.rows[2].cells[0].innerHTML = this.responseText;
-                    stablePDF.rows[2].cells[0].innerHTML = this.responseText;
-                    drawChart();
-                }
-            };
-            xmlhttp.open("POST", "sqldb/count.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects, false);
-            xmlhttp.send();
-
-            //Statistics Min-Max
-            var min = 0, max = 0;
-            for (var i = 1; i < 4; i++)
-            {
-                min = stable.rows[1].cells[i].childNodes[0].value;
-                max = stable.rows[1].cells[i].childNodes[2].value;
-                stablePDF.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
-                var xmlhttpm1 = new XMLHttpRequest();
-                xmlhttpm1.onreadystatechange = function () {
-
+                //Total Count
+                var xmlhttp = new XMLHttpRequest();
+                xmlhttp.onreadystatechange = function () {
                     if (this.readyState === 4) {
-                        stable.rows[2].cells[i].innerHTML = this.responseText;
-                        stablePDF.rows[2].cells[i].innerHTML = this.responseText;
+
+                        stable.rows[2].cells[1].innerHTML = this.responseText;
+                        stablePDF.rows[2].cells[1].innerHTML = this.responseText;
                         drawChart();
                     }
                 };
-                xmlhttpm1.open("POST", "sqldb/between.php?years=" + selected_years + "&grades=" + grades_sql + "&batches=" + selected_batches + "&terms=" + selected_terms + "&gender=" + selected_gender + "&category=" + selected_category + "&subject=" + selected_subjects + "&min=" + min + "&max=" + max, false);
-                xmlhttpm1.send();
-            }
-            document.getElementById('loading').style.visibility = 'hidden';
-            document.getElementById('search').style.visibility = 'visible';}
+                xmlhttp.open("POST", "sqldb/count.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + selected_subjects + "&gender=" + selected_gender + "&category=" + selected_category, false);
+                xmlhttp.send();
 
+                //Statistics Min-Max
+                var min = 0, max = 0;
+                for (var i = 2; i < 5; i++)
+                {
+                    min = stable.rows[1].cells[i].childNodes[0].value;
+                    max = stable.rows[1].cells[i].childNodes[2].value;
+                    stablePDF.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
+                    var xmlhttpm1 = new XMLHttpRequest();
+                    xmlhttpm1.onreadystatechange = function () {
 
+                        if (this.readyState === 4) {
+                            stable.rows[2].cells[i].innerHTML = this.responseText;
+                            stablePDF.rows[2].cells[i].innerHTML = this.responseText;
+                            drawChart();
+                        }
+                    };
+                    xmlhttpm1.open("POST", "sqldb/between.php?terms=" + selected_terms + "&years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subject=" + selected_subjects + "&gender=" + selected_gender + "&category=" + selected_category + "&min=" + min + "&max=" + max, false);
+                    xmlhttpm1.send();
+                }
+            });
+        });
 
 
 
@@ -465,7 +445,7 @@ if (!isset($_SESSION['login'])) {
     <body>
 
         <div class="se-pre-con"></div>
-        <div id="loader_div" class="loader_div"></div>
+
 
         <div class=" w3-responsive header" >
 
@@ -488,7 +468,7 @@ if (!isset($_SESSION['login'])) {
                         <td>Section</td>  <td>Subject</td>  <td>Term</td><td>Category</td><td></td><td></td>
                     </tr>
                     <tr><td>
-                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" onclick="downloadStatistics()"><span class="material-icons">save_alt</span></button>
+                       <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" onclick="printJS({ printable: 'out', type: 'html',base64: true, showModal:true,documentTitle: 'Attainment Analysis',targetStyles : '*'  })" title="Export Statistics as PDF">                                <span class="material-icons">save_alt</span></button>
 
 
                         </td>
@@ -503,8 +483,7 @@ if (!isset($_SESSION['login'])) {
                             <select  id ="batch"  onchange="fillSubjects()" multiple="multiple"  ></select>  
                         </td>
                         <td>
-                            <div class=""> <select id="subject" size="5" style="width:100px; overflow-y: scroll
-"   onchange="fillTerms()"   multiple="multiple"></select></div>
+                            <select id="subject"    onchange="fillTerms()"   multiple="multiple"></select>
                         </td>
                         <td>
                             <select id="term" multiple="multiple"></select>         
@@ -515,11 +494,11 @@ if (!isset($_SESSION['login'])) {
                         </td>
 
                         <td>
-                            <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" onclick='search();' title="View attainment analysis"><span class="fa fa-search"></span></button>
+                            <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View attainment analysis"><span class="fa fa-search"></span></button>
                         </td>
 
                         <td>
-                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" onclick="printJS({printable: 'out', type: 'html', base64: true, showModal: true, documentTitle: 'Attainment Analysis', targetStyles: '*'})" title="Export Statistics as PDF">                                <span class="material-icons">save_alt</span></button>
+                            <button  class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" id="exportM" onclick="downloadStudents()" title="Download result"><span class="material-icons ">save_alt</span></button>
                         </td>
 
                     </tr>
@@ -528,70 +507,58 @@ if (!isset($_SESSION['login'])) {
 
             </div>
 
-
-
             <!--Drop menus-->
 
-            <div class="w3-container w3-col m4 l5 w3-mobile" id="tables" style="overflow: scroll;top: 0;  bottom: 0; height: 100vh;">
-                <table align= center; id="StatisticsTitle" style="width: 100%; text-align: center;  border: 1px solid black;">
-                    <tr>
-                        <td align='left' style="padding:5px; border: 1px solid black;"></td>
-                        <td align='center' style="padding:5px; border: 1px solid black;"></td>
-                        <td align='right' style="padding:5px; border: 1px solid black;"></td>
-                    </tr>
-                    <tr>
-                        <td align='center' colspan="3"></td>
-                    </tr>                    
-                </table> <br>
-                <table hidden align= center; id="StatisticsTitlePDF" style="width: 100%; text-align: center;">
-                    <tr>
-                        <td style="padding:5px;"></td>
-
-                    </tr>
-                    <tr>
-                        <td colspan="3"></td>
-                    </tr>                    
-                </table>
-
-
-                <!--stable-->   <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="stable">
-                    <th colspan="4" class="w3-custom " style="font-size: 16px">
-                        STATISTICS
+            <div class="w3-container w3-col m4 l5 w3-mobile" id="tables" style="overflow: scroll;top: 0;  bottom: 0; height: 100vh; " >
+                <textarea id="output" rows="10" cols="50" hidden></textarea>
+                <br>
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="stable">  
+                    <th colspan="4" class="w3-custom " style="font-size: 16px">Statistics 
                     </th>
-                    
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popover" >
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
+
+
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Marks Count</th>
                         <th class="w3-border-right"><input id="percent11" type="text" value= 50>% - <input id="percente12" type="text" value=100>%</th>
                         <th class="w3-border-right"><input id="percent21" type="text" value=65>% - <input id="percente22" type="text" value=100>%</th>
                         <th class="w3-border-right"><input id="percent31" type="text" value=75>% - <input id="percente32" type="text" value=100>%</th>
                     </tr>
                     <tr>
+                        <td class="w3-border-right">2017-2018</td>
                         <td class="w3-border-right"></td>
                         <td class="w3-border-right"></td>
                         <td class="w3-border-right"></td>
                         <td class="w3-border-right"></td>
                     </tr>
+
+
                 </table>
                 <br><br>
 
-                <!--stablePDF--><table id="stablePDF" style="font-size: 100px" hidden>
+                <table id="stablePDF" style="font-size: 100px" hidden>
                     <thead>
                         <tr>
-                            <th colspan="5" style="text-align: center">STATISTICS</th>
+                            <th colspan="5"></th>
                             <th></th>
                             <th></th>
                             <th></th>
-
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody> 
                         <tr>
-                            <th>Marks Count</th>
+                            <th>Year</th>
+                            <th>Total Number</th>
                             <th></th>
                             <th></th>
                             <th></th>
                         </tr>
                         <tr>
+                            <td>2018-2019</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -600,183 +567,223 @@ if (!isset($_SESSION['login'])) {
                     </tbody>
                 </table>
 
-                <!--T1-->       <table id="T1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" >
+                <table id="T1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" >
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject1" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
+
+
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
                 <br>
 
-                <!--T2-->       <table id="T2" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">  
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T2">  
                     <th colspan="4" class="w3-custom" style="font-size: 16px;">Subject</th>
-                    
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject2" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
 
                 <br>
 
-                <!--T3-->       <table id="T3" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">  
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T3">  
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject3" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
 
                 <br>
 
-                <!--T4-->       <table id="T4" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T4">
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    <
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject4" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
 
                 <br>
 
-                <!--T5-->       <table id="T5" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T5">  
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                   
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject5" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
 
                 <br>
 
-                <!--T6-->       <table id="T6" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T6">  
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject6" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
 
                 <br>
 
-                <!--T7-->       <table id="T7" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T7">  
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject7" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
 
                 <br>
 
-                <!--T8-->       <table id="T8" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T8">  
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject8" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
 
                 <br>
 
-                <!--T9-->       <table id="T9" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T9">  
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    =
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject9" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>    
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
-                    </tr>
-                </table>
-
-                <br>
-
-                <!--T10-->       <table id="T10" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
-                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    
-                    <tr>
-                        <th class="w3-border-right">Total</th>
-                        <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
-                    </tr>
-                    <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
 
                 <br>
 
-                <!--T11-->       <table id="T11" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T10">  
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject10" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
 
                 <br>
 
-                <!--T12-->       <table id="T12" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T11">  
                     <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
-                    
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject11" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
                     <tr>
-                        <th class="w3-border-right">Total</th>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
                         <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
                     </tr>
                     <tr>
-                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
                         <td class="w3-border-right"></td><td class="w3-border-right"></td>
                     </tr>
                 </table>
+
+                <br>
+
+                <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T12">  
+                    <th colspan="4" class="w3-custom" style="font-size: 16px">Subject</th>
+                    <th colspan="1" class="w3-custom">  <button  style="float: right;"type="button" class="btn w3-button w3-hover-blue-gray w3-custom" 
+                                                                 data-toggle="popoverSubject12" onclick="drawChartSubjects();">
+                            <span class="material-icons ">signal_cellular_alt</span>
+                        </button></th>
+                    <tr>
+                        <th class="w3-border-right">Academic Year</th><th class="w3-border-right">Total</th>
+                        <th class="w3-border-right"></th><th class="w3-border-right"></th><th class="w3-border-right"></th>
+                    </tr>
+                    <tr>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td><td class="w3-border-right"></td>
+                        <td class="w3-border-right"></td><td class="w3-border-right"></td>
+                    </tr>
+                </table>
+
             </div>
+
             <div class="w3-col m8 l7 w3-card-4 w3-mobile" id="rightdiv" style = "height:100vh; overflow: scroll; padding-top: 10px; padding-left: 10px; padding-right: 10px"> 
                 <!--Downloading table  11:52 AM-->   
                 <br>
@@ -789,10 +796,12 @@ if (!isset($_SESSION['login'])) {
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
+                            <td>Year</td>
                             <td>Total Number</td>
                             <td></td>
                             <td></td>
@@ -803,64 +812,65 @@ if (!isset($_SESSION['login'])) {
                             <td></td>
                             <td></td>
                             <td></td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
                 <table id="TT2" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Total</td><td></td><td></td><td></td></tr>
-                        <tr><td></td><td></td><td></td><td></td></tr></tbody>
+                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT3" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Total</td><td></td><td></td><td></td></tr>
-                        <tr><td></td><td></td><td></td><td></td></tr></tbody>
+                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT4" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Total</td><td></td><td></td><td></td></tr>
-                        <tr><td></td><td></td><td></td><td></td></tr></tbody>
+                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT5" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Total</td><td></td><td></td><td></td></tr>
-                        <tr><td></td><td></td><td></td><td></td></tr></tbody>
+                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT6" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Total</td><td></td><td></td><td></td></tr>
-                        <tr><td></td><td></td><td></td><td></td></tr></tbody>
+                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT7" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Total</td><td></td><td></td><td></td></tr>
-                        <tr><td></td><td></td><td></td><td></td></tr></tbody>
+                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT8" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Total</td><td></td><td></td><td></td></tr>
-                        <tr><td></td><td></td><td></td><td></td></tr></tbody>
+                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT9" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Total</td><td></td><td></td><td></td></tr>
-                        <tr><td></td><td></td><td></td><td></td></tr></tbody>
+                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT10" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Total</td><td></td><td></td><td></td></tr>
-                        <tr><td></td><td></td><td></td><td></td></tr></tbody>
+                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT11" hidden>
-                   <thead><tr><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Total</td><td></td><td></td><td></td></tr>
-                        <tr><td></td><td></td><td></td><td></td></tr></tbody>
+                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT12" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Total</td><td></td><td></td><td></td></tr>
-                        <tr><td></td><td></td><td></td><td></td></tr></tbody>
-                </table>  
+                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+                </table>    
             </div>
 
             <button onclick="topFunction()" style="left:0; padding: 10px;" class=" w3-hover-blue-gray w3-small w3-round-xxlarge" id="myBtn" title="Scroll to top"><span class="glyphicon glyphicon-arrow-up"style="font-size: 25px;" ></span></button>
@@ -1041,7 +1051,7 @@ if (!isset($_SESSION['login'])) {
                 delete batchesArray[batchesArray.length - 1];
                 for (var i in batchesArray) {
                     select.add(new Option(batchesArray[i]));
-                    //                 document.write(batchesArray[i]);
+        //                 document.write(batchesArray[i]);
                 }
                 ;
 
@@ -1150,7 +1160,7 @@ if (!isset($_SESSION['login'])) {
                 delete subjectsArray[subjectsArray.length - 1];
                 for (var i in subjectsArray) {
                     select.add(new Option(subjectsArray[i]));
-                    //                 document.write(batchesArray[i]);
+        //                 document.write(batchesArray[i]);
                 }
                 ;
 
@@ -1167,28 +1177,40 @@ if (!isset($_SESSION['login'])) {
 
         <!--
         Initialize Term drop down     --> 
-        <!--Initialize Term drop down--> 
         <script type="text/javascript">
+
             document.getElementById("subject").addEventListener("change", fillTerms());
+
+
             function fillTerms() {
+
                 var selected_years = $("#academic_year option:selected");
                 var selected_grades = $("#grade option:selected");
                 var selected_batches = $("#batch option:selected");
                 var selected_subjects = $("#subject option:selected");
+
+
                 var select = document.getElementById('term');
+
                 while (select.length > 0)
                     select.remove(0);
+
                 var message = "";
                 selected_years.each(function () {
-                    if (message === "")
+                    if (message === "") {
+
                         message = "   (academic_years.name = '" + $(this).text() + "'";
-                    else
+                    } else {
                         message += " OR academic_years.name = '" + $(this).text() + "'";
+                    }
                 });
-                if (message !== "")
+
+                if (message !== "") {
+
                     selected_years = message + ")";
-                else
+                } else
                     selected_years = "";
+
 
                 var message = "";
                 selected_grades.each(function () {
@@ -1202,10 +1224,12 @@ if (!isset($_SESSION['login'])) {
                     }
                 });
 
-                if (message !== "")
+                if (message !== "") {
+
                     selected_grades = message + ")";
-                else
+                } else
                     selected_grades = "";
+
 
                 var message = "";
                 selected_batches.each(function () {
@@ -1214,49 +1238,59 @@ if (!isset($_SESSION['login'])) {
                             message = " AND (batches.name = '" + $(this).text() + "' ";
                         else
                             message = " (batches.name = '" + $(this).text() + "' ";
-                    } else
+                    } else {
                         message += " OR batches.name = '" + $(this).text() + "' ";
+                    }
                 });
 
-                if (message !== "")
+                if (message !== "") {
+
                     selected_batches = message + ")";
-                else
+                } else
                     selected_batches = "";
 
-    //                var message = "";
-    //                selected_subjects.each(function () {
-    //                    if (message === "") {
-    //                        if (selected_years !== "" || selected_grades !== "" || selected_batches !== "")
-    //                            message = " AND (subjects.name = '" + $(this).text() + "' ";
-    //                        else
-    //                            message = " (subjects.name = '" + $(this).text() + "' ";
-    //                    } else
-    //                        message += " OR subjects.name = '" + $(this).text() + "' ";
-    //                });
-    //
-    //                if (message !== "")
-    //                    selected_subjects = message + ")";
-    //                else
-                selected_subjects = "";
+
+                var message = "";
+                selected_subjects.each(function () {
+                    if (message === "") {
+                        if (selected_years !== "" || selected_grades !== "" || selected_batches !== "")
+                            message = " AND (subjects.name = '" + $(this).text() + "' ";
+                        else
+                            message = " (subjects.name = '" + $(this).text() + "' ";
+                    } else {
+                        message += " OR subjects.name = '" + $(this).text() + "' ";
+                    }
+                });
+
+                if (message !== "") {
+
+                    selected_subjects = message + ")";
+                } else
+                    selected_subjects = "";
+
+
+
+
 
                 var httpTerms = new XMLHttpRequest();
                 httpTerms.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
-    //                        document.getElementById("out").innerHTML = this.responseText;                        
                         termsArray = str.split("\t");
                     }
                 };
 
                 httpTerms.open("GET", "sqldb/_TermsViaYearGradeSectionSubject.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches + "&subjects=" + selected_subjects, false);
                 httpTerms.send();
-
                 $('#term').multiselect('destroy');
+
                 delete termsArray[termsArray.length - 1];
                 for (var i in termsArray) {
                     select.add(new Option(termsArray[i]));
+        //                 document.write(termsArray[i]);
                 }
                 ;
+
 
                 $(function () {
                     $('#term').multiselect({
@@ -1264,7 +1298,9 @@ if (!isset($_SESSION['login'])) {
                     });
                 });
             }
+
         </script>
+
 
 
 
@@ -1303,35 +1339,41 @@ if (!isset($_SESSION['login'])) {
 
         </script>
 
-        <script>
+
+        --><script>
+            function downloadStudents() {
+
+                var doc = new jsPDF('p', 'pt', 'a3');
+                var table = doc.autoTableHtmlToJson(document.getElementById("out"));
+                var header = function (data) {
+                    doc.setFontSize(16);
+                    doc.setFontStyle('normal');
+                    doc.text("Students List", 250, 50);
+                    doc.line(250, 53, 335, 53);// Header top margin
+                    // Header top margin
+                };
+
+                doc.autoTable(table.columns, table.data, {beforePageContent: header, theme: 'grid', margin: {top: 70}, styles: {
+                        fontSize: 12,
+                        font: 'PTSans'
+                    }
+                });
+                doc.save("Students.pdf");
+            }
+        </script><!--
+        --><script>
             function downloadStatistics() {
-                var doc = new jsPDF('p', 'pt', 'a4');
+
+                var doc = new jsPDF('p', 'pt');
                 var header = function (data) {
                     doc.setFontSize(18);
-                    doc.setTextColor(0);
                     doc.setFont('PTSans');
-                    //                    doc.setFontStyle('bold');
                     doc.text("Subject Wise Statistics", 225, 50);
                     doc.line(226, 53, 390, 53);// Header top margin
                 };
-                var table = doc.autoTableHtmlToJson(document.getElementById("StatisticsTitlePDF"));
-
-                doc.autoTable(table.columns, table.data, {beforePageContent: header, theme: 'plain', margin: {top: 70, left: 40, right: 40},
-                    styles: {
-                        fontSize: 12,
-                        font: 'PTSans',
-                        overflow: 'linebreak', columnWidth: 'wrap'
-
-                    }, bodyStyles: {valign: 'top'},
-                    columnStyles: {
-                        0: {
-                            columnWidth: 'auto',
-                            columnHeight: 'auto'
-                        }
-                    }});
 
                 var table = doc.autoTableHtmlToJson(stablePDF);
-                doc.autoTable(table.columns, table.data, {startY: doc.autoTable.previous.finalY + 14, beforePageContent: header, theme: 'grid', margin: {top: 70, left: 40, right: 40}, columnStyles: {
+                doc.autoTable(table.columns, table.data, {beforePageContent: header, theme: 'grid', margin: {top: 70, left: 40, right: 40}, columnStyles: {
                         0: {columnWidth: 205},
                         1: {columnWidth: 80},
                         2: {columnWidth: 80},
@@ -1339,8 +1381,8 @@ if (!isset($_SESSION['login'])) {
                     }, styles: {
                         fontSize: 12,
                         font: 'PTSans',
-
                     }
+
                 });
 
                 var tableName = "";
@@ -1361,34 +1403,6 @@ if (!isset($_SESSION['login'])) {
                             font: 'PTSans'
                         }});
                     i++;
-                });
-                doc.save("Statistics.pdf");
-            }
-        </script>
-
-        <script>
-            function downloadPopoverStatistics() {
-                var doc = new jsPDF('p', 'pt');
-                var header = function (data) {
-                    doc.setFontSize(18);
-                    doc.setFontStyle('PTSans');
-                    doc.text("Statistics", 225, 50);
-                    doc.line(226, 53, 290, 53);// Header top margin
-                };
-                doc.addImage(imgData[0], 'jpg', 80, 180, 300, 150);
-                var table = doc.autoTableHtmlToJson(stablePDF);
-                doc.autoTable(table.columns, table.data, {beforePageContent: header, theme: 'grid', margin: {top: 70, left: 40, right: 40}, columnStyles: {
-                        0: {columnWidth: 205},
-                        1: {columnWidth: 80},
-                        2: {columnWidth: 80},
-                        3: {columnWidth: 80},
-                        4: {columnWidth: 80}
-
-                    }, styles: {
-                        fontSize: 12,
-                        font: 'PTSans',
-                        halign: 'center'
-                    }
                 });
                 doc.save("Statistics.pdf");
             }
@@ -1769,9 +1783,7 @@ if (!isset($_SESSION['login'])) {
             </div>
             <h6   style="float: left; cursor: pointer; color: gray">Click to view details</h6>
             <button class="  w3-hover-teal  w3-round-xxlarge " id="exportS" style="float: right; margin-bottom: 10px; color: teal" onclick="downloadPopoverStatistics()" title="Download Graph">
-                <span class="material-icons">save_alt</span></button> 
-
-
+                <span class="material-icons">save_alt</span></button>
         </div>
 
         <div id = "popcontainerSubject1" class="popover-content-el hide  " style="width:400px; "  >
