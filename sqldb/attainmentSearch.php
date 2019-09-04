@@ -2,15 +2,21 @@
 
 include ('../config/dbConfig.php');
 
-$terms = $_REQUEST["terms"];
-$grades = $_REQUEST["grades"];
-$years = $_REQUEST["years"]; 
-$batches = $_REQUEST["batches"];
-$subjects = $_REQUEST["subjects"];
-$gender = $_REQUEST["gender"];
-$category = $_REQUEST["category"];
+ $terms = $_REQUEST["terms"];
+  $grades = $_REQUEST["grades"];
+  $years = $_REQUEST["years"]; 
+  $batches = $_REQUEST["batches"];
+ $subjects = $_REQUEST["subjects"];
+ $gender = $_REQUEST["gender"];
+ $category = $_REQUEST["category"];
 
+if ($terms == "" and $grades == "" and $years == "" and $batches == "" and $gender == "" and $subjects == "" and $category == "")
+    $and = "AND academic_years.name = '2018 - 2019' ".
+                  " AND courses.course_name = 'GR 1' ".
+                  " AND exam_groups.name = 'Term1-2019' ".
+                  " AND batches.name = 'A2019' ";
 
+else $and = ' AND ';
 
 $sql = "SELECT "
         . "T2.academic academic, "
@@ -18,23 +24,23 @@ $sql = "SELECT "
         . "T1.exams exams, "
         . "T1.batch batch, "
         . "T1.grade grade, "
-        . "T1.Count more_than_75, "
-        . "T3.Count more_than_65, "
-        . "T4.Count equal_to_65, "
-        . "T5.Count more_than_70, "
-        . "T6.Count more_than_50, "
-        . "T7.Count equal_to_60, "
-        . "T8.Count equal_to_50, "
-        . "T9.Count below_50, "        
+        . "T1.COUNT more_than_75, "
+        . "T3.COUNT more_than_65, "
+        . "T4.COUNT equal_to_65, "
+        . "T5.COUNT more_than_70, "
+        . "T6.COUNT more_than_50, "
+        . "T7.COUNT equal_to_60, "
+        . "T8.COUNT equal_to_50, "
+        . "T9.COUNT below_50, "        
         . "T2.Total Total, "
-        . "ROUND(((T1.Count * 100) / T2.Total),2) AVG_M75, "
-        . "ROUND(((T3.Count * 100) / T2.Total),2) AVG_M65, "
-        . "ROUND(((T4.Count * 100) / T2.Total),2) AVG_E65, "
-        . "ROUND(((T5.Count * 100) / T2.Total),2) AVG_M70, "
-        . "ROUND(((T6.Count * 100) / T2.Total),2) AVG_M50, "
-        . "ROUND(((T7.Count * 100) / T2.Total),2) AVG_E60, "
-        . "ROUND(((T8.Count * 100) / T2.Total),2) AVG_E50, "
-        . "ROUND(((T9.Count * 100) / T2.Total),2) AVG_B50 "
+        . "ROUND(((T1.COUNT * 100) / T2.Total),2) AVG_M75, "
+        . "ROUND(((T3.COUNT * 100) / T2.Total),2) AVG_M65, "
+        . "ROUND(((T4.COUNT * 100) / T2.Total),2) AVG_E65, "
+        . "ROUND(((T5.COUNT * 100) / T2.Total),2) AVG_M70, "
+        . "ROUND(((T6.COUNT * 100) / T2.Total),2) AVG_M50, "
+        . "ROUND(((T7.COUNT * 100) / T2.Total),2) AVG_E60, "
+        . "ROUND(((T8.COUNT * 100) / T2.Total),2) AVG_E50, "
+        . "ROUND(((T9.COUNT * 100) / T2.Total),2) AVG_B50 "
         . "FROM "
         . "( "
         . " SELECT "
@@ -69,10 +75,14 @@ $sql = "SELECT "
 if ($terms == "" and $grades == "" and $years == "" and $batches == "" and $gender == "" and $subjects == "" and $category == "") {
 
 
-    $sql = $sql . " GROUP BY "
+    $sql = $sql . " WHERE academic_years.name = '2018 - 2019' ".
+                  " AND courses.course_name = 'GR 1' ".
+                  " AND exam_groups.name = 'Term1-2019' ".
+                  " AND batches.name = 'A2019' "
+            . " GROUP BY "
             . "     courses.course_name, academic_years.name,";
 } else {
-    $sql = $sql . "WHERE $years $grades  $batches $terms    $gender $category $subjects"
+    $sql = $sql . "WHERE  $years $grades  $batches $terms   $gender $category $subjects"
             . "GROUP BY courses.course_name, ";
 }
 
@@ -111,7 +121,7 @@ $sql = $sql . "     exam_groups.name, "
         . "       INNER JOIN subjects ON exams.subject_id = subjects.id "
         . "       ) "
         . "   WHERE "
-        . "       exam_scores.marks > 75 "
+        . "       exam_scores.marks > 75 $and $years $grades  $batches $terms    $gender $category $subjects "
         . "   GROUP BY "
         . "       courses.course_name, "
         . "       exam_groups.name, "
@@ -150,7 +160,7 @@ $sql = $sql . "     exam_groups.name, "
         . "        INNER JOIN subjects ON exams.subject_id = subjects.id "
         . "        ) "
         . "    WHERE "
-        . "        exam_scores.marks > 65 "
+        . "        exam_scores.marks > 65 $and $years $grades  $batches $terms    $gender $category $subjects "
         . "    GROUP BY "
         . "        courses.course_name, "
         . "        exam_groups.name, "
@@ -189,7 +199,7 @@ $sql = $sql . "     exam_groups.name, "
         . "       INNER JOIN subjects ON exams.subject_id = subjects.id "
         . "       ) "
         . "   WHERE "
-        . "       exam_scores.marks = 65 "
+        . "       exam_scores.marks = 65 $and $years $grades  $batches $terms    $gender $category $subjects "
         . "   GROUP BY "
         . "       courses.course_name, "
         . "      exam_groups.name, "
@@ -228,7 +238,7 @@ $sql = $sql . "     exam_groups.name, "
         . "     INNER JOIN subjects ON exams.subject_id = subjects.id "
         . "     ) "
         . "  WHERE "
-        . "       exam_scores.marks > 70 "
+        . "       exam_scores.marks > 70 $and $years $grades  $batches $terms    $gender $category $subjects "
         . "   GROUP BY "
         . "       courses.course_name, "
         . "       exam_groups.name, "
@@ -267,7 +277,7 @@ $sql = $sql . "     exam_groups.name, "
         . "       INNER JOIN subjects ON exams.subject_id = subjects.id "
         . "       ) "
         . "   WHERE "
-        . "       exam_scores.marks > 50 "
+        . "       exam_scores.marks > 50 $and $years $grades  $batches $terms    $gender $category $subjects "
         . "   GROUP BY "
         . "       courses.course_name, "
         . "       exam_groups.name, "
@@ -306,7 +316,7 @@ $sql = $sql . "     exam_groups.name, "
         . "      INNER JOIN subjects ON exams.subject_id = subjects.id "
         . "      ) "
         . "  WHERE "
-        . "       exam_scores.marks = 60 "
+        . "       exam_scores.marks = 60 $and $years $grades  $batches $terms    $gender $category $subjects "
         . "   GROUP BY "
         . "      courses.course_name, "
         . "      exam_groups.name, "
@@ -345,7 +355,7 @@ $sql = $sql . "     exam_groups.name, "
         . "   INNER JOIN subjects ON exams.subject_id = subjects.id "
         . "     ) "
         . "  WHERE "
-        . "     exam_scores.marks = 50 "
+        . "     exam_scores.marks = 50 $and $years $grades  $batches $terms    $gender $category $subjects "
         . " GROUP BY "
         . "     courses.course_name, "
         . "      exam_groups.name, "
@@ -385,7 +395,7 @@ $sql = $sql . "     exam_groups.name, "
         . "   INNER JOIN subjects ON exams.subject_id = subjects.id "
         . "     ) "
         . "  WHERE "
-        . "     exam_scores.marks < 50 "
+        . "     exam_scores.marks < 50 $and $years $grades  $batches $terms    $gender $category $subjects "
         . " GROUP BY "
         . "     courses.course_name, "
         . "      exam_groups.name, "

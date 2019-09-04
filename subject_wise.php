@@ -32,6 +32,7 @@ if (!isset($_SESSION['login'])) {
         });
     </script>
 
+
 <script type="text/javascript">
     var imgData = new Array();
     $(function () {
@@ -295,6 +296,7 @@ function drawMaterial() {
             materialChart.draw(view, options);
         }
 
+
         imgData[i] = materialChart.getImageURI();
 
 
@@ -465,6 +467,7 @@ function drawMaterial() {
         </div>
         <br><br>
     </div>
+
 </div>
 
 <!--On-change event listener -->
@@ -723,6 +726,7 @@ function drawMaterial() {
             });
         });
     </script>
+
 
 <!----------Save PDF for table----------------->
 <script>

@@ -242,7 +242,7 @@ if (!isset($_SESSION['login'])) {
                             var table = document.getElementById(tableName);
                             var table2 = document.getElementById(tableNeme2);
                             table.rows[0].cells[0].innerHTML = currentGrade + " - " + currentSubject;  //head
-                            table2.rows[0].cells[0].innerHTML = currentSubject; //head                        
+                            table2.rows[0].cells[0].innerHTML = currentGrade + " - " + currentSubject; //head                        
                             //Academic //Total
                             var min = 0, max = 0;
                             for (var i = 1; i < 4; i++)
@@ -296,6 +296,8 @@ if (!isset($_SESSION['login'])) {
                         StatisticsTitle.rows[0].cells[1].innerHTML = "GR1-A2019";
                         StatisticsTitle.rows[0].cells[2].innerHTML = "Term1-2019";
                         StatisticsTitle.rows[1].cells[0].innerHTML = "SUBJECTS";
+                        StatisticsTitlePDF.rows[0].cells[0].innerHTML = "Year 2018-2019 - GR1-A2019 - Term1-2019 ";
+                        StatisticsTitlePDF.rows[1].cells[0].innerHTML = "SUBJECTS"
 
 
     //                    stablePDF.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
@@ -307,6 +309,9 @@ if (!isset($_SESSION['login'])) {
                         StatisticsTitle.rows[0].cells[2].innerHTML = termHeader;
                         StatisticsTitle.rows[1].cells[0].innerHTML = subjectHeader;
                         stable.rows[2].cells[0].innerHTML = academicHeader;
+                        stablePDF.rows[2].cells[0].innerHTML = academicHeader;
+                        StatisticsTitlePDF.rows[0].cells[0].innerHTML = academicHeader + " - " + gradeHeader + " - " + termHeader;
+                        StatisticsTitlePDF.rows[1].cells[0].innerHTML = subjectHeader;
                     }
 
                     var xmlhttp = new XMLHttpRequest();
@@ -322,6 +327,7 @@ if (!isset($_SESSION['login'])) {
                     xmlhttp.onreadystatechange = function () {
                         if (this.readyState === 4) {
                             stable.rows[2].cells[0].innerHTML = this.responseText;
+                            stablePDF.rows[2].cells[0].innerHTML = this.responseText;
                             drawChart();
                         }
                     };
@@ -334,11 +340,13 @@ if (!isset($_SESSION['login'])) {
                     {
                         min = stable.rows[1].cells[i].childNodes[0].value;
                         max = stable.rows[1].cells[i].childNodes[2].value;
+                        stablePDF.rows[1].cells[i].innerHTML = min + "% - " + max + "%";
                         var xmlhttpm1 = new XMLHttpRequest();
                         xmlhttpm1.onreadystatechange = function () {
 
                             if (this.readyState === 4) {
                                 stable.rows[2].cells[i].innerHTML = this.responseText;
+                                stablePDF.rows[2].cells[i].innerHTML = this.responseText;
                                 drawChart();
                             }
                         };
@@ -454,24 +462,13 @@ if (!isset($_SESSION['login'])) {
                     <tr>
                         <td>   <!--Download Button-->
                             <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom"
-                                    id="exportS" onclick="printJS({
-                                        printable: 'tables',
-                                        type: 'html',
-                                        base64: true,
-                                        showModal: true,
-                                        documentTitle: 'Statistics',
-                                        targetStyles: '*',
-                                        honorColor: true,
-                                        repeatTableHeader: true,
-                                        scanstyles: true,
-                                        ignoreElements: ['signal1'] 
-                                    });" title="Export Statistics as PDF">
-                            <span class="material-icons">save_alt</span>
+                                    id="exportS" onclick="downloadStatistics();" title="Export Statistics as PDF">
+                                <span class="material-icons">save_alt</span>
                             </button>
                         </td>
                         <td>
                             <select id="academic_year" 
-                            onchange="fillGrades(); fillBatches(); fillSubjects(); fillTerms();" multiple="multiple"></select>
+                                    onchange="fillGrades(); fillBatches(); fillSubjects(); fillTerms();" multiple="multiple"></select>
                         </td>
                         <td>
                             <select id="grade" onchange="fillBatches(); fillSubjects();" multiple="multiple"></select>   
@@ -495,34 +492,44 @@ if (!isset($_SESSION['login'])) {
                             <select id="category" multiple="multiple"></select>         
                         </td>
                         <td> <!--Search Button--> 
-                        <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;"
-                        class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">
-                        <span class="fa fa-search"></span>
-                        </button>
+                            <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;"
+                                    class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" title="View Results">
+                                <span class="fa fa-search"></span>
+                            </button>
                         </td>
                         <td>
-                        <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM"
-                        onclick="printJS({printable: 'outheader', type: 'html', base64: true, showModal: true,
-                        documentTitle: 'Students List', targetStyles: '*', honorColor: true, repeatTableHeader: true,
-                        scanstyles: true});" title="Export Students List as PDF">
-                        <span class="material-icons">save_alt</span>
-                        </button>
+                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM"
+                                    onclick="printJS({printable: 'outheader', type: 'html', base64: true, showModal: true,
+                                                documentTitle: 'Students List', targetStyles: '*', honorColor: true, repeatTableHeader: true,
+                                                scanstyles: true});" title="Export Students List as PDF">
+                                <span class="material-icons">save_alt</span>
+                            </button>
                         </td>
                     </tr>
                 </table>
             </div>
 
             <div class="w3-container w3-col m4 l5 w3-mobile" id="tables" style="overflow: scroll;top: 0;  bottom: 0; height: 100vh;">
-                <table align= center; id="StatisticsTitle" style="width: 100%; text-align: center;">
+                <table align= center; id="StatisticsTitle" style="width: 100%; text-align: center;  border: 1px solid black;">
+                    <tr>
+                        <td align='left' style="padding:5px; border: 1px solid black;"></td>
+                        <td align='center' style="padding:5px; border: 1px solid black;"></td>
+                        <td align='right' style="padding:5px; border: 1px solid black;"></td>
+                    </tr>
+                    <tr>
+                        <td align='center' colspan="3"></td>
+                    </tr>                    
+                </table> <br>
+                <table hidden align= center; id="StatisticsTitlePDF" style="width: 100%; text-align: center;">
                     <tr>
                         <td style="padding:5px;"></td>
-                        <td style="padding:5px;"></td>
-                        <td style="padding:5px;"></td>
+
                     </tr>
                     <tr>
                         <td colspan="3"></td>
                     </tr>                    
                 </table>
+
 
                 <!--stable-->   <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="stable">
                     <th colspan="3" class="w3-custom " style="font-size: 16px">
@@ -550,11 +557,11 @@ if (!isset($_SESSION['login'])) {
                 <!--stablePDF--><table id="stablePDF" style="font-size: 100px" hidden>
                     <thead>
                         <tr>
-                            <th colspan="5" style="text-align: center"></th>
+                            <th colspan="5" style="text-align: center">STATISTICS</th>
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
+
                         </tr>
                     </thead>
                     <tbody> 
@@ -803,19 +810,16 @@ if (!isset($_SESSION['login'])) {
                             <th></th>
                             <th></th>
                             <th></th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Year</td>
-                            <td>Total Number</td>
+                            <td>Total </td>
                             <td></td>
                             <td></td>
                             <td></td>
                         </tr>
                         <tr>
-                            <td></td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -824,58 +828,58 @@ if (!isset($_SESSION['login'])) {
                     </tbody>
                 </table>
                 <table id="TT2" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT3" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT4" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT5" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT6" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT7" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT8" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT9" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT10" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT11" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT12" hidden>
-                    <thead><tr><th></th><th></th><th></th><th></th><th></th></tr></thead>
-                    <tbody><tr><td>Year</td><td>Total Number</td><td></td><td></td><td></td></tr>
+                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>    
             </div>
@@ -1252,30 +1256,11 @@ if (!isset($_SESSION['login'])) {
             });
         </script>
 
-        <script>
-            function downloadStudents() {
-                var PTSans = "AAEAAAAUAQA...";
-                var doc = new jsPDF('p', 'pt', 'a3');
-                doc.addFileToVFS("PTSans.ttf", PTSans);
-                doc.addFont('PTSans.ttf', 'PTSans', 'normal');
-                doc.setFontStyle('normal');
 
-                var table = doc.autoTableHtmlToJson(document.getElementById("out"));
-                var header = function (data) {
-                    doc.setFont('PTSans'); // set font
-                    doc.text("Students List", 250, 50);
-                    doc.line(250, 53, 335, 53);// Header top margin
-                    // Header top margin
-                };
-
-                doc.autoTable(table.columns, table.data, {beforePageContent: header, theme: 'grid', margin: {top: 70}});
-                doc.save("Students.pdf");
-            }
-        </script>
 
         <script>
             function downloadStatistics() {
-                var doc = new jsPDF('p', 'pt', 'a3');
+                var doc = new jsPDF('p', 'pt', 'a4');
                 var header = function (data) {
                     doc.setFontSize(18);
                     doc.setTextColor(0);
@@ -1284,9 +1269,24 @@ if (!isset($_SESSION['login'])) {
                     doc.text("Subject Wise Statistics", 225, 50);
                     doc.line(226, 53, 390, 53);// Header top margin
                 };
+                var table = doc.autoTableHtmlToJson(document.getElementById("StatisticsTitlePDF"));
+
+                doc.autoTable(table.columns, table.data, {beforePageContent: header, theme: 'plain', margin: {top: 70, left: 40, right: 40},
+                    styles: {
+                        fontSize: 12,
+                        font: 'PTSans',
+                        overflow: 'linebreak', columnWidth: 'wrap'
+
+                    }, bodyStyles: { valign: 'top' },
+                    columnStyles: {
+                        0: {
+                            columnWidth: 'auto',
+                            columnHeight: 'auto'
+                        }
+                    }});
 
                 var table = doc.autoTableHtmlToJson(stablePDF);
-                doc.autoTable(table.columns, table.data, {beforePageContent: header, theme: 'grid', margin: {top: 70, left: 40, right: 40}, columnStyles: {
+                doc.autoTable(table.columns, table.data, {startY: doc.autoTable.previous.finalY + 14, beforePageContent: header, theme: 'grid', margin: {top: 70, left: 40, right: 40}, columnStyles: {
                         0: {columnWidth: 205},
                         1: {columnWidth: 80},
                         2: {columnWidth: 80},
