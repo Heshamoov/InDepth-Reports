@@ -23,6 +23,7 @@ if (!isset($_SESSION['login'])) {
        
        <script src="js/jspdf.debug.js"></script>
        <script src="js/jspdf.plugin.autotable.js"></script>
+       <script type="text/javascript" src="js/PrintTable.js"></script>
     <script>
         $(window).load(function () {
             // Animate loader off screen
@@ -31,121 +32,109 @@ if (!isset($_SESSION['login'])) {
         });
     </script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
+    var imgData = new Array();
+    $(function () {
+        $('#search, #charttype').click(function () {
+            var indexYear, indexGrade, indexSubject, indexSection, indexCategory;
 
-        var imgData = new Array();
+        for (var index = 1; index < 3; index++) {
+                indexYear     = "T" + index + "-YR";
+                indexGrade    = "T" + index + "-GR";
+                indexSubject  = "T" + index + "-SB";
+                indexSection  = "T" + index + "-SC";
+                indexCategory = "T" + index + "-CA";
 
-        $(function () {
+                var years = document.getElementById(indexYear).options[document.getElementById(indexYear).selectedIndex].text;
+                var grade = document.getElementById(indexGrade).options[document.getElementById(indexGrade).selectedIndex].text;
+                var category = $("#" + indexCategory + " option:selected");
+                var subject = $("#" + indexSubject + " option:selected");
+                var section = $("#" + indexSection + " option:selected");
 
-            $('#search, #charttype').click(function () {
-//                document.getElementById("chart2").innerHTML += 'Hello';
+                //Section            
+                var message = "";
+                var sectionHeader = "";
+                section.each(function () {
+                    var currentSection = $(this).text();
+                    if (currentSection.indexOf("(") !== -1) {
+                        var bracketIndex = currentSection.indexOf("(");
+                        currentSection = currentSection.slice(0, bracketIndex);
+                    }
+                    if (message === "") {
+                        if (section !== "")
+                            message = " AND (batches.name = '" + currentSection + "' ";
+                        else
+                            message = " (batches.name = '" + currentSection + "'";
+                        sectionHeader = " - " + currentSection;
+                    } else {
+                        message += " OR batches.name = '" + currentSection + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                        sectionHeader += " , " + currentSection;
+                    }
+                });
+                if (message !== "")
+                    section = message + ")";
+                else
+                    section = "";
 
-                var indexYear;
-                var indexGrade;
-                var indexSubject;
-                var indexSection;
-                var indexCategory;
 
-                for (var index = 1; index < 3; index++) {
+                //Subject              
+                var message = "";
+                var subjectHeader = "";
+                subject.each(function () {
+                    var currentSubject = "";
+                    var firstSpace = true;
+                    var subject = $(this).text();
 
-                   indexYear = "T" + index + "-YR";
-                    indexGrade = "T" + index + "-GR";
-                    indexSubject = "T" + index + "-SB";
-                    indexSection = "T" + index + "-SC";
-                    indexCategory = "T" + index + "-CA";
-
-                    var years = document.getElementById(indexYear).options[document.getElementById(indexYear).selectedIndex].text;
-                    var grade = document.getElementById(indexGrade).options[document.getElementById(indexGrade).selectedIndex].text;
-                    var category = $("#" + indexCategory + " option:selected");
-                    var subject = $("#" + indexSubject + " option:selected");
-                    var section = $("#" + indexSection + " option:selected");
-
-
-
-                    //Section            
-                    var message = "";
-                    var sectionHeader = "";
-                    section.each(function () {
-                        var currentSection = $(this).text();
-                        if (currentSection.indexOf("(") !== -1) {
-                            var bracketIndex = currentSection.indexOf("(");
-                            currentSection = currentSection.slice(0, bracketIndex);
+                    // Extracting English letters and numbers and remove Arabic letters
+                    for (var i = 0; i < subject.length; i++) {
+                        if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9'))
+                            currentSubject += subject[i];
+                        if (subject[i] === ' ' && firstSpace && i > 3) {
+                            currentSubject += subject[i];
+                            firstSpace = false;
                         }
-                        if (message === "") {
-                            if (section !== "")
-                                message = " AND (batches.name = '" + currentSection + "' ";
-                            else
-                                message = " (batches.name = '" + currentSection + "'";
-                            sectionHeader = " - " + currentSection;
-                        } else {
-                            message += " OR batches.name = '" + currentSection + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                            sectionHeader += " , " + currentSection;
-                        }
-                    });
-                    if (message !== "")
-                        section = message + ")";
-                    else
-                        section = "";
+                    }
 
+                    if (message === "") {
+                        if (subject !== "")
+                            message = " AND (subjects.name LIKE '" + currentSubject + "%' ";
+                        else
+                            message = " (subjects.name LIKE '" + currentSubject + "'%";
+                        subjectHeader = " - " + currentSubject;
+                    } else {
+                        message += " OR subjects.name LIKE '" + currentSubject + "'%";  //  grade like 'GR1' OR grade like 'GR10';
+                        subjectHeader += " , " + currentSubject;
+                    }
+                });
+                if (message !== "")
+                    subject = message + ")";
+                else
+                    subject = "";
 
-                    //Subject              
-                    var message = "";
-                    var subjectHeader = "";
-                    subject.each(function () {
-                        var currentSubject = "";
-                        var firstSpace = true;
-                        var subject = $(this).text();
-
-                        // Extracting English letters and numbers and remove Arabic letters
-                        for (var i = 0; i < subject.length; i++) {
-                            if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9'))
-                                currentSubject += subject[i];
-                            if (subject[i] === ' ' && firstSpace && i > 3) {
-                                currentSubject += subject[i];
-                                firstSpace = false;
-                            }
-                        }
-
-                        if (message === "") {
-                            if (subject !== "")
-                                message = " AND (subjects.name LIKE '" + currentSubject + "%' ";
-                            else
-                                message = " (subjects.name LIKE '" + currentSubject + "'%";
-                            subjectHeader = " - " + currentSubject;
-                        } else {
-                            message += " OR subjects.name LIKE '" + currentSubject + "'%";  //  grade like 'GR1' OR grade like 'GR10';
-                            subjectHeader += " , " + currentSubject;
-                        }
-                    });
-                    if (message !== "")
-                        subject = message + ")";
-                    else
-                        subject = "";
-
-                    //Category               
-                    var message = "";
-                    var categoryHeader = "";
-                    category.each(function () {
-                        var currentCategory = $(this).text();
-                        if (currentCategory.indexOf("(") !== -1) {
-                            var bracketIndex = currentCategory.indexOf("(");
-                            currentCategory = currentCategory.slice(0, bracketIndex);
-                        }
-                        if (message === "") {
-                            if (category !== "")
-                                message = " AND (student_categories.name = '" + currentCategory + "' ";
-                            else
-                                message = " (student_categories.name = '" + currentCategory + "'";
-                            categoryHeader = " - " + currentCategory;
-                        } else {
-                            message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
-                            categoryHeader += " , " + currentCategory;
-                        }
-                    });
-                    if (message !== "")
-                        category = message + ")";
-                    else
-                        category = "";
+                //Category               
+                var message = "";
+                var categoryHeader = "";
+                category.each(function () {
+                    var currentCategory = $(this).text();
+                    if (currentCategory.indexOf("(") !== -1) {
+                        var bracketIndex = currentCategory.indexOf("(");
+                        currentCategory = currentCategory.slice(0, bracketIndex);
+                    }
+                    if (message === "") {
+                        if (category !== "")
+                            message = " AND (student_categories.name = '" + currentCategory + "' ";
+                        else
+                            message = " (student_categories.name = '" + currentCategory + "'";
+                        categoryHeader = " - " + currentCategory;
+                    } else {
+                        message += " OR student_categories.name = '" + currentCategory + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                        categoryHeader += " , " + currentCategory;
+                    }
+                });
+                if (message !== "")
+                    category = message + ")";
+                else
+                    category = "";
 
         // Between values Subject wise
         var min = 0, tableName, term, gender;
@@ -165,16 +154,13 @@ if (!isset($_SESSION['login'])) {
                     gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
                 }
 
-                document.getElementById("chart2").innerHTML += term + gender;
+//                document.getElementById("chart2").innerHTML += term + gender;
                 min = document.getElementById(tableName).rows[2].cells[i].childNodes[0].value;
-
-                document.getElementById("chart2").innerHTML += 'befor http';
                 
                 var httpAbove = new XMLHttpRequest();
                 httpAbove.onreadystatechange = function () {
                     if (this.readyState === 4)
                         document.getElementById(tableName).rows[3].cells[i].innerHTML = this.responseText;
-                        document.getElementById("chart2").innerHTML = this.responseText;
                 };
                 httpAbove.open("POST", "sqldb/marksAbove.php?term=" + term +
                         "&grade=" + grade + "&subject=" + subject + "&category=" + category +
@@ -183,24 +169,36 @@ if (!isset($_SESSION['login'])) {
                 httpAbove.send();
             }
         }
-
         google.charts.load('current', {packages: ['corechart', 'bar']});
         google.charts.setOnLoadCallback(drawMaterial);
 
     }
 
-
+// Draw Chart and PDF Tables
 function drawMaterial() {
     for (var i = 1; i < 3; i++) {
-        var value1, value2, value3, value4, result1, result2, result3, result4, tableName, chartName, gender1, gender2;
-        var value1, value2, value3, value4, result1, result2, result3, result4, tableName, table1, chartName, gender1, gender2;
+        var value1, value2, value3, value4, result1, result2, result3, result4, tableName, chartName, gender1, gender2, table1;
         
         tableName = 'T' + i;
         table1 = 'TT' + i;
         var tableName1 = document.getElementById(table1);
+//        var year = document.getElementById(tableName + '-YR').options[document.getElementById(tableName + '-YR').selectedIndex].text;
+//        var grade = document.getElementById(tableName + '-GR').options[document.getElementById(tableName + '-GR').selectedIndex].text;
+//        var section = document.getElementById(tableName + '-SC').options[document.getElementById(tableName + '-SC').selectedIndex].text;
+//        var subject = document.getElementById(tableName + '-SB').options[document.getElementById(tableName + '-SB').selectedIndex].text;
+//        var category = document.getElementById(tableName + '-CA').options[document.getElementById(tableName + '-CA').selectedIndex].text;
         var term1 = document.getElementById(tableName + '-Term1').options[document.getElementById(tableName + '-Term1').selectedIndex].text;
         var term2 = document.getElementById(tableName + '-Term2').options[document.getElementById(tableName + '-Term2').selectedIndex].text;
-        tableName1.rows[0].cells[3].innerHTML = subject;
+        
+//        if (year !== "")
+//            tableName1.rows[0].cells[0].innerHTML = year;
+//        if (grade !== "")
+//            tableName1.rows[0].cells[1].innerHTML = grade;
+//        if (section !== "")
+//            tableName1.rows[0].cells[2].innerHTML = section;
+//        if (subject !== "")
+//            tableName1.rows[0].cells[3].innerHTML = subject;
+//        tableName1.rows[0].cells[4].innerHTML = category;
 
         var gender1 = document.getElementById(tableName + '-Gender1').options[document.getElementById(tableName + '-Gender1').selectedIndex].text;
 
@@ -319,31 +317,27 @@ function drawMaterial() {
 <script>document.getElementById("navSubjectWise").style.backgroundColor = '#009688';</script>
 
 <div id="upperdiv" class="w3-container" style="padding-top: 10px; padding-bottom: 10px;">   
-<table id= "table1">
-<tr>
-    <td>
-        <button style="text-align: center ;" class="w3-button w3-round-xlarge w3-medium w3-hover-blue-gray w3-center w3-custom"
-        onclick="PrintTable('TT1')" title="Export Data as PDF" > <span class="material-icons">print</span></button>
-    </td>
-    <td>
-        <button style="text-align: center ;" class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge"
-        id="search" title="Get students marks">View Results<span class="fa fa-search"></span></button>
-    </td>
-    <td></td>           
-    <td>
+
+    <table id= "table1">
+    <tr>
+        <td></td>
+        <td>
+            <button style="text-align: center ;" class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge"
+            id="search" title="Get students marks">View Results<span class="fa fa-search"></span></button>
+        </td>
+        <td></td>           
+        <td>
         <select  class="w3-button w3-hover-blue-gray w3-custom w3-medium w3-round-xlarge" style="text-align: center" id="charttype" > 
             <option class="w3-round-xlarge" style="text-align: center"  value="barchart">Bar</option>
             <option class="w3-round-xlarge" style="text-align: center" value="coloumn">Column</option>
             <option class="w3-round-xlarge" style="text-align: center" value="linechart">Line</option>
             <option class="w3-round-xlarge" style="text-align: center;" value="pie" selected="selected">Pie Chart</option>            
         </select>
-    </td>
-    <td>
-        <button style="text-align: center ;" class="w3-button w3-round-xlarge w3-medium w3-hover-blue-gray w3-center w3-custom"
-        onclick="PrintTable('TT2')" title="Export Data as PDF" > <span class="material-icons">print</span></button>
-    </td>               
-</tr>
-</table>
+        </td>
+        <td></td>               
+    </tr>
+    </table>
+    
 </div> <!--End of Upper Div Section-->
 
 <div id="tables" style="height: 100vh; overflow: auto">
@@ -352,17 +346,17 @@ function drawMaterial() {
         <br>
         <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="T1">
             <th colspan="4" class="w3-teal" style="font-size: 18px">
-            <button style="float: left;" type='button' class="w3-button w3-hover-blue-gray"
-            hidden onclick="printDiv(chart1)" id='printbtn'  title="Print chart" value='Print'>
-            <i class="glyphicon glyphicon-print"></i></button>
+                <button style="float: left;" type='button' class="w3-button w3-hover-blue-gray"
+                    onclick="PrintTable('TT1')" title="Print chart" value='Print'>
+                    <i class="glyphicon glyphicon-print"></i>
+                </button>
 
-        <select id="T1-YR"></select>   
-        <select id="T1-GR" ></select>
-        <select id="T1-SC" multiple></select> 
-
-        <select id="T1-SB" multiple></select>
-        <select id="T1-CA" multiple></select>           
-    </th>
+                <select id="T1-YR"></select>   
+                <select id="T1-GR" ></select>
+                <select id="T1-SC" multiple></select> 
+                <select id="T1-SB" multiple></select>
+                <select id="T1-CA" multiple></select>           
+            </th>
 
                 <tr>
                     <th colspan="2" class="w3-border-right">
@@ -396,7 +390,7 @@ function drawMaterial() {
                 </tr>
             </table>
         
-            <table id="TT1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
+        <table id="TT1" class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" hidden>
                 <thead>
                 <td> </td><td></td><td ></td><td ></td><td ></td><td ></td><td ></td></thead>
                 <tbody>
@@ -404,76 +398,74 @@ function drawMaterial() {
                     <tr><td></td><td></td><td></td><td></td><td ></td><td ></td><td ></td></tr>
                     <tr><td ></td><td></td><td></td><td></td><td ></td><td ></td><td></td></tr>
                 </tbody>
+        </table>
+        <br>
+        <div class="w3-half w3-card-4"  id="chart1"></div>
+        </div>
+
+        <div class="w3-container w3-half">
+            <br>
+            <table class=" w3-table-all w3-striped w3-centered w3-card-4" id="T2">  
+                <th colspan="4" class="w3-teal" style="font-size: 18px">
+                    <button style="float: left;" type='button' class="w3-button w3-hover-blue-gray"
+                        onclick="PrintTable('TT2')" id='printbtn'  title="Print chart" value='Print'>
+                        <i class="glyphicon glyphicon-print"></i>
+                    </button>
+
+                    <select id="T2-YR"></select>   
+                    <select id="T2-GR" ></select>
+                    <select id="T2-SC" multiple ></select>
+                    <select id="T2-SB" multiple></select>
+                    <select id="T2-CA" multiple></select>           
+                </th> 
+                <tr>
+                    <th colspan="2" class="w3-border-right">
+                        <select id="T2-Term1"></select>
+                        <select id="T2-Gender1">
+                            <option>Boys</option>
+                            <option>Girls</option>
+                            <option>Both</option>
+                        </select>            
+                    </th>
+                    <th colspan="2" class="w3-border-right">
+                        <select id="T2-Term2"></select>
+                        <select id="T2-Gender2">
+                            <option>Girls</option>
+                            <option>Boys</option>
+                            <option>Both</option>
+                        </select>                    
+                    </th>
+                </tr>
+                <tr>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;" value= 80> % and above</td>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;" value= 85> % and above</td>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;" value= 90> % and above</td>
+                    <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;" value= 95> % and above</td>
+                </tr>
+                <tr>
+                    <td class="w3-border-right">--</td>
+                    <td class="w3-border-right">--</td>
+                    <td class="w3-border-right">--</td>
+                    <td class="w3-border-right">--</td>
+                </tr>
+            </table>
+
+            <table id="TT2"  class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" hidden>
+                <thead><td></td><td ></td><td ></td><td ></td><td ></td><td ></td><td ></td></thead>
+                <tbody>
+                    <tr><td></td><td></td><td></td><td></td><td ></td><td ></td><td ></td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td ></td><td ></td><td ></td></tr>
+                    <tr><td ></td><td></td><td></td><td></td><td ></td><td ></td><td></td></tr>
+                </tbody>
             </table>
             <br>
-            <div class="w3-half w3-card-4"  id="chart1"></div>
-        </div>
-
-                    <div class="w3-container w3-half">
-                        <br>
-                        <table class=" w3-table-all w3-striped w3-centered w3-card-4" id="T2">  
-                            <th colspan="4" class="w3-teal" style="font-size: 18px">
-                                <button style="float: left;" type='button' class="w3-button w3-hover-blue-gray" hidden onclick="printDiv(chart2)" id='printbtn'  title="Print chart" value='Print'>
-                                    <i class="glyphicon glyphicon-print"></i></button>
-
-                                <select id="T2-YR"></select>   
-                                <select id="T2-GR" ></select>
-                                <select id="T2-SC" multiple ></select>
-
-                                <select id="T2-SB" multiple></select>
-                                <select id="T2-CA" multiple></select>           
-                            </th> 
-
-
-                            <tr>
-                                <th colspan="2" class="w3-border-right">
-                                    <select id="T2-Term1"></select>
-                                    <select id="T2-Gender1">
-                                        <option>Boys</option>
-                                        <option>Girls</option>
-                                        <option>Both</option>
-                                    </select>            
-                                </th>
-                                <th colspan="2" class="w3-border-right">
-                                    <select id="T2-Term2"></select>
-                                    <select id="T2-Gender2">
-                                        <option>Girls</option>
-                                        <option>Boys</option>
-                                        <option>Both</option>
-                                    </select>                    
-                                </th>
-                            </tr>
-                            <tr>
-                                <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 80> % and above</td>
-                                <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 85> % and above</td>
-                                <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 90> % and above</td>
-                                <td class="w3-border-right"><input type="text" style = "font-style:initial ; font-size: 16px;"value= 95> % and above</td>
-                            </tr>
-                            <tr>
-                                <td class="w3-border-right">--</td>
-                                <td class="w3-border-right">--</td>
-                                <td class="w3-border-right">--</td>
-                                <td class="w3-border-right">--</td>
-                            </tr>
-                        </table>
-
-                        <table id="TT2"  class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4">
-                            <thead>
-                            <td> </td><td ></td><td ></td><td ></td><td ></td><td ></td><td ></td></thead>
-                            <tbody>
-                                <tr><td></td><td></td><td></td><td></td><td ></td><td ></td><td ></td></tr>
-                                <tr><td></td><td></td><td></td><td></td><td ></td><td ></td><td ></td></tr>
-                                <tr><td ></td><td></td><td></td><td></td><td ></td><td ></td><td></td></tr>
-                            </tbody>
-                        </table>
-                        <br>
-                        <div class="w3-half w3-card-4" id="chart2"></div>
-                    </div>
-
-                </div>
-                <br><br>
+            <div class="w3-half w3-card-4" id="chart2">
             </div>
         </div>
+        </div>
+        <br><br>
+    </div>
+</div>
 
 <!--On-change event listener -->
 <script type="text/javascript">
@@ -590,10 +582,8 @@ function drawMaterial() {
     ;
 </script>
 
-
-    <!--Initialize Terms Table 2-->
-
-    <script type="text/javascript">
+<!--Initialize Terms Table 2-->
+<script type="text/javascript">
         function fillTerms2() {
             var grade = document.getElementById("T2-GR").options[document.getElementById("T2-GR").selectedIndex].text;
             var year = document.getElementById("T2-YR").options[document.getElementById("T2-YR").selectedIndex].text;
@@ -644,7 +634,7 @@ function drawMaterial() {
         ;
     </script>
 
-    <script type="text/javascript">
+<script type="text/javascript">
         $(function () {
             $('#T1-Term1').multiselect({includeSelectAllOption: true});
         });
@@ -684,10 +674,8 @@ function drawMaterial() {
         });
     </script>
 
-
-
-    <!--Initialize Student Category drop down for table 1-->     
-    <script type="text/javascript">
+<!--Initialize Student Category drop down for table 1-->     
+<script type="text/javascript">
         var categoryArray = ["Your Data Base is Empty!."];
         var httpcategory = new XMLHttpRequest();
         httpcategory.onreadystatechange = function () {
@@ -711,8 +699,8 @@ function drawMaterial() {
         });
     </script>
 
-    <!--Initialize Student Category drop down for table 2-->     
-    <script type="text/javascript">
+<!--Initialize Student Category drop down for table 2-->     
+<script type="text/javascript">
         var categoryArray = ["Your Data Base is Empty!."];
         var httpcategory = new XMLHttpRequest();
         httpcategory.onreadystatechange = function () {
@@ -736,41 +724,37 @@ function drawMaterial() {
         });
     </script>
 
+<!----------Save PDF for table----------------->
+<script>
+    function downloadStatistics() {
+        var doc = new jsPDF('pt', 'pt', 'a3');
+        var header = function (data) {
+            doc.setFontSize(16);
+            doc.setFontStyle('PTSans');
+            doc.text("Statistics Based on Subject", 210, 80);        // Header top margin
+        };
+        var tableName = "";
+        tableName = 'TT1';
+        var table = doc.autoTableHtmlToJson(document.getElementById(tableName));
+        doc.autoTable(table.columns, table.data, {beforePageContent: header, margin: {top: 100, left: 40, right: 40}, styles: {
+                fontSize: 12,
+                halign: 'center',
+                font: 'PTSans'
+            }});
+        doc.addImage(imgData[1], 'png', 80, 180, 420, 250);
+        tableName = 'TT2';
+        var table = doc.autoTableHtmlToJson(document.getElementById(tableName));
+        doc.autoTable(table.columns, table.data, {beforePageContent: header, margin: {top: 450, left: 40, right: 40}, styles: {
+                fontSize: 12,
+                halign: 'center',
+                font: 'PTSans'
+            }});
+        doc.addImage(imgData[2], 'png', 80, 550, 420, 250);
+        doc.save("Statistics.pdf");
+    }
+</script>
 
-
-
-    <!----------Save PDF for table----------------->
-
-    <script>
-        function downloadStatistics() {
-            var doc = new jsPDF('pt', 'pt', 'a3');
-            var header = function (data) {
-                doc.setFontSize(16);
-                doc.setFontStyle('PTSans');
-                doc.text("Statistics Based on Subject", 210, 80);        // Header top margin
-            };
-            var tableName = "";
-            tableName = 'TT1';
-            var table = doc.autoTableHtmlToJson(document.getElementById(tableName));
-            doc.autoTable(table.columns, table.data, {beforePageContent: header, margin: {top: 100, left: 40, right: 40}, styles: {
-                    fontSize: 12,
-                    halign: 'center',
-                    font: 'PTSans'
-                }});
-            doc.addImage(imgData[1], 'png', 80, 180, 420, 250);
-            tableName = 'TT2';
-            var table = doc.autoTableHtmlToJson(document.getElementById(tableName));
-            doc.autoTable(table.columns, table.data, {beforePageContent: header, margin: {top: 450, left: 40, right: 40}, styles: {
-                    fontSize: 12,
-                    halign: 'center',
-                    font: 'PTSans'
-                }});
-            doc.addImage(imgData[2], 'png', 80, 550, 420, 250);
-            doc.save("Statistics.pdf");
-        }
-    </script>
-
-    </body>
-    </html>
+</body>
+</html>
 
 <?php } ?>
