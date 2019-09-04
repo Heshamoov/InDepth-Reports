@@ -2,8 +2,8 @@
 
 include ('../config/dbConfig.php');
 
-$years = $_REQUEST["years"];
-$grades = $_REQUEST["grades"];
+$year = $_REQUEST["year"];
+$grade = $_REQUEST["grade"];
 
 $sql = "SELECT DISTINCT batches.name batch \n"
 
@@ -11,14 +11,19 @@ $sql = "SELECT DISTINCT batches.name batch \n"
 
     . "INNER JOIN courses  ON batches.course_id = courses.id  \n";
 
-if ($years == "" && $grades == ""){
-$sql = $sql . " LEFT JOIN academic_years ON academic_years.id = batches.academic_year_id  WHERE batches.is_deleted = 0 ";}
-else{
-    $sql = $sql . "LEFT JOIN academic_years ON batches.academic_year_id = academic_years.id "
-                . "WHERE academic_years.name = '$years' AND courses.course_name = '$grades'  "
-. "AND batches.is_deleted = 0";}
+if ($year == "" && $grade == "")
+{
+	$sql .= "JOIN academic_years ON batches.academic_year_id = academic_years.id
+	 		WHERE batches.is_deleted = 0 ";
+}
+else
+{
+    $sql .= "JOIN academic_years ON batches.academic_year_id = academic_years.id 
+             WHERE academic_years.name = '$year' AND courses.course_name = '$grade'  
+			 AND batches.is_deleted = 0 ";
+}
 
-    $sql = $sql . " ORDER BY batches.name ASC ;";
+$sql .= "ORDER BY batches.name ASC ;";
 
 //echo $sql;
 $result = $conn->query($sql);

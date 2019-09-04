@@ -959,10 +959,11 @@ if (!isset($_SESSION['login'])) {
                 httpgrades.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
+//                        document.getElementById('out').innerHTML = this.responseText;
                         gradesArray = str.split("\t");
                     }
                 };
-                httpgrades.open("GET", "sqldb/distinctGrades.php?years=" + selected_years, false);
+                httpgrades.open("GET", "sqldb/distinctGrades.php?year=" + selected_years, false);
                 httpgrades.send();
 
                 $('#grade').multiselect('destroy');
@@ -1112,7 +1113,7 @@ if (!isset($_SESSION['login'])) {
                     }
                 };
 
-                httpSubjects.open("GET", "sqldb/_subjectsViaBatchGradeYear.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches, false);
+                httpSubjects.open("GET", "sqldb/_subjectsViaBatchGradeYear.php?years=" + selected_years + "&grades=" + selected_grades, false);
                 httpSubjects.send();
 
                 $('#subject').multiselect('destroy');
