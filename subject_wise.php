@@ -257,7 +257,7 @@ function drawMaterial() {
             [gender1 + "-" + value1.toString() + '% and above in ' + term1, Number(result1), ' #006666'],
             [gender1 + "-" + value2.toString() + '% and above in ' + term1, Number(result2), '#800000'],
             [gender2 + "-" + value3.toString() + '% and above in ' + term2, Number(result3), ' #002f5a'],
-            [gender2 + "-" + value4.toString() + '% and above in ' + term2, Number(result4), '#d81c01'],
+            [gender2 + "-" + value4.toString() + '% and above in ' + term2, Number(result4), '#d81c01']
         ]);
         var options = {
             title: '(' + term1 + " " + gender1 + ') VS (' + term2 + " " + gender2 + ") ",

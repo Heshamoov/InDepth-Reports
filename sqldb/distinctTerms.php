@@ -5,8 +5,6 @@ include ('../config/dbConfig.php');
 $years = $_REQUEST["year"];
 $grades = $_REQUEST["grade"];
 
-
-
 $sql = "SELECT DISTINCT exam_groups.name term FROM exam_groups\n"
 
     . "LEFT JOIN batches ON batches.id = exam_groups.batch_id \n"

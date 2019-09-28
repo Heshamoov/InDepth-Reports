@@ -297,7 +297,7 @@ if (!isset($_SESSION['login'])) {
                         StatisticsTitle.rows[0].cells[2].innerHTML = "Term1-2019";
                         StatisticsTitle.rows[1].cells[0].innerHTML = "SUBJECTS";
                         StatisticsTitlePDF.rows[0].cells[0].innerHTML = "Year 2018-2019 - GR1-A2019 - Term1-2019 ";
-                        StatisticsTitlePDF.rows[1].cells[0].innerHTML = "SUBJECTS"
+                        StatisticsTitlePDF.rows[1].cells[0].innerHTML = "SUBJECTS";
 
 
     //                    stablePDF.rows[0].cells[0].innerHTML = "Year (2018-2019) Grade (GR1-A) Term 1";
@@ -388,7 +388,7 @@ if (!isset($_SESSION['login'])) {
                 data.addRows([
                     [value1.toString() + '% - ' + value2.toString() + "% ", Number(result1), ' yellow'],
                     [value3.toString() + '% - ' + value4.toString() + "% ", Number(result2), 'orange'],
-                    [value5.toString() + '% - ' + value6.toString() + "%", Number(result3), ' lime'],
+                    [value5.toString() + '% - ' + value6.toString() + "%", Number(result3), ' lime']
                 ]);
                 var options = {title: header, legend: {position: "none"}};
 
@@ -828,57 +828,57 @@ if (!isset($_SESSION['login'])) {
                     </tbody>
                 </table>
                 <table id="TT2" hidden>
-                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <thead><th></th><th></th><th></th><th></th></tr></thead>
                     <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT3" hidden>
-                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <thead><th></th><th></th><th></th><th></th></tr></thead>
                     <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT4" hidden>
-                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <thead><th></th><th></th><th></th><th></th></tr></thead>
                     <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT5" hidden>
-                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <thead><th></th><th></th><th></th><th></th></tr></thead>
                     <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT6" hidden>
-                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <thead><th></th><th></th><th></th><th></th></tr></thead>
                     <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT7" hidden>
-                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <thead><th></th><th></th><th></th><th></th></tr></thead>
                     <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT8" hidden>
-                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <thead><th></th><th></th><th></th><th></th></tr></thead>
                     <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT9" hidden>
-                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <thead><th></th><th></th><th></th><th></th></tr></thead>
                     <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT10" hidden>
-                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <thead><th></th><th></th><th></th><th></th></tr></thead>
                     <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT11" hidden>
-                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <thead><th></th><th></th><th></th><th></th></tr></thead>
                     <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>
                 <table id="TT12" hidden>
-                    <thead></th><th></th><th></th><th></th><th></th></tr></thead>
+                    <thead><th></th><th></th><th></th><th></th></tr></thead>
                     <tbody><tr><td>Total </td><td></td><td></td><td></td></tr>
                         <tr><td></td><td></td><td></td><td></td><td></td></tr></tbody>
                 </table>    
@@ -1293,8 +1293,7 @@ if (!isset($_SESSION['login'])) {
                         3: {columnWidth: 80}
                     }, styles: {
                         fontSize: 12,
-                        font: 'PTSans',
-
+                        font: 'PTSans'
                     }
                 });
 
