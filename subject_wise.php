@@ -85,7 +85,7 @@ if (!isset($_SESSION['login'])) {
                     for (var i = 0; i < subject.length; i++) {
                         if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9'))
                             currentSubject += subject[i];
-                        if (subject[i] === '' && firstSpace && i > 3) {
+                        if (subject[i] === ' ' && firstSpace && i > 3) {
                             currentSubject += subject[i];
                             firstSpace = false;
                         }
