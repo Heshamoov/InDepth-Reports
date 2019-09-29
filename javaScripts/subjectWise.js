@@ -1,32 +1,20 @@
-
-
 var imgData = new Array();
 
 $(function () {
-
     $('#search, #charttype').click(function () {
 
-        //            var indexYear;
-        var indexGrade;
-        var indexSubject;
-        var indexSection;
-        var indexCategory;
+        var indexGrade, indexSubject, indexSection, indexCategory;
 
         for (var index = 1; index < 3; index++) {
-
-            //                indexYear = "T" + index + "-YR";
             indexGrade = "T" + index + "-GR";
             indexSubject = "T" + index + "-SB";
             indexSection = "T" + index + "-SC";
             indexCategory = "T" + index + "-CA";
 
-            //``              var years = document.getElementById(indexYear).options[document.getElementById(indexYear).selectedIndex].text;
             var grade = document.getElementById(indexGrade).options[document.getElementById(indexGrade).selectedIndex].text;
             var category = $("#" + indexCategory + " option:selected");
             var subject = $("#" + indexSubject + " option:selected");
             var section = $("#" + indexSection + " option:selected");
-
-
 
             //Section            
             var message = "";
@@ -106,25 +94,28 @@ $(function () {
 
 
 
-            // Between values Subject wise
-            var min = 0, tableName, term, gender;
+//Fill query values
+            var min = 0, tableName,year, term, gender;
             t = index;
             {
                 tableName = 'T' + t;
                 for (var i = 0; i < 4; i++) {
                     if (i < 2) {
+                        year = tableName + "-YR"; 
+                        year = document.getElementById(year).options[document.getElementById(year).selectedIndex].text;
                         term = tableName + "-Term1";
                         term = document.getElementById(term).options[document.getElementById(term).selectedIndex].text;
                         gender = tableName + "-Gender1";
                         gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
                     } else {
+                        year = tableName + "-YR";
+                        year = document.getElementById(year).options[document.getElementById(year).selectedIndex].text;                        
                         term = tableName + "-Term2";
                         term = document.getElementById(term).options[document.getElementById(term).selectedIndex].text;
                         gender = tableName + "-Gender2";
                         gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
                     }
 
-                    output.value += term + " " + gender;
                     min = document.getElementById(tableName).rows[2].cells[i].childNodes[0].value;
                     var httpAbove = new XMLHttpRequest();
                     httpAbove.onreadystatechange = function () {
@@ -132,7 +123,7 @@ $(function () {
                             document.getElementById(tableName).rows[3].cells[i].innerHTML =
                                     this.responseText;
                     };
-                    httpAbove.open("POST", "sqldb/marksAbove.php?term=" + term +
+                    httpAbove.open("POST", "sqldb/marksAbove.php?year=" + year + "&term=" + term +
                             "&grade=" + grade + "&subject=" + subject + "&category=" + category +
                             "&gender=" + gender + "&min=" + min + "&section=" + section, false);
 

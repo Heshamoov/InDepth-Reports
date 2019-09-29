@@ -7,8 +7,9 @@ if (!isset($_SESSION['login'])) {
 } else {
     include('Header.php');
     ?>
+
 <head>
-    <title>Statistics based on subject</title>
+    <title>Compare Subjects</title>
 </head>
 
 <body  onload="FillYears(), FillGrades('T1-YR', 'T1-GR'), FillGrades('T2-YR', 'T2-GR'),
@@ -16,14 +17,14 @@ if (!isset($_SESSION['login'])) {
                FillSubjects('T1-YR', 'T1-GR', 'T1-SB'), FillSubjects('T2-YR', 'T2-GR', 'T2-SB'),
                fillTerms1(), fillTerms2()">
     
-       <script type="text/javascript" src="js/FillYears.js"></script>
-       <script type="text/javascript" src="js/FillGrades.js"></script>
-       <script type="text/javascript" src="js/FillSections.js"></script>
-       <script type="text/javascript" src="js/FillSubjects.js"></script>
-       
-       <script src="js/jspdf.debug.js"></script>
-       <script src="js/jspdf.plugin.autotable.js"></script>
-       <script type="text/javascript" src="js/PrintTable.js"></script>
+    <script type="text/javascript" src="js/FillYears.js"></script>
+    <script type="text/javascript" src="js/FillGrades.js"></script>
+    <script type="text/javascript" src="js/FillSections.js"></script>
+    <script type="text/javascript" src="js/FillSubjects.js"></script>
+   
+    <script src="js/jspdf.debug.js"></script>
+    <script src="js/jspdf.plugin.autotable.js"></script>
+    <script type="text/javascript" src="js/PrintTable.js"></script>
     <script>
         $(window).load(function () {
             // Animate loader off screen
@@ -39,28 +40,23 @@ if (!isset($_SESSION['login'])) {
         $('#search, #charttype').click(function () {
             var indexYear, indexGrade, indexSubject, indexSection, indexCategory;
 
-        for (var index = 1; index < 3; index++) {
+            for (var index = 1; index < 3; index++) {
                 indexYear     = "T" + index + "-YR";
                 indexGrade    = "T" + index + "-GR";
                 indexSubject  = "T" + index + "-SB";
                 indexSection  = "T" + index + "-SC";
                 indexCategory = "T" + index + "-CA";
 
-                var years = document.getElementById(indexYear).options[document.getElementById(indexYear).selectedIndex].text;
+                var year = document.getElementById(indexYear).options[document.getElementById(indexYear).selectedIndex].text;
                 var grade = document.getElementById(indexGrade).options[document.getElementById(indexGrade).selectedIndex].text;
-                var category = $("#" + indexCategory + " option:selected");
-                var subject = $("#" + indexSubject + " option:selected");
                 var section = $("#" + indexSection + " option:selected");
+                var subject = $("#" + indexSubject + " option:selected");
+                var category = $("#" + indexCategory + " option:selected");
 
                 //Section            
-                var message = "";
-                var sectionHeader = "";
+                var message = sectionHeader = "";
                 section.each(function () {
                     var currentSection = $(this).text();
-                    if (currentSection.indexOf("(") !== -1) {
-                        var bracketIndex = currentSection.indexOf("(");
-                        currentSection = currentSection.slice(0, bracketIndex);
-                    }
                     if (message === "") {
                         if (section !== "")
                             message = " AND (batches.name = '" + currentSection + "' ";
@@ -68,7 +64,7 @@ if (!isset($_SESSION['login'])) {
                             message = " (batches.name = '" + currentSection + "'";
                         sectionHeader = " - " + currentSection;
                     } else {
-                        message += " OR batches.name = '" + currentSection + "'";  //  grade like 'GR1' OR grade like 'GR10';
+                        message += " OR batches.name = '" + currentSection + "'";
                         sectionHeader += " , " + currentSection;
                     }
                 });
@@ -79,8 +75,7 @@ if (!isset($_SESSION['login'])) {
 
 
                 //Subject              
-                var message = "";
-                var subjectHeader = "";
+                var message = subjectHeader = "";
                 subject.each(function () {
                     var currentSubject = "";
                     var firstSpace = true;
@@ -90,7 +85,7 @@ if (!isset($_SESSION['login'])) {
                     for (var i = 0; i < subject.length; i++) {
                         if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9'))
                             currentSubject += subject[i];
-                        if (subject[i] === ' ' && firstSpace && i > 3) {
+                        if (subject[i] === '' && firstSpace && i > 3) {
                             currentSubject += subject[i];
                             firstSpace = false;
                         }
@@ -137,25 +132,25 @@ if (!isset($_SESSION['login'])) {
                 else
                     category = "";
 
-        // Between values Subject wise
-        var min = 0, tableName, term, gender;
-        t = index;
-        {
-            tableName = 'T' + t;
-            for (var i = 0; i < 4; i++) {
-                if (i < 2) {
-                    term = tableName + "-Term1";
-                    term = document.getElementById(term).options[document.getElementById(term).selectedIndex].text;
-                    gender = tableName + "-Gender1";
-                    gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
-                } else {
-                    term = tableName + "-Term2";
-                    term = document.getElementById(term).options[document.getElementById(term).selectedIndex].text;
-                    gender = tableName + "-Gender2";
-                    gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
-                }
+                // Between values Subject wise
+                var min = 0, tableName, term, gender;
+                t = index;
+                {
+                tableName = 'T' + t;
+                for (var i = 0; i < 4; i++) {
+                    if (i < 2) {
+                        term = tableName + "-Term1";
+                        term = document.getElementById(term).options[document.getElementById(term).selectedIndex].text;
+                        gender = tableName + "-Gender1";
+                        gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
+                    } else {
+                        term = tableName + "-Term2";
+                        term = document.getElementById(term).options[document.getElementById(term).selectedIndex].text;
+                        gender = tableName + "-Gender2";
+                        gender = document.getElementById(gender).options[document.getElementById(gender).selectedIndex].text;
+                    }
 
-//                document.getElementById("chart2").innerHTML += term + gender;
+//              document.getElementById("chart2").innerHTML += term + gender;
                 min = document.getElementById(tableName).rows[2].cells[i].childNodes[0].value;
                 
                 var httpAbove = new XMLHttpRequest();
@@ -163,7 +158,7 @@ if (!isset($_SESSION['login'])) {
                     if (this.readyState === 4)
                         document.getElementById(tableName).rows[3].cells[i].innerHTML = this.responseText;
                 };
-                httpAbove.open("POST", "sqldb/marksAbove.php?term=" + term +
+                httpAbove.open("POST", "sqldb/marksAbove.php?year=" + year + "&term=" + term +
                         "&grade=" + grade + "&subject=" + subject + "&category=" + category +
                         "&gender=" + gender + "&min=" + min + "&section=" + section, false);
 
@@ -202,26 +197,16 @@ function drawMaterial() {
 //        tableName1.rows[0].cells[4].innerHTML = category;
 
         var gender1 = document.getElementById(tableName + '-Gender1').options[document.getElementById(tableName + '-Gender1').selectedIndex].text;
-
         if (gender1 === 'Both')
-        {
             tableName1.rows[1].cells[1].innerHTML = term1 + 'Boys & Girls';
-        } else
-        {
+         else
             tableName1.rows[1].cells[1].innerHTML = term1 + gender1;
-
-        }
 
         var gender2 = document.getElementById(tableName + '-Gender2').options[document.getElementById(tableName + '-Gender2').selectedIndex].text;
         if (gender2 === 'Both')
-        {
             tableName1.rows[1].cells[5].innerHTML = term1 + 'Boys & Girls';
-        } else
-        {
+        else
             tableName1.rows[1].cells[5].innerHTML = term2 + gender2;
-
-        }
-
 
         value1 = document.getElementById(tableName).rows[2].cells[0].childNodes[0].value;
         tableName1.rows[2].cells[0].innerHTML = 'Above ' + value1 + ' % in' + term1;
@@ -295,19 +280,10 @@ function drawMaterial() {
             var materialChart = new google.visualization.LineChart(document.getElementById(chartName));
             materialChart.draw(view, options);
         }
-
-
         imgData[i] = materialChart.getImageURI();
-
-
-
     }
-}
-;
-
-
-}
-);
+};
+    });
 });
 </script>
 
@@ -480,7 +456,7 @@ function drawMaterial() {
         Result();
     };
     document.getElementById("T2-YR").onchange = function () {
-        FillGrades('T2-YR', 'T2-GR')
+        FillGrades('T2-YR', 'T2-GR');
         FillSections('T2-YR', 'T2-GR', 'T2-SC');
         FillSubjects('T2-YR', 'T2-GR', 'T2-SB');
         fillTerms2();
@@ -518,6 +494,7 @@ function drawMaterial() {
         Result();
     };
     
+    document.getElementById('T1-SB').onchange = function () {Result();};
     document.getElementById('T1-Gender1').onchange = function () {Result();};
     document.getElementById('T1-Gender2').onchange = function () {Result();};
     document.getElementById('T2-Gender1').onchange = function () {Result();};
