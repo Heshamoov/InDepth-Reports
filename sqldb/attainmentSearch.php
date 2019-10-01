@@ -92,7 +92,7 @@ if ($result->num_rows > 0) {
             ) 
         {
             echo "<td>" . $row[">75"] . "</td>";
-            echo "<td>" . $row[">75%"] . "%</td><td style= 'background:green; color:white'>Outstanding</td>";
+            echo "<td>" . $row[">75%"] . "%</td><td style= 'background:#00cc00; color:white'>Outstanding</td>";
             echo "<td>" . $row["Subject"] . "</td>";
             echo "<tr><td colspan=8 style=text-align:center;>75% of Students scored Greater than 75% - US Curriculum</td></tr>";
         }
@@ -109,7 +109,7 @@ if ($result->num_rows > 0) {
             )
         {
             echo "<td>" . $row[">75"] . "</td>";
-            echo "<td>" . $row[">75%"] . "%</td><td style= 'background:green; color:white'>Very Good</td>";
+            echo "<td>" . $row[">75%"] . "%</td><td style= 'background:#66cc00; color:white'>Very Good</td>";
             echo "<td>" . $row["Subject"] . "</td></tr>";
             echo "<tr><td colspan=8 style=text-align:center;>60% of Students scored Greater than 75% - US Curriculum</td></tr>";
         }
@@ -125,7 +125,7 @@ if ($result->num_rows > 0) {
             ) 
         {
             echo "<td>" . $row[">65"] . "</td>";
-            echo "<td>" . $row[">65%"] . "%</td><td style= 'background:green; color:white'>Good</td>";
+            echo "<td>" . $row[">65%"] . "%</td><td style= 'background:#99cc00; color:white'>Good</td>";
             echo "<td>" . $row["Subject"] . "</td></tr>";
             echo "<tr><td colspan=8 style=text-align:center;> Greater than or Equal to 50% of Students scored Greater than 65% - US Curriculum</td></tr>";
         }
@@ -141,9 +141,9 @@ if ($result->num_rows > 0) {
             ) 
         {
             echo "<td>" . $row["=65"] . "</td>";
-            echo "<td>" . $row["=65%"] . "%</td><td style= 'background:green; color:white'>Acceptible</td>";
+            echo "<td>" . $row["=65%"] . "%</td><td style= 'background:#cccc00; color:white'>Acceptible</td>";
             echo "<td>" . $row["Subject"] . "</td></tr>";
-            echo "<tr><td colspan=8 style=text-align:center;> Greater than or Equal to 75% of Students scored Equal to 65% - US Curriculum</td></tr>";            
+            echo "<tr><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 65% - US Curriculum</td></tr>";            
         }
         elseif ($row[">70%"] >= 75 and 
                 (
@@ -155,7 +155,7 @@ if ($result->num_rows > 0) {
             )
         {
             echo "<td>" . $row[">70"] . "</td>";
-            echo "<td>" . $row[">70%"] . "%</td><td style= 'background:green; color:white'>Outstanding</td>";
+            echo "<td>" . $row[">70%"] . "%</td><td style= 'background: #00cc00; color:white'>Outstanding</td>";
             echo "<td>" . $row["Subject"] . "</td></tr>";
             echo "<tr><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Greater than 70% - UAE Curriculum</td></tr>";
         }
@@ -169,7 +169,7 @@ if ($result->num_rows > 0) {
             )
         {
             echo "<td>" . $row[">=60"] . "</td>";
-            echo "<td>" . $row["=70%"] . "%</td><td style= 'background:green; color:white'>Very Good</td>";
+            echo "<td>" . $row["=70%"] . "%</td><td style= 'background:#66cc00; color:white'>Very Good</td>";
             echo "<td>" . $row["Subject"] . "</td></tr>";
             echo "<tr><td colspan=8 style=text-align:center;>Greater than or Equal to 60% of Students scored Greater than 70% - UAE Curriculum</td></tr>";
         }
@@ -183,7 +183,7 @@ if ($result->num_rows > 0) {
             )
         {
             echo "<td>" . $row[">50"] . "</td>";
-            echo "<td>" . $row["=50%"] . "%</td><td style= 'background:green; color:white'>Good</td>";
+            echo "<td>" . $row["=50%"] . "%</td><td style= 'background:#99cc00; color:white'>Good</td>";
             echo "<td>" . $row["Subject"] . "</td></tr>";
             echo "<tr><td colspan=8 style=text-align:center;>Greater than or Equal to 50% of Students scored Greater than 50% - UAE Curriculum</td></tr>";
         }
@@ -197,7 +197,7 @@ if ($result->num_rows > 0) {
             )
         {
             echo "<td>" . $row["=60"] . "</td>";
-            echo "<td>" . $row["=60%"] . "%</td><td style= 'background:green; color:white'>Acceptible</td>";
+            echo "<td>" . $row["=60%"] . "%</td><td style= 'background:#cccc00; color:white'>Acceptible</td>";
             echo "<td>" . $row["Subject"] . "</td></tr>";
             echo "<tr><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 60% - UAE Curriculum</td></tr>";
         }
