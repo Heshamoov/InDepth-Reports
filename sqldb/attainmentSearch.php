@@ -81,7 +81,13 @@ $sql =   "SELECT academic_years.name 'Year', exam_groups.name 'Exam', CONCAT(cou
                         else
                             $sql = $sql . "subjects.name";
 
-    $sql = $sql ."ORDER BY `>75%`  DESC";
+                    if ($terms !== "")
+                        if ($years !== "" or $grades !== "" or $batches !== "" or $subjects !== "")
+                            $sql = $sql . ",exam_groups.name ";
+                        else
+                            $sql = $sql . "exam_groups.name";    
+
+    $sql = $sql ."ORDER BY `>75%` DESC, `>70%` DESC, `>65%` DESC, `=65%` DESC, `=60%` DESC, `>50%` DESC, `=50%` DESC";
 
 // echo $sql;
 $result = $conn->query($sql);
@@ -112,6 +118,7 @@ if ($result->num_rows > 0) {
                 or  (strpos($row["Subject"], 'Biology') !== false)
                 or  (strpos($row["Subject"], 'Business') !== false)
                 or  (strpos($row["Subject"], 'Chemistry') !== false)
+                or  (strpos($row["Subject"], 'History') !== false)
                 )
             ) 
         {
@@ -138,6 +145,7 @@ if ($result->num_rows > 0) {
                 or  (strpos($row["Subject"], 'Biology') !== false)
                 or  (strpos($row["Subject"], 'Business') !== false)
                 or  (strpos($row["Subject"], 'Chemistry') !== false)
+                or  (strpos($row["Subject"], 'History') !== false)
                 )
             )
         {
@@ -148,7 +156,7 @@ if ($result->num_rows > 0) {
                     . "<td>" . $row["Total"] . "</td>"
                     . "<td>" . $row[">75"]   . " above 75</td>"
                     . "<td>" . $row[">75%"]  . "%</td>"
-                    . "<td class='w3-container w3-light-green'>Very Good</td>"
+                    . "<td class='w3-container w3-light-green w3-text-white'>Very Good</td>"
                     . "<td>" . $row["Subject"] . "</td>"
                 . "</tr>"
                 . "<tr></tr>"
@@ -168,6 +176,7 @@ if ($result->num_rows > 0) {
                 or  (strpos($row["Subject"], 'Biology') !== false)
                 or  (strpos($row["Subject"], 'Business') !== false)
                 or  (strpos($row["Subject"], 'Chemistry') !== false)
+                or  (strpos($row["Subject"], 'History') !== false)
                 )
             ) 
         {
@@ -193,6 +202,7 @@ if ($result->num_rows > 0) {
                 or  (strpos($row["Subject"], 'Biology') !== false)
                 or  (strpos($row["Subject"], 'Business') !== false)
                 or  (strpos($row["Subject"], 'Chemistry') !== false)
+                or  (strpos($row["Subject"], 'History') !== false)
                 )
             ) 
         {
@@ -239,10 +249,10 @@ if ($result->num_rows > 0) {
             . "<td>" . $row["Exam"]  . "</td>"
             . "<td>" . $row["Grade"] . "</td>"
             . "<td>" . $row["Total"] . "</td>";
-            echo "<td>" . $row[">=60"] . " above 70</td>";
-            echo "<td>" . $row["=70%"] . "%</td><td class='w3-container w3-light-green'>Very Good</td>";
+            echo "<td>" . $row[">70"] . " above 70</td>";
+            echo "<td>" . $row[">70%"] . "%</td><td class='w3-container w3-light-green w3-text-white'>Very Good</td>";
             echo "<td>" . $row["Subject"] . "</td></tr>";
-            echo "<tr></tr><tr class='w3-hover-light-green'><td colspan=8 style=text-align:center; class='w3-container w3-light-green'>"
+            echo "<tr></tr><tr class='w3-hover-light-green'><td colspan=8 style=text-align:center;>"
                 . "Greater than or Equal to 60% of Students scored Greater than 70% - UAE Curriculum</td></tr>";
         }
         elseif ($row[">50%"] >= 50 and 

@@ -239,10 +239,10 @@ if (!isset($_SESSION['login'])) {
                             message = "  AND (subjects.name  LIKE '" + currentSubject + "%' ";  //Add '%' to the end of the subject name: WHERE subject LIKE 'Math%' 
                         else
                             message = "  (subjects.name LIKE '" + currentSubject + "%' ";
-                        subjectHeader = currentSubject;
+                        subjectHeader = currentSubject.replace(/%/g," ");
                     } else {
                         message += "OR subjects.name  LIKE '" + currentSubject + "%' ";
-                        subjectHeader += " , " + currentSubject;
+                        subjectHeader += " , " + currentSubject.replace(/%/g," ");
                     }
 
                     tableNumber++;
