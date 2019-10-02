@@ -224,13 +224,15 @@ if (!isset($_SESSION['login'])) {
                     var subject = $(this).text();
 
                     for (var i = 0; i < subject.length; i++) {       // Extracting English letters and numbers and remove Arabic letters
-                        if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9'))
+                        if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9') || (subject[i] === ' '))
                             currentSubject += subject[i];
-                        if (subject[i] === ' ' && firstSpace && i > 3) {
-                            currentSubject += subject[i];
-                            firstSpace = false;
-                        }
+                        // if (subject[i] === ' ' && firstSpace && i > 3) {
+                        //     currentSubject += subject[i];
+                        //     firstSpace = false;
+                        // }
                     }
+
+                    currentSubject = currentSubject.replace(/ /g,"%");
 
                     if (message === "") {
                         if (selected_terms !== "" || currentGradeSQL !== "" || selected_batches !== "" || selected_gender !== "" || selected_years !== "" || selected_category !== "")
@@ -781,7 +783,9 @@ if (!isset($_SESSION['login'])) {
                 <!--Downloading table  11:52 AM-->   
                 <br>
 
-                <table class="w3-table-all w3-card-4 w3-striped w3-hoverable" id="out" ></table>
+                <!-- <table class="w3-table-all w3-card-4 w3-striped w3-hoverable" id="out" ></table> -->
+                <table class="w3-table-all" id="out" ></table>
+
                 <table id="TT1" hidden>
                     <thead>
                         <tr>
