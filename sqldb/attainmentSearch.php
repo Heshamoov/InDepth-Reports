@@ -148,7 +148,7 @@ if ($result->num_rows > 0) {
             else
                 echo "<td>ALL</td>";
 
-            echo "<tr ></tr><tr class='w3-hover-green w3-border-0'>"
+            echo "<tr ></tr><tr class='w3-hover-green w3-border-bottom'>"
                 ."<td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Greater than 75% - US Curriculum</td><</tr>";
             // echo "<tr class='w3-blue-gray'><td colspan=8></td></tr>";
             
@@ -200,7 +200,7 @@ if ($result->num_rows > 0) {
                 echo "<td>ALL</td>";                    
 
                 echo "</tr><tr></tr>"
-                    ."<tr class='w3-hover-light-green w3-border-0'>"
+                    ."<tr class='w3-hover-light-green w3-border-bottom'>"
                         . "<td colspan=8 style=text-align:center;>"
                                 ." Greater than or Equal to 60% of Students scored Greater than 75% - US Curriculum"
                         . "</td>"
@@ -248,7 +248,7 @@ if ($result->num_rows > 0) {
             else
                 echo "<td>ALL</td>";                    
 
-            echo "<tr></tr><tr class='w3-hover-lime' w3-border-0><td colspan=8 style=text-align:center;> Greater than or Equal to 50% of Students scored Greater than 65% - US Curriculum</td></tr>";
+            echo "<tr></tr><tr class='w3-hover-lime' w3-border-bottom><td colspan=8 style=text-align:center;> Greater than or Equal to 50% of Students scored Greater than 65% - US Curriculum</td></tr>";
         }
         elseif ($row["=65%"] >= 75 and 
                 (
@@ -292,7 +292,7 @@ if ($result->num_rows > 0) {
             else
                 echo "<td>ALL</td>";                    
 
-            echo "<tr></tr><tr class='w3-hover-khaki' w3-border-0><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 65% - US Curriculum</td></tr>";            
+            echo "<tr></tr><tr class='w3-hover-khaki' w3-border-bottom><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 65% - US Curriculum</td></tr>";            
         }
         elseif ($row[">70%"] >= 75 and 
                 (
@@ -331,7 +331,8 @@ if ($result->num_rows > 0) {
             else
                 echo "<td>ALL</td>";                    
 
-            echo "<tr></tr><tr class='w3-hover-green' w3-border-0><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Greater than 70% - UAE Curriculum</td></tr>";
+            echo "<tr></tr><tr class='w3-hover-green' w3-border-bottom>"
+                . "<td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Greater than 70% - UAE Curriculum</td></tr>";
         }
         elseif ($row[">70%"] >= 60 and 
                 (
@@ -371,7 +372,7 @@ if ($result->num_rows > 0) {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
-            echo "<tr></tr><tr class='w3-hover-light-green w3-border-0'><td colspan=8 style=text-align:center;>"
+            echo "<tr></tr><tr class='w3-hover-light-green w3-border-bottom'><td colspan=8 style=text-align:center;>"
                 . "Greater than or Equal to 60% of Students scored Greater than 70% - UAE Curriculum</td></tr>";
         }
         elseif ($row[">50%"] >= 50 and 
@@ -412,7 +413,7 @@ if ($result->num_rows > 0) {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
-            echo "<tr></tr><tr class='w3-hover-lime w3-border-0'><td colspan=8 style=text-align:center;>Greater than or Equal to 50% of Students scored Greater than 50% - UAE Curriculum</td></tr>";
+            echo "<tr></tr><tr class='w3-hover-lime w3-border-bottom'><td colspan=8 style=text-align:center;>Greater than or Equal to 50% of Students scored Greater than 50% - UAE Curriculum</td></tr>";
         }
         elseif ($row["=60%"] >= 75 and 
                 (
@@ -452,7 +453,7 @@ if ($result->num_rows > 0) {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
-            echo "<tr></tr><tr class='w3-hover-khaki w3-border-0'><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 60% - UAE Curriculum</td></tr>";
+            echo "<tr></tr><tr class='w3-hover-khaki w3-border-bottom'><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 60% - UAE Curriculum</td></tr>";
         }
         elseif ($row["=50%"] >= 75 and 
                 (
@@ -492,7 +493,7 @@ if ($result->num_rows > 0) {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
-            echo "<tr></tr><tr class='w3-hover-khaki' w3-border-0><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 50% - UAE Curriculum</td></tr>";
+            echo "<tr></tr><tr class='w3-hover-khaki' w3-border-bottom><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 50% - UAE Curriculum</td></tr>";
         }
         else
         {
@@ -526,7 +527,8 @@ if ($result->num_rows > 0) {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
-            echo "<tr></tr><tr class='w3-hover-orange w3-border-0'><td colspan=8 style=text-align:center;>Less than 75% of students scored Greater than or Equal to 65%</td></tr>";
+            echo "<tr></tr><tr class='w3-hover-orange w3-border-bottom'>"
+                 . "<td colspan=8 style=text-align:center;>Less than 75% of students scored Greater than or Equal to 65%</td></tr>";
         }
     }
 

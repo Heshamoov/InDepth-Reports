@@ -498,11 +498,11 @@ if (!isset($_SESSION['login'])) {
                             </button>
                         </td>
                         <td>
-                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM"
-                                    onclick="printJS({printable: 'outheader', type: 'html', base64: true, showModal: true,
-                                                documentTitle: 'Students List', targetStyles: '*', honorColor: true, repeatTableHeader: true,
-                                                scanstyles: true});" title="Export Students List as PDF">
-                                <span class="material-icons">save_alt</span>
+<button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM"
+onclick="printJS({printable: 'outheader', type: 'html', base64: true, showModal: true,
+documentTitle: 'Students List', targetStyles: '*', honorColor: true, repeatTableHeader: true,
+scanstyles: true});" title="Export Students List as PDF">
+<span class="material-icons">save_alt</span>
                             </button>
                         </td>
                     </tr>

@@ -7,8 +7,7 @@ if (!isset($_SESSION['login'])) {
     include('Header.php');
     ?>
 
-
-    <title>attainment</title>
+    <title>Attainment Analysis</title>
     
     </head>
 
@@ -521,7 +520,11 @@ if (!isset($_SESSION['login'])) {
                         </td>
 
                         <td>
-                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" onclick="printJS({printable: 'out', type: 'html', base64: true, showModal: true, documentTitle: 'Attainment Analysis', targetStyles: '*'})" title="Export Statistics as PDF">                                <span class="material-icons">save_alt</span></button>
+<button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM"
+onclick="printJS({printable: 'out', type: 'html', base64: true, showModal: true,
+documentTitle: 'Attainment Analysis', targetStyles: '*', honorColor: true, repeatTableHeader: true,
+scanstyles: true})" title="Export Statistics as PDF">
+<span class="material-icons">save_alt</span></button>
                         </td>
 
                     </tr>

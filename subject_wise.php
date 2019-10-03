@@ -239,10 +239,10 @@ function drawMaterial() {
         data.addColumn({type: 'string', role: 'style'});
 
         data.addRows([
-            [gender1 + "-" + value1.toString() + '% and above in ' + term1, Number(result1), ' #006666'],
-            [gender1 + "-" + value2.toString() + '% and above in ' + term1, Number(result2), '#800000'],
-            [gender2 + "-" + value3.toString() + '% and above in ' + term2, Number(result3), ' #002f5a'],
-            [gender2 + "-" + value4.toString() + '% and above in ' + term2, Number(result4), '#d81c01']
+            [gender1 + "-" + value1.toString() + '% and above in ' + term1, Number(result1), '#0000e6'],
+            [gender1 + "-" + value2.toString() + '% and above in ' + term1, Number(result2), '#0000e6'],
+            [gender2 + "-" + value3.toString() + '% and above in ' + term2, Number(result3), '#00b300'],
+            [gender2 + "-" + value4.toString() + '% and above in ' + term2, Number(result4), ' #00b300']
         ]);
         var options = {
             title: '(' + term1 + " " + gender1 + ') VS (' + term2 + " " + gender2 + ") ",
@@ -267,7 +267,6 @@ function drawMaterial() {
             materialChart.draw(view, options);
         }
         if (type === "pie") {
-
             var materialChart = new google.visualization.PieChart(document.getElementById(chartName));
             materialChart.draw(data, options);
         }
