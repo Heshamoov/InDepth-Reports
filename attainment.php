@@ -782,9 +782,7 @@ if (!isset($_SESSION['login'])) {
             <div class="w3-col m8 l7 w3-card-4 w3-mobile" id="rightdiv" style = "height:100vh; overflow: scroll; padding-top: 10px; padding-left: 10px; padding-right: 10px"> 
                 <!--Downloading table  11:52 AM-->   
                 <br>
-
-                <!-- <table class="w3-table-all w3-card-4 w3-striped w3-hoverable" id="out" ></table> -->
-                <table class="w3-table-all" id="out" ></table>
+                <table id="out"  class='w3-table-all'></table>
 
                 <table id="TT1" hidden>
                     <thead>
