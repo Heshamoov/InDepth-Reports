@@ -121,18 +121,18 @@ if ($result->num_rows > 0) {
                 )
             ) 
         {
-            echo "<tr class='w3-hover-green w3-border-0'>"
-                . "<td>" . $row["Year"]  . "</td>";
-            
-            if ($terms !== "")
+/*Year*/    echo "<tr class='w3-hover-light-green w3-border-0'>"
+                    . "<td>" . $row["Year"]  . "</td>";
+
+/*Term*/    if ($terms !== "")
                 echo "<td>" . $row["Exam"]  . "</td>";
             else
                 echo "<td>ALL</td>";
 
-            if ($grades === "")
+/*Grade*/   if ($grades === "")
                 echo "<td>ALL</td>";
             else
-                if ($batches !== "")
+/*Section*/     if ($batches !== "")
                     echo "<td>" . $row["Grade"]  . "</td>";
                 else {
                     $arr = explode('-',trim($row["Grade"]));
@@ -143,15 +143,10 @@ if ($result->num_rows > 0) {
             echo "<td>" . $row[">75"] . " above 75</td>";
             echo "<td>" . $row[">75%"] . "%</td><td class='w3-container w3-green'>Outstanding</td>";
 
-            if ($grades === "")
-                echo "<td>ALL</td>";
+            if ($subjects !== "")
+                echo "<td>" . $row["Subject"] . "</td>";
             else
-                if ($batches !== "")
-                    echo "<td>" . $row["Grade"]  . "</td>";
-                else {
-                    $arr = explode('-',trim($row["Grade"]));
-                    echo "<td>" . $arr[0] . "</td>";
-                }
+                echo "<td>ALL</td>";
 
             echo "<tr ></tr><tr class='w3-hover-green w3-border-0'>"
                 ."<td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Greater than 75% - US Curriculum</td><</tr>";
@@ -175,29 +170,41 @@ if ($result->num_rows > 0) {
                 )
             )
         {
-            echo "<tr class='w3-hover-light-green w3-border-0'>"
+
+/*Year*/    echo "<tr class='w3-hover-light-green w3-border-0'>"
                     . "<td>" . $row["Year"]  . "</td>";
 
-                    if ($terms !== "")
+/*Term*/    if ($terms !== "")
                 echo "<td>" . $row["Exam"]  . "</td>";
             else
                 echo "<td>ALL</td>";
-                    if ($batches !== "")
-                echo "<td>" . $row["Grade"]  . "</td>";
-            else {
+
+/*Grade*/   if ($grades === "")
+                echo "<td>ALL</td>";
+            else
+/*Section*/     if ($batches !== "")
+                    echo "<td>" . $row["Grade"]  . "</td>";
+                else {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
-                    echo "<td>" . $row["Total"] . "</td>"
-                    . "<td>" . $row[">75"]   . " above 75</td>"
-                    . "<td>" . $row[">75%"]  . "%</td>"
-                    . "<td class='w3-container w3-light-green w3-text-white'>Very Good</td>"
-                    . "<td>" . $row["Subject"] . "</td>"
-                . "</tr>"
-                . "<tr></tr>"
-                . "<tr class='w3-hover-light-green w3-border-0'>"
-                    . "<td colspan=8 style=text-align:center;>Greater than or Equal to 60% of Students scored Greater than 75% - US Curriculum</td>"
-                ." </tr>";
+
+/*Total*/   echo "<td>" . $row["Total"] . "</td>"
+                . "<td>" . $row[">75"]   . " above 75</td>"
+                . "<td>" . $row[">75%"]  . "%</td>"
+                . "<td class='w3-container w3-light-green w3-text-white'>Very Good</td>";
+            
+/*Subject*/ if ($subjects !== "")
+                echo "<td>" . $row["Subject"] . "</td>";
+            else
+                echo "<td>ALL</td>";                    
+
+                echo "</tr><tr></tr>"
+                    ."<tr class='w3-hover-light-green w3-border-0'>"
+                        . "<td colspan=8 style=text-align:center;>"
+                                ." Greater than or Equal to 60% of Students scored Greater than 75% - US Curriculum"
+                        . "</td>"
+                    ."</tr>";
         }
         elseif ($row[">65%"] >= 50 and 
                 (
@@ -215,31 +222,33 @@ if ($result->num_rows > 0) {
                 )
             ) 
         {
-            echo "<tr class='w3-hover-lime w3-border-0'>"
-            . "<td>" . $row["Year"]  . "</td>";
-            if ($terms !== "")
+/*Year*/    echo "<tr class='w3-hover-lime w3-border-0'>"
+                    . "<td>" . $row["Year"]  . "</td>";
+
+/*Term*/    if ($terms !== "")
                 echo "<td>" . $row["Exam"]  . "</td>";
             else
                 echo "<td>ALL</td>";
-            if ($batches !== "")
-                echo "<td>" . $row["Grade"]  . "</td>";
-            else {
+
+/*Grade*/   if ($grades === "")
+                echo "<td>ALL</td>";
+            else
+/*Section*/     if ($batches !== "")
+                    echo "<td>" . $row["Grade"]  . "</td>";
+                else {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
             echo "<td>" . $row["Total"] . "</td>";
             echo "<td>" . $row[">65"] . " above 65</td>";
             echo "<td>" . $row[">65%"] . "%</td><td class='w3-container w3-lime'>Good</td>";
-            if ($grades === "")
-                echo "<td>ALL</td>";
+            
+            if ($subjects !== "")
+                echo "<td>" . $row["Subject"] . "</td>";
             else
-                if ($batches !== "")
-                    echo "<td>" . $row["Grade"]  . "</td>";
-                else {
-                    $arr = explode('-',trim($row["Grade"]));
-                    echo "<td>" . $arr[0] . "</td>";
-                }
-            echo "<tr></tr><tr class='w3-hover-lime'><td colspan=8 style=text-align:center;> Greater than or Equal to 50% of Students scored Greater than 65% - US Curriculum</td></tr>";
+                echo "<td>ALL</td>";                    
+
+            echo "<tr></tr><tr class='w3-hover-lime' w3-border-0><td colspan=8 style=text-align:center;> Greater than or Equal to 50% of Students scored Greater than 65% - US Curriculum</td></tr>";
         }
         elseif ($row["=65%"] >= 75 and 
                 (
@@ -257,32 +266,33 @@ if ($result->num_rows > 0) {
                 )
             ) 
         {
-            echo "<tr>"
-            . "<td>" . $row["Year"]  . "</td>";
-            if ($terms !== "")
+ /*Year*/    echo "<tr class='w3-hover-khaki w3-border-0'>"
+                    . "<td>" . $row["Year"]  . "</td>";
+
+/*Term*/    if ($terms !== "")
                 echo "<td>" . $row["Exam"]  . "</td>";
             else
                 echo "<td>ALL</td>";
 
-            if ($batches !== "")
-                echo "<td>" . $row["Grade"]  . "</td>";
-            else {
-                    $arr = explode('-',trim($row["Grade"]));
-                    echo "<td>" . $arr[0] . "</td>";
-                }
-            echo "<td>" . $row["Total"] . "</td>";
-            echo "<td>" . $row["=65"] . " Equal to 65</td>";
-            echo "<td>" . $row["=65%"] . "%</td><td style= 'background:#cccc00; color:white'>Acceptible</td>";
-            if ($grades === "")
+/*Grade*/   if ($grades === "")
                 echo "<td>ALL</td>";
             else
-                if ($batches !== "")
+/*Section*/     if ($batches !== "")
                     echo "<td>" . $row["Grade"]  . "</td>";
                 else {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
-            echo "<tr></tr><tr w3-border-0><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 65% - US Curriculum</td></tr>";            
+            echo "<td>" . $row["Total"] . "</td>";
+            echo "<td>" . $row["=65"] . " Equal to 65</td>";
+            echo "<td>" . $row["=65%"] . "%</td><td class='w3-container w3-khaki'>Acceptible</td>";
+
+            if ($subjects !== "")
+                echo "<td>" . $row["Subject"] . "</td>";
+            else
+                echo "<td>ALL</td>";                    
+
+            echo "<tr></tr><tr class='w3-hover-khaki' w3-border-0><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 65% - US Curriculum</td></tr>";            
         }
         elseif ($row[">70%"] >= 75 and 
                 (
@@ -293,31 +303,35 @@ if ($result->num_rows > 0) {
                 )
             )
         {
-            echo "<tr class='w3-hover-green w3-border-0'>"
-            . "<td>" . $row["Year"]  . "</td>";
-            if ($terms !== "")
+/*Year*/    echo "<tr class='w3-hover-green w3-border-0'>"
+                    . "<td>" . $row["Year"]  . "</td>";
+
+/*Term*/    if ($terms !== "")
                 echo "<td>" . $row["Exam"]  . "</td>";
             else
                 echo "<td>ALL</td>";
-            if ($batches !== "")
-                echo "<td>" . $row["Grade"]  . "</td>";
-            else {
-                    $arr = explode('-',trim($row["Grade"]));
-                    echo "<td>" . $arr[0] . "</td>";
-                }
-            echo "<td>" . $row["Total"] . "</td>";
-            echo "<td>" . $row[">70"] . " above 70</td>";
-            echo "<td>" . $row[">70%"] . "%</td><td class='w3-container w3-green'>Outstanding</td>";
-            if ($grades === "")
+
+/*Grade*/   if ($grades === "")
                 echo "<td>ALL</td>";
             else
-                if ($batches !== "")
+/*Section*/     if ($batches !== "")
                     echo "<td>" . $row["Grade"]  . "</td>";
                 else {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
-            echo "<tr></tr><tr class='w3-hover-green'><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Greater than 70% - UAE Curriculum</td></tr>";
+
+            echo "<td>" . $row["Total"] . "</td>";
+            echo "<td>" . $row[">70"] . " above 70</td>";
+            echo "<td>" . $row[">70%"] . "%</td><td class='w3-container w3-green'>Outstanding</td>";
+
+
+            if ($subjects !== "")
+                echo "<td>" . $row["Subject"] . "</td>";
+            else
+                echo "<td>ALL</td>";                    
+
+            echo "<tr></tr><tr class='w3-hover-green' w3-border-0><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Greater than 70% - UAE Curriculum</td></tr>";
         }
         elseif ($row[">70%"] >= 60 and 
                 (
@@ -328,15 +342,20 @@ if ($result->num_rows > 0) {
                 )
             )
         {
-            echo "<tr class='w3-hover-light-green'>"
-            . "<td>" . $row["Year"]  . "</td>";
-            if ($terms !== "")
+ /*Year*/    echo "<tr class='w3-hover-light-green w3-border-0'>"
+                    . "<td>" . $row["Year"]  . "</td>";
+
+/*Term*/    if ($terms !== "")
                 echo "<td>" . $row["Exam"]  . "</td>";
             else
                 echo "<td>ALL</td>";
-            if ($batches !== "")
-                echo "<td>" . $row["Grade"]  . "</td>";
-            else {
+
+/*Grade*/   if ($grades === "")
+                echo "<td>ALL</td>";
+            else
+/*Section*/     if ($batches !== "")
+                    echo "<td>" . $row["Grade"]  . "</td>";
+                else {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
@@ -364,15 +383,20 @@ if ($result->num_rows > 0) {
                 )
             )
         {
-            echo "<tr class='w3-hover-lime w3-border-0'>"
-            . "<td>" . $row["Year"]  . "</td>";
-            if ($terms !== "")
+/*Year*/    echo "<tr class='w3-hover-lime w3-border-0'>"
+                    . "<td>" . $row["Year"]  . "</td>";
+
+/*Term*/    if ($terms !== "")
                 echo "<td>" . $row["Exam"]  . "</td>";
             else
                 echo "<td>ALL</td>";
-            if ($batches !== "")
-                echo "<td>" . $row["Grade"]  . "</td>";
-            else {
+
+/*Grade*/   if ($grades === "")
+                echo "<td>ALL</td>";
+            else
+/*Section*/     if ($batches !== "")
+                    echo "<td>" . $row["Grade"]  . "</td>";
+                else {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
@@ -399,15 +423,20 @@ if ($result->num_rows > 0) {
                 )
             )
         {
-            echo "<tr class='w3-hover-khaki w3-border-0'>"
-            . "<td>" . $row["Year"]  . "</td>";
-            if ($terms !== "")
+/*Year*/    echo "<tr class='w3-hover-khaki w3-border-0'>"
+                    . "<td>" . $row["Year"]  . "</td>";
+
+/*Term*/    if ($terms !== "")
                 echo "<td>" . $row["Exam"]  . "</td>";
             else
                 echo "<td>ALL</td>";
-            if ($batches !== "")
-                echo "<td>" . $row["Grade"]  . "</td>";
-            else {
+
+/*Grade*/   if ($grades === "")
+                echo "<td>ALL</td>";
+            else
+/*Section*/     if ($batches !== "")
+                    echo "<td>" . $row["Grade"]  . "</td>";
+                else {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
@@ -434,15 +463,20 @@ if ($result->num_rows > 0) {
                 )
             )
         {
-            echo "<tr class='w3-hover-khaki w3-border-0'>"
-            . "<td>" . $row["Year"]  . "</td>";
-            if ($terms !== "")
+ /*Year*/    echo "<tr class='w3-hover-khaki w3-border-0'>"
+                    . "<td>" . $row["Year"]  . "</td>";
+
+/*Term*/    if ($terms !== "")
                 echo "<td>" . $row["Exam"]  . "</td>";
             else
                 echo "<td>ALL</td>";
-            if ($batches !== "")
-                echo "<td>" . $row["Grade"]  . "</td>";
-            else {
+
+/*Grade*/   if ($grades === "")
+                echo "<td>ALL</td>";
+            else
+/*Section*/     if ($batches !== "")
+                    echo "<td>" . $row["Grade"]  . "</td>";
+                else {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
@@ -458,19 +492,25 @@ if ($result->num_rows > 0) {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }
-            echo "<tr></tr><tr class='w3-hover-khaki'><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 50% - UAE Curriculum</td></tr>";
+            echo "<tr></tr><tr class='w3-hover-khaki' w3-border-0><td colspan=8 style=text-align:center;>Greater than or Equal to 75% of Students scored Equal to 50% - UAE Curriculum</td></tr>";
         }
         else
         {
-            echo "<tr class='w3-hover-orange'>"
-            . "<td>" . $row["Year"]  . "</td>";
-            if ($terms !== "")
+ 
+ /*Year*/    echo "<tr class='w3-hover-orange w3-border-0'>"
+                    . "<td>" . $row["Year"]  . "</td>";
+
+/*Term*/    if ($terms !== "")
                 echo "<td>" . $row["Exam"]  . "</td>";
             else
                 echo "<td>ALL</td>";
-            if ($batches !== "")
-                echo "<td>" . $row["Grade"]  . "</td>";
-            else {
+
+/*Grade*/   if ($grades === "")
+                echo "<td>ALL</td>";
+            else
+/*Section*/     if ($batches !== "")
+                    echo "<td>" . $row["Grade"]  . "</td>";
+                else {
                     $arr = explode('-',trim($row["Grade"]));
                     echo "<td>" . $arr[0] . "</td>";
                 }

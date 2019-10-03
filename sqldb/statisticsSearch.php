@@ -37,7 +37,7 @@ if ($years == "" and $terms == "" and $grades == "" and $batches == "" and $gend
                 . " ORDER BY students.id ASC, exam_groups.name ";
 }
 
-echo $sql;
+// echo $sql;
 $result = $conn->query($sql);
 $rownumber = 1;
 if ($result->num_rows > 0) {
