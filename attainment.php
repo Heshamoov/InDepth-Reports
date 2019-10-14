@@ -21,11 +21,7 @@ if (!isset($_SESSION['login'])) {
         });
     </script>
 
-    <script type="text/javascript">
-        
-
-
-
+    <script type="text/javascript">      
         $(function () {
             $('#academic_year').multiselect({includeSelectAllOption: true});
             $('#term').multiselect({includeSelectAllOption: true});
@@ -1399,7 +1395,7 @@ scanstyles: true})" title="Export Statistics as PDF">
             }
         </script>
 
-        --><script>
+        <script>
             function downloadPopoverStatistics() {
                 var doc = new jsPDF('p', 'pt');
                 var header = function (data) {

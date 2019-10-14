@@ -46,7 +46,7 @@
             }
             .popover {width:100%}
             #popover-content-logout > * {
-            background-color:#ff0000 !important;
+                background-color:#ff0000 !important;
             }
             .overlay {
                 width: 200px;
@@ -55,9 +55,8 @@
                 top: 60px;  /* chartArea top  */
                 left: 180px; /* chartArea left */
             }
-            
- select.selector{
-color:red;
-}
-        </style>
 
+            select.selector{
+                color:red;
+            }
+        </style>
