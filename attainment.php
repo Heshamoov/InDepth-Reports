@@ -213,31 +213,30 @@ if (!isset($_SESSION['login'])) {
                         currentGradeSQL = " (courses.course_name = '" + currentGrade + "') ";
 
                 //Subjects
+                //Subjects
                 selected_subjects.each(function () {
                     var currentSubject = "";
                     var firstSpace = true;
                     var subject = $(this).text();
 
                     for (var i = 0; i < subject.length; i++) {       // Extracting English letters and numbers and remove Arabic letters
-                        if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9') || (subject[i] === ' '))
+                        if ((subject[i] >= 'A' && subject[i] <= 'z') || (subject[i] >= '0' && subject[i] <= '9'))
                             currentSubject += subject[i];
-                        // if (subject[i] === ' ' && firstSpace && i > 3) {
-                        //     currentSubject += subject[i];
-                        //     firstSpace = false;
-                        // }
+                        if (subject[i] === ' ' && firstSpace && i > 3) {
+                            currentSubject += subject[i];
+                            firstSpace = false;
+                        }
                     }
-
-                    currentSubject = currentSubject.replace(/ /g,"%");
 
                     if (message === "") {
                         if (selected_terms !== "" || currentGradeSQL !== "" || selected_batches !== "" || selected_gender !== "" || selected_years !== "" || selected_category !== "")
-                            message = "  AND (subjects.name  LIKE '" + currentSubject + "%' ";  //Add '%' to the end of the subject name: WHERE subject LIKE 'Math%' 
+                            message = "  AND (subjects.name  LIKE '" + currentSubject + "%' ";  //Add '%' to the end of the subject name: WHERE subject LIKE 'Math%'
                         else
                             message = "  (subjects.name LIKE '" + currentSubject + "%' ";
-                        subjectHeader = currentSubject.replace(/%/g," ");
+                        subjectHeader = currentSubject;
                     } else {
                         message += "OR subjects.name  LIKE '" + currentSubject + "%' ";
-                        subjectHeader += " , " + currentSubject.replace(/%/g," ");
+                        subjectHeader += " , " + currentSubject;
                     }
 
                     tableNumber++;
@@ -460,7 +459,95 @@ if (!isset($_SESSION['login'])) {
     </script>
 
     <body>
+    <!-- Modal -->
+    <div class="modal fade" id="printOptions" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Print</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-check">
+                        <table>
+                            <tr> <td>
+                        <input class="form-check-input checkboxPrint" type="checkbox" name="selection[]" value="tCol1" id="tCol1" checked>
+                        <label class="form-check-label" for="tCol1">
+                            Year  &nbsp;&nbsp;&nbsp;&nbsp;
+                        </label>
+                                </td>
 
+                                <td>
+                        <input class="form-check-input checkboxPrint" type="checkbox" name="selection[]" value="tCol2" id="tCol2" checked>
+                        <label class="form-check-label" for="tCol2">
+                            Exam  &nbsp;&nbsp;&nbsp;&nbsp;
+                        </label>
+                                </td>
+
+
+                                <td>
+                                    <input class="form-check-input checkboxPrint" type="checkbox" name="selection[]" value="tCol3" id="tCol3" checked>
+                                    <label class="form-check-label" for="tCol3">
+                                        Grade  &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                </td>
+
+
+                                <td>
+                                    <input class="form-check-input checkboxPrint" type="checkbox" name="selection[]" value="tCol4" id="tCol4" checked>
+                                    <label class="form-check-label" for="tCol4">
+                                        Total  &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                </td>
+                                <td>
+                                    <input class="form-check-input checkboxPrint" type="checkbox" name="selection[]" value="tCol9" id="tCol9" checked>
+                                    <label class="form-check-label" for="tCol9">
+                                        Remarks  &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <input class="form-check-input checkboxPrint" type="checkbox" name="selection[]" value="tCol5" id="tCol5" checked>
+                                    <label class="form-check-label" for="tCol5">
+                                        Count  &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                </td>
+
+
+                                <td>
+                                    <input class="form-check-input checkboxPrint" type="checkbox" name="selection[]" value="tCol6" id="tCol6" checked>
+                                    <label class="form-check-label" for="tCol6">
+                                        Ratio  &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                </td>
+
+                                <td>
+                                    <input class="form-check-input checkboxPrint" type="checkbox" name="selection[]" value="tCol7" id="tCol7" checked>
+                                    <label class="form-check-label" for="tCol7">
+                                        Attainment &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                </td>
+
+                                <td>
+                                    <input class="form-check-input checkboxPrint"  type="checkbox" name="selection[]" value="tCol8" id="tCol8" checked>
+                                    <label class="form-check-label" for="tCol8">
+                                        Subject &nbsp;&nbsp;&nbsp;&nbsp;
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" onclick="return validateFormPrint()" class="btn btn-primary">Print</button>
+                </div>
+            </div>
+        </div>
+    </div>
         <div class="se-pre-con"></div>
         <div id="loader_div" class="loader_div"></div>
 
@@ -485,7 +572,7 @@ if (!isset($_SESSION['login'])) {
                         <td>Section</td>  <td>Subject</td>  <td>Term</td><td>Category</td><td></td><td></td>
                     </tr>
                     <tr><td>
-                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" onclick="downloadStatistics()"><span class="material-icons">save_alt</span></button>
+                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" onclick="downloadStatistics() "><span class="material-icons">save_alt</span></button>
 
 
                         </td>
@@ -493,15 +580,14 @@ if (!isset($_SESSION['login'])) {
                             <select id="academic_year"  onchange="fillGrades()"  multiple="multiple"></select>
                         </td>
                         <td>
-                            <select   id="grade"  onchange="fillBatches()"  multiple="multiple"></select>   
+                            <select   id="grade"  onchange="fillBatches(); fillSubjects()"  multiple="multiple"></select>
                         </td>
                         <td>
 
                             <select  id ="batch"  onchange="fillSubjects()" multiple="multiple"  ></select>  
                         </td>
                         <td>
-                            <div class=""> <select id="subject" size="5" style="width:100px; overflow-y: scroll
-"   onchange="fillTerms()"   multiple="multiple"></select></div>
+                            <div class=""> <select   style="max-width: 300px" id="subject" size="5"  onchange="fillTerms()"   multiple="multiple"></select></div>
                         </td>
                         <td>
                             <select id="term" multiple="multiple"></select>         
@@ -516,11 +602,7 @@ if (!isset($_SESSION['login'])) {
                         </td>
 
                         <td>
-<button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM"
-onclick="printJS({printable: 'out', type: 'html', base64: true, showModal: true,
-documentTitle: 'Attainment Analysis', targetStyles: '*', honorColor: true, repeatTableHeader: true,
-scanstyles: true})" title="Export Statistics as PDF">
-<span class="material-icons">save_alt</span></button>
+<button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" data-toggle="modal" data-target="#printOptions" title="Export Statistics as PDF"> <span class="material-icons">save_alt</span></button>
                         </td>
 
                     </tr>
@@ -781,7 +863,8 @@ scanstyles: true})" title="Export Statistics as PDF">
             <div class="w3-col m8 l7 w3-card-4 w3-mobile" id="rightdiv" style = "height:100vh; overflow: scroll; padding-top: 10px; padding-left: 10px; padding-right: 10px"> 
                 <!--Downloading table  11:52 AM-->   
                 <br>
-                <table id="out"  class='w3-table-all'></table>
+                <div id="outdiv"> <h1 hidden>Al Sanawabar School: Attainment Analysis</h1>
+                <table id="out"  class='w3-table-all'></table></div>
 
                 <table id="TT1" hidden>
                     <thead>
@@ -1071,7 +1154,7 @@ scanstyles: true})" title="Export Statistics as PDF">
 
                 var selected_years = $("#academic_year option:selected");
                 var selected_grades = $("#grade option:selected");
-                var selected_batches = $("#batch option:selected");
+                // var selected_batches = $("#batch option:selected");
 
                 var select = document.getElementById('subject');
 
@@ -1114,23 +1197,23 @@ scanstyles: true})" title="Export Statistics as PDF">
                     selected_grades = "";
 
 
-                var message = "";
-                selected_batches.each(function () {
-                    if (message === "") {
-                        if (selected_years !== "" || selected_grades !== "")
-                            message = " AND (batches.name = '" + $(this).text() + "' ";
-                        else
-                            message = " (batches.name = '" + $(this).text() + "' ";
-                    } else {
-                        message += " OR batches.name = '" + $(this).text() + "' ";
-                    }
-                });
-
-                if (message !== "") {
-
-                    selected_batches = message + ")";
-                } else
-                    selected_batches = "";
+                // var message = "";
+                // selected_batches.each(function () {
+                //     if (message === "") {
+                //         if (selected_years !== "" || selected_grades !== "")
+                //             message = " AND (batches.name = '" + $(this).text() + "' ";
+                //         else
+                //             message = " (batches.name = '" + $(this).text() + "' ";
+                //     } else {
+                //         message += " OR batches.name = '" + $(this).text() + "' ";
+                //     }
+                // });
+                //
+                // if (message !== "") {
+                //
+                //     selected_batches = message + ")";
+                // } else
+                //     selected_batches = "";
 
 
 
@@ -1144,7 +1227,7 @@ scanstyles: true})" title="Export Statistics as PDF">
                     }
                 };
 
-                httpSubjects.open("GET", "sqldb/_subjectsViaBatchGradeYear.php?years=" + selected_years + "&grades=" + selected_grades + "&batches=" + selected_batches, false);
+                httpSubjects.open("GET", "sqldb/_subjectsViaBatchGradeYear.php?years=" + selected_years + "&grades=" + selected_grades , false);
                 httpSubjects.send();
                 $('#subject').multiselect('destroy');
 
@@ -1304,68 +1387,62 @@ scanstyles: true})" title="Export Statistics as PDF">
 
         </script>
 
-        <script>
-            function downloadStatistics() {
-                var doc = new jsPDF('p', 'pt', 'a4');
-                var header = function (data) {
-                    doc.setFontSize(18);
-                    doc.setTextColor(0);
-                    doc.setFont('PTSans');
-                    //                    doc.setFontStyle('bold');
-                    doc.text("Subject Wise Statistics", 225, 50);
-                    doc.line(226, 53, 390, 53);// Header top margin
-                };
-                var table = doc.autoTableHtmlToJson(document.getElementById("StatisticsTitlePDF"));
-
-                doc.autoTable(table.columns, table.data, {beforePageContent: header, theme: 'plain', margin: {top: 70, left: 40, right: 40},
-                    styles: {
-                        fontSize: 12,
-                        font: 'PTSans',
-                        overflow: 'linebreak', columnWidth: 'wrap'
-
-                    }, bodyStyles: {valign: 'top'},
-                    columnStyles: {
-                        0: {
-                            columnWidth: 'auto',
-                            columnHeight: 'auto'
-                        }
-                    }});
-
-                var table = doc.autoTableHtmlToJson(stablePDF);
-                doc.autoTable(table.columns, table.data, {startY: doc.autoTable.previous.finalY + 14, beforePageContent: header, theme: 'grid', margin: {top: 70, left: 40, right: 40}, columnStyles: {
+    <script>
+        function downloadStatistics() {
+            var doc = new jsPDF('p', 'pt', 'a4');
+            var header = function (data) {
+                doc.setFontSize(18);
+                doc.setTextColor(0);
+                doc.setFont('PTSans');
+                //                    doc.setFontStyle('bold');
+                doc.text("Subject Wise Statistics", 225, 50);
+                doc.line(226, 53, 390, 53);// Header top margin
+            };
+            var table = doc.autoTableHtmlToJson(document.getElementById("StatisticsTitlePDF"));
+            doc.autoTable(table.columns, table.data, {beforePageContent: header, theme: 'plain', margin: {top: 70, left: 40, right: 40},
+                styles: {
+                    fontSize: 12,
+                    font: 'PTSans',
+                    overflow: 'linebreak', columnWidth: 'wrap'
+                }, bodyStyles: {valign: 'top'},
+                columnStyles: {
+                    0: {
+                        columnWidth: 'auto',
+                        columnHeight: 'auto'
+                    }
+                }});
+            var table = doc.autoTableHtmlToJson(stablePDF);
+            doc.autoTable(table.columns, table.data, {startY: doc.autoTable.previous.finalY + 14, beforePageContent: header, theme: 'grid', margin: {top: 70, left: 40, right: 40}, columnStyles: {
+                    0: {columnWidth: 205},
+                    1: {columnWidth: 80},
+                    2: {columnWidth: 80},
+                    3: {columnWidth: 80}
+                }, styles: {
+                    fontSize: 12,
+                    font: 'PTSans',
+                }
+            });
+            var tableName = "";
+            var i = 1;
+            $('#subject').multiselect({includeSelectAllOption: true});
+            var selected_subjects = $("#subject option:selected");
+            selected_subjects.each(function () {
+                tableName = 'TT' + i;
+                var table = doc.autoTableHtmlToJson(document.getElementById(tableName));
+                doc.autoTable(table.columns, table.data, {startY: doc.autoTable.previous.finalY + 14, margin: {left: 40, right: 40}, theme: 'grid', columnStyles: {
                         0: {columnWidth: 205},
                         1: {columnWidth: 80},
                         2: {columnWidth: 80},
                         3: {columnWidth: 80}
                     }, styles: {
                         fontSize: 12,
-                        font: 'PTSans',
-
-                    }
-                });
-
-                var tableName = "";
-                var i = 1;
-                $('#subject').multiselect({includeSelectAllOption: true});
-                var selected_subjects = $("#subject option:selected");
-                selected_subjects.each(function () {
-
-                    tableName = 'TT' + i;
-                    var table = doc.autoTableHtmlToJson(document.getElementById(tableName));
-                    doc.autoTable(table.columns, table.data, {startY: doc.autoTable.previous.finalY + 14, margin: {left: 40, right: 40}, theme: 'grid', columnStyles: {
-                            0: {columnWidth: 205},
-                            1: {columnWidth: 80},
-                            2: {columnWidth: 80},
-                            3: {columnWidth: 80}
-                        }, styles: {
-                            fontSize: 12,
-                            font: 'PTSans'
-                        }});
-                    i++;
-                });
-                doc.save("Statistics.pdf");
-            }
-        </script>
+                        font: 'PTSans'
+                    }});
+                i++;
+            });
+            doc.save("Statistics.pdf");
+        }
+    </script>
 
         <script>
             function downloadPopoverStatistics() {
@@ -1459,421 +1536,18 @@ scanstyles: true})" title="Export Statistics as PDF">
                 doc.save("Subject.pdf");
             }
         </script>
-
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popover"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainer').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject1"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject1').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject2"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject2').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject3"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject3').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject4"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject4').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject5"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject5').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject6"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject6').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject7"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject7').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject8"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject8').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject9"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject9').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject10"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject10').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject11"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject11').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-        <script>
-
-            $(document).ready(function () {
-                $('[data-toggle="popoverSubject12"]').popover(
-                        {
-                            trigger: "manual",
-                            html: true,
-                            content: function () {
-
-                                return $('#popcontainerSubject12').html();
-                            }
-                        }).on("mouseenter", function () {
-                    var _this = this;
-                    $(this).popover("show");
-                    $(".popover").on("mouseleave", function () {
-                        $(_this).popover('hide');
-                    });
-                });
-
-            });
-
-        </script>
-
-
-        <div id = "popcontainer" class="popover-content-el hide " style="width:400px; "  >
-
-            <div id="chart_div" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left; cursor: pointer; color: gray">Click to view details</h6>
-            <button class="  w3-hover-teal  w3-round-xxlarge " id="exportS" style="float: right; margin-bottom: 10px; color: teal" onclick="downloadPopoverStatistics()" title="Download Graph">
-                <span class="material-icons">save_alt</span></button> 
-
-
-        </div>
-
-        <div id = "popcontainerSubject1" class="popover-content-el hide  " style="width:400px; "  >
-            <div id="chart1" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left;cursor: pointer; color: gray">Click to view details</h6>
-            <button class="  w3-hover-teal  w3-round-xxlarge "  style="float: right; margin-bottom: 10px; color: teal" onclick="downloadPopoverSubjects(1)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-
-        <div id = "popcontainerSubject2" class="popover-content-el hide " style="width:400px; "  >
-            <div id="chart2" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left;cursor: pointer; color: gray">Click to view details</h6>
-            <button class="  w3-hover-teal  w3-round-xxlarge "  style="float: right; margin-bottom: 10px; color: teal" onclick="downloadPopoverSubjects(2)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-
-        <div id = "popcontainerSubject3" class="popover-content-el hide " style="width:400px; "  >
-            <div id="chart3" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left;cursor: pointer; color: gray">Click to view details</h6>
-            <button class=" w3-hover-teal w3-round-xxlarge "  style="float: right; color: teal; margin-bottom: 10px" onclick="downloadPopoverSubjects(3)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-        <div id = "popcontainerSubject4" class="popover-content-el hide " style="width:400px; "  >
-            <div id="chart4" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left; cursor: pointer; color: gray">Click to view details</h6>
-            <button class="w3-hover-teal w3-round-xxlarge"  style="float: right;color : teal; margin-bottom: 10px" onclick="downloadPopoverSubjects(4)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-        <div id = "popcontainerSubject5" class="popover-content-el hide  " style="width:400px; "  >
-            <div id="chart5" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left;cursor: pointer; color: gray">Click to view details</h6>
-            <button class="  w3-hover-teal w3-round-xxlarge "  style="float: right; margin-bottom: 10px; color :teal" onclick="downloadPopoverSubjects(5)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-        <div id = "popcontainerSubject6" class="popover-content-el hide " style="width:400px; "  >
-            <div id="chart6" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left;cursor: pointer; color: gray">Click to view details</h6>
-            <button class="w3-hover-teal  w3-round-xxlarge "  style="float: right;color :teal; margin-bottom: 10px" onclick="downloadPopoverSubjects(6)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-        <div id = "popcontainerSubject7" class="popover-content-el hide " style="width:400px; "  >
-            <div id="chart7" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left;cursor: pointer; color: gray">Click to view details</h6>
-            <button class="  w3-hover-teal  w3-round-xxlarge "  style="float: right; margin-bottom: 10px; color : teal" onclick="downloadPopoverSubjects(7)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-        <div id = "popcontainerSubject8" class="popover-content-el hide " style="width:400px; "  >
-            <div id="chart8" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left;cursor: pointer; color: gray">Click to view details</h6>
-            <button class=" w3-hover-teal  w3-round-xxlarge "  style="float: right; margin-bottom: 10px; color : teal" onclick="downloadPopoverSubjects(8)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-        <div id = "popcontainerSubject9" class="popover-content-el hide " style="width:400px; "  >
-            <div id="chart9" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left;cursor: pointer; color: gray">Click to view details</h6>
-            <button class="  w3-hover-teal w3-round-xxlarge "  style="float: right; margin-bottom: 10px; color:teal" onclick="downloadPopoverSubjects(9)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-        <div id = "popcontainerSubject10" class="popover-content-el hide " style="width:400px; "  >
-            <div id="chart10" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left;cursor: por-blue-grayinter; color: gray">Click to view details</h6>
-            <button class="  w3-hover-teal w3-round-xxlarge "  style="float: right; color:teal; margin-bottom: 10px" onclick="downloadPopoverSubjects(10)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-        <div id = "popcontainerSubject11" class="popover-content-el hide " style="width:400px; "  >
-            <div id="chart11" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left;cursor: pointer; color: gray">Click to view details</h6>
-            <button class="  w3-hover-teal w3-round-xxlarge "  style="float: right; margin-bottom: 10px; color : teal" onclick="downloadPopoverSubjects(11)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-        <div id = "popcontainerSubject12" class="popover-content-el hide " style="width:400px; "  >
-            <div id="chart12" style="width:400px; "  >
-
-            </div>
-            <h6   style="float: left;cursor: pointer; color: gray">Click to view details</h6>
-            <button class=" w3-hover-teal  w3-round-xxlarge "  style="float: right;color : teal; margin-bottom: 10px" onclick="downloadPopoverSubjects(12)" title="Download Graph">
-                <span class="material-icons">save_alt</span></button>
-        </div>
-
+    <script>
+        var validateFormPrint = function() {
+            var checks = $(".checkboxPrint:not(:checked)").map(function() {
+                return $(this).val();
+            }).get()
+            // alert(checks); 
+            printJS({printable: 'outdiv', type: 'html', base64: true, showModal: true,
+                header: '<u><h1>Al Sanawbar School - Attainment Analysis</h1></u><br><br>', targetStyles: '*', honorColor: true, repeatTableHeader: true,
+                scanstyles: true, ignoreElements: checks});
+            return false;
+        }
+    </script>
 
     </body>
     </html>
