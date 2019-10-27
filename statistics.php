@@ -500,7 +500,7 @@ if (!isset($_SESSION['login'])) {
                         <td>
 <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM"
 onclick="printJS({printable: 'outheader', type: 'html', base64: true, showModal: true,
-documentTitle: 'Students List', targetStyles: '*', honorColor: true, repeatTableHeader: true,
+header: '<u><h1>Al Sanawbar School - Students Mark List</h1></u>', targetStyles: '*', honorColor: true, repeatTableHeader: true,
 scanstyles: true});" title="Export Students List as PDF">
 <span class="material-icons">save_alt</span>
                             </button>
@@ -799,7 +799,6 @@ scanstyles: true});" title="Export Students List as PDF">
 
                 <!--Students List-->   
                 <div id ="outheader">
-                    <h4  style="text-align: center">STUDENTS LIST</h4>
                     <!--Out Table-->    <table class="w3-table-all w3-card-4 w3-striped w3-hoverable" id="out" ></table>
                 </div>
 
