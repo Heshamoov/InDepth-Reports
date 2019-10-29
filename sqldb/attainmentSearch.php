@@ -90,8 +90,8 @@ if ($result->num_rows > 0) {
          ."</thead>";
 
     while ($row = $result->fetch_assoc()) {
-        // Out Standing
-        if ($row[">=75%"] >= 75)
+        // Outstanding
+        if ($row[">=75%"] >  75)
         {
 /*Year*/    echo "<tr  class='w3-hover-green w3-border-0'>"
                     . "<td id='tCol1'>" . $row["Year"]  . "</td>";
@@ -111,9 +111,9 @@ if ($result->num_rows > 0) {
                     echo "<td id='tCol3'>" . $arr[0] . "</td>";
                 }
             echo "<td id='tCol4'>" . $row["Total"] . "</td>";
-            echo "<td id='tCol5'>" . $row[">=75"] . " Equal or above mark 75</td>";
+            echo "<td id='tCol5'>" . $row[">=75"] . " equal or above mark 75</td>";
             echo "<td id='tCol6'>" . $row[">=75%"] . "%</td>
-                  <td id='tCol7' class='w3-container w3-green'>Out Standing</td>";
+                  <td id='tCol7' class='w3-container w3-green'>Outstanding</td>";
             
             if ($subjects !== "")
                 echo "<td id='tCol8'>" . $row["Subject"] . "</td>";
@@ -125,7 +125,7 @@ if ($result->num_rows > 0) {
         }
 
         // Very Good
-        elseif ($row[">=75%"] > 61 and $row[">=75%"] <= 75)
+        elseif ($row[">=75%"] >= 61 and $row[">=75%"] <= 75)
         {
 
 /*Year*/    echo "<tr  class='w3-hover-light-green w3-border-0'>"
@@ -147,7 +147,7 @@ if ($result->num_rows > 0) {
                 }
 
 /*Total*/   echo "<td id='tCol4'>" . $row["Total"] . "</td>"
-                . "<td id='tCol5'> " . $row[">=75"]   . " Equal or above mark 75</td>"
+                . "<td id='tCol5'> " . $row[">=75"]   . " equal or above mark 75</td>"
                 . "<td id='tCol6'>" . $row[">=75%"]  . "%</td>"
                 . "<td id='tCol7' class='w3-container w3-light-green w3-text-white'>Very Good</td>";
             
@@ -184,7 +184,7 @@ if ($result->num_rows > 0) {
                 }
 
             echo "<td id='tCol4'>" . $row["Total"] . "</td>";
-            echo "<td id='tCol5'>" . $row[">=75"] . " Equal or above mark 75</td>";
+            echo "<td id='tCol5'>" . $row[">=75"] . " equal or above mark 75</td>";
             echo "<td id='tCol6'>" . $row[">=75%"] . "%</td>
                   <td id='tCol7' class='w3-container w3-blue'>Good</td>";
 
@@ -221,7 +221,7 @@ if ($result->num_rows > 0) {
                 }
 
 echo "<td id='tCol4'>" . $row["Total"] . "</td>";
-echo "<td id='tCol5'>" . $row[">=65"] . " Equal or above mark 65</td>";
+echo "<td id='tCol5'>" . $row[">=65"] . " equal or above mark 65</td>";
 echo "<td id='tCol6'>" . $row[">=65%"] . "%</td><td id='tCol7' class='w3-container w3-orange'>Acceptable</td>";
 
             if ($subjects !== "")
@@ -256,7 +256,7 @@ echo "<td id='tCol6'>" . $row[">=65%"] . "%</td><td id='tCol7' class='w3-contain
                 }
 
 echo "<td id='tCol4'>" . $row["Total"] . "</td>";
-echo "<td id='tCol5'>" . $row[">=65"] . " Equal or above mark 65</td>";
+echo "<td id='tCol5'>" . $row[">=65"] . " equal or above mark 65</td>";
 echo "<td id='tCol6'>" . $row[">=65%"] . "%</td><td id='tCol7' class='w3-container w3-orange'>Not Applicable</td>";
 
             if ($subjects !== "")
