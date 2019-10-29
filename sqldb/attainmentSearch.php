@@ -91,7 +91,7 @@ if ($result->num_rows > 0) {
 
     while ($row = $result->fetch_assoc()) {
         // Outstanding
-        if ($row[">=75%"] >  75)
+        if ($row[">=75%"] >= 75)
         {
 /*Year*/    echo "<tr  class='w3-hover-green w3-border-0'>"
                     . "<td id='tCol1'>" . $row["Year"]  . "</td>";
@@ -125,7 +125,7 @@ if ($result->num_rows > 0) {
         }
 
         // Very Good
-        elseif ($row[">=75%"] >= 61 and $row[">=75%"] <= 75)
+        elseif ($row[">=75%"] >= 61 and $row[">=75%"] < 75)
         {
 
 /*Year*/    echo "<tr  class='w3-hover-light-green w3-border-0'>"
@@ -231,7 +231,7 @@ echo "<td id='tCol6'>" . $row[">=65%"] . "%</td><td id='tCol7' class='w3-contain
 
             echo "<tr id='tCol9' ></tr><tr id='tCol9' class='w3-hover-orange w3-border-bottom'>"
                 ."<td  colspan=8 style=text-align:center;>"
-                . row[">=65%"] . "% (equal or above 65%) of students scored 75 or more</td></tr>";
+                . $row[">=65%"] . "% (equal or above 65%) of students scored 75 or more</td></tr>";
         }
 
         // Not Applicable
