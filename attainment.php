@@ -548,6 +548,8 @@ if (!isset($_SESSION['login'])) {
             </div>
         </div>
     </div>
+
+
         <div class="se-pre-con"></div>
         <div id="loader_div" class="loader_div"></div>
 
@@ -564,42 +566,40 @@ if (!isset($_SESSION['login'])) {
             <!--End of Navictacoin bar-->
 
             <!--Drop menus-->
-            <div id="upperdiv" class="w3-container w3-mobile" style="padding-top: 10px; padding-bottom: 10px">
-                <table id= "table1">
+<div id="upperdiv" class="w3-container">
+    <table id= "table1" class="w3-table">
+        <tr>
+            <td></td> <td>Academic Year</td><td>Grade</td>
+            <td>Section</td>  <td>Subject</td>  <td>Term</td><td>Category</td><td></td><td></td>
+        </tr>
+        <tr><td>
+                <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" onclick="downloadStatistics() "><span class="material-icons">save_alt</span></button>
 
-                    <tr>
-                        <td></td> <td>Academic Year</td><td>Grade</td>
-                        <td>Section</td>  <td>Subject</td>  <td>Term</td><td>Category</td><td></td><td></td>
-                    </tr>
-                    <tr><td>
-                            <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" onclick="downloadStatistics() "><span class="material-icons">save_alt</span></button>
+            </td>
+            <td>
+                <select id="academic_year"  onchange="fillGrades()"  multiple="multiple"></select>
+            </td>
+            <td>
+                <select   id="grade"  onchange="fillBatches(); fillSubjects()"  multiple="multiple"></select>
+            </td>
+            <td>
 
+                <select  id ="batch"  onchange="fillSubjects()" multiple="multiple"  ></select>  
+            </td>
+            <td>
+                <div class=""> <select   style="max-width: 300px" id="subject" size="5"  onchange="fillTerms()"   multiple="multiple"></select></div>
+            </td>
+            <td>
+                <select id="term" multiple="multiple"></select>         
+            </td>
 
-                        </td>
-                        <td>
-                            <select id="academic_year"  onchange="fillGrades()"  multiple="multiple"></select>
-                        </td>
-                        <td>
-                            <select   id="grade"  onchange="fillBatches(); fillSubjects()"  multiple="multiple"></select>
-                        </td>
-                        <td>
+            <td>
+                <select id="category" multiple="multiple"></select>
+            </td>
 
-                            <select  id ="batch"  onchange="fillSubjects()" multiple="multiple"  ></select>  
-                        </td>
-                        <td>
-                            <div class=""> <select   style="max-width: 300px" id="subject" size="5"  onchange="fillTerms()"   multiple="multiple"></select></div>
-                        </td>
-                        <td>
-                            <select id="term" multiple="multiple"></select>         
-                        </td>
-
-                        <td>
-                            <select id="category" multiple="multiple"></select>
-                        </td>
-
-                        <td>
-                            <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" onclick='search();' title="View attainment analysis"><span class="fa fa-search"></span></button>
-                        </td>
+            <td>
+                <button style="padding: 15px 32px 32px 32px;text-align: center ;font-size: 14px;" class="w3-button w3-hover-blue-gray w3-custom w3-round-large " id="search" onclick='search();' title="View attainment analysis"><span class="fa fa-search"></span></button>
+            </td>
 
                         <td>
 <button class="w3-button w3-round-xlarge w3-hover-blue-gray w3-medium w3-custom" id="exportM" data-toggle="modal" data-target="#printOptions" title="Export Statistics as PDF"> <span class="material-icons">save_alt</span></button>
@@ -615,47 +615,48 @@ if (!isset($_SESSION['login'])) {
 
             <!--Drop menus-->
 
-            <div class="w3-container w3-col m4 l5 w3-mobile" id="tables" style="overflow: scroll;top: 0;  bottom: 0; height: 100vh;">
-                <table align= center; id="StatisticsTitle" style="width: 100%; text-align: center;  border: 1px solid black;">
-                    <tr>
-                        <td align='left' style="padding:5px; border: 1px solid black;"></td>
-                        <td align='center' style="padding:5px; border: 1px solid black;"></td>
-                        <td align='right' style="padding:5px; border: 1px solid black;"></td>
-                    </tr>
-                    <tr>
-                        <td align='center' colspan="3"></td>
-                    </tr>                    
-                </table> <br>
-                <table hidden align= center; id="StatisticsTitlePDF" style="width: 100%; text-align: center;">
-                    <tr>
-                        <td style="padding:5px;"></td>
+<div class="w3-container w3-col m4 l5 w3-mobile" id="tables" style="overflow: scroll;top: 0;  bottom: 0; height: 100vh;">
+    <table align= center; id="StatisticsTitle" style="width: 100%; text-align: center;  border: 1px solid black;">
+        <tr>
+            <td align='left' style="padding:5px; border: 1px solid black;"></td>
+            <td align='center' style="padding:5px; border: 1px solid black;"></td>
+            <td align='right' style="padding:5px; border: 1px solid black;"></td>
+        </tr>
+        <tr>
+            <td align='center' colspan="3"></td>
+        </tr>                    
+    </table> <br>
+    <table hidden align= center; id="StatisticsTitlePDF" style="width: 100%; text-align: center;">
+        <tr>
+            <td style="padding:5px;"></td>
 
-                    </tr>
-                    <tr>
-                        <td colspan="3"></td>
-                    </tr>                    
-                </table>
+        </tr>
+        <tr>
+            <td colspan="3"></td>
+        </tr>                    
+    </table>
 
 
-                <!--stable-->   <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="stable">
-                    <th colspan="4" class="w3-custom " style="font-size: 16px">
-                        STATISTICS
-                    </th>
+<table class=" w3-striped w3-bordered w3-centered w3-card-4" id="stable">
+    <th colspan="4" class="w3-custom" style="font-size: 16px">
+        STATISTICS
+    </th>
                     
-                    <tr>
-                        <th class="w3-border-right">Total</th>
-                        <th class="w3-border-right"><input id="percent11" type="text" value= 50>% - <input id="percente12" type="text" value=100>%</th>
-                        <th class="w3-border-right"><input id="percent21" type="text" value=65>% - <input id="percente22" type="text" value=100>%</th>
-                        <th class="w3-border-right"><input id="percent31" type="text" value=75>% - <input id="percente32" type="text" value=100>%</th>
-                    </tr>
-                    <tr>
-                        <td class="w3-border-right"></td>
-                        <td class="w3-border-right"></td>
-                        <td class="w3-border-right"></td>
-                        <td class="w3-border-right"></td>
-                    </tr>
-                </table>
-                <br><br>
+    <tr>
+        <th class="w3-border-right">Total</th>
+        <th class="w3-border-right"><input id="percent11" type="text" value= 50>% - <input id="percente12" type="text" value=100>%</th>
+        <th class="w3-border-right"><input id="percent21" type="text" value=65>% - <input id="percente22" type="text" value=100>%</th>
+        <th class="w3-border-right"><input id="percent31" type="text" value=75>% - <input id="percente32" type="text" value=100>%</th>
+    </tr>
+    <tr>
+        <td class="w3-border-right"></td>
+        <td class="w3-border-right"></td>
+        <td class="w3-border-right"></td>
+        <td class="w3-border-right"></td>
+    </tr>
+</table>
+
+<br><br>
 
                 <!--stablePDF--><table id="stablePDF" style="font-size: 100px" hidden>
                     <thead>
