@@ -57,22 +57,25 @@ if (!isset($_SESSION['login'])) {
             <!--Drop menus-->
                 <div class="w3-container">
                     <h4 class="w3-center">Al Sanawabar School: Attainment Analysis</h4>
+                    <h4>Grade</h4>
+                    <select id="grade" multiple="multiple"></select>
+
                     <table id="useroptions" class="w3-table-all w3-centered">
                     <tr>
                         <th><h4>Year</h4></th>
-                        <th><select id="academic_year1" multiple="multiple" onchange="fillTerms('academic_year1')"></select><th>
-                        <th><select id="academic_year2" multiple="multiple" onchange="fillTerms('academic_year2')"></select><th>
-                        <th><select id="academic_year3" multiple="multiple" onchange="fillTerms('academic_year3')"></select><th>
-                        <th><select id="academic_year4" multiple="multiple" onchange="fillTerms('academic_year4')"></select><th>
-                        <th><select id="academic_year5" multiple="multiple" onchange="fillTerms('academic_year5')"></select><th>
+                        <th><select id="academic_year1" multiple="multiple"></select></th>
+                        <th><select id="academic_year2" multiple="multiple"></select></th>
+                        <th><select id="academic_year3" multiple="multiple"></select></th>
+                        <th><select id="academic_year4" multiple="multiple"></select></th>
+                        <th><select id="academic_year5" multiple="multiple"></select></th>
                     </tr>
                     <tr>
                         <th><h4>Term</h4></th>
-                        <th><select id="term1" multiple="multiple"></select><th>
-                        <th><select id="term2" multiple="multiple"></select><th>
-                        <th><select id="term3" multiple="multiple"></select><th>
-                        <th><select id="term4" multiple="multiple"></select><th>
-                        <th><select id="term5" multiple="multiple"></select><th>
+                        <th><select id="term1" multiple="multiple"></select></th>
+                        <th><select id="term2" multiple="multiple"></select></th>
+                        <th><select id="term3" multiple="multiple"></select></th>
+                        <th><select id="term4" multiple="multiple"></select></th>
+                        <th><select id="term5" multiple="multiple"></select></th>
                     </tr>
                     <tr>
                         <td><h4>Arabic Language</h4></td>
@@ -91,6 +94,36 @@ if (!isset($_SESSION['login'])) {
                         <td></td>
                     </tr>
                 </table>
+            </div>
+
+<script type="text/javascript">
+    var select = document.getElementById('grade');
+
+    var httpgrades = new XMLHttpRequest();
+    httpgrades.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            var str = this.responseText;
+            gradesArray = str.split("\t");
+        }
+    };
+
+    httpgrades.open("GET", "sqldb/distinctGrades.php", false);
+    httpgrades.send();
+
+    $('#grade').multiselect('destroy');
+
+    delete gradesArray[gradesArray.length - 1];
+    
+    for (var i in gradesArray) {
+        select.add(new Option(gradesArray[i]));
+    };
+    
+    $(function () {
+        $('#grade').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+</script>                
 
         <!--Initialize Academic Years->-->     
         <script type="text/javascript">
