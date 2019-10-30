@@ -1000,7 +1000,7 @@ if (!isset($_SESSION['login'])) {
                 });
             });
 
-        </script><!--
+        </script>
         
         
         <!--Initialize Grade drop down-->     
@@ -1249,12 +1249,10 @@ if (!isset($_SESSION['login'])) {
 
         </script>
 
-
-        <!--
-        Initialize Term drop down     --> 
         <!--Initialize Term drop down--> 
         <script type="text/javascript">
             document.getElementById("subject").addEventListener("change", fillTerms());
+            
             function fillTerms() {
                 var selected_years = $("#academic_year option:selected");
                 var selected_grades = $("#grade option:selected");
