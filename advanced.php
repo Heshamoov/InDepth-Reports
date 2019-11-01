@@ -10,6 +10,7 @@ if (!isset($_SESSION['login'])) {
     <title>Attainment Analysis</title>
     </head>
 
+
     <script type="text/javascript">      
         $(function () {
             $('#academic_year1').multiselect({includeSelectAllOption: true});
@@ -27,34 +28,44 @@ if (!isset($_SESSION['login'])) {
             $('#grade').multiselect({includeSelectAllOption: true});
         });
         
-        function search() {
-            var selected_years1 = $("#academic_year1 option:selected");
-            var selected_years2 = $("#academic_year2 option:selected");
-            var selected_years3 = $("#academic_year3 option:selected");
-            var selected_years4 = $("#academic_year4 option:selected");
-            var selected_years5 = $("#academic_year5 option:selected");
+        function search(){ 
 
-            var selected_terms1 = $("#term1 option:selected");
-            var selected_terms2 = $("#term2 option:selected");
-            var selected_terms3 = $("#term3 option:selected");
-            var selected_terms4 = $("#term4 option:selected");
-            var selected_terms5 = $("#term5 option:selected");
+            var selected_years1 = $("#academic_year1 option:selected");
+            // var selected_years2 = $("#academic_year2 option:selected");
+            // var selected_years3 = $("#academic_year3 option:selected");
+            // var selected_years4 = $("#academic_year4 option:selected");
+            // var selected_years5 = $("#academic_year5 option:selected");
+
+            // var selected_terms1 = $("#term1 option:selected");
+            // var selected_terms2 = $("#term2 option:selected");
+            // var selected_terms3 = $("#term3 option:selected");
+            // var selected_terms4 = $("#term4 option:selected");
+            // var selected_terms5 = $("#term5 option:selected");
+
             var selected_grades = $("#grade option:selected");
 
-            selected_grades.each(function () {var currentGrade = $(this).text();}
+            selected_grades.each(function () 
+                {
+                    var currentGrade = $(this).text();
 
-            selected_years1.each(function () {var currentYear = $(this).text();}
+                    selected_years1.each(function ()
+                    {
+                        var currentYear = $(this).text();
+
+                        var httpSearch = new XMLHttpRequest();
+                        httpSearch.onreadystatechange = function () {
+                            if (this.readyState === 4) {
+                                document.getElementById("out").innerHTML = this.responseText;
+                            }
+                        };
+                        httpSearch.open("POST", "sqldb/advancedsearch.php?grade=" + currentGrade + "&year=" + currentYear, false);
+                        httpSearch.send();
+                    });
+                });
+
+            // selected_years1.each(function () {var currentYear = $(this).text();}
             
-            selected_term1.each(function () {var currentTerm = $(this).text();}                
-
-            var httpSearch = new XMLHttpRequest();
-            httpSearch.onreadystatechange = function () {
-                if (this.readyState === 4) {
-                    document.getElementById("subjects").innerHTML = this.responseText;
-                }
-            };
-            httpSearch.open("POST", "sqldb/advancedsearch.php?year=" + currentYear + "&grade=" + currentGrade + "&term=" + currentTerm, false);
-            httpSearch.send();
+            // selected_term1.each(function () {var currentTerm = $(this).text();}
         }        
     </script>
 
@@ -74,6 +85,7 @@ if (!isset($_SESSION['login'])) {
             <!--Drop menus-->
                 <div class="w3-container">
                     <h4 class="w3-center w3-wide">Al Sanawabar School: Attainment Analysis</h4>
+                    <h4 id="out"></h4>
                     <h4>Grade</h4>
 <select id="grade" multiple="multiple"></select>
 <button id="submit" class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>

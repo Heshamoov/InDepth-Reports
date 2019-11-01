@@ -2,11 +2,13 @@
 
 include ('../config/dbConfig.php');
 
+
 $year = $_REQUEST["year"];
-$term = $_REQUEST["term"];
+// $term = $_REQUEST["term"];
 $grade = $_REQUEST["grade"]; 
 
-echo "dslfkdslfjdslkfj";
+echo $grade;
+echo $year;
 
 $sql =   "SELECT academic_years.name 'Year', exam_groups.name 'Exam', CONCAT(courses.course_name, ' - ', batches.name) as Grade, "
         ."COUNT(IF (exam_scores.marks IS NOT NULL, 1, NULL)) 'Total', "
