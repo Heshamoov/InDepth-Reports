@@ -59,10 +59,10 @@ if (!isset($_SESSION['login'])) {
                             var httpSearch = new XMLHttpRequest();
                             httpSearch.onreadystatechange = function () {
                                 if (this.readyState === 4) {
-                                    document.getElementById("out").innerHTML = this.responseText;
+                                    document.getElementById("useroptions").innerHTML += this.responseText;
                                 }
                             };
-                            httpSearch.open("POST", "sqldb/advancedsearch.php?grade=" + currentGrade + "&year=" + currentYear + "&term=" + currentTerm, false);
+                            httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grade=" + currentGrade + "&year=" + currentYear + "&term=" + currentTerm, false);
                             httpSearch.send();
                         });
                     });
@@ -114,7 +114,7 @@ if (!isset($_SESSION['login'])) {
                     </tr>
                     </table>
                 
-                    <table id="subjects"></table>
+                    <table id="subjects" class="w3-container w3-table-all w3-centered"></table>
                 </div>
 
         
