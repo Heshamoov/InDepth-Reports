@@ -100,36 +100,38 @@ if (!isset($_SESSION['login'])) {
                     <table id="subjects"></table>
                 </div>
 
-<script type="text/javascript">
-    var select = document.getElementById('grade');
+        
+        <!-- Initialize Grades    -->
+        <script type="text/javascript">
+            var select = document.getElementById('grade');
 
-    var httpgrades = new XMLHttpRequest();
-    httpgrades.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            var str = this.responseText;
-            gradesArray = str.split("\t");
-        }
-    };
+            var httpgrades = new XMLHttpRequest();
+            httpgrades.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    var str = this.responseText;
+                    gradesArray = str.split("\t");
+                }
+            };
 
-    httpgrades.open("GET", "sqldb/distinctGrades.php", false);
-    httpgrades.send();
+            httpgrades.open("GET", "sqldb/grades.php", false);
+            httpgrades.send();
 
-    $('#grade').multiselect('destroy');
+            $('#grade').multiselect('destroy');
 
-    delete gradesArray[gradesArray.length - 1];
-    
-    for (var i in gradesArray) {
-        select.add(new Option(gradesArray[i]));
-    };
-    
-    $(function () {
-        $('#grade').multiselect({
-            includeSelectAllOption: true
-        });
-    });
-</script>                
+            delete gradesArray[gradesArray.length - 1];
+            
+            for (var i in gradesArray) {
+                select.add(new Option(gradesArray[i]));
+            };
+            
+            $(function () {
+                $('#grade').multiselect({
+                    includeSelectAllOption: true
+                });
+            });
+        </script>                
 
-        <!--Initialize Academic Years->-->     
+        <!-- Initialize Academic Years    -->
         <script type="text/javascript">
             var yearArray = ["Your Data Base is Empty!."];
 
@@ -182,7 +184,7 @@ if (!isset($_SESSION['login'])) {
             });
         </script>
 
-
+        <!-- Initialize Terms    -->
         <script type="text/javascript">      
                 var term1 = document.getElementById('term1');
                 var term2 = document.getElementById('term2');
@@ -198,7 +200,7 @@ if (!isset($_SESSION['login'])) {
                     }
                 };
 
-                httpTerms.open("GET", "sqldb/distinctTerms.php", false);
+                httpTerms.open("GET", "sqldb/terms.php", false);
                 httpTerms.send();
 
 
