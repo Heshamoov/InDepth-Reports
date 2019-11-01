@@ -36,7 +36,7 @@ if (!isset($_SESSION['login'])) {
             // var selected_years4 = $("#academic_year4 option:selected");
             // var selected_years5 = $("#academic_year5 option:selected");
 
-            // var selected_terms1 = $("#term1 option:selected");
+            var selected_terms1 = $("#term1 option:selected");
             // var selected_terms2 = $("#term2 option:selected");
             // var selected_terms3 = $("#term3 option:selected");
             // var selected_terms4 = $("#term4 option:selected");
@@ -52,14 +52,19 @@ if (!isset($_SESSION['login'])) {
                     {
                         var currentYear = $(this).text();
 
-                        var httpSearch = new XMLHttpRequest();
-                        httpSearch.onreadystatechange = function () {
-                            if (this.readyState === 4) {
-                                document.getElementById("out").innerHTML = this.responseText;
-                            }
-                        };
-                        httpSearch.open("POST", "sqldb/advancedsearch.php?grade=" + currentGrade + "&year=" + currentYear, false);
-                        httpSearch.send();
+                        selected_terms1.each(function () 
+                        {
+                            var currentTerm = $(this).text();
+
+                            var httpSearch = new XMLHttpRequest();
+                            httpSearch.onreadystatechange = function () {
+                                if (this.readyState === 4) {
+                                    document.getElementById("out").innerHTML = this.responseText;
+                                }
+                            };
+                            httpSearch.open("POST", "sqldb/advancedsearch.php?grade=" + currentGrade + "&year=" + currentYear + "&term=" + currentTerm, false);
+                            httpSearch.send();
+                        });
                     });
                 });
 
