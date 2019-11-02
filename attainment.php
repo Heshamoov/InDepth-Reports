@@ -609,11 +609,8 @@ if (!isset($_SESSION['login'])) {
 
                 </table>
 
-            </div>
+</div>
 
-
-
-            <!--Drop menus-->
 
 <div class="w3-container w3-col m4 l5 w3-mobile" id="tables" style="overflow: scroll;top: 0;  bottom: 0; height: 100vh;">
     <table align= center; id="StatisticsTitle" style="width: 100%; text-align: center;  border: 1px solid black;">

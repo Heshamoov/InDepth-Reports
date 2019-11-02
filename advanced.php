@@ -67,55 +67,58 @@ if (!isset($_SESSION['login'])) {
                         });
                     });
                 });
-
-            // selected_years1.each(function () {var currentYear = $(this).text();}
-            
-            // selected_term1.each(function () {var currentTerm = $(this).text();}
         }        
     </script>
 
-    <body>
+<body>
     
-        <div class=" w3-responsive header" >
-            <!-- Navigation bar -->        
-            <?php include('navbar.php'); ?>
+<div class="w3-responsive header" >
+    <!-- Navigation bar -->        
+    <?php include('navbar.php'); ?>
 
-            <!--set color for current tab-->
-            <script>
-                document.getElementById("navAdvanced").style.backgroundColor = '#009688';
-            </script>
+    <!--set color for current tab-->
+    <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
+</div>
 
-            <!--End of Navictacoin bar-->
 
-            <!--Drop menus-->
-                <div class="w3-container">
-                    <h4 class="w3-center w3-wide">Al Sanawabar School: Attainment Analysis</h4>
-                    <h4 id="out"></h4>
-                    <h4>Grade</h4>
-<select id="grade" multiple="multiple"></select>
-<button id="submit" class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>
+<!--Drop menus-->
+<h4 class="w3-center">Al Sanawabar School: Attainment Analysis</h4>
 
-                    <table id="useroptions" class="w3-container w3-table-all w3-centered">
-                    <tr>
-                        <th><h4>Year</h4></th>
-                        <th><select id="academic_year1" multiple="multiple" onchange=""></select></th>
-                        <th><select id="academic_year2" multiple="multiple" onchange=""></select></th>
-                        <th><select id="academic_year3" multiple="multiple" onchange=""></select></th>
-                        <th><select id="academic_year4" multiple="multiple" onchange=""></select></th>
-                        <th><select id="academic_year5" multiple="multiple" onchange=""></select></th>
-                    </tr>
-                    <tr>
-                        <th><h4>Term</h4></th>
-                        <th><select id="term1" multiple="multiple" onchange="search()"></select></th>
-                        <th><select id="term2" multiple="multiple" onchange="search()"></select></th>
-                        <th><select id="term3" multiple="multiple" onchange="search()"></select></th>
-                        <th><select id="term4" multiple="multiple" onchange="search()"></select></th>
-                        <th><select id="term5" multiple="multiple" onchange="search()"></select></th>
-                    </tr>
-                    </table>
-                
-                    <table id="subjects" class="w3-container w3-table-all w3-centered"></table>
-                </div>
+<!-- Select Grade -->
+<div class="w3-container w3-center">
+    <label class="w3-large w3-container">Grade</label>
+    <select id="grade" multiple="multiple"></select>
+    <button id="submit" class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>
+</div>
+
+<br>
+
+<div class="w3-container">
+    <table id="useroptions" class="w3-container w3-table-all w3-card w3-centered">
+        <tr>
+            <th><label class="w3-large">Year</label></th>
+            <th><select id="academic_year1" multiple="multiple" onchange=""></select></th>
+            <th><select id="academic_year2" multiple="multiple" onchange=""></select></th>
+            <th><select id="academic_year3" multiple="multiple" onchange=""></select></th>
+            <th><select id="academic_year4" multiple="multiple" onchange=""></select></th>
+            <th><select id="academic_year5" multiple="multiple" onchange=""></select></th>
+        </tr>
+        <tr>
+            <th><label class="w3-large">Term</label></th>
+            <th><select id="term1" multiple="multiple" onchange=""></select></th>
+            <th><select id="term2" multiple="multiple" onchange="search()"></select></th>
+            <th><select id="term3" multiple="multiple" onchange="search()"></select></th>
+            <th><select id="term4" multiple="multiple" onchange="search()"></select></th>
+            <th><select id="term5" multiple="multiple" onchange="search()"></select></th>
+        </tr>
+    </table>
+</div>    
+    
+    <table id="subjects" class="w3-container w3-table-all w3-centered"></table>
+</div>
+
+
+
 
         
         <!-- Initialize Grades    -->
