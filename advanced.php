@@ -28,19 +28,20 @@ if (!isset($_SESSION['login'])) {
             $('#grade').multiselect({includeSelectAllOption: true});
         });
         
-        function search(){ 
+        function search(){
+            document.getElementById('out').innerHTML = "search";
 
             var selected_years1 = $("#academic_year1 option:selected");
             var selected_years2 = $("#academic_year2 option:selected");
-            // var selected_years3 = $("#academic_year3 option:selected");
-            // var selected_years4 = $("#academic_year4 option:selected");
-            // var selected_years5 = $("#academic_year5 option:selected");
+            var selected_years3 = $("#academic_year3 option:selected");
+            var selected_years4 = $("#academic_year4 option:selected");
+            var selected_years5 = $("#academic_year5 option:selected");
 
             var selected_terms1 = $("#term1 option:selected");
             var selected_terms2 = $("#term2 option:selected");
-            // var selected_terms3 = $("#term3 option:selected");
-            // var selected_terms4 = $("#term4 option:selected");
-            // var selected_terms5 = $("#term5 option:selected");
+            var selected_terms3 = $("#term3 option:selected");
+            var selected_terms4 = $("#term4 option:selected");
+            var selected_terms5 = $("#term5 option:selected");
 
             var selected_grades = $("#grade option:selected");
 
@@ -61,7 +62,7 @@ if (!isset($_SESSION['login'])) {
                 
                     if (years1SQL !== "") 
                         years1SQL += ")";
-
+                    
 
                     //Generate selected years SQL statement YEARS 2
                     var years2SQL = "";
@@ -77,8 +78,48 @@ if (!isset($_SESSION['login'])) {
                     if (years2SQL !== "") 
                         years2SQL += ")";                    
                                        
+                    //Generate selected years SQL statement YEARS 3
+                    var years3SQL = "";
+                    selected_years3.each(function () {
+                        var currentYear = $(this).text();
+                        document.getElementById("out").innerHTML += currentYear + " - ";
+                        if (years3SQL === "")
+                            years3SQL = "(acd_code = '" + currentYear + "' ";
+                        else
+                            years3SQL += " OR acd_code = '" + currentYear + "'";
+                    });
+                
+                    if (years3SQL !== "") 
+                        years3SQL += ")";                    
 
+                    // //Generate selected years SQL statement YEARS 4
+                    var years4SQL = "";
+                    selected_years4.each(function () {
+                        var currentYear = $(this).text();
+                        document.getElementById("out").innerHTML += currentYear + " - ";
+                        if (years4SQL === "")
+                            years4SQL = "(acd_code = '" + currentYear + "' ";
+                        else
+                            years4SQL += " OR acd_code = '" + currentYear + "'";
+                    });
+                
+                    if (years4SQL !== "") 
+                        years4SQL += ")";                    
                
+                    // //Generate selected years SQL statement YEARS 5
+                    var years5SQL = "";
+                    selected_years5.each(function () {
+                        var currentYear = $(this).text();
+                        document.getElementById("out").innerHTML += currentYear + " - ";
+                        if (years5SQL === "")
+                            years5SQL = "(acd_code = '" + currentYear + "' ";
+                        else
+                            years5SQL += " OR acd_code = '" + currentYear + "'";
+                    });
+                
+                    if (years5SQL !== "") 
+                        years5SQL += ")";                    
+
 
                     //Generate selected years SQL statement TERMS 1
                     var terms1SQL = "";
@@ -95,22 +136,72 @@ if (!isset($_SESSION['login'])) {
                     if (terms1SQL !== "")
                         terms1SQL += ")";
 
-                    //Generate selected years SQL statement TERMS 1
+                    //Generate selected years SQL statement TERMS 2
                     var terms2SQL = "";
                     selected_terms2.each(function () {
                         var currentTerm = $(this).text();
                         document.getElementById("out").innerHTML += currentTerm + " - ";
                         
                         if (terms2SQL === "")
-                            terms2SQL = " (exam_name = '" + currentTerm + "' ";
+                            terms2SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
                         else
-                            terms2SQL += " OR exam_name = '" + currentTerm + "'";
+                            terms2SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
                     });
                 
 
                     if (terms2SQL !== "")
                         terms2SQL += ")";                    
 
+
+                    // //Generate selected years SQL statement TERMS 3
+                    var terms3SQL = "";
+                    selected_terms3.each(function () {
+                        var currentTerm = $(this).text();
+                        document.getElementById("out").innerHTML += currentTerm + " - ";
+                        
+                        if (terms3SQL === "")
+                            terms3SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
+                        else
+                            terms3SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
+                    });
+                
+
+                    if (terms3SQL !== "")
+                        terms3SQL += ")";                    
+
+
+                    // //Generate selected years SQL statement TERMS 4
+                    var terms4SQL = "";
+                    selected_terms4.each(function () {
+                        var currentTerm = $(this).text();
+                        document.getElementById("out").innerHTML += currentTerm + " - ";
+                        
+                        if (terms4SQL === "")
+                            terms4SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
+                        else
+                            terms4SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
+                    });
+                
+
+                    if (terms4SQL !== "")
+                        terms4SQL += ")";                    
+
+
+                    // //Generate selected years SQL statement TERMS 5
+                    var terms5SQL = "";
+                    selected_terms5.each(function () {
+                        var currentTerm = $(this).text();
+                        document.getElementById("out").innerHTML += currentTerm + " - ";
+                        
+                        if (terms5SQL === "")
+                            terms5SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
+                        else
+                            terms5SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
+                    });
+                
+
+                    if (terms5SQL !== "")
+                        terms5SQL += ")";                    
 
                     // Sending to Server
                     var httpSearch = new XMLHttpRequest();
@@ -119,8 +210,10 @@ if (!isset($_SESSION['login'])) {
                             document.getElementById("useroptions").innerHTML += this.responseText;
                         }
                     };
-                    httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + "&years1=" + years1SQL + "&years2=" + years2SQL
-                     + "&terms1=" + terms1SQL+ "&terms2=" + terms2SQL, false);
+                    httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + 
+"&years1=" + years1SQL + "&years2=" + years2SQL + "&years3=" + years3SQL + "&years4=" + years4SQL + "&years5=" + years5SQL + 
+"&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL
+, false);
                     httpSearch.send();
 
                 });
