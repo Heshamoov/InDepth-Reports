@@ -31,13 +31,13 @@ if (!isset($_SESSION['login'])) {
         function search(){ 
 
             var selected_years1 = $("#academic_year1 option:selected");
-            // var selected_years2 = $("#academic_year2 option:selected");
+            var selected_years2 = $("#academic_year2 option:selected");
             // var selected_years3 = $("#academic_year3 option:selected");
             // var selected_years4 = $("#academic_year4 option:selected");
             // var selected_years5 = $("#academic_year5 option:selected");
 
             var selected_terms1 = $("#term1 option:selected");
-            // var selected_terms2 = $("#term2 option:selected");
+            var selected_terms2 = $("#term2 option:selected");
             // var selected_terms3 = $("#term3 option:selected");
             // var selected_terms4 = $("#term4 option:selected");
             // var selected_terms5 = $("#term5 option:selected");
@@ -45,29 +45,86 @@ if (!isset($_SESSION['login'])) {
             var selected_grades = $("#grade option:selected");
 
             selected_grades.each(function () 
-                {
-                    var currentGrade = $(this).text();
+                {   
+                    var currentGrade = "(grade = '" + $(this).text() + "')";
 
-                    selected_years1.each(function ()
-                    {
+                    //Generate selected years SQL statement YEARS 1
+                    var years1SQL = "";
+                    selected_years1.each(function () {
                         var currentYear = $(this).text();
 
-                        selected_terms1.each(function () 
-                        {
-                            var currentTerm = $(this).text();
-
-                            var httpSearch = new XMLHttpRequest();
-                            httpSearch.onreadystatechange = function () {
-                                if (this.readyState === 4) {
-                                    document.getElementById("useroptions").innerHTML += this.responseText;
-                                }
-                            };
-                            httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grade=" + currentGrade + "&year=" + currentYear + "&term=" + currentTerm, false);
-                            httpSearch.send();
-                        });
+                        if (years1SQL === "")
+                            years1SQL = "(acd_code = '" + currentYear + "' ";
+                        else
+                            years1SQL += " OR acd_code = '" + currentYear + "'";
                     });
+                
+                    if (years1SQL !== "") 
+                        years1SQL += ")";
+
+
+                    //Generate selected years SQL statement YEARS 2
+                    var years2SQL = "";
+                    selected_years2.each(function () {
+                        var currentYear = $(this).text();
+                        document.getElementById("out").innerHTML += currentYear + " - ";
+                        if (years2SQL === "")
+                            years2SQL = "(acd_code = '" + currentYear + "' ";
+                        else
+                            years2SQL += " OR acd_code = '" + currentYear + "'";
+                    });
+                
+                    if (years2SQL !== "") 
+                        years2SQL += ")";                    
+                                       
+
+               
+
+                    //Generate selected years SQL statement TERMS 1
+                    var terms1SQL = "";
+                    selected_terms1.each(function () {
+                        var currentTerm = $(this).text();
+                        
+                        if (terms1SQL === "")
+                            terms1SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
+                        else
+                            terms1SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
+                    });
+                
+
+                    if (terms1SQL !== "")
+                        terms1SQL += ")";
+
+                    //Generate selected years SQL statement TERMS 1
+                    var terms2SQL = "";
+                    selected_terms2.each(function () {
+                        var currentTerm = $(this).text();
+                        document.getElementById("out").innerHTML += currentTerm + " - ";
+                        
+                        if (terms2SQL === "")
+                            terms2SQL = " (exam_name = '" + currentTerm + "' ";
+                        else
+                            terms2SQL += " OR exam_name = '" + currentTerm + "'";
+                    });
+                
+
+                    if (terms2SQL !== "")
+                        terms2SQL += ")";                    
+
+
+                    // Sending to Server
+                    var httpSearch = new XMLHttpRequest();
+                    httpSearch.onreadystatechange = function () {
+                        if (this.readyState === 4) {
+                            document.getElementById("useroptions").innerHTML += this.responseText;
+                        }
+                    };
+                    httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + "&years1=" + years1SQL + "&years2=" + years2SQL
+                     + "&terms1=" + terms1SQL+ "&terms2=" + terms2SQL, false);
+                    httpSearch.send();
+
                 });
-        }        
+            }      
     </script>
 
 <body>
@@ -83,6 +140,9 @@ if (!isset($_SESSION['login'])) {
 
 <!--Drop menus-->
 <h4 class="w3-center">Al Sanawabar School: Attainment Analysis</h4>
+
+<!-- Debug Console -->
+<label id="out"></label>
 
 <!-- Select Grade -->
 <div class="w3-container w3-center">
@@ -105,11 +165,11 @@ if (!isset($_SESSION['login'])) {
         </tr>
         <tr>
             <th><label class="w3-large">Term</label></th>
-            <th><select id="term1" multiple="multiple" onchange=""></select></th>
-            <th><select id="term2" multiple="multiple" onchange="search()"></select></th>
-            <th><select id="term3" multiple="multiple" onchange="search()"></select></th>
-            <th><select id="term4" multiple="multiple" onchange="search()"></select></th>
-            <th><select id="term5" multiple="multiple" onchange="search()"></select></th>
+            <th><select id="term1" multiple="multiple"></select></th>
+            <th><select id="term2" multiple="multiple"></select></th>
+            <th><select id="term3" multiple="multiple"></select></th>
+            <th><select id="term4" multiple="multiple"></select></th>
+            <th><select id="term5" multiple="multiple"></select></th>
         </tr>
     </table>
 </div>    
