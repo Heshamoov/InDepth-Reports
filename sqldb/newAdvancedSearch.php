@@ -5,6 +5,7 @@ include ('../config/dbConfig.php');
 
 $grades = $_REQUEST["grades"];
 
+
 $YArray = array();
 if ($_REQUEST["years1"] != "") $YArray[0] = $_REQUEST["years1"];
 if ($_REQUEST["years2"] != "") $YArray[1] = $_REQUEST["years2"];
@@ -20,16 +21,16 @@ if ($_REQUEST["terms3"] != "") $TArray[2] = $_REQUEST["terms3"];
 if ($_REQUEST["terms4"] != "") $TArray[3] = $_REQUEST["terms4"];
 if ($_REQUEST["terms5"] != "") $TArray[4] = $_REQUEST["terms5"];
 
-// for($i = 0; $i < count($YArray); $i++)
-//     echo $YArray[$i] . "<br>";
-// echo "****************<br>";
-// echo count($YArray);
-
-
-// for($i = 0; $i < count($TArray); $i++)
-//     echo $TArray[$i] . "<br>";
-// echo "****************<br>";
-// echo count($TArray);
+//for($i = 0; $i < count($YArray); $i++)
+//    echo $YArray[$i] . "<br>";
+//echo "****************<br>";
+//echo count($YArray);
+//
+//
+//for($i = 0; $i < count($TArray); $i++)
+//    echo $TArray[$i] . "<br>";
+//echo "****************<br>";
+//echo count($TArray);
 
 
 $columns = "SELECT subject_name, exam_name, acd_code, grade, section,
@@ -47,7 +48,7 @@ $QArray = array();
 if ($grades != "")
 {
     
-    for($i = 0; $i < count($TArray); $i++)        
+    for($i = 0; $i < count($YArray); $i++)        
         $QArray[$i] = " t$i.subject_name 'Subject$i', t$i.exam_name 'Exam$i', t$i.acd_code 'Year$i', t$i.grade 'Grade$i', t$i.MoreOrEqual65P '>=65%$i', t$i.MoreOrEqual75P '>=75%$i'";
 
     
@@ -66,26 +67,35 @@ if ($grades != "")
         ORDER BY subject_name ";
     }
 
+    $From  = " FROM ";
+    $Table = "($columns $WhereArray[0]) t0";
 
-    $sql = $TopColumns .  " FROM (
+    for ($i=1; $i < count($WhereArray); $i++) { 
+        $From .= "(";
+        $Table .= " INNER JOIN ($columns $WhereArray[$i]) t$i ON (t0.subject_name = t$i.subject_name) )";
+    }
+
+    $sql = "$TopColumns $From $Table";
+
+    // $sql = $TopColumns .  " FROM (
                                 
-                                    (
-                                        (
-                                            (
-                                                ($columns $WhereArray[0]) t0
-                                            INNER JOIN 
-                                                ($columns $WhereArray[1]) t1 ON (t0.subject_name = t1.subject_name)
-                                            )
+    //                                 (
+    //                                     (
+    //                                         (
+    //                                             ($columns $WhereArray[0]) t0
+    //                                         INNER JOIN 
+    //                                             ($columns $WhereArray[1]) t1 ON (t0.subject_name = t1.subject_name)
+    //                                         )
 
-                                        INNER JOIN
-                                            ($columns $WhereArray[2]) t2 ON (t0.subject_name = t2.subject_name)
-                                        )
-                                    INNER JOIN 
-                                        ($columns $WhereArray[3]) t3 ON (t0.subject_name = t3.subject_name)
-                                    )
-                                INNER JOIN 
-                                    ($columns $WhereArray[4]) t4 ON (t0.subject_name = t4.subject_name)
-                                  );";
+    //                                     INNER JOIN
+    //                                         ($columns $WhereArray[2]) t2 ON (t0.subject_name = t2.subject_name)
+    //                                     )
+    //                                 INNER JOIN 
+    //                                     ($columns $WhereArray[3]) t3 ON (t0.subject_name = t3.subject_name)
+    //                                 )
+    //                             INNER JOIN 
+    //                                 ($columns $WhereArray[4]) t4 ON (t0.subject_name = t4.subject_name)
+    //                               );";
                                     
 
 
@@ -95,68 +105,25 @@ if ($grades != "")
         while ($row = $result->fetch_assoc()) {
 
             echo "<tr><td>" . $row["Subject0"] . "</td>";
+
+            for ($i=0; $i < count($YArray); $i++) {
             
-            if ($row[">=75%0"] >= 75)                                    // Outstanding
-                echo "<td class='w3-container w3-green'>Outstanding</td>";
-            elseif ($row[">=75%0"] >= 61 and $row[">=75%0"] < 75)       // Very Good
-                echo "<td class='w3-container w3-hover-light-green'>Very Good</td>";
-            elseif ($row[">=75%0"] >= 50  and $row[">=75%0"] <= 61)       // Good
-                echo "<td class='w3-container w3-lime'>Good</td>";
-            elseif ($row[">=65%0"] >= 75)                                 // Acceptable
-                echo "<td class='w3-container w3-orange'>Acceptable</td>";
-            else                                                        // Not Applicable
-                echo "<td class='w3-container w3-red'>Not Applicable</td>";
-
-
-            if ($row[">=75%1"] >= 75)                                    // Outstanding
-                echo "<td class='w3-container w3-green'>Outstanding</td>";
-            elseif ($row[">=75%1"] >= 61 and $row[">=75%1"] < 75)       // Very Good
-                echo "<td class='w3-container w3-hover-light-green'>Very Good</td>";
-            elseif ($row[">=75%1"] >= 50  and $row[">=75%1"] <= 61)       // Good
-                echo "<td class='w3-container w3-lime'>Good</td>";
-            elseif ($row[">=65%1"] >= 75)                                 // Acceptable
-                echo "<td class='w3-container w3-orange'>Acceptable</td>";
-            else                                                        // Not Applicable
-                echo "<td class='w3-container w3-red'>Not Applicable</td>";
-
-
-            if ($row[">=75%2"] >= 75)                                    // Outstanding
-                echo "<td class='w3-container w3-green'>Outstanding</td>";
-            elseif ($row[">=75%2"] >= 61 and $row[">=75%2"] < 75)       // Very Good
-                echo "<td class='w3-container w3-hover-light-green'>Very Good</td>";
-            elseif ($row[">=75%2"] >= 50  and $row[">=75%2"] <= 61)       // Good
-                echo "<td class='w3-container w3-lime'>Good</td>";
-            elseif ($row[">=65%2"] >= 75)                                 // Acceptable
-                echo "<td class='w3-container w3-orange'>Acceptable</td>";
-            else                                                        // Not Applicable
-                echo "<td class='w3-container w3-red'>Not Applicable</td>";    
-
-            if ($row[">=75%3"] >= 75)                                    // Outstanding
-                echo "<td class='w3-container w3-green'>Outstanding</td>";
-            elseif ($row[">=75%3"] >= 61 and $row[">=75%3"] < 75)       // Very Good
-                echo "<td class='w3-container w3-hover-light-green'>Very Good</td>";
-            elseif ($row[">=75%3"] >= 50  and $row[">=75%3"] <= 61)       // Good
-                echo "<td class='w3-container w3-lime'>Good</td>";
-            elseif ($row[">=65%3"] >= 75)                                 // Acceptable
-                echo "<td class='w3-containe w3-orrange'>Acceptable</td>";
-            else                                                        // Not Applicable
-                echo "<td class='w3-container w3-red'>Not Applicable</td>";    
-
-            if ($row[">=75%4"] >= 75)                                    // Outstanding
-                echo "<td class='w3-container w3-green'>Outstanding</td>";
-            elseif ($row[">=75%4"] >= 61 and $row[">=75%4"] < 75)       // Very Good
-                echo "<td class='w3-container w3-hover-light-green'>Very Good</td>";
-            elseif ($row[">=75%4"] >= 50  and $row[">=75%4"] <= 61)       // Good
-                echo "<td class='w3-container w3-lime'>Good</td>";
-            elseif ($row[">=65%4"] >= 75)                                 // Acceptable
-                echo "<td class='w3-container w3-orange'>Acceptable</td>";
-            else                                                        // Not Applicable
-                echo "<td class='w3-container w3-red'>Not Applicable</td>";  
+                if ($row[">=75%$i"] >= 75)                                    // Outstanding
+                    echo "<td class='w3-container w3-green'>Outstanding</td>";
+                elseif ($row[">=75%$i"] >= 61 and $row[">=75%$i"] < 75)       // Very Good
+                    echo "<td class='w3-container w3-hover-light-green'>Very Good</td>";
+                elseif ($row[">=75%$i"] >= 50  and $row[">=75%$i"] <= 61)       // Good
+                    echo "<td class='w3-container w3-lime'>Good</td>";
+                elseif ($row[">=65%$i"] >= 75)                                 // Acceptable
+                    echo "<td class='w3-container w3-orange'>Acceptable</td>";
+                else                                                        // Not Applicable
+                    echo "<td class='w3-container w3-red'>Not Applicable</td>";
+            }
 
             echo "</tr>";
         }
     }
 }
 else
-    echo "Select Grade";
+    echo "Select Grade!";
 $conn->close();

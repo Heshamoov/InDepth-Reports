@@ -29,7 +29,8 @@ if (!isset($_SESSION['login'])) {
         });
         
         function search(){
-
+            var selected_grades = $("#grade option:selected");
+            
             var selected_years1 = $("#academic_year1 option:selected");
             var selected_years2 = $("#academic_year2 option:selected");
             var selected_years3 = $("#academic_year3 option:selected");
@@ -42,15 +43,18 @@ if (!isset($_SESSION['login'])) {
             var selected_terms4 = $("#term4 option:selected");
             var selected_terms5 = $("#term5 option:selected");
 
-            var selected_grades = $("#grade option:selected");
-
-            selected_grades.each(function () 
-                {   
-                    var currentGrade = "(grade = '" + $(this).text() + "')";
+            
+                    
+                    var currentGrade = "";
+                    selected_grades.each(function()        
+                    {   
+                        currentGrade = "(grade = '" + $(this).text() + "')";
+                    });
 
                     //Generate selected years SQL statement YEARS 1
                     var years1SQL = "";
-                    selected_years1.each(function () {
+                    selected_years1.each(function ()
+                    {
                         var currentYear = $(this).text();
 
                         if (years1SQL === "")
@@ -62,7 +66,6 @@ if (!isset($_SESSION['login'])) {
                     if (years1SQL !== "") 
                         years1SQL += ")";
                     
-
                     //Generate selected years SQL statement YEARS 2
                     var years2SQL = "";
                     selected_years2.each(function () {
@@ -201,14 +204,13 @@ if (!isset($_SESSION['login'])) {
                             document.getElementById("useroptions").innerHTML += this.responseText;
                         }
                     };
+                    
 httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + 
 "&years1=" + years1SQL + "&years2=" + years2SQL + "&years3=" + years3SQL + "&years4=" + years4SQL + "&years5=" + years5SQL + 
 "&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL
 , false);
                     httpSearch.send();
-
-                });
-            }      
+}
     </script>
 
 <body>
@@ -223,17 +225,28 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
 
 
 <!--Drop menus-->
-<h3 class="w3-center">Attainment Analysis - Al Sanawabar School</h3>
+<h3 class="w3-center">Attainment Progress Analysis - Al Sanawabar School</h3>
 
 <!-- Debug Console -->
 <label id="out"></label>
 
 <!-- Select Grade -->
-<div class="w3-container w3-center">
+<div class="w3-container w3-center" id="main">
     <label class="w3-large w3-container">Grade</label>
     <select id="grade" multiple="multiple"></select>
-    <button id="submit" class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>
-</div>
+    <button class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>
+    
+    <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
+            onclick="printJS({
+                    documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
+                    printable: 'main',
+                    type: 'html',
+                    ignoreElements: ['pp'],
+                    targetStyles: ['*'],
+                    css: 'styles/pdf.css',
+                })">
+                </button>
+
 
 <br>
 
@@ -241,11 +254,11 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
     <table id="useroptions" class="w3-container w3-table-all w3-card w3-centered">
         <tr>
             <th><label class="w3-large">Year</label></th>
-            <th><select id="academic_year1" multiple="multiple" onchange=""></select></th>
-            <th><select id="academic_year2" multiple="multiple" onchange=""></select></th>
-            <th><select id="academic_year3" multiple="multiple" onchange=""></select></th>
-            <th><select id="academic_year4" multiple="multiple" onchange=""></select></th>
-            <th><select id="academic_year5" multiple="multiple" onchange=""></select></th>
+            <th><select id="academic_year1" multiple="multiple"></select></th>
+            <th><select id="academic_year2" multiple="multiple"></select></th>
+            <th><select id="academic_year3" multiple="multiple"></select></th>
+            <th><select id="academic_year4" multiple="multiple"></select></th>
+            <th><select id="academic_year5" multiple="multiple"></select></th>
         </tr>
         <tr>
             <th><label class="w3-large">Term</label></th>
@@ -256,7 +269,8 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
             <th><select id="term5" multiple="multiple"></select></th>
         </tr>
     </table>
-</div>    
+</div>
+</div>
     
     <table id="subjects" class="w3-container w3-table-all w3-centered"></table>
 </div>
@@ -297,7 +311,11 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
 
         <!-- Initialize Academic Years    -->
         <script type="text/javascript">
-            var yearArray = ["Your Data Base is Empty!."];
+            var AY1 = document.getElementById('academic_year1');
+            var AY2 = document.getElementById('academic_year2');
+            var AY3 = document.getElementById('academic_year3');
+            var AY4 = document.getElementById('academic_year4');
+            var AY5 = document.getElementById('academic_year5');
 
             var httpyear = new XMLHttpRequest();
             httpyear.onreadystatechange = function () {
@@ -307,13 +325,13 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
                 }
             };
             httpyear.open("GET", "sqldb/years.php", false);
-            httpyear.send();
+            httpyear.send();  
 
-            var AY1 = document.getElementById('academic_year1');
-            var AY2 = document.getElementById('academic_year2');
-            var AY3 = document.getElementById('academic_year3');
-            var AY4 = document.getElementById('academic_year4');
-            var AY5 = document.getElementById('academic_year5');
+            $('#academic_year1').multiselect('destroy');
+            $('#academic_year2').multiselect('destroy');
+            $('#academic_year3').multiselect('destroy');
+            $('#academic_year4').multiselect('destroy');
+            $('#academic_year4').multiselect('destroy');
 
             delete yearArray[yearArray.length - 1];
 
@@ -329,19 +347,25 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
                 $('#academic_year1').multiselect({
                     includeSelectAllOption: true
                 });
+            });
 
+             $(function () {
                 $('#academic_year2').multiselect({
                     includeSelectAllOption: true
                 });
+            });
 
+             $(function () {
                 $('#academic_year3').multiselect({
                     includeSelectAllOption: true
                 });
-
+            });
+             $(function () {
                 $('#academic_year4').multiselect({
                     includeSelectAllOption: true
                 });
-
+            });
+             $(function () {
                 $('#academic_year5').multiselect({
                     includeSelectAllOption: true
                 });                                 
@@ -366,7 +390,12 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
 
                 httpTerms.open("GET", "sqldb/terms.php", false);
                 httpTerms.send();
-
+                
+                $('#terms1').multiselect('destroy');
+                $('#terms2').multiselect('destroy');
+                $('#terms3').multiselect('destroy');
+                $('#terms4').multiselect('destroy');
+                $('#terms5').multiselect('destroy');
 
                 delete termsArray[termsArray.length - 1];
 

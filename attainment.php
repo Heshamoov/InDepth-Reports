@@ -11,7 +11,7 @@ if (!isset($_SESSION['login'])) {
     
     </head>
 
-    <!--loder initialization-->
+    <!--loader initialization-->
     <script>
         $(window).load(function () {
 
@@ -359,12 +359,6 @@ if (!isset($_SESSION['login'])) {
             }
             document.getElementById('loading').style.visibility = 'hidden';
             document.getElementById('search').style.visibility = 'visible';}
-
-
-
-
-
-
     </script>
 
     <script>
