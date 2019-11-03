@@ -29,7 +29,6 @@ if (!isset($_SESSION['login'])) {
         });
         
         function search(){
-            document.getElementById('out').innerHTML = "search";
 
             var selected_years1 = $("#academic_year1 option:selected");
             var selected_years2 = $("#academic_year2 option:selected");
@@ -68,7 +67,6 @@ if (!isset($_SESSION['login'])) {
                     var years2SQL = "";
                     selected_years2.each(function () {
                         var currentYear = $(this).text();
-                        document.getElementById("out").innerHTML += currentYear + " - ";
                         if (years2SQL === "")
                             years2SQL = "(acd_code = '" + currentYear + "' ";
                         else
@@ -82,7 +80,6 @@ if (!isset($_SESSION['login'])) {
                     var years3SQL = "";
                     selected_years3.each(function () {
                         var currentYear = $(this).text();
-                        document.getElementById("out").innerHTML += currentYear + " - ";
                         if (years3SQL === "")
                             years3SQL = "(acd_code = '" + currentYear + "' ";
                         else
@@ -96,7 +93,6 @@ if (!isset($_SESSION['login'])) {
                     var years4SQL = "";
                     selected_years4.each(function () {
                         var currentYear = $(this).text();
-                        document.getElementById("out").innerHTML += currentYear + " - ";
                         if (years4SQL === "")
                             years4SQL = "(acd_code = '" + currentYear + "' ";
                         else
@@ -110,7 +106,6 @@ if (!isset($_SESSION['login'])) {
                     var years5SQL = "";
                     selected_years5.each(function () {
                         var currentYear = $(this).text();
-                        document.getElementById("out").innerHTML += currentYear + " - ";
                         if (years5SQL === "")
                             years5SQL = "(acd_code = '" + currentYear + "' ";
                         else
@@ -140,7 +135,6 @@ if (!isset($_SESSION['login'])) {
                     var terms2SQL = "";
                     selected_terms2.each(function () {
                         var currentTerm = $(this).text();
-                        document.getElementById("out").innerHTML += currentTerm + " - ";
                         
                         if (terms2SQL === "")
                             terms2SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
@@ -157,7 +151,6 @@ if (!isset($_SESSION['login'])) {
                     var terms3SQL = "";
                     selected_terms3.each(function () {
                         var currentTerm = $(this).text();
-                        document.getElementById("out").innerHTML += currentTerm + " - ";
                         
                         if (terms3SQL === "")
                             terms3SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
@@ -174,7 +167,6 @@ if (!isset($_SESSION['login'])) {
                     var terms4SQL = "";
                     selected_terms4.each(function () {
                         var currentTerm = $(this).text();
-                        document.getElementById("out").innerHTML += currentTerm + " - ";
                         
                         if (terms4SQL === "")
                             terms4SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
@@ -191,7 +183,6 @@ if (!isset($_SESSION['login'])) {
                     var terms5SQL = "";
                     selected_terms5.each(function () {
                         var currentTerm = $(this).text();
-                        document.getElementById("out").innerHTML += currentTerm + " - ";
                         
                         if (terms5SQL === "")
                             terms5SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
