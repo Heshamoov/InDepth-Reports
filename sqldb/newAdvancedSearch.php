@@ -111,7 +111,7 @@ if ($grades != "")
                 if ($row[">=75%$i"] >= 75)                                    // Outstanding
                     echo "<td class='w3-container w3-green'>Outstanding</td>";
                 elseif ($row[">=75%$i"] >= 61 and $row[">=75%$i"] < 75)       // Very Good
-                    echo "<td class='w3-container w3-hover-light-green'>Very Good</td>";
+                    echo "<td class='w3-container w3-light-green'>Very Good</td>";
                 elseif ($row[">=75%$i"] >= 50  and $row[">=75%$i"] <= 61)       // Good
                     echo "<td class='w3-container w3-lime'>Good</td>";
                 elseif ($row[">=65%$i"] >= 75)                                 // Acceptable
