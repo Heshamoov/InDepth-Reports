@@ -201,7 +201,7 @@ if (!isset($_SESSION['login'])) {
                             document.getElementById("useroptions").innerHTML += this.responseText;
                         }
                     };
-                    httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + 
+httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + 
 "&years1=" + years1SQL + "&years2=" + years2SQL + "&years3=" + years3SQL + "&years4=" + years4SQL + "&years5=" + years5SQL + 
 "&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL
 , false);
@@ -223,7 +223,7 @@ if (!isset($_SESSION['login'])) {
 
 
 <!--Drop menus-->
-<h4 class="w3-center">Al Sanawabar School: Attainment Analysis</h4>
+<h3 class="w3-center">Attainment Analysis - Al Sanawabar School</h3>
 
 <!-- Debug Console -->
 <label id="out"></label>

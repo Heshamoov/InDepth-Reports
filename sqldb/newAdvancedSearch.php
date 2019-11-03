@@ -5,29 +5,31 @@ include ('../config/dbConfig.php');
 
 $grades = $_REQUEST["grades"];
 
-$years1 = $_REQUEST["years1"];
-$years2 = $_REQUEST["years2"];
-$years3 = $_REQUEST["years3"];
-$years4 = $_REQUEST["years4"];
-$years5 = $_REQUEST["years5"];
+$YArray = array();
+if ($_REQUEST["years1"] != "") $YArray[0] = $_REQUEST["years1"];
+if ($_REQUEST["years2"] != "") $YArray[1] = $_REQUEST["years2"];
+if ($_REQUEST["years3"] != "") $YArray[2] = $_REQUEST["years3"];
+if ($_REQUEST["years4"] != "") $YArray[3] = $_REQUEST["years4"];
+if ($_REQUEST["years5"] != "") $YArray[4] = $_REQUEST["years5"];
 
-$YArray = array($years1, $years2, $years3, $years4, $years5);
+
+$TArray = array();
+if ($_REQUEST["terms1"] != "") $TArray[0] = $_REQUEST["terms1"];
+if ($_REQUEST["terms2"] != "") $TArray[1] = $_REQUEST["terms2"];
+if ($_REQUEST["terms3"] != "") $TArray[2] = $_REQUEST["terms3"];
+if ($_REQUEST["terms4"] != "") $TArray[3] = $_REQUEST["terms4"];
+if ($_REQUEST["terms5"] != "") $TArray[4] = $_REQUEST["terms5"];
 
 // for($i = 0; $i < count($YArray); $i++)
 //     echo $YArray[$i] . "<br>";
 // echo "****************<br>";
+// echo count($YArray);
 
-$terms1 = $_REQUEST["terms1"];
-$terms2 = $_REQUEST["terms2"];
-$terms3 = $_REQUEST["terms3"];
-$terms4 = $_REQUEST["terms4"];
-$terms5 = $_REQUEST["terms5"];
-
-$TArray = array($terms1, $terms2, $terms3, $terms4, $terms5);
 
 // for($i = 0; $i < count($TArray); $i++)
 //     echo $TArray[$i] . "<br>";
 // echo "****************<br>";
+// echo count($TArray);
 
 
 $columns = "SELECT subject_name, exam_name, acd_code, grade, section,
