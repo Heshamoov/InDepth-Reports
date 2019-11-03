@@ -13,19 +13,19 @@ if (!isset($_SESSION['login'])) {
 
     <script type="text/javascript">      
         $(function () {
-            $('#academic_year1').multiselect({includeSelectAllOption: true});
-            $('#academic_year2').multiselect({includeSelectAllOption: true});
-            $('#academic_year3').multiselect({includeSelectAllOption: true});
-            $('#academic_year4').multiselect({includeSelectAllOption: true});
-            $('#academic_year5').multiselect({includeSelectAllOption: true});
+            $('#academic_year1').multiselect({includeSelectAllOption: false});
+            $('#academic_year2').multiselect({includeSelectAllOption: false});
+            $('#academic_year3').multiselect({includeSelectAllOption: false});
+            $('#academic_year4').multiselect({includeSelectAllOption: false});
+            $('#academic_year5').multiselect({includeSelectAllOption: false});
 
-            $('#term1').multiselect({includeSelectAllOption: true});
-            $('#term2').multiselect({includeSelectAllOption: true});
-            $('#term3').multiselect({includeSelectAllOption: true});
-            $('#term4').multiselect({includeSelectAllOption: true});
-            $('#term5').multiselect({includeSelectAllOption: true});
+            $('#term1').multiselect({includeSelectAllOption: false});
+            $('#term2').multiselect({includeSelectAllOption: false});
+            $('#term3').multiselect({includeSelectAllOption: false});
+            $('#term4').multiselect({includeSelectAllOption: false});
+            $('#term5').multiselect({includeSelectAllOption: false});
 
-            $('#grade').multiselect({includeSelectAllOption: true});
+            $('#grade').multiselect({includeSelectAllOption: false});
         });
         
         function search(){
@@ -201,7 +201,7 @@ if (!isset($_SESSION['login'])) {
                     var httpSearch = new XMLHttpRequest();
                     httpSearch.onreadystatechange = function () {
                         if (this.readyState === 4) {
-                            document.getElementById("useroptions").innerHTML += this.responseText;
+                            document.getElementById("results").innerHTML = this.responseText;
                         }
                     };
                     
@@ -209,9 +209,10 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
 "&years1=" + years1SQL + "&years2=" + years2SQL + "&years3=" + years3SQL + "&years4=" + years4SQL + "&years5=" + years5SQL + 
 "&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL
 , false);
-                    httpSearch.send();
+
+httpSearch.send();
 }
-    </script>
+</script>
 
 <body>
     
@@ -233,7 +234,7 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
 <!-- Select Grade -->
 <div class="w3-container w3-center" id="main">
     <label class="w3-large w3-container">Grade</label>
-    <select id="grade" multiple="multiple"></select>
+    <select id="grade"></select>
     <button class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>
     
     <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
@@ -254,25 +255,25 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
     <table id="useroptions" class="w3-container w3-table-all w3-card w3-centered">
         <tr>
             <th><label class="w3-large">Year</label></th>
-            <th><select id="academic_year1" multiple="multiple"></select></th>
-            <th><select id="academic_year2" multiple="multiple"></select></th>
-            <th><select id="academic_year3" multiple="multiple"></select></th>
-            <th><select id="academic_year4" multiple="multiple"></select></th>
-            <th><select id="academic_year5" multiple="multiple"></select></th>
+            <th><select id="academic_year1"></select></th>
+            <th><select id="academic_year2"></select></th>
+            <th><select id="academic_year3"></select></th>
+            <th><select id="academic_year4"></select></th>
+            <th><select id="academic_year5"></select></th>
         </tr>
         <tr>
             <th><label class="w3-large">Term</label></th>
-            <th><select id="term1" multiple="multiple"></select></th>
-            <th><select id="term2" multiple="multiple"></select></th>
-            <th><select id="term3" multiple="multiple"></select></th>
-            <th><select id="term4" multiple="multiple"></select></th>
-            <th><select id="term5" multiple="multiple"></select></th>
+            <th><select id="term1"></select></th>
+            <th><select id="term2"></select></th>
+            <th><select id="term3"></select></th>
+            <th><select id="term4"></select></th>
+            <th><select id="term5"></select></th>
         </tr>
+        <tbody id="results"> </tbody>
     </table>
 </div>
 </div>
     
-    <table id="subjects" class="w3-container w3-table-all w3-centered"></table>
 </div>
 
 
@@ -343,11 +344,11 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
                 AY5.add(new Option(yearArray[i]));
             };
 
-            $(function () {
-                $('#academic_year1').multiselect({
-                    includeSelectAllOption: true
-                });
-            });
+            // $(function () {
+            //     $('#academic_year1').multiselect({
+            //         includeSelectAllOption: true
+            //     });
+            // });
 
              $(function () {
                 $('#academic_year2').multiselect({
@@ -408,27 +409,7 @@ httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
                 }
                 ;
 
-                $(function () {
-                    $('#term1').multiselect({
-                        includeSelectAllOption: true
-                    });
-
-                    $('#term2').multiselect({
-                        includeSelectAllOption: true
-                    });
-
-                    $('#term3').multiselect({
-                        includeSelectAllOption: true
-                    });
-
-                    $('#term4').multiselect({
-                        includeSelectAllOption: true
-                    });
-
-                    $('#term5').multiselect({
-                        includeSelectAllOption: true
-                    });                                                                                
-                });
+    
         </script>
 
         

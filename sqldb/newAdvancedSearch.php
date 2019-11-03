@@ -120,6 +120,7 @@ if ($grades != "")
                     echo "<td class='w3-container w3-red'>Not Applicable</td>";
             }
 
+            // echo "<td>-</td><td>-</td><td>-</td><td>-</td>";
             echo "</tr>";
         }
     }
