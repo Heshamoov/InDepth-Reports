@@ -26,6 +26,8 @@ if (!isset($_SESSION['login'])) {
             $('#term5').multiselect({includeSelectAllOption: false});
 
             $('#grade').multiselect({includeSelectAllOption: false});
+
+            $('#view').multiselect({includeSelectAllOption: false});
         });
         
         function search(){
@@ -43,7 +45,12 @@ if (!isset($_SESSION['login'])) {
             var selected_terms4 = $("#term4 option:selected");
             var selected_terms5 = $("#term5 option:selected");
 
-            
+            var selected_view = $("#view option:selected");
+            var currentView = "";
+            selected_view.each(function()
+            {
+               currentView = $(this).text();
+            });
                     
                     var currentGrade = "";
                     selected_grades.each(function()        
@@ -211,7 +218,7 @@ if (!isset($_SESSION['login'])) {
                     
 httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + 
 "&years1=" + years1SQL + "&years2=" + years2SQL + "&years3=" + years3SQL + "&years4=" + years4SQL + "&years5=" + years5SQL + 
-"&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL
+"&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL + "&view=" + currentView
 , false);
 
 httpSearch.send();
@@ -252,6 +259,12 @@ httpSearch.send();
                 })">
                 </button>
 
+<label class="w3-large w3-container">View</label>
+<select id="view" onchange="search()">
+    <option>Attainment</option>
+    <option>Percentage</option>
+    <option>Attainment - Percentage</option>
+</select>
 
 <br>
 
