@@ -133,7 +133,7 @@ if ($grades != "")
                     elseif ($row[">=65%$i"] >= 75)                                 // Acceptable
                         echo "<td class='w3-container w3-text-orange w3-hover-orange'>".$row[">=65%$i"]. "%</td>";
                     else                                                          // Not Applicable
-                        echo "<td class='w3-container w3-text-red w3-hover-red'>".$row[">=65%$i"]. "</td>";
+                        echo "<td class='w3-container w3-text-red w3-hover-red'>".$row[">=65%$i"]. "%</td>";
 
                 elseif ($view == 'Attainment - Percentage')
                     if ($row[">=75%$i"] >= 75)                                    // Outstanding
