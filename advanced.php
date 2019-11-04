@@ -70,10 +70,11 @@ if (!isset($_SESSION['login'])) {
                     var years2SQL = "";
                     selected_years2.each(function () {
                         var currentYear = $(this).text();
-                        if (years2SQL === "")
-                            years2SQL = "(acd_code = '" + currentYear + "' ";
-                        else
-                            years2SQL += " OR acd_code = '" + currentYear + "'";
+                        if (currentYear != 'Select Year')
+                            if (years2SQL === "")
+                                years2SQL = "(acd_code = '" + currentYear + "' ";
+                            else
+                                years2SQL += " OR acd_code = '" + currentYear + "'";
                     });
                 
                     if (years2SQL !== "") 
@@ -83,6 +84,7 @@ if (!isset($_SESSION['login'])) {
                     var years3SQL = "";
                     selected_years3.each(function () {
                         var currentYear = $(this).text();
+                        if (currentYear != 'Select Year')
                         if (years3SQL === "")
                             years3SQL = "(acd_code = '" + currentYear + "' ";
                         else
@@ -96,6 +98,7 @@ if (!isset($_SESSION['login'])) {
                     var years4SQL = "";
                     selected_years4.each(function () {
                         var currentYear = $(this).text();
+                        if (currentYear != 'Select Year')
                         if (years4SQL === "")
                             years4SQL = "(acd_code = '" + currentYear + "' ";
                         else
@@ -109,6 +112,7 @@ if (!isset($_SESSION['login'])) {
                     var years5SQL = "";
                     selected_years5.each(function () {
                         var currentYear = $(this).text();
+                        if (currentYear != 'Select Year')
                         if (years5SQL === "")
                             years5SQL = "(acd_code = '" + currentYear + "' ";
                         else
@@ -123,7 +127,7 @@ if (!isset($_SESSION['login'])) {
                     var terms1SQL = "";
                     selected_terms1.each(function () {
                         var currentTerm = $(this).text();
-                        
+                
                         if (terms1SQL === "")
                             terms1SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
                         else
@@ -138,7 +142,7 @@ if (!isset($_SESSION['login'])) {
                     var terms2SQL = "";
                     selected_terms2.each(function () {
                         var currentTerm = $(this).text();
-                        
+                        if (currentTerm != 'Select Term')
                         if (terms2SQL === "")
                             terms2SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
                         else
@@ -154,7 +158,7 @@ if (!isset($_SESSION['login'])) {
                     var terms3SQL = "";
                     selected_terms3.each(function () {
                         var currentTerm = $(this).text();
-                        
+                        if (currentTerm != 'Select Term')
                         if (terms3SQL === "")
                             terms3SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
                         else
@@ -170,7 +174,7 @@ if (!isset($_SESSION['login'])) {
                     var terms4SQL = "";
                     selected_terms4.each(function () {
                         var currentTerm = $(this).text();
-                        
+                        if (currentTerm != 'Select Term')
                         if (terms4SQL === "")
                             terms4SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
                         else
@@ -186,7 +190,7 @@ if (!isset($_SESSION['login'])) {
                     var terms5SQL = "";
                     selected_terms5.each(function () {
                         var currentTerm = $(this).text();
-                        
+                        if (currentTerm != 'Select Term')
                         if (terms5SQL === "")
                             terms5SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
                         else
@@ -336,6 +340,11 @@ httpSearch.send();
 
             delete yearArray[yearArray.length - 1];
 
+            AY2.add(new Option('Select Year'));
+            AY3.add(new Option('Select Year'));
+            AY4.add(new Option('Select Year'));
+            AY5.add(new Option('Select Year'));
+
             for (var i in yearArray) {
                 AY1.add(new Option(yearArray[i]));
                 AY2.add(new Option(yearArray[i]));
@@ -399,6 +408,11 @@ httpSearch.send();
                 $('#terms5').multiselect('destroy');
 
                 delete termsArray[termsArray.length - 1];
+
+                term2.add(new Option('Select Term'));
+                term3.add(new Option('Select Term'));
+                term4.add(new Option('Select Term'));
+                term5.add(new Option('Select Term'));
 
                 for (var i in termsArray) {
                     term1.add(new Option(termsArray[i]));

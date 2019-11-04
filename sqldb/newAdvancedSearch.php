@@ -109,15 +109,15 @@ if ($grades != "")
             for ($i=0; $i < count($YArray); $i++) {
             
                 if ($row[">=75%$i"] >= 75)                                    // Outstanding
-                    echo "<td class='w3-container w3-green'>Outstanding</td>";
+                    echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>";
                 elseif ($row[">=75%$i"] >= 61 and $row[">=75%$i"] < 75)       // Very Good
-                    echo "<td class='w3-container w3-light-green'>Very Good</td>";
+                    echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>";
                 elseif ($row[">=75%$i"] >= 50  and $row[">=75%$i"] <= 61)       // Good
-                    echo "<td class='w3-container w3-lime'>Good</td>";
+                    echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>";
                 elseif ($row[">=65%$i"] >= 75)                                 // Acceptable
-                    echo "<td class='w3-container w3-orange'>Acceptable</td>";
+                    echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>";
                 else                                                        // Not Applicable
-                    echo "<td class='w3-container w3-red'>Not Applicable</td>";
+                    echo "<td class='w3-container w3-text-red w3-hover-red'>Not Applicable</td>";
             }
 
             // echo "<td>-</td><td>-</td><td>-</td><td>-</td>";
