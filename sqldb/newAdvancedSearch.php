@@ -6,7 +6,7 @@ include ('../config/dbConfig.php');
 $grades = $_REQUEST["grades"];
 $view   = $_REQUEST["view"];
 
-echo $view;
+// echo $view;
 
 
 $YArray = array();

@@ -26,8 +26,13 @@ if (!isset($_SESSION['login'])) {
             $('#term5').multiselect({includeSelectAllOption: false});
 
             $('#grade').multiselect({includeSelectAllOption: false});
-
+            
+            $('#studentYear').multiselect({includeSelectAllOption: false});
+            $('#student').multiselect({includeSelectAllOption: false});
+            
             $('#view').multiselect({includeSelectAllOption: false});
+
+
         });
         
         function search(){
@@ -258,6 +263,12 @@ httpSearch.send();
                     css: 'styles/pdf.css',
                 })">
                 </button>
+</div>
+<br>
+<div class="w3-container w3-center w3-light-gray">
+<label class="w3-large w3-container">Year</label><select id="studentYear" onchange="StudentsSearch()"></select>
+
+<label class="w3-large w3-container">Student Name</label><select id="student" onchange="search()"></select>
 
 <label class="w3-large w3-container">View</label>
 <select id="view" onchange="search()">
@@ -265,7 +276,7 @@ httpSearch.send();
     <option>Percentage</option>
     <option>Attainment - Percentage</option>
 </select>
-
+</div>
 <br>
 
 <div class="w3-container">
@@ -334,6 +345,7 @@ httpSearch.send();
             var AY3 = document.getElementById('academic_year3');
             var AY4 = document.getElementById('academic_year4');
             var AY5 = document.getElementById('academic_year5');
+            var SY  = document.getElementById('studentYear');
 
             var httpyear = new XMLHttpRequest();
             httpyear.onreadystatechange = function () {
@@ -349,7 +361,8 @@ httpSearch.send();
             $('#academic_year2').multiselect('destroy');
             $('#academic_year3').multiselect('destroy');
             $('#academic_year4').multiselect('destroy');
-            $('#academic_year4').multiselect('destroy');
+            $('#academic_year5').multiselect('destroy');
+            $('#studentYear').multiselect('destroy');
 
             delete yearArray[yearArray.length - 1];
 
@@ -357,6 +370,7 @@ httpSearch.send();
             AY3.add(new Option('Select Year'));
             AY4.add(new Option('Select Year'));
             AY5.add(new Option('Select Year'));
+            SY.add(new Option('Select Year'));
 
             for (var i in yearArray) {
                 AY1.add(new Option(yearArray[i]));
@@ -364,6 +378,7 @@ httpSearch.send();
                 AY3.add(new Option(yearArray[i]));
                 AY4.add(new Option(yearArray[i]));
                 AY5.add(new Option(yearArray[i]));
+                SY.add(new Option(yearArray[i]));
             };
 
             // $(function () {
@@ -372,27 +387,27 @@ httpSearch.send();
             //     });
             // });
 
-             $(function () {
-                $('#academic_year2').multiselect({
-                    includeSelectAllOption: true
-                });
-            });
+            //  $(function () {
+            //     $('#academic_year2').multiselect({
+            //         includeSelectAllOption: true
+            //     });
+            // });
 
-             $(function () {
-                $('#academic_year3').multiselect({
-                    includeSelectAllOption: true
-                });
-            });
-             $(function () {
-                $('#academic_year4').multiselect({
-                    includeSelectAllOption: true
-                });
-            });
-             $(function () {
-                $('#academic_year5').multiselect({
-                    includeSelectAllOption: true
-                });                                 
-            });
+            //  $(function () {
+            //     $('#academic_year3').multiselect({
+            //         includeSelectAllOption: true
+            //     });
+            // });
+            //  $(function () {
+            //     $('#academic_year4').multiselect({
+            //         includeSelectAllOption: true
+            //     });
+            // });
+            //  $(function () {
+            //     $('#academic_year5').multiselect({
+            //         includeSelectAllOption: true
+            //     });                                 
+    // });
         </script>
 
         <!-- Initialize Terms    -->
@@ -439,6 +454,40 @@ httpSearch.send();
     
         </script>
 
+
+        <!-- Initialize Students List    -->
+        <script type="text/javascript">      
+                var studentDrop = document.getElementById('student');
+                
+                var yearDrop = $("#studentYear option:selected");
+                var yearValue = "";
+                yearDrop.each(function()
+                {
+                    yearValue = $(this).text();
+                });
+
+                var httpStudents = new XMLHttpRequest();
+                httpStudents.onreadystatechange = function () {
+                    if (this.readyState === 4) {
+                        var str = this.responseText;
+                        studentArray = str.split("\t");
+                    }
+                };
+
+                httpStudents.open("GET", "sqldb/students.php?year=" + yearValue, false);
+                httpStudents.send();
+                
+                $('#studentDrop').multiselect('destroy');
+
+                delete studentArray[studentArray.length - 1];
+
+                studentDrop.add(new Option('Select Student'));
+                
+
+                for (var i in studentArray) {
+                    studentDrop.add(new Option(studentArray[i]));
+                };
+        </script>
         
     </body>
     </html>
