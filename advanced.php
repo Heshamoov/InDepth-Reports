@@ -65,7 +65,7 @@ if (!isset($_SESSION['login'])) {
             var httpSearch = new XMLHttpRequest();
             httpSearch.onreadystatechange = function () {
                 if (this.readyState === 4) {
-                    document.getElementById('out').innerHTML = this.responseText;
+                    // document.getElementById('out').innerHTML = this.responseText;
                     var str = this.responseText;
                     namesArray = str.split("\t");
                 }
@@ -319,7 +319,7 @@ httpSearch.send();
     <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
             onclick="printJS({
                     documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
-                    printable: 'main',
+                    printable: 'useroptions',
                     type: 'html',
                     ignoreElements: ['pp'],
                     targetStyles: ['*'],

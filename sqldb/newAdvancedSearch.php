@@ -41,10 +41,10 @@ if ($_REQUEST["terms5"] != "") $TArray[4] = $_REQUEST["terms5"];
 
 $columns = "SELECT subject_name, exam_name, acd_code, grade, section,
                 COUNT(IF(exam_mark IS NOT NULL, 1, NULL)) 'Total',
-                COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL, 1, NULL)) AS 'MoreOrEqual65',
-                ROUND(COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL, 1, NULL)) / COUNT(IF(exam_mark IS NOT NULL, 1, NULL)) * 100, 0) AS 'MoreOrEqual65P',
+COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL, 1, NULL)) AS 'MoreOrEqual65',
+ROUND(COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL, 1, NULL)) / COUNT(IF(exam_mark IS NOT NULL, 1, NULL)) * 100, 0) AS 'MoreOrEqual65P',
                 COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) AS 'MoreOrEqual75',
-                ROUND(COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL, 1, NULL)) * 100,0) AS 'MoreOrEqual75P'
+                ROUND(COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL, 1, NULL)) * 100,0) AS 'MoreOrEqual75P', exam_mark 
                 
                 FROM new_marks ";
 
@@ -55,7 +55,7 @@ if ($grades != "")
 {
     
     for($i = 0; $i < count($YArray); $i++)        
-        $QArray[$i] = " t$i.subject_name 'Subject$i', t$i.exam_name 'Exam$i', t$i.acd_code 'Year$i', t$i.grade 'Grade$i', t$i.MoreOrEqual65P '>=65%$i', t$i.MoreOrEqual75P '>=75%$i'";
+        $QArray[$i] = " t$i.subject_name 'Subject$i', t$i.exam_name 'Exam$i', t$i.acd_code 'Year$i', t$i.grade 'Grade$i', t$i.MoreOrEqual65P '>=65%$i', t$i.MoreOrEqual75P '>=75%$i', t$i.exam_mark 'Mark$i'";
 
     
     $TopColumns = "SELECT " . $QArray[0];
@@ -66,9 +66,13 @@ if ($grades != "")
     for($i = 0; $i < count($YArray); $i++) {
         $WhereArray[$i] = "
         WHERE
-            $grades AND $YArray[$i] AND $TArray[$i] 
+            $grades AND $YArray[$i] AND $TArray[$i] ";
 
-        GROUP BY subject_name
+        if ($student != '') {
+            $WhereArray[$i] .= " AND student_name = '$student' ";
+        }
+
+        $WhereArray[$i] .= "GROUP BY subject_name
 
         ORDER BY subject_name ";
     }
@@ -112,8 +116,48 @@ if ($grades != "")
 
             echo "<tr><td>" . $row["Subject0"] . "</td>";
 
-            for ($i=0; $i < count($YArray); $i++) {
+        for ($i=0; $i < count($YArray); $i++) {
             
+            if ($student != '') {
+
+                if ($view == 'Attainment')
+                    if ($row["Mark$i"] >= 75)                                    // Outstanding
+                        echo "<td class='w3-container w3-text-green w3-hover-green'>           Outstanding</td>";
+                    elseif ($row["Mark$i"] >= 61 and $row["Mark$i"] < 75)       // Very Good
+                        echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>";
+                    elseif ($row["Mark$i"] >= 50  and $row["Mark$i"] <= 61)       // Good
+                        echo "<td class='w3-container w3-text-lime w3-hover-lime'>              Good</td>";
+                    // elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
+                        // echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable</td>";
+                    else                                                          // Not Applicable
+                        echo "<td class='w3-container w3-text-red w3-hover-red'>                Not Applicable</td>";
+                
+                elseif ($view == 'Percentage') 
+                    if ($row["Mark$i"] >= 75)                                    // Outstanding
+                        echo "<td class='w3-container w3-text-green w3-hover-green'>".$row["Mark$i"]. "%</td>";
+                    elseif ($row["Mark$i"] >= 61 and $row["Mark$i"] < 75)       // Very Good
+                        echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>".$row["Mark$i"]. "%</td>";
+                    elseif ($row["Mark$i"] >= 50  and $row["Mark$i"] <= 61)       // Good
+                        echo "<td class='w3-container w3-text-lime w3-hover-lime'>".$row["Mark$i"]. "%</td>";
+                    // elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
+                        // echo "<td class='w3-container w3-text-orange w3-hover-orange'>".$row[">=65%$i"]. "%</td>";
+                    else                                                          // Not Applicable
+                        echo "<td class='w3-container w3-text-red w3-hover-red'>".$row["Mark$i"]. "%</td>";
+
+                elseif ($view == 'Attainment - Percentage')
+                    if ($row["Mark$i"] >= 75)                                    // Outstanding
+                        echo "<td class='w3-container w3-text-green w3-hover-green'>           Outstanding - ".$row["Mark$i"]. "%</td>";
+                    elseif ($row["Mark$i"] >= 61 and $row["Mark$i"] < 75)       // Very Good
+                        echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - ".$row["Mark$i"]. "%</td>";
+                    elseif ($row["Mark$i"] >= 50  and $row["Mark$i"] <= 61)       // Good
+                        echo "<td class='w3-container w3-text-lime w3-hover-lime'>              Good - ".$row["Mark$i"]. "%</td>";
+                    // elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
+                        // echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable - ".$row[">=65%$i"]. "%</td>";
+                    else                                                          // Not Applicable
+                        echo "<td class='w3-container w3-text-red w3-hover-red'>                Not Applicable - ".$row["Mark$i"]. "%</td>";
+            }
+            else {
+
                 if ($view == 'Attainment')
                     if ($row[">=75%$i"] >= 75)                                    // Outstanding
                         echo "<td class='w3-container w3-text-green w3-hover-green'>           Outstanding</td>";
@@ -121,7 +165,7 @@ if ($grades != "")
                         echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>";
                     elseif ($row[">=75%$i"] >= 50  and $row[">=75%$i"] <= 61)       // Good
                         echo "<td class='w3-container w3-text-lime w3-hover-lime'>              Good</td>";
-                    elseif ($row[">=65%$i"] >= 75)                                 // Acceptable
+                    elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                         echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable</td>";
                     else                                                          // Not Applicable
                         echo "<td class='w3-container w3-text-red w3-hover-red'>                Not Applicable</td>";
@@ -133,7 +177,7 @@ if ($grades != "")
                         echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>".$row[">=75%$i"]. "%</td>";
                     elseif ($row[">=75%$i"] >= 50  and $row[">=75%$i"] <= 61)       // Good
                         echo "<td class='w3-container w3-text-lime w3-hover-lime'>".$row[">=75%$i"]. "%</td>";
-                    elseif ($row[">=65%$i"] >= 75)                                 // Acceptable
+                    elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                         echo "<td class='w3-container w3-text-orange w3-hover-orange'>".$row[">=65%$i"]. "%</td>";
                     else                                                          // Not Applicable
                         echo "<td class='w3-container w3-text-red w3-hover-red'>".$row[">=75%$i"]. "%</td>";
@@ -145,11 +189,12 @@ if ($grades != "")
                         echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - ".$row[">=75%$i"]. "%</td>";
                     elseif ($row[">=75%$i"] >= 50  and $row[">=75%$i"] <= 61)       // Good
                         echo "<td class='w3-container w3-text-lime w3-hover-lime'>              Good - ".$row[">=75%$i"]. "%</td>";
-                    elseif ($row[">=65%$i"] >= 75)                                 // Acceptable
+                    elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                         echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable - ".$row[">=65%$i"]. "%</td>";
                     else                                                          // Not Applicable
-                        echo "<td class='w3-container w3-text-red w3-hover-red'>                Not Applicable - ".$row[">=75%$i"]. "%</td>";
+                        echo "<td class='w3-container w3-text-red w3-hover-red'>                Not Applicable - ".$row[">=75%$i"]. "%</td>";                
             }
+        }
 
             // echo "<td>-</td><td>-</td><td>-</td><td>-</td>";
             echo "</tr>";
