@@ -7,6 +7,16 @@ if (!isset($_SESSION['login'])) {
     include('Header.php');
     ?>
 
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+<!-- (Optional) Latest compiled and minified JavaScript translation files -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
+
     <title>Attainment Analysis</title>
     </head>
 
@@ -35,8 +45,54 @@ if (!isset($_SESSION['login'])) {
 
         });
         
-        function search(){
+        function FillStudents() {
+            var selected_grade = $("#grade option:selected");
+            var selected_year = $("#studentYear option:selected");
+
+            var currentGrade = "";
+            selected_grade.each(function()        
+            {   
+                currentGrade = "(grade = '" + $(this).text() + "')";
+            });
+
+            var currentYear = "";
+            selected_year.each(function()        
+            {   
+                currentYear = "(acd_code = '" + $(this).text() + "')";
+            });
+
+            // Sending to Server
+            var httpSearch = new XMLHttpRequest();
+            httpSearch.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    document.getElementById('out').innerHTML = this.responseText;
+                    var str = this.responseText;
+                    namesArray = str.split("\t");
+                }
+            };      
+httpSearch.open("POST", "sqldb/studentsNames.php?grade=" + currentGrade + "&year=" + currentYear, false);
+httpSearch.send();
+
+            var studentsDropDown = document.getElementById('studentsDropDown');
+
+            $('#studentsDropDown').multiselect('destroy');
+
+            delete namesArray[namesArray.length - 1];
+
+            for (var i in namesArray) {
+                studentsDropDown.add(new Option(namesArray[i]));
+            };
+
+            $(function () {
+                $('#studentsDropDown').multiselect({
+                    includeSelectAllOption: true
+                });
+            });            
+        }
+
+        function search() {
             var selected_grades = $("#grade option:selected");
+            
             
             var selected_years1 = $("#academic_year1 option:selected");
             var selected_years2 = $("#academic_year2 option:selected");
@@ -50,13 +106,20 @@ if (!isset($_SESSION['login'])) {
             var selected_terms4 = $("#term4 option:selected");
             var selected_terms5 = $("#term5 option:selected");
 
-            var selected_view = $("#view option:selected");
+            var selected_view = $("#view option:selected");                   //View
             var currentView = "";
             selected_view.each(function()
             {
                currentView = $(this).text();
             });
-                    
+            
+
+            var selected_student = $("#studentsDropDown option:selected");        //Student
+            var currentStudent = "";
+            selected_student.each(function()
+            {
+               currentStudent = $(this).text();
+            });                    
                     var currentGrade = "";
                     selected_grades.each(function()        
                     {   
@@ -223,7 +286,7 @@ if (!isset($_SESSION['login'])) {
                     
 httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + 
 "&years1=" + years1SQL + "&years2=" + years2SQL + "&years3=" + years3SQL + "&years4=" + years4SQL + "&years5=" + years5SQL + 
-"&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL + "&view=" + currentView
+"&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL + "&view=" + currentView + "&student=" + currentStudent
 , false);
 
 httpSearch.send();
@@ -266,9 +329,27 @@ httpSearch.send();
 </div>
 <br>
 <div class="w3-container w3-center w3-light-gray">
-<label class="w3-large w3-container">Year</label><select id="studentYear" onchange="StudentsSearch()"></select>
+<label class="w3-large w3-container">Year</label>                   <!-- Year DropDown -->
+<select id="studentYear" onchange="FillStudents()"></select>
 
-<label class="w3-large w3-container">Student Name</label><select id="student" onchange="search()"></select>
+<label class="w3-large w3-container">Student Name</label>           <!-- Students DropDown -->
+<select id="studentsDropDown" onchange="search()"></select>
+
+<!-- <select class="selectpicker show-tick" id="studentsDropDown" onchange="search()" data-live-search="true" title="Student Name"
+    data-style="btn-success">
+  <optgroup label="Picnic">
+    <option>Mustard</option>
+    <option>Ketchup</option>
+    <option>Relish</option>
+  </optgroup>
+  <optgroup label="Camping">
+    <option>Tent</option>
+    <option>Flashlight</option>
+    <option>Toilet Paper</option>
+  </optgroup>
+</select> -->
+
+
 
 <label class="w3-large w3-container">View</label>
 <select id="view" onchange="search()">
@@ -450,43 +531,6 @@ httpSearch.send();
                     term5.add(new Option(termsArray[i]));
                 }
                 ;
-
-    
-        </script>
-
-
-        <!-- Initialize Students List    -->
-        <script type="text/javascript">      
-                var studentDrop = document.getElementById('student');
-                
-                var yearDrop = $("#studentYear option:selected");
-                var yearValue = "";
-                yearDrop.each(function()
-                {
-                    yearValue = $(this).text();
-                });
-
-                var httpStudents = new XMLHttpRequest();
-                httpStudents.onreadystatechange = function () {
-                    if (this.readyState === 4) {
-                        var str = this.responseText;
-                        studentArray = str.split("\t");
-                    }
-                };
-
-                httpStudents.open("GET", "sqldb/students.php?year=" + yearValue, false);
-                httpStudents.send();
-                
-                $('#studentDrop').multiselect('destroy');
-
-                delete studentArray[studentArray.length - 1];
-
-                studentDrop.add(new Option('Select Student'));
-                
-
-                for (var i in studentArray) {
-                    studentDrop.add(new Option(studentArray[i]));
-                };
         </script>
         
     </body>

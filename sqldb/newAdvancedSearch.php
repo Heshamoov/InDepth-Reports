@@ -5,6 +5,9 @@ include ('../config/dbConfig.php');
 
 $grades = $_REQUEST["grades"];
 $view   = $_REQUEST["view"];
+$student = $_REQUEST["student"];
+
+// echo "PHP $student";
 
 // echo $view;
 
