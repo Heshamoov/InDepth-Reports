@@ -349,7 +349,7 @@ httpSearch.send();
 
         <div class="w3-left">   <!-- Students List DropDown -->
             <label class="w3-container">Student Name</label>
-            <select id="studentsDropDown" onchange="search()"></select>
+            <select id="studentsDropDown" onchange="FillYears(), search()"></select>
         </div>
 
         <div class="w3-right"><!-- View DropDown -->
@@ -391,7 +391,83 @@ httpSearch.send();
     </div>
 </div>
 
-        
+
+        <script type="text/javascript">
+            function FillYears() {
+
+                var selected_student = $("#studentsDropDown option:selected");      
+                var currentStudent = "";
+                    selected_student.each(function()
+                    {
+                        currentStudent = $(this).text();
+                    });                
+
+                var httpYears = new XMLHttpRequest();
+                httpYears.onreadystatechange = function () {
+                    if (this.readyState === 4) {
+                        var str = this.responseText;
+                        // document.getElementById('out').innerHTML += this.responseText;
+                        YearsArray = str.split("\t");
+                    }
+                };
+                httpYears.open("POST", "sqldb/YearsViaStudent.php?student=" + currentStudent, false);
+                httpYears.send();
+
+                var years1 = document.getElementById(years1);
+                var years2 = document.getElementById(years2);
+                var years3 = document.getElementById(years3);
+                var years4 = document.getElementById(years4);
+                var years5 = document.getElementById(years5);
+
+                while (years1.length > 0) {
+                    years1.remove(0);
+                    years2.remove(0);
+                    years3.remove(0);
+                    years4.remove(0);
+                    years5.remove(0);
+                }
+
+
+                $('#years1').multiselect('destroy');
+                $('#years2').multiselect('destroy');
+                $('#years3').multiselect('destroy');
+                $('#years4').multiselect('destroy');
+                $('#years5').multiselect('destroy');
+
+                delete YearsArray[YearsArray.length - 1];
+
+
+                for (var i in YearsArray) {
+                    years1.add(new Option(YearsArray[i]));
+                    years2.add(new Option(YearsArray[i]));
+                    years3.add(new Option(YearsArray[i]));
+                    years4.add(new Option(YearsArray[i]));
+                    years5.add(new Option(YearsArray[i]));
+                };
+
+                $(function () {
+                    $('years1').multiselect({
+                        includeSelectAllOption: true
+                    });
+                    $('years2').multiselect({
+                        includeSelectAllOption: true
+                    });
+                    $('years3').multiselect({
+                        includeSelectAllOption: true
+                    });
+                    $('years4').multiselect({
+                        includeSelectAllOption: true
+                    });
+                    $('years5').multiselect({
+                        includeSelectAllOption: true
+                    });
+                });
+
+                search();
+            }
+        </script>
+
+
         <script type="text/javascript">
             function FillTerm(year, term) {
                 var year = $(year).children('option:selected').text();
