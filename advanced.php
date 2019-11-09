@@ -325,9 +325,7 @@ httpSearch.send();
     <!-- Select Grade -->
     <div class="w3-container w3-center" id="main">
         <label class="w3-large w3-container">Grade</label>
-        <select id="grade" onchange="FillStudents()"></select>
-        <button class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>
-        
+        <select id="grade" onchange="FillStudents(), search()"></select>
         <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
                 onclick="printJS({
                         documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
@@ -350,7 +348,6 @@ httpSearch.send();
         <div class="w3-left">   <!-- Students List DropDown -->
             <label class="w3-container">Student Name</label>
             <select id="studentsDropDown" onchange="search()"></select>
-        <button class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>
         </div>
 
         <div class="w3-right"><!-- View DropDown -->
@@ -381,11 +378,11 @@ httpSearch.send();
             </tr>
             <tr>
                 <th><label>Term</label></th>
-                <th><select id="term1"></select></th>
-                <th><select id="term2"></select></th>
-                <th><select id="term3"></select></th>
-                <th><select id="term4"></select></th>
-                <th><select id="term5"></select></th>
+                <th><select id="term1" onchange="search()"></select></th>
+                <th><select id="term2" onchange="search()"></select></th>
+                <th><select id="term3" onchange="search()"></select></th>
+                <th><select id="term4" onchange="search()"></select></th>
+                <th><select id="term5" onchange="search()"></select></th>
             </tr>
             <tbody id="results"> </tbody>
         </table>
