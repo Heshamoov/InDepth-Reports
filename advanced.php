@@ -376,8 +376,8 @@ httpSearch.send();
         <th><select id="academic_year1" onchange="FillTerm(this, 'term1')"></select></th>
         <th><select id="academic_year2" onchange="FillTerm(this, 'term2')"></select></th>
         <th><select id="academic_year3" onchange="FillTerm(this, 'term3')"></select></th>
-        <th><select id="academic_year4" onchange="FillTerm(this)"></select></th>
-        <th><select id="academic_year5" onchange="FillTerm(this)"></select></th>
+        <th><select id="academic_year4" onchange="FillTerm(this, 'term4')"></select></th>
+        <th><select id="academic_year5" onchange="FillTerm(this, 'term5')"></select></th>
             </tr>
             <tr>
                 <th><label>Term</label></th>
@@ -402,7 +402,7 @@ httpSearch.send();
                 httpTerms.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
-                        document.getElementById('out').innerHTML += this.responseText;
+                        // document.getElementById('out').innerHTML += this.responseText;
                         termsArray = str.split("\t");
                     }
                 };
@@ -510,7 +510,7 @@ httpSearch.send();
         </script>
 
         <!-- Initialize Terms    -->
-        <!-- <script type="text/javascript">      
+        <script type="text/javascript">      
                 var term1 = document.getElementById('term1');
                 var term2 = document.getElementById('term2');
                 var term3 = document.getElementById('term3');
@@ -543,15 +543,9 @@ httpSearch.send();
                 term4.add(new Option('Select Term'));
                 term5.add(new Option('Select Term'));
 
-                for (var i in termsArray) {
+                for (var i in termsArray)
                     term1.add(new Option(termsArray[i]));
-                    term2.add(new Option(termsArray[i]));
-                    term3.add(new Option(termsArray[i]));
-                    term4.add(new Option(termsArray[i]));
-                    term5.add(new Option(termsArray[i]));
-                }
-                ;
-        </script> -->
+        </script>
         
     </body>
     </html>
