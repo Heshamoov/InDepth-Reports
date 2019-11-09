@@ -106,25 +106,36 @@ httpSearch.send();
             var selected_terms4 = $("#term4 option:selected");
             var selected_terms5 = $("#term5 option:selected");
 
-            var selected_view = $("#view option:selected");                   //View
-            var currentView = "";
-            selected_view.each(function()
-            {
-               currentView = $(this).text();
-            });
+            var selected_view = $("#view option:selected");
             
+            var selected_student = $("#studentsDropDown option:selected");
 
-            var selected_student = $("#studentsDropDown option:selected");        //Student
-            var currentStudent = "";
-            selected_student.each(function()
-            {
-               currentStudent = $(this).text();
-            });                    
-                    var currentGrade = "";
-                    selected_grades.each(function()        
-                    {   
+// Curren Year                   
+                    var currentGrade = "", printableGrade = "";
+                    selected_grades.each(function() {
+                        document.getElementById('printGrade').innerHTML = $(this).text();
+                        printableGrade = $(this).text();
                         currentGrade = "(grade = '" + $(this).text() + "')";
                     });
+
+// Current Student
+                    var currentStudent = "";
+                    selected_student.each(function()
+                    {
+                        currentStudent = $(this).text();
+                        if (currentStudent != "")
+                            document.getElementById('printGrade').innerHTML = printableGrade + "  -  " + currentStudent;
+                        else
+                            document.getElementById('printGrade').innerHTML = currentGrade;
+                    });
+
+// Current View                    
+                    var currentView = ""; 
+                    selected_view.each(function()
+                        {currentView = $(this).text();});
+
+
+
 
                     //Generate selected years SQL statement YEARS 1
                     var years1SQL = "";
@@ -298,96 +309,95 @@ httpSearch.send();
 <div class="w3-responsive header" >
     <!-- Navigation bar -->        
     <?php include('navbar.php'); ?>
-
     <!--set color for current tab-->
     <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
 </div>
 
+<div id="print">
+    <h3 class="w3-center">Attainment Progress Analysis - Al Sanawabar School</h3>
 
-<!--Drop menus-->
-<h3 class="w3-center">Attainment Progress Analysis - Al Sanawabar School</h3>
+    <!-- Debug Console -->
+    <!-- <label id="out"></label> -->
 
-<!-- Debug Console -->
-<label id="out"></label>
+    <!-- Select Grade -->
+    <div class="w3-container w3-center" id="main">
+        <label class="w3-large w3-container">Grade</label>
+        <select id="grade" onchange="FillStudents()"></select>
+        <button class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>
+        
+        <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
+                onclick="printJS({
+                        documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
+                        printable: 'useroptions',
+                        type: 'html',
+                        ignoreElements: ['pp'],
+                        targetStyles: ['*'],
+                        css: 'styles/pdf.css',
+                    })">
+        </button>
+    </div>
 
-<!-- Select Grade -->
-<div class="w3-container w3-center" id="main">
-    <label class="w3-large w3-container">Grade</label>
-    <select id="grade"></select>
-    <button class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>
-    
-    <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
-            onclick="printJS({
-                    documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
-                    printable: 'useroptions',
-                    type: 'html',
-                    ignoreElements: ['pp'],
-                    targetStyles: ['*'],
-                    css: 'styles/pdf.css',
-                })">
-                </button>
-</div>
+    <div class="w3-container w3-center w3-light-gray"> <!-- DropDowns-->
+        
+        <div class="w3-left">   <!-- Year DropDown -->
+            <label class="w3-container w3-left">Year</label>                   
+            <select style="float:left;" id="studentYear" onchange="FillStudents()"></select>
+        </div>
+
+        <div class="w3-left">   <!-- Students List DropDown -->
+            <label class="w3-container">Student Name</label>
+            <select id="studentsDropDown" onchange="search()"></select>
+        <button class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>
+        </div>
+
+        <div class="w3-right"><!-- View DropDown -->
+            <label class="w3-container">View</label>
+            <select id="view" onchange="search()">
+                <option>Attainment</option>
+                <option>Percentage</option>
+                <option>Attainment - Percentage</option>
+            </select>
+        </div>
+    </div>
 <br>
-<div class="w3-container w3-center w3-light-gray">
-<label class="w3-large w3-container">Year</label>                   <!-- Year DropDown -->
-<select id="studentYear" onchange="FillStudents()"></select>
+    <div class="w3-container">
+        <table id="useroptions" class="w3-container w3-table-all w3-card w3-centered">
+            <thead>
+                <tr>
+                    <th id="printGrade" colspan="6"></th>
+                </tr>
 
-<label class="w3-large w3-container">Student Name</label>           <!-- Students DropDown -->
-<select id="studentsDropDown" onchange="search()"></select>
-
-<!-- <select class="selectpicker show-tick" id="studentsDropDown" onchange="search()" data-live-search="true" title="Student Name"
-    data-style="btn-success">
-  <optgroup label="Picnic">
-    <option>Mustard</option>
-    <option>Ketchup</option>
-    <option>Relish</option>
-  </optgroup>
-  <optgroup label="Camping">
-    <option>Tent</option>
-    <option>Flashlight</option>
-    <option>Toilet Paper</option>
-  </optgroup>
-</select> -->
-
-
-
-<label class="w3-large w3-container">View</label>
-<select id="view" onchange="search()">
-    <option>Attainment</option>
-    <option>Percentage</option>
-    <option>Attainment - Percentage</option>
-</select>
-</div>
-<br>
-
-<div class="w3-container">
-    <table id="useroptions" class="w3-container w3-table-all w3-card w3-centered">
-        <tr>
-            <th><label class="w3-large">Year</label></th>
-            <th><select id="academic_year1"></select></th>
-            <th><select id="academic_year2"></select></th>
-            <th><select id="academic_year3"></select></th>
-            <th><select id="academic_year4"></select></th>
-            <th><select id="academic_year5"></select></th>
-        </tr>
-        <tr>
-            <th><label class="w3-large">Term</label></th>
-            <th><select id="term1"></select></th>
-            <th><select id="term2"></select></th>
-            <th><select id="term3"></select></th>
-            <th><select id="term4"></select></th>
-            <th><select id="term5"></select></th>
-        </tr>
-        <tbody id="results"> </tbody>
-    </table>
-</div>
-</div>
-    
+            </thead>
+            <tr>
+                <th><label>Year</label></th>
+                <th><select id="academic_year1"></select></th>
+                <th><select id="academic_year2"></select></th>
+                <th><select id="academic_year3"></select></th>
+                <th><select id="academic_year4"></select></th>
+                <th><select id="academic_year5"></select></th>
+            </tr>
+            <tr>
+                <th><label>Term</label></th>
+                <th><select id="term1"></select></th>
+                <th><select id="term2"></select></th>
+                <th><select id="term3"></select></th>
+                <th><select id="term4"></select></th>
+                <th><select id="term5"></select></th>
+            </tr>
+            <tbody id="results"> </tbody>
+        </table>
+    </div>
 </div>
 
 
-
-
+        <!-- Print Date -->
+        <script type="text/javascript">
+            n =  new Date();
+            y = n.getFullYear();
+            m = n.getMonth() + 1;
+            d = n.getDate();
+            document.getElementById("date").innerHTML = "Date " + m + "/" + d + "/" + y;
+        </script>
         
         <!-- Initialize Grades    -->
         <script type="text/javascript">
