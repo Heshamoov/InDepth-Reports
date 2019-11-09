@@ -375,7 +375,7 @@ httpSearch.send();
                 <th><label>Year</label></th>
         <th><select id="academic_year1" onchange="FillTerm(this, 'term1')"></select></th>
         <th><select id="academic_year2" onchange="FillTerm(this, 'term2')"></select></th>
-        <th><select id="academic_year3" onchange="FillTerm(this)"></select></th>
+        <th><select id="academic_year3" onchange="FillTerm(this, 'term3')"></select></th>
         <th><select id="academic_year4" onchange="FillTerm(this)"></select></th>
         <th><select id="academic_year5" onchange="FillTerm(this)"></select></th>
             </tr>
@@ -396,6 +396,7 @@ httpSearch.send();
         <script type="text/javascript">
             function FillTerm(year, term) {
                 var year = $(year).children('option:selected').text();
+
                 var termsArray = "";
                 var httpTerms = new XMLHttpRequest();
                 httpTerms.onreadystatechange = function () {
@@ -408,12 +409,14 @@ httpSearch.send();
                 httpTerms.open("POST", "sqldb/termsViaYear.php?year=" + year, false);
                 httpTerms.send();
 
-                var termDropdown = document.getElementById('term2');
+                var termDropdown = document.getElementById(term);
 
                 while (termDropdown.length > 0)
                     termDropdown.remove(0);
 
-                $('#term2').multiselect('destroy');
+
+                var name = '#' + term;
+                $(name).multiselect('destroy');
 
                 delete termsArray[termsArray.length - 1];
 
@@ -422,7 +425,7 @@ httpSearch.send();
                 };
 
                 $(function () {
-                    $('#term2').multiselect({
+                    $(name).multiselect({
                         includeSelectAllOption: true
                     });
                 });
