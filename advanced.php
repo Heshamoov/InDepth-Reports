@@ -81,6 +81,8 @@ httpSearch.send();
 
             delete namesArray[namesArray.length - 1];
 
+            studentsDropDown.add(new Option('None'));
+
             for (var i in namesArray) {
                 studentsDropDown.add(new Option(namesArray[i]));
             };
@@ -129,10 +131,10 @@ if (printableGrade == "Select Grade")
     selected_student.each(function()
     {
         currentStudent = $(this).text();
-        if (currentStudent != "")
+        if (currentStudent != "" && currentStudent != "None" )
             document.getElementById('TableTitle').innerHTML = printableGrade + "  -  " + currentStudent;
         else
-            document.getElementById('TableTitle').innerHTML = currentGrade;
+            document.getElementById('TableTitle').innerHTML = printableGrade;
     });
 
     // Current View                    
@@ -394,6 +396,13 @@ httpSearch.send();
             function FillTerm(year, term) {
                 var year = $(year).children('option:selected').text();
 
+                var selected_student = $("#studentsDropDown option:selected");      
+                var currentStudent = "";
+                    selected_student.each(function()
+                    {
+                        currentStudent = $(this).text();
+                    });                
+
                 var termsArray = "";
                 var httpTerms = new XMLHttpRequest();
                 httpTerms.onreadystatechange = function () {
@@ -403,7 +412,7 @@ httpSearch.send();
                         termsArray = str.split("\t");
                     }
                 };
-                httpTerms.open("POST", "sqldb/termsViaYear.php?year=" + year, false);
+                httpTerms.open("POST", "sqldb/termsViaYear.php?year=" + year + "&student=" + currentStudent, false);
                 httpTerms.send();
 
                 var termDropdown = document.getElementById(term);

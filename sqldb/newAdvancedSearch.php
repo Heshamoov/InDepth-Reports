@@ -68,7 +68,7 @@ if ($grades != "")
         WHERE
             $grades AND $YArray[$i] AND $TArray[$i] ";
 
-        if ($student != '') {
+        if ($student != '' AND $student != 'None') {
             $WhereArray[$i] .= " AND student_name = '$student' ";
         }
 
@@ -109,7 +109,7 @@ if ($grades != "")
                                     
 
 
-    // echo "SQL STATEMENT <br> " . $sql;
+    echo "SQL STATEMENT <br> " . $sql;
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
