@@ -417,6 +417,7 @@ httpSearch.send();
 
                 delete termsArray[termsArray.length - 1];
 
+
                 for (var i in termsArray) {
                     termDropdown.add(new Option(termsArray[i]));
                 };
@@ -426,6 +427,8 @@ httpSearch.send();
                         includeSelectAllOption: true
                     });
                 });
+
+                search();
             }
         </script>
 
