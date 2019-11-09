@@ -46,3 +46,9 @@ button {
 .grade {
   align-self: center;
 }
+
+.TableTitle {
+   display: block;
+   display: inline;
+   visibility: visible;
+}
