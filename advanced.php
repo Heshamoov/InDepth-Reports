@@ -74,6 +74,8 @@ httpSearch.open("POST", "sqldb/studentsNames.php?grade=" + currentGrade + "&year
 httpSearch.send();
 
             var studentsDropDown = document.getElementById('studentsDropDown');
+            while (studentsDropDown.length > 0)
+                    studentsDropDown.remove(0);
 
             $('#studentsDropDown').multiselect('destroy');
 
@@ -92,7 +94,6 @@ httpSearch.send();
 
         function search() {
             var selected_grades = $("#grade option:selected");
-            
             
             var selected_years1 = $("#academic_year1 option:selected");
             var selected_years2 = $("#academic_year2 option:selected");
@@ -319,12 +320,12 @@ httpSearch.send();
     <h3 class="w3-center">Attainment Progress Analysis - Al Sanawabar School</h3>
 
     <!-- Debug Console -->
-    <!-- <label id="out"></label> -->
+    <label id="out"></label>
 
     <!-- Select Grade -->
     <div class="w3-container w3-center" id="main">
         <label class="w3-large w3-container">Grade</label>
-        <select id="grade" onclick="FillStudents()"></select>
+        <select id="grade" onchange="FillStudents()"></select>
         <button class="w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-search w3-xlarge" onclick="search()"></button>
         
         <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
@@ -372,11 +373,11 @@ httpSearch.send();
             </thead>
             <tr>
                 <th><label>Year</label></th>
-                <th><select id="academic_year1"></select></th>
-                <th><select id="academic_year2"></select></th>
-                <th><select id="academic_year3"></select></th>
-                <th><select id="academic_year4"></select></th>
-                <th><select id="academic_year5"></select></th>
+        <th><select id="academic_year1" onchange="FillTerm(this, 'term1')"></select></th>
+        <th><select id="academic_year2" onchange="FillTerm(this, 'term2')"></select></th>
+        <th><select id="academic_year3" onchange="FillTerm(this)"></select></th>
+        <th><select id="academic_year4" onchange="FillTerm(this)"></select></th>
+        <th><select id="academic_year5" onchange="FillTerm(this)"></select></th>
             </tr>
             <tr>
                 <th><label>Term</label></th>
@@ -391,6 +392,29 @@ httpSearch.send();
     </div>
 </div>
 
+        
+        <script type="text/javascript">
+            function FillTerm(year, term) {
+                var year = $(year).children('option:selected').text();
+                document.getElementById('out').innerHTML = year + term;
+
+                var TermsArray = "";
+                var httpTerms = new XMLHttpRequest();
+                httpTerms.onreadystatechange = function () {
+                    if (this.readyState === 4) {
+                        var str = this.responseText;
+                        document.getElementById('out').innerHTML += this.responseText;
+                        TermsArray = str.split("\t");
+                    }
+                };
+
+
+                httpTerms.open("POST", "sqldb/termsViaYear.php?year=" + year, false);
+                httpTerms.send();
+
+                
+            }
+        </script>
 
         <!-- Print Date -->
         <script type="text/javascript">
@@ -421,15 +445,8 @@ httpSearch.send();
             delete gradesArray[gradesArray.length - 1];
             
             select.add(new Option("Select Grade"));
-            for (var i in gradesArray) {
+            for (var i in gradesArray)
                 select.add(new Option(gradesArray[i]));
-            };
-            
-            $(function () {
-                $('#grade').multiselect({
-                    includeSelectAllOption: true
-                });
-            });
         </script>                
 
         <!-- Initialize Academic Years    -->
@@ -474,34 +491,6 @@ httpSearch.send();
                 AY5.add(new Option(yearArray[i]));
                 SY.add(new Option(yearArray[i]));
             };
-
-            // $(function () {
-            //     $('#academic_year1').multiselect({
-            //         includeSelectAllOption: true
-            //     });
-            // });
-
-            //  $(function () {
-            //     $('#academic_year2').multiselect({
-            //         includeSelectAllOption: true
-            //     });
-            // });
-
-            //  $(function () {
-            //     $('#academic_year3').multiselect({
-            //         includeSelectAllOption: true
-            //     });
-            // });
-            //  $(function () {
-            //     $('#academic_year4').multiselect({
-            //         includeSelectAllOption: true
-            //     });
-            // });
-            //  $(function () {
-            //     $('#academic_year5').multiselect({
-            //         includeSelectAllOption: true
-            //     });                                 
-    // });
         </script>
 
         <!-- Initialize Terms    -->
@@ -522,6 +511,8 @@ httpSearch.send();
 
                 httpTerms.open("GET", "sqldb/terms.php", false);
                 httpTerms.send();
+
+
                 
                 $('#terms1').multiselect('destroy');
                 $('#terms2').multiselect('destroy');
