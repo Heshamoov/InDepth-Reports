@@ -396,23 +396,36 @@ httpSearch.send();
         <script type="text/javascript">
             function FillTerm(year, term) {
                 var year = $(year).children('option:selected').text();
-                document.getElementById('out').innerHTML = year + term;
-
-                var TermsArray = "";
+                var termsArray = "";
                 var httpTerms = new XMLHttpRequest();
                 httpTerms.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
                         document.getElementById('out').innerHTML += this.responseText;
-                        TermsArray = str.split("\t");
+                        termsArray = str.split("\t");
                     }
                 };
-
-
                 httpTerms.open("POST", "sqldb/termsViaYear.php?year=" + year, false);
                 httpTerms.send();
 
-                
+                var termDropdown = document.getElementById('term2');
+
+                while (termDropdown.length > 0)
+                    termDropdown.remove(0);
+
+                $('#term2').multiselect('destroy');
+
+                delete termsArray[termsArray.length - 1];
+
+                for (var i in termsArray) {
+                    termDropdown.add(new Option(termsArray[i]));
+                };
+
+                $(function () {
+                    $('#term2').multiselect({
+                        includeSelectAllOption: true
+                    });
+                });
             }
         </script>
 
@@ -494,7 +507,7 @@ httpSearch.send();
         </script>
 
         <!-- Initialize Terms    -->
-        <script type="text/javascript">      
+        <!-- <script type="text/javascript">      
                 var term1 = document.getElementById('term1');
                 var term2 = document.getElementById('term2');
                 var term3 = document.getElementById('term3');
@@ -535,7 +548,7 @@ httpSearch.send();
                     term5.add(new Option(termsArray[i]));
                 }
                 ;
-        </script>
+        </script> -->
         
     </body>
     </html>
