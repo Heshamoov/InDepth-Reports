@@ -7,17 +7,17 @@ $grades = $_REQUEST["grades"];
 $view   = $_REQUEST["view"];
 $student = $_REQUEST["student"];
 
-// echo "PHP $student";
+echo "Student Name: $student <br>";
 
-// echo $view;
+echo "View: $view <br>";
 
 
 $YArray = array();
-if ($_REQUEST["years1"] != "") $YArray[0] = $_REQUEST["years1"];
-if ($_REQUEST["years2"] != "") $YArray[1] = $_REQUEST["years2"];
-if ($_REQUEST["years3"] != "") $YArray[2] = $_REQUEST["years3"];
-if ($_REQUEST["years4"] != "") $YArray[3] = $_REQUEST["years4"];
-if ($_REQUEST["years5"] != "") $YArray[4] = $_REQUEST["years5"];
+if ($_REQUEST["years1"] != "" AND $_REQUEST["years1"] !="Select Year") $YArray[0] = $_REQUEST["years1"];
+if ($_REQUEST["years2"] != "" AND $_REQUEST["years2"] !="Select Year") $YArray[1] = $_REQUEST["years2"];
+if ($_REQUEST["years3"] != "" AND $_REQUEST["years3"] !="Select Year") $YArray[2] = $_REQUEST["years3"];
+if ($_REQUEST["years4"] != "" AND $_REQUEST["years4"] !="Select Year") $YArray[3] = $_REQUEST["years4"];
+if ($_REQUEST["years5"] != "" AND $_REQUEST["years5"] !="Select Year") $YArray[4] = $_REQUEST["years5"];
 
 
 $TArray = array();
@@ -27,16 +27,21 @@ if ($_REQUEST["terms3"] != "") $TArray[2] = $_REQUEST["terms3"];
 if ($_REQUEST["terms4"] != "") $TArray[3] = $_REQUEST["terms4"];
 if ($_REQUEST["terms5"] != "") $TArray[4] = $_REQUEST["terms5"];
 
-//for($i = 0; $i < count($YArray); $i++)
-//    echo $YArray[$i] . "<br>";
-//echo "****************<br>";
-//echo count($YArray);
-//
-//
-//for($i = 0; $i < count($TArray); $i++)
-//    echo $TArray[$i] . "<br>";
-//echo "****************<br>";
-//echo count($TArray);
+echo "Years <br>";
+for($i = 0; $i < count($YArray); $i++)
+   echo $YArray[$i] . "<br>";
+
+echo "Count: " . count($YArray) . "<br>";
+echo "****************<br>";
+
+
+
+echo "Terms <br>";
+for($i = 0; $i < count($TArray); $i++)
+   echo $TArray[$i] . "<br>";
+
+echo "Count: " . count($TArray) . "<br>";
+echo "****************<br>";
 
 
 $columns = "SELECT subject_name, exam_name, acd_code, grade, section,
@@ -59,8 +64,10 @@ if ($grades != "")
 
     
     $TopColumns = "SELECT " . $QArray[0];
-    for($i = 1; $i < count($QArray); $i++)
+    for($i = 1; $i < count($QArray); $i++) {
+        echo $i;
         $TopColumns .= ", " . $QArray[$i];
+    }
 
     $WhereArray = array();
     for($i = 0; $i < count($YArray); $i++) {

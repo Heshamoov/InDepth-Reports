@@ -50,262 +50,256 @@ if (!isset($_SESSION['login'])) {
             var selected_year = $("#studentYear option:selected");
 
             var currentGrade = "";
-            selected_grade.each(function()        
-            {   
+            selected_grade.each(function() {   
                 currentGrade = "(grade = '" + $(this).text() + "')";
             });
 
             var currentYear = "";
-            selected_year.each(function()        
-            {   
+            selected_year.each(function() {   
                 currentYear = "(acd_code = '" + $(this).text() + "')";
             });
 
-            // Sending to Server
-            var httpSearch = new XMLHttpRequest();
-            httpSearch.onreadystatechange = function () {
-                if (this.readyState === 4) {
+            if (currentYear != "" && currentYear != "Select Year") {
+                // Sending to Server
+                var httpSearch = new XMLHttpRequest();
+                httpSearch.onreadystatechange = function () {
+                    if (this.readyState === 4) {
                     // document.getElementById('out').innerHTML = this.responseText;
-                    var str = this.responseText;
-                    namesArray = str.split("\t");
-                }
-            };      
-httpSearch.open("POST", "sqldb/studentsNames.php?grade=" + currentGrade + "&year=" + currentYear, false);
-httpSearch.send();
+                        var str = this.responseText;
+                        namesArray = str.split("\t");
+                    }
+                };      
+                httpSearch.open("POST", "sqldb/studentsNames.php?grade=" + currentGrade + "&year=" + currentYear, false);
+                httpSearch.send();
 
-            var studentsDropDown = document.getElementById('studentsDropDown');
-            while (studentsDropDown.length > 0)
+                var studentsDropDown = document.getElementById('studentsDropDown');
+                while (studentsDropDown.length > 0)
                     studentsDropDown.remove(0);
 
-            $('#studentsDropDown').multiselect('destroy');
+                $('#studentsDropDown').multiselect('destroy');
 
-            delete namesArray[namesArray.length - 1];
+                delete namesArray[namesArray.length - 1];
 
-            studentsDropDown.add(new Option('None'));
+                studentsDropDown.add(new Option('None'));
 
-            for (var i in namesArray) {
-                studentsDropDown.add(new Option(namesArray[i]));
-            };
-
-            $(function () {
-                $('#studentsDropDown').multiselect({
-                    includeSelectAllOption: true
+                for (var i in namesArray)
+                    studentsDropDown.add(new Option(namesArray[i]));
+                
+                $(function () {
+                    $('#studentsDropDown').multiselect({
+                        includeSelectAllOption: true
+                    });
                 });
-            });            
+
+            }
         }
 
-        function search() {
-            var selected_grades = $("#grade option:selected");
-            
-            var selected_years1 = $("#academic_year1 option:selected");
-            var selected_years2 = $("#academic_year2 option:selected");
-            var selected_years3 = $("#academic_year3 option:selected");
-            var selected_years4 = $("#academic_year4 option:selected");
-            var selected_years5 = $("#academic_year5 option:selected");
-
-            var selected_terms1 = $("#term1 option:selected");
-            var selected_terms2 = $("#term2 option:selected");
-            var selected_terms3 = $("#term3 option:selected");
-            var selected_terms4 = $("#term4 option:selected");
-            var selected_terms5 = $("#term5 option:selected");
-
-            var selected_view = $("#view option:selected");
-            
-            var selected_student = $("#studentsDropDown option:selected");
-
+function search() {
+    var selected_grades = $("#grade option:selected");
+    var selected_student = $("#studentsDropDown option:selected");
+    var selected_view = $("#view option:selected");
     
-    // Curren Year                   
-    var currentGrade = "", printableGrade = "";
+    var selected_years1 = $("#academic_year1 option:selected");
+    var selected_years2 = $("#academic_year2 option:selected");
+    var selected_years3 = $("#academic_year3 option:selected");
+    var selected_years4 = $("#academic_year4 option:selected");
+    var selected_years5 = $("#academic_year5 option:selected");
+
+    var selected_terms1 = $("#term1 option:selected");
+    var selected_terms2 = $("#term2 option:selected");
+    var selected_terms3 = $("#term3 option:selected");
+    var selected_terms4 = $("#term4 option:selected");
+    var selected_terms5 = $("#term5 option:selected");
+
+    // Current Year                   
+    var currentGrade = "";
     selected_grades.each(function() {
-        document.getElementById('TableTitle').innerHTML = $(this).text();
-        printableGrade = $(this).text();
-        currentGrade = "(grade = '" + $(this).text() + "')";
+        currentGrade = $(this).text();
     });
 
-if (printableGrade == "Select Grade")
-    alert("Please select Grade first");
-{
-
-    // Current Student
-    var currentStudent = "";
-    selected_student.each(function()
-    {
-        currentStudent = $(this).text();
-        if (currentStudent != "" && currentStudent != "None" )
-            document.getElementById('TableTitle').innerHTML = printableGrade + "  -  " + currentStudent;
-        else
-            document.getElementById('TableTitle').innerHTML = printableGrade;
-    });
-
-    // Current View                    
-    var currentView = ""; 
-    selected_view.each(function()
-        {currentView = $(this).text();});
-
-    //Generate selected years SQL statement YEARS 1
-    var years1SQL = "";
-    selected_years1.each(function ()
-    {
-        var currentYear = $(this).text();
-        if (years1SQL === "")
-            years1SQL = "(acd_code = '" + currentYear + "' ";
-        else
-            years1SQL += " OR acd_code = '" + currentYear + "'";
-    });
-                
-    if (years1SQL !== "") 
-        years1SQL += ")";
-                    
-    //Generate selected years SQL statement YEARS 2
-    var years2SQL = "";
-    selected_years2.each(function () {
-        var currentYear = $(this).text();
-        if (currentYear != 'Select Year')
-            if (years2SQL === "")
-                years2SQL = "(acd_code = '" + currentYear + "' ";
+    if (currentGrade == "Select Grade")
+        alert("Please select Grade first");
+    else {
+        // Current Student
+        var currentStudent = "";
+        selected_student.each(function()
+        {
+            currentStudent = $(this).text();
+            if (currentStudent != "" && currentStudent != "None" )
+                document.getElementById('TableTitle').innerHTML = currentGrade + "  -  " + currentStudent;
             else
-                years2SQL += " OR acd_code = '" + currentYear + "'";
-    });
+                document.getElementById('TableTitle').innerHTML = currentGrade;
+        });
+        currentGrade = "(grade = '" + currentGrade + "')";
 
-    if (years2SQL !== "") 
-        years2SQL += ")";                    
-                       
-    //Generate selected years SQL statement YEARS 3
-    var years3SQL = "";
-    selected_years3.each(function () {
-        var currentYear = $(this).text();
-        if (currentYear != 'Select Year')
-        if (years3SQL === "")
-            years3SQL = "(acd_code = '" + currentYear + "' ";
-        else
-            years3SQL += " OR acd_code = '" + currentYear + "'";
-    });
+        // Current View                    
+        var currentView = ""; 
+        selected_view.each(function()
+            {currentView = $(this).text();});
 
-    if (years3SQL !== "") 
-        years3SQL += ")";                    
+        //Generate selected years SQL statement YEARS 1
+        var years1SQL = "";
+        selected_years1.each(function ()
+        {
+            var currentYear = $(this).text();
+            if (years1SQL === "")
+                years1SQL = "(acd_code = '" + currentYear + "' ";
+            else
+                years1SQL += " OR acd_code = '" + currentYear + "'";
+        });
+                    
+        if (years1SQL !== "") 
+            years1SQL += ")";
+                        
+        //Generate selected years SQL statement YEARS 2
+        var years2SQL = "";
+        selected_years2.each(function () {
+            var currentYear = $(this).text();
+            if (currentYear != 'Select Year')
+                if (years2SQL === "")
+                    years2SQL = "(acd_code = '" + currentYear + "' ";
+                else
+                    years2SQL += " OR acd_code = '" + currentYear + "'";
+        });
 
-    // //Generate selected years SQL statement YEARS 4
-    var years4SQL = "";
-    selected_years4.each(function () {
-        var currentYear = $(this).text();
-        if (currentYear != 'Select Year')
-        if (years4SQL === "")
-            years4SQL = "(acd_code = '" + currentYear + "' ";
-        else
-            years4SQL += " OR acd_code = '" + currentYear + "'";
-    });
+        if (years2SQL !== "") 
+            years2SQL += ")";                    
+                           
+        //Generate selected years SQL statement YEARS 3
+        var years3SQL = "";
+        selected_years3.each(function () {
+            var currentYear = $(this).text();
+            if (currentYear != 'Select Year')
+            if (years3SQL === "")
+                years3SQL = "(acd_code = '" + currentYear + "' ";
+            else
+                years3SQL += " OR acd_code = '" + currentYear + "'";
+        });
 
-    if (years4SQL !== "") 
-        years4SQL += ")";                    
+        if (years3SQL !== "") 
+            years3SQL += ")";                    
 
-    // //Generate selected years SQL statement YEARS 5
-    var years5SQL = "";
-    selected_years5.each(function () {
-        var currentYear = $(this).text();
-        if (currentYear != 'Select Year')
-        if (years5SQL === "")
-            years5SQL = "(acd_code = '" + currentYear + "' ";
-        else
-            years5SQL += " OR acd_code = '" + currentYear + "'";
-    });
+        // //Generate selected years SQL statement YEARS 4
+        var years4SQL = "";
+        selected_years4.each(function () {
+            var currentYear = $(this).text();
+            if (currentYear != 'Select Year')
+            if (years4SQL === "")
+                years4SQL = "(acd_code = '" + currentYear + "' ";
+            else
+                years4SQL += " OR acd_code = '" + currentYear + "'";
+        });
 
-    if (years5SQL !== "") 
-        years5SQL += ")";                    
+        if (years4SQL !== "") 
+            years4SQL += ")";                    
 
+        // //Generate selected years SQL statement YEARS 5
+        var years5SQL = "";
+        selected_years5.each(function () {
+            var currentYear = $(this).text();
+            if (currentYear != 'Select Year')
+            if (years5SQL === "")
+                years5SQL = "(acd_code = '" + currentYear + "' ";
+            else
+                years5SQL += " OR acd_code = '" + currentYear + "'";
+        });
 
-    //Generate selected years SQL statement TERMS 1
-    var terms1SQL = "";
-    selected_terms1.each(function () {
-        var currentTerm = $(this).text();
-
-        if (terms1SQL === "")
-            terms1SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
-        else
-            terms1SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
-    });
-
-
-    if (terms1SQL !== "")
-        terms1SQL += ")";
-
-    //Generate selected years SQL statement TERMS 2
-    var terms2SQL = "";
-    selected_terms2.each(function () {
-        var currentTerm = $(this).text();
-        if (currentTerm != 'Select Term')
-        if (terms2SQL === "")
-            terms2SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
-        else
-            terms2SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
-    });
-
-
-    if (terms2SQL !== "")
-        terms2SQL += ")";                    
-
-
-    // //Generate selected years SQL statement TERMS 3
-    var terms3SQL = "";
-    selected_terms3.each(function () {
-        var currentTerm = $(this).text();
-        if (currentTerm != 'Select Term')
-        if (terms3SQL === "")
-            terms3SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
-        else
-            terms3SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
-    });
+        if (years5SQL !== "") 
+            years5SQL += ")";                    
 
 
-    if (terms3SQL !== "")
-        terms3SQL += ")";                    
+        //Generate selected years SQL statement TERMS 1
+        var terms1SQL = "";
+        selected_terms1.each(function () {
+            var currentTerm = $(this).text();
+
+            if (terms1SQL === "")
+                terms1SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
+            else
+                terms1SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
+        });
 
 
-    // //Generate selected years SQL statement TERMS 4
-    var terms4SQL = "";
-    selected_terms4.each(function () {
-        var currentTerm = $(this).text();
-        if (currentTerm != 'Select Term')
-        if (terms4SQL === "")
-            terms4SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
-        else
-            terms4SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
-    });
+        if (terms1SQL !== "")
+            terms1SQL += ")";
+
+        //Generate selected years SQL statement TERMS 2
+        var terms2SQL = "";
+        selected_terms2.each(function () {
+            var currentTerm = $(this).text();
+            if (currentTerm != 'Select Term')
+            if (terms2SQL === "")
+                terms2SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
+            else
+                terms2SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
+        });
 
 
-    if (terms4SQL !== "")
-        terms4SQL += ")";                    
+        if (terms2SQL !== "")
+            terms2SQL += ")";                    
 
 
-    // //Generate selected years SQL statement TERMS 5
-    var terms5SQL = "";
-    selected_terms5.each(function () {
-        var currentTerm = $(this).text();
-        if (currentTerm != 'Select Term')
-        if (terms5SQL === "")
-            terms5SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
-        else
-            terms5SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
-    });
+        // //Generate selected years SQL statement TERMS 3
+        var terms3SQL = "";
+        selected_terms3.each(function () {
+            var currentTerm = $(this).text();
+            if (currentTerm != 'Select Term')
+            if (terms3SQL === "")
+                terms3SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
+            else
+                terms3SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
+        });
 
 
-    if (terms5SQL !== "")
-        terms5SQL += ")";                    
+        if (terms3SQL !== "")
+            terms3SQL += ")";                    
 
-    // Sending to Server
-    var httpSearch = new XMLHttpRequest();
-    httpSearch.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            document.getElementById("results").innerHTML = this.responseText;
-        }
-    };
-                
-httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + 
-"&years1=" + years1SQL + "&years2=" + years2SQL + "&years3=" + years3SQL + "&years4=" + years4SQL + "&years5=" + years5SQL + 
-"&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL + "&view=" + currentView + "&student=" + currentStudent, false);
 
-httpSearch.send();
+        // //Generate selected years SQL statement TERMS 4
+        var terms4SQL = "";
+        selected_terms4.each(function () {
+            var currentTerm = $(this).text();
+            if (currentTerm != 'Select Term')
+            if (terms4SQL === "")
+                terms4SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
+            else
+                terms4SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
+        });
 
-}
+
+        if (terms4SQL !== "")
+            terms4SQL += ")";                    
+
+
+        // //Generate selected years SQL statement TERMS 5
+        var terms5SQL = "";
+        selected_terms5.each(function () {
+            var currentTerm = $(this).text();
+            if (currentTerm != 'Select Term')
+            if (terms5SQL === "")
+                terms5SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
+            else
+                terms5SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
+        });
+
+
+        if (terms5SQL !== "")
+            terms5SQL += ")";                    
+
+        // Sending to Server
+        var httpSearch = new XMLHttpRequest();
+        httpSearch.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                document.getElementById("results").innerHTML = this.responseText;
+            }
+        };
+                    
+    httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + 
+    "&years1=" + years1SQL + "&years2=" + years2SQL + "&years3=" + years3SQL + "&years4=" + years4SQL + "&years5=" + years5SQL + 
+    "&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL + "&view=" + currentView + "&student=" + currentStudent, false);
+
+    httpSearch.send();
+} 
 }
 </script>
 
@@ -319,16 +313,30 @@ httpSearch.send();
 </div>
 
 <div id="print">
-    <h3 class="w3-center">Attainment Progress Analysis - Al Sanawabar School</h3>
+    <h3 class="w3-center">
+        <a href="https://www.indepth.ae/">
+         <img src="images/indepth.png" class="w3-left" height="50px" width="100px">
+        </a>
+        Attainment Progress Analysis - Al Sanawabar School
+        <a href="http://alsanawbarschool.com/">
+        <img src="images/sanawbar.jpg" class="w3-right" height="50px" width="100px">
+        </a>
+    </h3>
+    <label id="out"></label>                            <!-- Debug Console -->
 
-    <!-- Debug Console -->
-    <label id="out"></label>
+    <div class="w3-container w3-center w3-light-gray">   <!-- DropDowns-->
 
-    <!-- Select Grade -->
-    <div class="w3-container w3-center" id="main">
-        <label class="w3-large w3-container">Grade</label>
-        <select id="grade" onchange="FillStudents(), search()"></select>
-        <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
+        <div class="w3-left">   
+            <label class="w3-container w3-large ">Grade</label>
+            <select id="grade" onchange="FillStudents(), search()"></select>     <!-- Grade DropDown -->
+
+            <label class="w3-container w3-large">Year</label>                   
+            <select style="float:left;" id="studentYear" onchange="FillStudents()"></select> <!-- Year DropDown -->
+
+            <label class="w3-container w3-large">Student Name</label>
+            <select id="studentsDropDown" onchange="FillYears(), search()"></select>          <!-- Students DropDown -->
+
+            <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
                 onclick="printJS({
                         documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
                         printable: 'useroptions',
@@ -337,28 +345,16 @@ httpSearch.send();
                         targetStyles: ['*'],
                         css: 'styles/pdf.css',
                     })">
-        </button>
-    </div>
-
-    <div class="w3-container w3-center w3-light-gray"> <!-- DropDowns-->
-        
-        <div class="w3-left">   <!-- Year DropDown -->
-            <label class="w3-container w3-left">Year</label>                   
-            <select style="float:left;" id="studentYear" onchange="FillStudents()"></select>
-        </div>
-
-        <div class="w3-left">   <!-- Students List DropDown -->
-            <label class="w3-container">Student Name</label>
-            <select id="studentsDropDown" onchange="FillYears(), search()"></select>
+            </button>
         </div>
 
         <div class="w3-right"><!-- View DropDown -->
-            <label class="w3-container">View</label>
             <select id="view" onchange="search()">
                 <option>Attainment</option>
                 <option>Percentage</option>
                 <option>Attainment - Percentage</option>
             </select>
+            <label class="w3-container">View</label>
         </div>
     </div>
 <br>
@@ -394,6 +390,33 @@ httpSearch.send();
 
         <script type="text/javascript">
             function FillYears() {
+                var years1 = document.getElementById('academic_year1');
+                var years2 = document.getElementById('academic_year2');
+                var years3 = document.getElementById('academic_year3');
+                var years4 = document.getElementById('academic_year4');
+                var years5 = document.getElementById('academic_year5');
+
+                while (years1.length > 0)
+                    years1.remove(0);
+
+                while (years2.length > 0)
+                    years2.remove(0);
+                
+                while (years3.length > 0)
+                    years3.remove(0);
+                
+                while (years4.length > 0)
+                    years4.remove(0);
+
+                while (years5.length > 0)
+                    years5.remove(0);
+
+
+                $('#years1').multiselect('destroy');
+                $('#years2').multiselect('destroy');
+                $('#years3').multiselect('destroy');
+                $('#years4').multiselect('destroy');
+                $('#years5').multiselect('destroy');
 
                 var selected_student = $("#studentsDropDown option:selected");      
                 var currentStudent = "";
@@ -411,31 +434,14 @@ httpSearch.send();
                     }
                 };
                 httpYears.open("POST", "sqldb/YearsViaStudent.php?student=" + currentStudent, false);
-                httpYears.send();
-
-                var years1 = document.getElementById(years1);
-                var years2 = document.getElementById(years2);
-                var years3 = document.getElementById(years3);
-                var years4 = document.getElementById(years4);
-                var years5 = document.getElementById(years5);
-
-                while (years1.length > 0) {
-                    years1.remove(0);
-                    years2.remove(0);
-                    years3.remove(0);
-                    years4.remove(0);
-                    years5.remove(0);
-                }
-
-
-                $('#years1').multiselect('destroy');
-                $('#years2').multiselect('destroy');
-                $('#years3').multiselect('destroy');
-                $('#years4').multiselect('destroy');
-                $('#years5').multiselect('destroy');
+                httpYears.send();                
 
                 delete YearsArray[YearsArray.length - 1];
 
+                AY2.add(new Option('Select Year'));
+                AY3.add(new Option('Select Year'));
+                AY4.add(new Option('Select Year'));
+                AY5.add(new Option('Select Year'));
 
                 for (var i in YearsArray) {
                     years1.add(new Option(YearsArray[i]));
@@ -445,23 +451,23 @@ httpSearch.send();
                     years5.add(new Option(YearsArray[i]));
                 };
 
-                $(function () {
-                    $('years1').multiselect({
-                        includeSelectAllOption: true
-                    });
-                    $('years2').multiselect({
-                        includeSelectAllOption: true
-                    });
-                    $('years3').multiselect({
-                        includeSelectAllOption: true
-                    });
-                    $('years4').multiselect({
-                        includeSelectAllOption: true
-                    });
-                    $('years5').multiselect({
-                        includeSelectAllOption: true
-                    });
-                });
+                // $(function () {
+                //     $('years1').multiselect({
+                //         includeSelectAllOption: true
+                //     });
+                //     $('years2').multiselect({
+                //         includeSelectAllOption: true
+                //     });
+                //     $('years3').multiselect({
+                //         includeSelectAllOption: true
+                //     });
+                //     $('years4').multiselect({
+                //         includeSelectAllOption: true
+                //     });
+                //     $('years5').multiselect({
+                //         includeSelectAllOption: true
+                //     });
+                // });
 
                 search();
             }

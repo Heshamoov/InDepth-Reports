@@ -5,8 +5,7 @@ include ('../config/dbConfig.php');
 $student = $_REQUEST["student"];
 // echo $student . "sdfsdfsdfsdf<br>";
 
-$sql = "SELECT DISTINCT(acd_code)
-		FROM new_marks ";
+$sql = "SELECT DISTINCT(acd_code) FROM new_marks ";
 
 if($student != 'None' AND $student != '')
 	$sql .= " WHERE student_name = '$student'";
