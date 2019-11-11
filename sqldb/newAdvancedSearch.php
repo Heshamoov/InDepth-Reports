@@ -7,9 +7,9 @@ $grades = $_REQUEST["grades"];
 $view   = $_REQUEST["view"];
 $student = $_REQUEST["student"];
 
-echo "Student Name: $student <br>";
+// echo "Student Name: $student <br>";
 
-echo "View: $view <br>";
+// echo "View: $view <br>";
 
 
 $YArray = array();
@@ -27,21 +27,21 @@ if ($_REQUEST["terms3"] != "") $TArray[2] = $_REQUEST["terms3"];
 if ($_REQUEST["terms4"] != "") $TArray[3] = $_REQUEST["terms4"];
 if ($_REQUEST["terms5"] != "") $TArray[4] = $_REQUEST["terms5"];
 
-echo "Years <br>";
-for($i = 0; $i < count($YArray); $i++)
-   echo $YArray[$i] . "<br>";
+// echo "Years <br>";
+// for($i = 0; $i < count($YArray); $i++)
+//    echo $YArray[$i] . "<br>";
 
-echo "Count: " . count($YArray) . "<br>";
-echo "****************<br>";
+// echo "Count: " . count($YArray) . "<br>";
+// echo "****************<br>";
 
 
 
-echo "Terms <br>";
-for($i = 0; $i < count($TArray); $i++)
-   echo $TArray[$i] . "<br>";
+// echo "Terms <br>";
+// for($i = 0; $i < count($TArray); $i++)
+//    echo $TArray[$i] . "<br>";
 
-echo "Count: " . count($TArray) . "<br>";
-echo "****************<br>";
+// echo "Count: " . count($TArray) . "<br>";
+// echo "****************<br>";
 
 
 $columns = "SELECT subject_name, exam_name, acd_code, grade, section,

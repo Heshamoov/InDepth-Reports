@@ -99,7 +99,10 @@ function search() {
     var selected_student = $("#studentsDropDown option:selected");
     var selected_view = $("#view option:selected");
     
-    var selected_years1 = $("#academic_year1 option:selected");
+    var selected_years1 = $("#academic_year1 option:selected").text();
+    if (selected_years1 != "Select Year")
+            years1SQL = "(acd_code = '" + selected_years1 + "') ";
+
     var selected_years2 = $("#academic_year2 option:selected");
     var selected_years3 = $("#academic_year3 option:selected");
     var selected_years4 = $("#academic_year4 option:selected");
@@ -137,20 +140,8 @@ function search() {
         selected_view.each(function()
             {currentView = $(this).text();});
 
-        //Generate selected years SQL statement YEARS 1
-        var years1SQL = "";
-        selected_years1.each(function ()
-        {
-            var currentYear = $(this).text();
-            if (years1SQL === "")
-                years1SQL = "(acd_code = '" + currentYear + "' ";
-            else
-                years1SQL += " OR acd_code = '" + currentYear + "'";
-        });
-                    
-        if (years1SQL !== "") 
-            years1SQL += ")";
-                        
+
+                                            
         //Generate selected years SQL statement YEARS 2
         var years2SQL = "";
         selected_years2.each(function () {
@@ -293,7 +284,8 @@ function search() {
                 document.getElementById("results").innerHTML = this.responseText;
             }
         };
-                    
+        
+        // document.getElementById('out').innerHTML += "Before Sending " + years1SQL;
     httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + 
     "&years1=" + years1SQL + "&years2=" + years2SQL + "&years3=" + years3SQL + "&years4=" + years4SQL + "&years5=" + years5SQL + 
     "&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL + "&view=" + currentView + "&student=" + currentStudent, false);
@@ -390,86 +382,92 @@ function search() {
 
         <script type="text/javascript">
             function FillYears() {
+                var selected_years1 = $("#academic_year1 option:selected");
+                var selected_years2 = $("#academic_year2 option:selected");
+                var selected_years3 = $("#academic_year3 option:selected");
+                var selected_years4 = $("#academic_year4 option:selected");
+                var selected_years5 = $("#academic_year5 option:selected");
+
                 var years1 = document.getElementById('academic_year1');
                 var years2 = document.getElementById('academic_year2');
                 var years3 = document.getElementById('academic_year3');
                 var years4 = document.getElementById('academic_year4');
                 var years5 = document.getElementById('academic_year5');
 
-                while (years1.length > 0)
-                    years1.remove(0);
+                while (years1.length > 0) years1.remove(0);
 
-                while (years2.length > 0)
-                    years2.remove(0);
+                while (years2.length > 0) years2.remove(0);
                 
-                while (years3.length > 0)
-                    years3.remove(0);
+                while (years3.length > 0) years3.remove(0);
                 
-                while (years4.length > 0)
-                    years4.remove(0);
+                while (years4.length > 0) years4.remove(0);
 
-                while (years5.length > 0)
-                    years5.remove(0);
+                while (years5.length > 0) years5.remove(0);
 
-
-                $('#years1').multiselect('destroy');
-                $('#years2').multiselect('destroy');
-                $('#years3').multiselect('destroy');
-                $('#years4').multiselect('destroy');
-                $('#years5').multiselect('destroy');
+                $('#academic_year1').multiselect('destroy');
+                $('#academic_year2').multiselect('destroy');
+                $('#academic_year3').multiselect('destroy');
+                $('#academic_year4').multiselect('destroy');
+                $('#academic_year5').multiselect('destroy');
 
                 var selected_student = $("#studentsDropDown option:selected");      
                 var currentStudent = "";
-                    selected_student.each(function()
-                    {
-                        currentStudent = $(this).text();
-                    });                
+                selected_student.each(function()
+                {
+                    currentStudent = $(this).text();
+                });                
 
                 var httpYears = new XMLHttpRequest();
                 httpYears.onreadystatechange = function () {
                     if (this.readyState === 4) {
                         var str = this.responseText;
                         // document.getElementById('out').innerHTML += this.responseText;
-                        YearsArray = str.split("\t");
+                        yearsArray = str.split("\t");
                     }
                 };
                 httpYears.open("POST", "sqldb/YearsViaStudent.php?student=" + currentStudent, false);
                 httpYears.send();                
 
-                delete YearsArray[YearsArray.length - 1];
+                delete yearsArray[yearsArray.length - 1];
 
-                AY2.add(new Option('Select Year'));
-                AY3.add(new Option('Select Year'));
-                AY4.add(new Option('Select Year'));
-                AY5.add(new Option('Select Year'));
+                years2.add(new Option('Select Year'));
+                years3.add(new Option('Select Year'));
+                years4.add(new Option('Select Year'));
+                years5.add(new Option('Select Year'));
 
-                for (var i in YearsArray) {
-                    years1.add(new Option(YearsArray[i]));
-                    years2.add(new Option(YearsArray[i]));
-                    years3.add(new Option(YearsArray[i]));
-                    years4.add(new Option(YearsArray[i]));
-                    years5.add(new Option(YearsArray[i]));
+                for (var i in yearsArray) {
+                    years1.add(new Option(yearsArray[i]));
+                    years2.add(new Option(yearsArray[i]));
+                    years3.add(new Option(yearsArray[i]));
+                    years4.add(new Option(yearsArray[i]));
+                    years5.add(new Option(yearsArray[i]));
                 };
-
-                // $(function () {
-                //     $('years1').multiselect({
-                //         includeSelectAllOption: true
-                //     });
-                //     $('years2').multiselect({
-                //         includeSelectAllOption: true
-                //     });
-                //     $('years3').multiselect({
-                //         includeSelectAllOption: true
-                //     });
-                //     $('years4').multiselect({
-                //         includeSelectAllOption: true
-                //     });
-                //     $('years5').multiselect({
-                //         includeSelectAllOption: true
-                //     });
-                // });
-
-                search();
+                $(function () {
+                    $('#academic_year1').multiselect({
+                        includeSelectAllOption: false
+                    });
+                });
+                $(function () {
+                    $('#academic_year2').multiselect({
+                        includeSelectAllOption: false
+                    });
+                });
+                $(function () {
+                    $('#academic_year3').multiselect({
+                        includeSelectAllOption: false
+                    });
+                });
+                $(function () {
+                    $('#academic_year4').multiselect({
+                        includeSelectAllOption: false
+                    });
+                });
+                $(function () {
+                    $('#academic_year5').multiselect({
+                        includeSelectAllOption: false
+                    });
+                });
+                // search();
             }
         </script>
 
@@ -524,14 +522,14 @@ function search() {
         </script>
 
         <!-- Print Date -->
-        <script type="text/javascript">
+        <!-- <script type="text/javascript">
             n =  new Date();
             y = n.getFullYear();
             m = n.getMonth() + 1;
             d = n.getDate();
             document.getElementById("date").innerHTML = "Date " + m + "/" + d + "/" + y;
         </script>
-        
+         -->
         <!-- Initialize Grades    -->
         <script type="text/javascript">
             var select = document.getElementById('grade');
