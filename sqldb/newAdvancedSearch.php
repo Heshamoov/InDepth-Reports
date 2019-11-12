@@ -73,7 +73,7 @@ if ($grades != "")
     for($i = 0; $i < count($YArray); $i++) {
         $WhereArray[$i] = "
         WHERE
-            $grades AND $YArray[$i] AND $TArray[$i] ";
+            $YArray[$i] AND $TArray[$i] ";
 
         if ($student != '' AND $student != 'None') {
             $WhereArray[$i] .= " AND student_name = '$student' ";
