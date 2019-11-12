@@ -22,7 +22,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            (acd_code = '2016 / 2017') 
+            $year 
             AND
             (grade = 'GR01' OR grade = 'GR02' OR grade = 'GR03' OR grade = 'GR04' OR grade = 'GR05')
         
@@ -42,7 +42,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            (acd_code = '2016 / 2017') 
+            $year 
             AND
             (grade = 'GR06' OR grade = 'GR07' OR grade = 'GR08' OR grade = 'GR09')
         
@@ -65,7 +65,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            (acd_code = '2016 / 2017') 
+            $year 
             AND
             (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12')
         
@@ -95,7 +95,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            (acd_code = '2016 / 2017') 
+            $year 
             AND
             (grade = 'GR01' OR grade = 'GR02' OR grade = 'GR03' OR grade = 'GR04' OR grade = 'GR05')
         
@@ -115,7 +115,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            (acd_code = '2016 / 2017') 
+            $year 
             AND
             (grade = 'GR06' OR grade = 'GR07' OR grade = 'GR08' OR grade = 'GR09')
         
@@ -138,7 +138,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            (acd_code = '2016 / 2017') 
+            $year 
             AND
             (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12')
         
@@ -149,12 +149,15 @@ FROM
     ON
     (t1.subject_name = t2.subject_name)    
 
-)";
+)
+
+ORDER BY ISNULL(Subject0), Subject0, ISNULL(Subject1), Subject1, ISNULL(Subject2), Subject2";
 
 
     // echo "SQL STATEMENT <br> " . $sql;
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
+    	// echo "<tr><thead colsapn=5>$year</thead></tr>";
         while ($row = $result->fetch_assoc()) {
 
         	if ($row["Subject0"] != null)
@@ -164,7 +167,7 @@ FROM
             elseif ($row["Subject2"] != null)
             	echo "<tr><td>" . $row["Subject2"] . "</td>";
 
-            echo "<td></td>";
+            echo "<td class='w3-container w3-text-green w3-hover-gray'></td>";
         	for ($i=0; $i < 3; $i++) {
 
                 if ($view == 'Attainment')
@@ -181,8 +184,10 @@ FROM
                     else                                                          // Not Applicable
                         echo "<td class='w3-container w3-text-red w3-hover-red'>                Not Applicable</td>";
                 
-                elseif ($view == 'Percentage') 
-                    if ($row[">=75%$i"] >= 75)                                    // Outstanding
+                elseif ($view == 'Percentage')
+                	if($row[">=75%$i"] == null)
+                    	echo "<td></td>";
+                    elseif ($row[">=75%$i"] >= 75)                                    // Outstanding
                         echo "<td class='w3-container w3-text-green w3-hover-green'>".$row[">=75%$i"]. "%</td>";
                     elseif ($row[">=75%$i"] >= 61 and $row[">=75%$i"] < 75)       // Very Good
                         echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>".$row[">=75%$i"]. "%</td>";
@@ -194,7 +199,9 @@ FROM
                         echo "<td class='w3-container w3-text-red w3-hover-red'>".$row[">=75%$i"]. "%</td>";
 
                 elseif ($view == 'Attainment - Percentage')
-                    if ($row[">=75%$i"] >= 75)                                    // Outstanding
+                	if($row[">=75%$i"] == null)
+                    	echo "<td></td>";
+                    elseif ($row[">=75%$i"] >= 75)                                    // Outstanding
                         echo "<td class='w3-container w3-text-green w3-hover-green'>           Outstanding - ".$row[">=75%$i"]. "%</td>";
                     elseif ($row[">=75%$i"] >= 61 and $row[">=75%$i"] < 75)       // Very Good
                         echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - ".$row[">=75%$i"]. "%</td>";
