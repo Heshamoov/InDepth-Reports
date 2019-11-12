@@ -156,11 +156,21 @@ FROM
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
-            echo "<tr><td>" . $row["Subject0"] . "</td>";
+
+        	if ($row["Subject0"] != null)
+            	echo "<tr><td>" . $row["Subject0"] . "</td>";
+            elseif ($row["Subject1"] != null)
+            	echo "<tr><td>" . $row["Subject1"] . "</td>";
+            elseif ($row["Subject2"] != null)
+            	echo "<tr><td>" . $row["Subject2"] . "</td>";
+
+            echo "<td></td>";
         	for ($i=0; $i < 3; $i++) {
 
                 if ($view == 'Attainment')
-                    if ($row[">=75%$i"] >= 75)                                    // Outstanding
+                    if($row[">=75%$i"] == null)
+                    	echo "<td></td>";
+                    elseif ($row[">=75%$i"] >= 75)                                    // Outstanding
                         echo "<td class='w3-container w3-text-green w3-hover-green'>           Outstanding</td>";
                     elseif ($row[">=75%$i"] >= 61 and $row[">=75%$i"] < 75)       // Very Good
                         echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>";
