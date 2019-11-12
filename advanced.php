@@ -294,7 +294,57 @@ function search() {
 } 
 }
 </script>
+<script type="text/javascript">
+    function Cycle() {
+        document.getElementById('out').innerHTML = "Cycle Pressed!";
+        var table = document.getElementById('useroptions');
+        var row = table.getElementsByTagName("tr");
 
+        var deleting = false;
+
+        document.getElementById('out').innerHTML += row.length;
+
+        if (row.length != 0)
+            deleting = true;
+        
+        while (deleting) {
+            table.deleteRow(0);
+            if (row.length == 0)
+                deleting = false;
+        }
+
+        var columnname = ["1.1 Attainment","KG","Cycle 1 / Primary", "Cycle 2 / Middle", "Cycle 3 / High"];
+        
+        var row = table.insertRow(0); //Headers
+        for(var i=0; i<5; i++) {
+            var cell = row.insertCell(i).innerHTML = columnname[i];
+        }
+
+        var httpCycle = new XMLHttpRequest();
+        httpCycle.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                document.getElementById("useroptions").innerHTML += this.responseText;
+            }
+        };
+        
+        var selected_year = $("#studentYear option:selected");
+        var year = "";
+            selected_year.each(function() {   
+                year = "(acd_code = '" + $(this).text() + "')";
+            });
+
+        var selected_view = $("#view option:selected");
+        var currentView = ""; 
+        selected_view.each(function()
+            {currentView = $(this).text();});
+
+        // document.getElementById('out').innerHTML += "Before Sending " + years1SQL;
+        httpCycle.open("POST", "sqldb/CycleSearch.php?year=" + year + "&view=" + currentView, false);
+        httpCycle.send();
+
+    }
+
+</script>
 <body>
     
 <div class="w3-responsive header" >
@@ -316,8 +366,8 @@ function search() {
     </h3>
     <label id="out"></label>                            <!-- Debug Console -->
 
-    <div class="w3-container w3-center w3-light-gray">   <!-- DropDowns-->
-
+    <div class="w3-container w3-light-gray">   <!-- DropDowns-->
+        
         <div class="w3-left">   
             <label class="w3-container w3-large ">Grade</label>
             <select id="grade" onchange="FillStudents(), search()"></select>     <!-- Grade DropDown -->
@@ -327,6 +377,8 @@ function search() {
 
             <label class="w3-container w3-large">Student Name</label>
             <select id="studentsDropDown" onchange="FillYears(), search()"></select>          <!-- Students DropDown -->
+            |||
+            <button class="w3-btn w3-white w3-border w3-round-large w3-hover-green" onclick="Cycle()">Cycle Analysis</button>
 
             <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
                 onclick="printJS({
@@ -338,7 +390,7 @@ function search() {
                         css: 'styles/pdf.css',
                     })">
             </button>
-        </div>
+        </div> 
 
         <div class="w3-right"><!-- View DropDown -->
             <select id="view" onchange="search()">
@@ -348,6 +400,7 @@ function search() {
             </select>
             <label class="w3-container">View</label>
         </div>
+
     </div>
 <br>
     <div class="w3-container">
