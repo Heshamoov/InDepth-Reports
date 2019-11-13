@@ -121,7 +121,7 @@ function search() {
     });
 
     if (currentGrade == "Select Grade")
-        alert("Please select Grade first");
+        alert("View Changed, Click search again");
     else {
         // Current Student
         var currentStudent = "";
@@ -296,13 +296,22 @@ function search() {
 </script>
 <script type="text/javascript">
     function Cycle() {
-        document.getElementById('out').innerHTML = "Cycle Pressed!";
+        var selected_year = $("#studentYear option:selected");
+        var year = "";
+            selected_year.each(function() {   
+                year = $(this).text();
+            });
+
+    if (year == "Select Year")
+        alert("Select a Year");
+    else
+    {
         var table = document.getElementById('useroptions');
         var row = table.getElementsByTagName("tr");
 
         var deleting = false;
 
-        document.getElementById('out').innerHTML += row.length;
+        // document.getElementById('out').innerHTML += row.length;
 
         if (row.length != 0)
             deleting = true;
@@ -313,12 +322,14 @@ function search() {
                 deleting = false;
         }
 
-        var columnname = ["1.1 Attainment","KG","Cycle 1 / Primary", "Cycle 2 / Middle", "Cycle 3 / High"];
+        // var columnname = ["1.1 Attainment","KG","Cycle 1 / Primary", "Cycle 2 / Middle", "Cycle 3 / High"];
         
-        var row = table.insertRow(0); //Headers
-        for(var i=0; i<5; i++) {
-            var cell = row.insertCell(i).innerHTML = columnname[i];
-        }
+        // var row = table.insertRow(0); //Headers
+        // for(var i=0; i<5; i++) {
+        //     var cell = row.insertCell(i).innerHTML = columnname[i];
+        // }
+        document.getElementById('subtitle').innerHTML = "Performance Indicator levels: Summary";
+        document.getElementById('school').innerHTML = "Attainment Progress Analysis - Al Sanawabar School";
 
         var httpCycle = new XMLHttpRequest();
         httpCycle.onreadystatechange = function () {
@@ -330,7 +341,7 @@ function search() {
         var selected_year = $("#studentYear option:selected");
         var year = "";
             selected_year.each(function() {   
-                year = "(acd_code = '" + $(this).text() + "')";
+                year = $(this).text();
             });
 
         var selected_view = $("#view option:selected");
@@ -341,6 +352,7 @@ function search() {
         // document.getElementById('out').innerHTML += "Before Sending " + years1SQL;
         httpCycle.open("POST", "sqldb/CycleSearch.php?year=" + year + "&view=" + currentView, false);
         httpCycle.send();
+    }
 
     }
 
@@ -383,7 +395,7 @@ function search() {
             <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
                 onclick="printJS({
                         documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
-                        printable: 'useroptions',
+                        printable: 'divprint',
                         type: 'html',
                         ignoreElements: ['pp'],
                         targetStyles: ['*'],
@@ -403,7 +415,15 @@ function search() {
 
     </div>
 <br>
-    <div class="w3-container">
+    <div class="w3-container" id="divprint">
+    
+    <div class="w3-left">
+        <label id="subtitle"></label>
+    </div>
+    <div class="w3-center">
+        <label id="school"></label>
+    </div>
+<br>
         <table id="useroptions" class="w3-container w3-table-all w3-card w3-centered">
             <thead>
                 <tr>

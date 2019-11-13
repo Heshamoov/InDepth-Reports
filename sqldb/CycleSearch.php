@@ -22,7 +22,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            $year 
+            (acd_code = '$year') 
             AND
             (grade = 'GR01' OR grade = 'GR02' OR grade = 'GR03' OR grade = 'GR04' OR grade = 'GR05')
         
@@ -42,7 +42,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            $year 
+            (acd_code = '$year') 
             AND
             (grade = 'GR06' OR grade = 'GR07' OR grade = 'GR08' OR grade = 'GR09')
         
@@ -65,7 +65,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            $year 
+            (acd_code = '$year') 
             AND
             (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12')
         
@@ -95,7 +95,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            $year 
+            (acd_code = '$year') 
             AND
             (grade = 'GR01' OR grade = 'GR02' OR grade = 'GR03' OR grade = 'GR04' OR grade = 'GR05')
         
@@ -115,7 +115,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            $year 
+            (acd_code = '$year') 
             AND
             (grade = 'GR06' OR grade = 'GR07' OR grade = 'GR08' OR grade = 'GR09')
         
@@ -138,7 +138,7 @@ FROM
             exam_mark
         FROM new_marks
         WHERE
-            $year 
+            (acd_code = '$year') 
             AND
             (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12')
         
@@ -157,7 +157,8 @@ ORDER BY ISNULL(Subject0), Subject0, ISNULL(Subject1), Subject1, ISNULL(Subject2
     // echo "SQL STATEMENT <br> " . $sql;
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
-    	// echo "<tr><thead colsapn=5>$year</thead></tr>";
+    	echo "<tr><th class='w3-container w3-hover-gray w3-center' colspan=5>$year</th></tr>";
+        echo "<tr><th>1.1 Attainment</th><th>KG</th><th>Cycle 1 / Primary</th><th>Cycle 2 / Middle</th><th>Cycle 3 / High</th></tr>";
         while ($row = $result->fetch_assoc()) {
 
         	if ($row["Subject0"] != null)
