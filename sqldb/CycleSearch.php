@@ -160,7 +160,9 @@ ORDER BY ISNULL(Subject0), Subject0, ISNULL(Subject1), Subject1, ISNULL(Subject2
     // echo "SQL STATEMENT <br> " . $sql;
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
-    	echo "<tr><th class='w3-container w3-hover-gray w3-center' colspan=5>$year</th></tr>";
+        echo "<tr>
+                <th style='text-align: center' colspan=5>$year</th>
+              </tr>";
         echo "<tr><th class='w3-container w3-hover-green w3-center'>1.1 Attainment</th>
                   <th class='w3-container w3-hover-green w3-center'>KG</th>
                   <th class='w3-container w3-hover-green w3-center'>Cycle 1 / Primary</th>

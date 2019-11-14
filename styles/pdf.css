@@ -1,26 +1,3 @@
-#useroptions {
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 10%;
-}
-
-#useroptions td, #useroptions th {
-  border: 1px solid #ddd;
-  padding: 8px;
-}
-
-#useroptions tr:nth-child(even){background-color: #f2f2f2;}
-
-#useroptions tr:hover {background-color: #ddd;}
-
-#useroptions th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-  text-align: left;
-  background-color: #4CAF50;
-  color: white;
-}
-
 body {
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -76,3 +53,28 @@ button {
    visibility: visible;
 }
 
+ #useroptions,#header {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 60%;
+  height: 80%;
+  margin: auto;
+  text-align: center;
+}
+
+#useroptions td, #useroptions th {
+  border: 1px solid #ddd;
+  padding: 2px;
+}
+
+#useroptions tr:nth-child(even){background-color: #f2f2f2;}
+
+#useroptions tr:hover {background-color: #ddd;}
+
+#useroptions th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.TableTitle {
+    border: none;
+}

@@ -20,11 +20,11 @@ if (!isset($_SESSION['login'])) {
     <title>Attainment Analysis</title>
 
 <style type="text/css">
- #useroptions {
+ #useroptions,#header {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
-  width: 50%;
-  height: 50%;
+  width: 60%;
+  height: 80%;
   margin: auto;
   text-align: center;
 }
@@ -41,6 +41,9 @@ if (!isset($_SESSION['login'])) {
 #useroptions th {
   padding-top: 12px;
   padding-bottom: 12px;
+}
+.TableTitle {
+    border: none;
 }
 </style>    
     </head>
@@ -84,7 +87,7 @@ if (!isset($_SESSION['login'])) {
                 currentYear = "(acd_code = '" + $(this).text() + "')";
             });
 
-            if (currentYear != "" && currentYear != "Select Year") {
+            if (currentYear != "" && currentYear != "Year") {
                 // Sending to Server
                 var httpSearch = new XMLHttpRequest();
                 httpSearch.onreadystatechange = function () {
@@ -125,7 +128,7 @@ function search() {
     var selected_view = $("#view option:selected");
     
     var selected_years1 = $("#academic_year1 option:selected").text();
-    if (selected_years1 != "Select Year")
+    if (selected_years1 != "Year")
             years1SQL = "(acd_code = '" + selected_years1 + "') ";
 
     var selected_years2 = $("#academic_year2 option:selected");
@@ -145,7 +148,7 @@ function search() {
         currentGrade = $(this).text();
     });
 
-    if (currentGrade == "Select Grade")
+    if (currentGrade == "Grade")
         alert("View Changed, Click search again");
     else {
         // Current Student
@@ -171,7 +174,7 @@ function search() {
         var years2SQL = "";
         selected_years2.each(function () {
             var currentYear = $(this).text();
-            if (currentYear != 'Select Year')
+            if (currentYear != 'Year')
                 if (years2SQL === "")
                     years2SQL = "(acd_code = '" + currentYear + "' ";
                 else
@@ -185,7 +188,7 @@ function search() {
         var years3SQL = "";
         selected_years3.each(function () {
             var currentYear = $(this).text();
-            if (currentYear != 'Select Year')
+            if (currentYear != 'Year')
             if (years3SQL === "")
                 years3SQL = "(acd_code = '" + currentYear + "' ";
             else
@@ -199,7 +202,7 @@ function search() {
         var years4SQL = "";
         selected_years4.each(function () {
             var currentYear = $(this).text();
-            if (currentYear != 'Select Year')
+            if (currentYear != 'Year')
             if (years4SQL === "")
                 years4SQL = "(acd_code = '" + currentYear + "' ";
             else
@@ -213,7 +216,7 @@ function search() {
         var years5SQL = "";
         selected_years5.each(function () {
             var currentYear = $(this).text();
-            if (currentYear != 'Select Year')
+            if (currentYear != 'Year')
             if (years5SQL === "")
                 years5SQL = "(acd_code = '" + currentYear + "' ";
             else
@@ -243,7 +246,7 @@ function search() {
         var terms2SQL = "";
         selected_terms2.each(function () {
             var currentTerm = $(this).text();
-            if (currentTerm != 'Select Term')
+            if (currentTerm != 'Term')
             if (terms2SQL === "")
                 terms2SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
             else
@@ -259,7 +262,7 @@ function search() {
         var terms3SQL = "";
         selected_terms3.each(function () {
             var currentTerm = $(this).text();
-            if (currentTerm != 'Select Term')
+            if (currentTerm != 'Term')
             if (terms3SQL === "")
                 terms3SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
             else
@@ -275,7 +278,7 @@ function search() {
         var terms4SQL = "";
         selected_terms4.each(function () {
             var currentTerm = $(this).text();
-            if (currentTerm != 'Select Term')
+            if (currentTerm != 'Term')
             if (terms4SQL === "")
                 terms4SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
             else
@@ -291,7 +294,7 @@ function search() {
         var terms5SQL = "";
         selected_terms5.each(function () {
             var currentTerm = $(this).text();
-            if (currentTerm != 'Select Term')
+            if (currentTerm != 'Term')
             if (terms5SQL === "")
                 terms5SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
             else
@@ -327,34 +330,21 @@ function search() {
             year = $(this).text();
         });
 
-    if (year == "Select Year")
-        alert("Select a Year");
-    else
-    {
-        var table = document.getElementById('useroptions');
-        var row = table.getElementsByTagName("tr");
+        if (year == "Year")
+            alert("Select a Year");
+        else
+        {
+            var table = document.getElementById('useroptions');
+            var row = table.getElementsByTagName("tr");
+            var deleting = false;
+            // document.getElementById('out').innerHTML += row.length;
+            if (row.length != 0)  deleting = true;
+            while (deleting) {
+                table.deleteRow(0);
+                if (row.length == 0)
+                    deleting = false;
+            }
 
-        var deleting = false;
-
-        // document.getElementById('out').innerHTML += row.length;
-
-        if (row.length != 0)
-            deleting = true;
-        
-        while (deleting) {
-            table.deleteRow(0);
-            if (row.length == 0)
-                deleting = false;
-        }
-
-        // var columnname = ["1.1 Attainment","KG","Cycle 1 / Primary", "Cycle 2 / Middle", "Cycle 3 / High"];
-        
-        // var row = table.insertRow(0); //Headers
-        // for(var i=0; i<5; i++) {
-        //     var cell = row.insertCell(i).innerHTML = columnname[i];
-        // }
-        document.getElementById('subtitle').innerHTML = "Performance Indicator levels: Summary";
-        document.getElementById('school').innerHTML = "Attainment Progress Analysis - Al Sanawabar School";
 
         var httpCycle = new XMLHttpRequest();
         httpCycle.onreadystatechange = function () {
@@ -374,7 +364,6 @@ function search() {
         selected_view.each(function()
             {currentView = $(this).text();});
 
-        // document.getElementById('out').innerHTML += "Before Sending " + years1SQL;
         httpCycle.open("POST", "sqldb/CycleSearch.php?year=" + year + "&view=" + currentView, false);
         httpCycle.send();
     }
@@ -382,89 +371,86 @@ function search() {
     }
 
 </script>
-<body>
-    
-<div class="w3-responsive header" >
-    <!-- Navigation bar -->        
-    <?php include('navbar.php'); ?>
-    <!--set color for current tab-->
-    <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
-</div>
-
-<div id="print">
-    <h3 class="w3-center">
-        <a href="https://www.indepth.ae/">
-         <img src="images/indepth.png" class="w3-left" height="50px" width="100px">
-        </a>
-        Attainment Progress Analysis - Al Sanawabar School
-        <a href="http://alsanawbarschool.com/">
-        <img src="images/sanawbar.jpg" class="w3-right" height="50px" width="100px">
-        </a>
-    </h3>
-    <label id="out"></label>                            <!-- Debug Console -->
-
-    <div class="w3-container w3-light-gray">   <!-- DropDowns-->
-        
-        <div class="w3-left">   
-            <label class="w3-container w3-large ">Grade</label>
-            <select id="grade" onchange="FillStudents(), search()"></select>     <!-- Grade DropDown -->
-
-            <label class="w3-container w3-large">Year</label>                   
-            <select style="float:left;" id="studentYear" onchange="FillStudents()"></select> <!-- Year DropDown -->
-
-            <label class="w3-container w3-large">Student Name</label>
-            <select id="studentsDropDown" onchange="FillYears(), search()"></select>          <!-- Students DropDown -->
-            |||
-            <button class="w3-btn w3-white w3-border w3-round-large w3-hover-green" onclick="Cycle()">Cycle Analysis</button>
-
-            <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
-                onclick="printJS({
-                        documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
-                        printable: 'divprint',
-                        type: 'html',
-                        ignoreElements: ['pp'],
-                        targetStyles: ['*'],
-                        css: 'styles/pdf.css',
-                    })">
-            </button>
-        </div> 
-
-        <div class="w3-right"><!-- View DropDown -->
-            <select id="view" onchange="search()">
-                <option>Attainment</option>
-                <option>Percentage</option>
-                <option>Attainment - Percentage</option>
-            </select>
-            <label class="w3-container">View</label>
-        </div>
-
+<body>   
+    <div class="w3-responsive" >
+        <?php include('navbar.php'); ?>
+        <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
     </div>
-<br>
+    <label id="out"></label>                            <!-- Debug Console -->
+    
+    <div class="w3-container">   <!-- DropDowns-->
+        <table class="w3-table-all w3-card w3-gray">
+            <th>
+                <button class="w3-btn w3-white w3-border w3-round-large w3-hover-green" onclick="Cycle()">Cycle Analysis</button>                    
+            </th>            
+            <th>
+                <select id="grade" onchange="FillStudents(), search()"></select>     <!-- Grade DropDown -->                    
+            </th>
+            <th>
+                <select style="float:left;" id="studentYear" onchange="FillStudents()"></select> <!-- Year DropDown -->                    
+            </th>
+            <th>
+                <select id="studentsDropDown" onchange="FillYears(), search()"></select>          <!-- Students DropDown -->                    
+            </th>
+            <th>
+                <select id="view" onchange="search()">
+                    <option>Attainment</option>
+                    <option>Percentage</option>
+                    <option>Attainment - Percentage</option>
+                </select>
+            </th>
+            <th>
+                <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
+                        onclick="printJS({
+                                documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
+                                printable: 'divprint',
+                                type: 'html',
+                                ignoreElements: ['pp'],
+                                // targetStyles: ['*']
+                                css: 'styles/pdf.css'
+                                })">
+                </button>                    
+            </th>            
+        </table>
+    </div> 
+    <br>
     <div class="w3-container" id="divprint">
-    
-        <div class="w3-left">
-            <label id="subtitle"></label>
-        </div>
-    
-        <div class="w3-center">
-            <label id="school"></label>
-        </div>
 
-        <!-- <table id="useroptions" class="w3-container w3-table-all w3-card w3-centered"> -->
-            <table id="useroptions">
+        <table style="width: 60%; margin: auto;">
+            <tr>
+                <th id="SchoolName" style="text-align: center;" colspan="2">
+                    <img src="images/sanawbar.jpg" style="width: 10%;">
+                </th>
+            </tr>
+            <tr>
+                <th style="text-align: center;" colspan="2">
+                    Alsanawbar School
+                </th>
+            </tr>
+            <tr><br><br></tr>
+            <tr>
+                <th>
+                    Performance Indicator levels: Summary
+                </th>
+                <th style="text-align: right;">
+                    Attainment Progress Analysis
+                </th>
+            </tr>
+        </table> 
+
+        <table id="useroptions" class="w3-card">
             <thead>
                 <tr>
                     <th id="TableTitle" colspan="6"></th>
                 </tr>
-
             </thead>
             <tr>
                 <th><label>Year</label></th>
-        <th><select id="academic_year1" onchange="FillTerm(this, 'term1')"></select></th>
-        <th><select id="academic_year2" onchange="FillTerm(this, 'term2')"></select></th>
-        <th><select id="academic_year3" onchange="FillTerm(this, 'term3')"></select></th>
-        <th><select id="academic_year4" onchange="FillTerm(this, 'term4')"></select></th>
-        <th><select id="academic_year5" onchange="FillTerm(this, 'term5')"></select></th>
+                <th><select id="academic_year1" onchange="FillTerm(this, 'term1')"></select></th>
+                <th><select id="academic_year2" onchange="FillTerm(this, 'term2')"></select></th>
+                <th><select id="academic_year3" onchange="FillTerm(this, 'term3')"></select></th>
+                <th><select id="academic_year4" onchange="FillTerm(this, 'term4')"></select></th>
+                <th><select id="academic_year5" onchange="FillTerm(this, 'term5')"></select></th>
             </tr>
             <tr>
                 <th><label>Term</label></th>
@@ -475,6 +461,11 @@ function search() {
                 <th><select id="term5" onchange="search()"></select></th>
             </tr>
             <tbody id="results"> </tbody>
+        </table>
+        <table style="width: 60%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
+            <tr>
+                <td style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
+            </tr>
         </table>
     </div>
 </div>
@@ -530,10 +521,10 @@ function search() {
 
                 delete yearsArray[yearsArray.length - 1];
 
-                years2.add(new Option('Select Year'));
-                years3.add(new Option('Select Year'));
-                years4.add(new Option('Select Year'));
-                years5.add(new Option('Select Year'));
+                years2.add(new Option('Year'));
+                years3.add(new Option('Year'));
+                years4.add(new Option('Year'));
+                years5.add(new Option('Year'));
 
                 for (var i in yearsArray) {
                     years1.add(new Option(yearsArray[i]));
@@ -649,7 +640,7 @@ function search() {
 
             delete gradesArray[gradesArray.length - 1];
             
-            select.add(new Option("Select Grade"));
+            select.add(new Option("Grade"));
             for (var i in gradesArray)
                 select.add(new Option(gradesArray[i]));
         </script>                
@@ -682,11 +673,11 @@ function search() {
 
             delete yearArray[yearArray.length - 1];
 
-            AY2.add(new Option('Select Year'));
-            AY3.add(new Option('Select Year'));
-            AY4.add(new Option('Select Year'));
-            AY5.add(new Option('Select Year'));
-            SY.add(new Option('Select Year'));
+            AY2.add(new Option('Year'));
+            AY3.add(new Option('Year'));
+            AY4.add(new Option('Year'));
+            AY5.add(new Option('Year'));
+            SY.add(new Option('Year'));
 
             for (var i in yearArray) {
                 AY1.add(new Option(yearArray[i]));
@@ -727,10 +718,10 @@ function search() {
 
                 delete termsArray[termsArray.length - 1];
 
-                term2.add(new Option('Select Term'));
-                term3.add(new Option('Select Term'));
-                term4.add(new Option('Select Term'));
-                term5.add(new Option('Select Term'));
+                term2.add(new Option('Term'));
+                term3.add(new Option('Term'));
+                term4.add(new Option('Term'));
+                term5.add(new Option('Term'));
 
                 for (var i in termsArray)
                     term1.add(new Option(termsArray[i]));
