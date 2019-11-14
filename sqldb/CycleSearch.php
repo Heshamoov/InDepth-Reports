@@ -161,7 +161,11 @@ ORDER BY ISNULL(Subject0), Subject0, ISNULL(Subject1), Subject1, ISNULL(Subject2
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
     	echo "<tr><th class='w3-container w3-hover-gray w3-center' colspan=5>$year</th></tr>";
-        echo "<tr><th>1.1 Attainment</th><th>KG</th><th>Cycle 1 / Primary</th><th>Cycle 2 / Middle</th><th>Cycle 3 / High</th></tr>";
+        echo "<tr><th class='w3-container w3-hover-green w3-center'>1.1 Attainment</th>
+                  <th class='w3-container w3-hover-green w3-center'>KG</th>
+                  <th class='w3-container w3-hover-green w3-center'>Cycle 1 / Primary</th>
+                  <th class='w3-container w3-hover-green w3-center'>Cycle 2 / Middle</th>
+                  <th class='w3-container w3-hover-green w3-center'>Cycle 3 / High</th></tr>";
         while ($row = $result->fetch_assoc()) {
 
         	if ($row["Subject0"] != null)

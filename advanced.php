@@ -24,7 +24,9 @@ if (!isset($_SESSION['login'])) {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 50%;
-  height: 50%
+  height: 50%;
+  margin: auto;
+  text-align: center;
 }
 
 #useroptions td, #useroptions th {
@@ -39,7 +41,6 @@ if (!isset($_SESSION['login'])) {
 #useroptions th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
 }
 </style>    
     </head>
@@ -322,9 +323,9 @@ function search() {
     function Cycle() {
         var selected_year = $("#studentYear option:selected");
         var year = "";
-            selected_year.each(function() {   
-                year = $(this).text();
-            });
+        selected_year.each(function() {   
+            year = $(this).text();
+        });
 
     if (year == "Select Year")
         alert("Select a Year");
