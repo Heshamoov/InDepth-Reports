@@ -18,6 +18,30 @@ if (!isset($_SESSION['login'])) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
 
     <title>Attainment Analysis</title>
+
+<style type="text/css">
+ #useroptions {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 50%;
+  height: 50%
+}
+
+#useroptions td, #useroptions th {
+  border: 1px solid #ddd;
+  padding: 2px;
+}
+
+#useroptions tr:nth-child(even){background-color: #f2f2f2;}
+
+#useroptions tr:hover {background-color: #ddd;}
+
+#useroptions th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+}
+</style>    
     </head>
 
 
@@ -417,14 +441,16 @@ function search() {
 <br>
     <div class="w3-container" id="divprint">
     
-    <div class="w3-left">
-        <label id="subtitle"></label>
-    </div>
-    <div class="w3-center">
-        <label id="school"></label>
-    </div>
-<br>
-        <table id="useroptions" class="w3-container w3-table-all w3-card w3-centered">
+        <div class="w3-left">
+            <label id="subtitle"></label>
+        </div>
+    
+        <div class="w3-center">
+            <label id="school"></label>
+        </div>
+
+        <!-- <table id="useroptions" class="w3-container w3-table-all w3-card w3-centered"> -->
+            <table id="useroptions">
             <thead>
                 <tr>
                     <th id="TableTitle" colspan="6"></th>
