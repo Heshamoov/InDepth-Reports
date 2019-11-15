@@ -20,32 +20,33 @@ if (!isset($_SESSION['login'])) {
     <title>Attainment Analysis</title>
 
 <style type="text/css">
- #useroptions,#header {
-  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-  border-collapse: collapse;
-  width: 60%;
-  height: 80%;
-  margin: auto;
-  text-align: center;
-}
+     #useroptions{
+      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+      border-collapse: collapse;
+      width: 70%;
+      height: 100%;
+      margin: auto;
+      text-align: center;
+    }
 
-#useroptions td, #useroptions th {
-  border: 1px solid #ddd;
-  padding: 2px;
-}
+    #useroptions td, #useroptions th {
+      border: 1px solid #ddd;
+      padding: 2px;
+    }
 
-#useroptions tr:nth-child(even){background-color: #f2f2f2;}
+    #useroptions tr:nth-child(even){background-color: #f2f2f2;}
 
-#useroptions tr:hover {background-color: #ddd;}
+    #useroptions tr:hover {background-color: #ddd;}
 
-#useroptions th {
-  padding-top: 12px;
-  padding-bottom: 12px;
-}
-.TableTitle {
-    border: none;
-}
-</style>    
+    #useroptions th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+    }
+    .TableTitle {
+        border: none;
+    }
+</style>
+
     </head>
 
 
@@ -381,13 +382,13 @@ function search() {
     <div class="w3-container">   <!-- DropDowns-->
         <table class="w3-table-all w3-card w3-gray">
             <th>
+                <select style="float:left;" id="studentYear" onchange="FillStudents()"></select> <!-- Year DropDown -->                    
+            </th>            
+            <th>
                 <button class="w3-btn w3-white w3-border w3-round-large w3-hover-green" onclick="Cycle()">Cycle Analysis</button>                    
             </th>            
             <th>
                 <select id="grade" onchange="FillStudents(), search()"></select>     <!-- Grade DropDown -->                    
-            </th>
-            <th>
-                <select style="float:left;" id="studentYear" onchange="FillStudents()"></select> <!-- Year DropDown -->                    
             </th>
             <th>
                 <select id="studentsDropDown" onchange="FillYears(), search()"></select>          <!-- Students DropDown -->                    
@@ -405,34 +406,34 @@ function search() {
                                 documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
                                 printable: 'divprint',
                                 type: 'html',
+                                showModal:true,
                                 ignoreElements: ['pp'],
-                                // targetStyles: ['*']
-                                css: 'styles/pdf.css'
+                                targetStyles: ['*'],
+                                css: 'styles/advanced.css'
                                 })">
                 </button>                    
             </th>            
         </table>
     </div> 
-    <br>
-    <div class="w3-container" id="divprint">
-
-        <table style="width: 60%; margin: auto;">
+    <div class="w3-center" id="divprint">
+        
+        <table id="PageTitle" style="margin: auto; width: 70%;">
             <tr>
-                <th id="SchoolName" style="text-align: center;" colspan="2">
-                    <img src="images/sanawbar.jpg" style="width: 10%;">
+                <th id="SchoolLogoTH" style="text-align: center;" colspan="2">
+                    <img id="SchoolLogo" src="images/sanawbar.jpg" style="width: 10%;">
                 </th>
             </tr>
             <tr>
-                <th style="text-align: center;" colspan="2">
-                    Alsanawbar School
+                <th id="SchoolName" style="text-align: center;" colspan="2">
+                    Al Sanawbar School
                 </th>
             </tr>
             <tr><br><br></tr>
             <tr>
-                <th>
+                <th id="Performance">
                     Performance Indicator levels: Summary
                 </th>
-                <th style="text-align: right;">
+                <th id="Attainment" style="text-align: right;">
                     Attainment Progress Analysis
                 </th>
             </tr>
@@ -462,9 +463,10 @@ function search() {
             </tr>
             <tbody id="results"> </tbody>
         </table>
-        <table style="width: 60%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
+
+        <table id="InDepthDiv" style="width: 70%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
             <tr>
-                <td style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
+                <td id="InDepthTD" style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
             </tr>
         </table>
     </div>
