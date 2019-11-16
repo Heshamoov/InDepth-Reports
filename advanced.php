@@ -295,55 +295,7 @@ function search() {
 } 
 }
 </script>
-<script type="text/javascript">
-    function Cycle() {
-        var selected_year = $("#studentYear option:selected");
-        var year = "";
-        selected_year.each(function() {   
-            year = $(this).text();
-        });
 
-        if (year == "Year")
-            alert("Select a Year");
-        else
-        {
-            var table = document.getElementById('useroptions');
-            var row = table.getElementsByTagName("tr");
-            var deleting = false;
-            // document.getElementById('out').innerHTML += row.length;
-            if (row.length != 0)  deleting = true;
-            while (deleting) {
-                table.deleteRow(0);
-                if (row.length == 0)
-                    deleting = false;
-            }
-
-
-        var httpCycle = new XMLHttpRequest();
-        httpCycle.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                document.getElementById("useroptions").innerHTML += this.responseText;
-            }
-        };
-        
-        var selected_year = $("#studentYear option:selected");
-        var year = "";
-            selected_year.each(function() {   
-                year = $(this).text();
-            });
-
-        var selected_view = $("#view option:selected");
-        var currentView = ""; 
-        selected_view.each(function()
-            {currentView = $(this).text();});
-
-        httpCycle.open("POST", "sqldb/CycleSearch.php?year=" + year + "&view=" + currentView, false);
-        httpCycle.send();
-    }
-
-    }
-
-</script>
 <body>   
     <div class="w3-responsive" >
         <?php include('navbar.php'); ?>
@@ -353,12 +305,22 @@ function search() {
     
     <div class="w3-container">   <!-- DropDowns-->
         <table class="w3-table-all w3-card w3-gray">
+        <th>
+            <div class="w3-container">
+              <div class="w3-dropdown-hover">
+                <button class="w3-button w3-white">Hover Over Me!</button>
+                <div class="w3-dropdown-content w3-bar-block w3-border">
+                  <a href="advanced.php" class="w3-bar-item w3-button">Attainment</a>
+                  <a href="cycle.php" class="w3-bar-item w3-button">Cycle</a>
+                  <a href="#" class="w3-bar-item w3-button">Link 3</a>
+                </div>
+              </div>
+            </div>            
+        </th>
+
             <th>
                 <select style="float:left;" id="studentYear" onchange="FillStudents()"></select> <!-- Year DropDown -->                    
-            </th>            
-            <th>
-                <button class="w3-btn w3-white w3-border w3-round-large w3-hover-green" onclick="Cycle()">Cycle Analysis</button>                    
-            </th>            
+            </th>          
             <th>
                 <select id="grade" onchange="FillStudents(), search()"></select>     <!-- Grade DropDown -->                    
             </th>
