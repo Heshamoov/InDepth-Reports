@@ -32,6 +32,7 @@ if (!isset($_SESSION['login'])) {
     #useroptions td, #useroptions th {
       border: 1px solid #ddd;
       padding: 2px;
+      text-align: center;
     }
 
     #useroptions tr:nth-child(even){background-color: #f2f2f2;}
