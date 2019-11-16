@@ -308,11 +308,11 @@ function search() {
         <th>
             <div class="w3-container">
               <div class="w3-dropdown-hover">
-                <button class="w3-button w3-white">Hover Over Me!</button>
+                <button class="w3-button w3-green">Benchmark</button>
                 <div class="w3-dropdown-content w3-bar-block w3-border">
-                  <a href="advanced.php" class="w3-bar-item w3-button">Attainment</a>
-                  <a href="cycle.php" class="w3-bar-item w3-button">Cycle</a>
-                  <a href="#" class="w3-bar-item w3-button">Link 3</a>
+                  <a href="advanced.php" class="w3-bar-item w3-button w3-hover-green">Attainment</a>
+                  <a href="cycle.php" class="w3-bar-item w3-button w3-hover-green">Cycle</a>
+                  <a href="grades.php" class="w3-bar-item w3-button w3-hover-green">Grades</a>
                 </div>
               </div>
             </div>            
