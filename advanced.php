@@ -19,35 +19,6 @@ if (!isset($_SESSION['login'])) {
 
     <title>Attainment Analysis</title>
 
-<style type="text/css">
-     #useroptions{
-      font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
-      border-collapse: collapse;
-      width: 70%;
-      height: 100%;
-      margin: auto;
-      text-align: center;
-    }
-
-    #useroptions td, #useroptions th {
-      border: 1px solid #ddd;
-      padding: 2px;
-      text-align: center;
-    }
-
-    #useroptions tr:nth-child(even){background-color: #f2f2f2;}
-
-    #useroptions tr:hover {background-color: #ddd;}
-
-    #useroptions th {
-      padding-top: 12px;
-      padding-bottom: 12px;
-    }
-    .TableTitle {
-        border: none;
-    }
-</style>
-
     </head>
 
 
@@ -409,19 +380,19 @@ function search() {
                                 type: 'html',
                                 showModal:true,
                                 ignoreElements: ['pp'],
-                                targetStyles: ['*'],
-                                css: 'styles/advanced.css'
+                                targetStyles: ['*']
+                                // css: 'styles/advanced.css'
                                 })">
                 </button>                    
             </th>            
         </table>
     </div> 
-    <div class="w3-center" id="divprint">
+    <div id="divprint" style="width: 70%; margin: auto;">
         
-        <table id="PageTitle" style="margin: auto; width: 70%;">
+        <table id="PageTitle" style="margin: auto; width: 100%;">
             <tr>
                 <th id="SchoolLogoTH" style="text-align: center;" colspan="2">
-                    <img id="SchoolLogo" src="images/sanawbar.jpg" style="width: 10%;">
+                    <img id="SchoolLogo" src="images/sanawbar.jpg" style="width: 5%;">
                 </th>
             </tr>
             <tr>
@@ -440,10 +411,10 @@ function search() {
             </tr>
         </table> 
 
-        <table id="useroptions" class="w3-card">
+        <table id="useroptions" class="w3-card w3-table-all w3-centered">
             <thead>
                 <tr>
-                    <th id="TableTitle" colspan="6"></th>
+                    <th id="TableTitle" colspan="6" class="w3-center"></th>
                 </tr>
             </thead>
             <tr>
@@ -465,11 +436,12 @@ function search() {
             <tbody id="results"> </tbody>
         </table>
 
-        <table id="InDepthDiv" style="width: 70%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
+        <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
             <tr>
                 <td id="InDepthTD" style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
             </tr>
         </table>
+        <br><br><br>
     </div>
 </div>
 
