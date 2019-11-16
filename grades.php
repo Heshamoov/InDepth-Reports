@@ -17,13 +17,80 @@ if (!isset($_SESSION['login'])) {
 
 <title>Attainment Analysis</title>
 
+<!-- <style type="text/css">
+    .Vtext {
+    text-align:center;
+    white-space:nowrap;
+    transform-origin:50% 50%;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    transform: rotate(90deg);
+    
+}
+.Vtext:before {
+    content:'';
+    padding-top:110%;/* takes width as reference, + 10% for faking some extra padding */
+    display:inline-block;
+    vertical-align:middle;
+}
+
+</style> -->
 </head>
 
 <script type="text/javascript">      
     $(function () {
-        $('#Year').multiselect({includeSelectAllOption: false});            
-        $('#view').multiselect({includeSelectAllOption: false});
+        $('#Year').multiselect({includeSelectAllOption: false});
+        $('#grade').multiselect({includeSelectAllOption: false});
+        $('#exam').multiselect({includeSelectAllOption: false});
     });
+</script>
+
+<!-- Initialize Grades    -->
+<script type="text/javascript">
+    var select = document.getElementById('grade');
+    var httpgrades = new XMLHttpRequest();
+    httpgrades.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            var str = this.responseText;
+            gradesArray = str.split("\t");
+        }
+    };
+
+    httpgrades.open("GET", "sqldb/grades.php", false);
+    httpgrades.send();
+
+    $('#grade').multiselect('destroy');
+
+    delete gradesArray[gradesArray.length - 1];
+    
+    select.add(new Option("Grade"));
+    for (var i in gradesArray)
+        select.add(new Option(gradesArray[i]));
+</script>
+
+<!-- Initialize Exams    -->
+<script type="text/javascript">
+        var exam = document.getElementById('exam');
+
+        var httpTerms = new XMLHttpRequest();
+        httpTerms.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                var str = this.responseText;
+                termsArray = str.split("\t");
+            }
+        };
+
+        httpTerms.open("GET", "sqldb/terms.php", false);
+        httpTerms.send();
+    
+        $('#exam').multiselect('destroy');
+
+        delete termsArray[termsArray.length - 1];
+
+        for (var i in termsArray)
+            exam.add(new Option(termsArray[i]));
 </script>
 
 <script type="text/javascript">
@@ -74,10 +141,12 @@ if (!isset($_SESSION['login'])) {
 </script>
 
 <body>
+
     <div class="w3-responsive" >
         <?php include('navbar.php'); ?>
         <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
     </div>
+
     <label id="out"></label>                            <!-- Debug Console -->
     
     <div class="w3-container">   <!-- DropDowns-->
@@ -123,6 +192,7 @@ if (!isset($_SESSION['login'])) {
         </table>
     </div>
 
+
     <div id="divprint" style="width: 70%; margin: auto;">
         
         <table id="PageTitle" style="margin: auto; width: 100%;">
@@ -147,12 +217,90 @@ if (!isset($_SESSION['login'])) {
             </tr>
         </table> 
 
-        <table id="useroptions" class="w3-card w3-table-all w3-centered">
+        <table id="useroptions" class="w3-card w3-table w3-bordered w3-centered">       <!--Header Table-->
             <thead>
                 <tr>
-                    <th id="TableTitle" colspan="6" class="w3-center"></th>
+                    <th class="w3-yellow">School Type:</th>
+                    <th colspan="3">KG-12</th>
+                </tr>
+                <tr>
+                    <th class="w3-yellow">School Name</th> <th>Al Sanawbar School</th>
+                    <th class="w3-yellow">ID</th>          <th>12345</th>
+                </tr>
+                <tr>
+                    <th class="w3-yellow">Region</th>      <th>Abu Dhabi - Al Ain</th>
+                    <th class="w3-yellow">Curriculum</th>  <th>US Curriculum</th>
                 </tr>
             </thead>
+        </table>
+        
+        <br>
+
+        <table id="SubjectExam" class="w3-card w3-table w3-bordered w3-centered">
+            <thead>
+                <tr>
+                    <th class="w3-yellow" colspan="3">
+                        Subject name                        
+                    </th>
+                    <th colspan="8">
+                       <select id="grade" onchange=""></select>                     
+                    </th>
+                </tr>
+                <tr>
+                    <th class="w3-yellow" colspan="3">Exam name</th>
+                    <th colspan="6">
+                        <select id="exam" onchange=""></select>
+                    </th>
+                    <th class="w3-blue Vtext" rowspan="2" colspan="2">
+                        attainment judgment
+                    </th>
+                </tr>
+                <tr>
+                    <th class="w3-yellow" colspan="3">2017</th>
+                    <th class="w3-yellow" colspan="3">2018</th>
+                    <th class="w3-yellow" colspan="3">2019</th>
+                </tr>
+                <tr>
+                    <th class="w3-green Vtext">
+                        % students achieving levels above Expectations
+                    </th>
+                    <th class="w3-yellow Vtext">
+                        % students achieving levels minimum Expectaions
+                    </th>
+                    <th class="w3-red Vtext">
+                        % students achieving levels below Expectaions
+                    </th>
+
+                    <th class="w3-green Vtext">
+                        % students achieving levels above Expectations
+                    </th>
+                    <th class="w3-yellow Vtext">
+                        % students achieving levels minimum Expectaions
+                    </th>
+                    <th class="w3-red Vtext">
+                        % students achieving levels below Expectaions
+                    </th>
+
+                    <th class="w3-green Vtext">
+                        % students achieving levels above Expectations
+                    </th>
+                    <th class="w3-yellow Vtext">
+                        % students achieving levels minimum Expectaions
+                    </th>
+                    <th class="w3-red Vtext">
+                        % students achieving levels below Expectaions
+                    </th>
+
+                    <th class="w3-blue">
+                        Attainment benchmark judgment for the latest year
+                    </th>
+                    <th class="w3-blue">
+                        Trend in attainment over time
+                    </th>
+                </tr>
+
+            </thead>
+            
         </table>
 
         <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
