@@ -204,7 +204,7 @@ if (!isset($_SESSION['login'])) {
         <thead>
             <tr>
                 <th class="HiddenCell"></th>
-                <th class="w3-yellow" colspan="4">
+                <th class="w3-yellow bigtext" colspan="4">
                     Subject name                        
                 </th>
                 <th colspan="10">
@@ -214,32 +214,32 @@ if (!isset($_SESSION['login'])) {
 
             <tr>
                 <th class="HiddenCell"></th>
-                <th class="w3-yellow" colspan="4">Exam name</th>
+                <th class="w3-yellow bigtext" colspan="4">Exam name</th>
                 <th colspan="8">
                     <select class="dropdown" id="exam" onchange="search()"></select>
                 </th>
-                <th class="w3-blue Vtext" rowspan="2" colspan="2">
+                <th class="w3-blue " rowspan="2" colspan="2">
                     attainment judgment
                 </th>
             </tr>
             <tr>
                 <th class="HiddenCell"></th>
-                <th class="w3-yellow" colspan="4">2017</th>
-                <th class="w3-yellow" colspan="4">2018</th>
-                <th class="w3-yellow" colspan="4">2019</th>
+                <th class="w3-yellow bigtext" colspan="4">2017</th>
+                <th class="w3-yellow bigtext" colspan="4">2018</th>
+                <th class="w3-yellow bigtext" colspan="4">2019</th>
             </tr>
             <tr>
                 <td></td>
                 <td>
                     Number of Students
                 </td>
-                <td class="w3-green Vtext">
+                <td class="w3-green">
                     % students achieving levels above Expectations
                 </td>
-                <td class="w3-yellow Vtext">
+                <td class="w3-yellow">
                     % students achieving levels minimum Expectaions
                 </td>
-                <td class="w3-red Vtext">
+                <td class="w3-red">
                     % students achieving levels below Expectaions
                 </td>
 
@@ -247,13 +247,13 @@ if (!isset($_SESSION['login'])) {
                 <td>
                     Number of Students
                 </td>
-                <td class="w3-green Vtext">
+                <td class="w3-green">
                     % students achieving levels above Expectations
                 </td>
-                <td class="w3-yellow Vtext">
+                <td class="w3-yellow">
                     % students achieving levels minimum Expectaions
                 </td>
-                <td class="w3-red Vtext">
+                <td class="w3-red">
                     % students achieving levels below Expectaions
                 </td>
 
@@ -261,13 +261,13 @@ if (!isset($_SESSION['login'])) {
                 <td>
                     Number of Students
                 </td>
-                <td class="w3-green Vtext">
+                <td class="w3-green">
                     % students achieving levels above Expectations
                 </td>
-                <td class="w3-yellow Vtext">
+                <td class="w3-yellow">
                     % students achieving levels minimum Expectaions
                 </td>
-                <td class="w3-red Vtext">
+                <td class="w3-red">
                     % students achieving levels below Expectaions
                 </td>
 

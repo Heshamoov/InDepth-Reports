@@ -2,17 +2,16 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 10px;
+  font-size: 14px;
 }
 
 #divprint {
-  /*background-color: gray;*/
-  margin: auto;
-  width: 80%;
+  width: 100%;
 }
 
 #PageTitle {
-  width: 100%;
+	margin: auto;
+    width: 100%;
 }
 
 #SchoolLogoTH {
@@ -21,25 +20,35 @@ body {
 
 #SchoolLogo {
   width: 70px;
+  margin: auto;
 }
 
 #SchoolName {
   text-align: center;
 }
 
-#SchoolInfo, #SubjectExam {
+#SchoolInfo {
 	margin: auto;
-	/*width: 50%;*/
+	width: 40%;
 	border-collapse: collapse;
 }
 
+#SubjectExam {
+	margin: auto;
+	font-size: 10px;
+	width: 50%;
+}
+
+.bigtext {
+	font-size: 14px;
+}
 #SchoolInfo th, #SchoolInfo td, #SubjectExam th, #SubjectExam td {
   border: 1px solid #ddd;
-  padding: 1px;
+  padding: 0px;
   text-align: center;
 }
 
-.HiddenCell, .dropdown {
+.HiddenCell {
 	border: none !important;
 }
 
@@ -56,13 +65,17 @@ body {
 	background-color: green;
 }
 
+.w3-red {
+	background-color: red;
+}
+
 .pdfcenter {
 	background-color: red;
 }
 
 
 #InDepthDiv {
-  width: 100%;
+  width: 62%;
   margin: auto;
   color: gray;
   font-size: 10px;
