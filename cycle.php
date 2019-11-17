@@ -38,16 +38,6 @@ if (!isset($_SESSION['login'])) {
             alert("Select a Year");
         else
         {
-            var table = document.getElementById('useroptions');
-            var row = table.getElementsByTagName("tr");
-            var deleting = false;
-            if (row.length != 0)  deleting = true;
-            while (deleting) {
-                table.deleteRow(0);
-                if (row.length == 0)
-                    deleting = false;
-            }
-
 
             var httpCycle = new XMLHttpRequest();
             httpCycle.onreadystatechange = function () {
@@ -136,7 +126,7 @@ if (!isset($_SESSION['login'])) {
                     Al Sanawbar School
                 </th>
             </tr>
-            <tr><br><br></tr>
+            <tr><br></tr>
             <tr>
                 <th id="Performance">
                     Performance Indicator levels: Summary
@@ -147,13 +137,7 @@ if (!isset($_SESSION['login'])) {
             </tr>
         </table> 
 
-        <table id="useroptions" class="w3-card w3-table-all w3-centered">
-            <thead>
-                <tr>
-                    <th id="TableTitle" colspan="6" class="w3-center"></th>
-                </tr>
-            </thead>
-        </table>
+        <table id="useroptions" class="w3-card w3-table-all w3-centered"></table>
 
         <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
             <tr>

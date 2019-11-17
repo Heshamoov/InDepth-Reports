@@ -5,7 +5,7 @@ body {
   margin: auto;
 }
 
-#useroptions,#header {
+#useroptions {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 60%;
@@ -28,9 +28,6 @@ body {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: center;
-}
-.TableTitle {
-    border: none;
 }
 
 #InDepthDiv {
