@@ -1,3 +1,45 @@
+/*Grades CSS*/
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 16px;
+}
+
+#divprint {
+  /*background-color: gray;*/
+  margin: auto;
+  width: 90%;
+}
+
+#PageTitle {
+  width: 100%;
+}
+
+#SchoolLogoTH {
+  text-align: center;
+}
+
+#SchoolLogo {
+  width: 70px;
+}
+
+#SchoolName {
+  text-align: center;
+}
+
+#SchoolInfo {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+#SchoolInfo th, #SchoolInfo td {
+  border: 1px solid #ddd;
+  padding: 3px;
+  text-align: center;
+}
+
+
+
 .w3-yellow {
 	background-color: yellow;
 }
@@ -11,4 +53,17 @@
 
 .pdfcenter {
 	background-color: red;
+}
+
+
+#InDepthDiv {
+  width: 70%;
+  margin: auto;
+  color: gray;
+  font-size: 10px;
+  opacity: 0.5";
+}
+
+#InDepthTD {
+  text-align: right;
 }

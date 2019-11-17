@@ -7,6 +7,8 @@ if (!isset($_SESSION['login'])) {
     include('Header.php');
     ?>
 
+<link rel="stylesheet" href="styles/grades.css">
+
 <title>Attainment Analysis</title>
 
 <style type="text/css">
@@ -18,11 +20,11 @@ if (!isset($_SESSION['login'])) {
 </head>
 
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     $( document ).ready(function() {
         document.getElementById('pp').click();
 });
-</script>
+</script> -->
 
 
 <script type="text/javascript">      
@@ -168,32 +170,23 @@ if (!isset($_SESSION['login'])) {
     </div>
 
 
-<div id="divprint" class="divprint" style="background-color: gray;">
-<div class="pdfcenter">
-    <table align='center'>
-        <tr>
-            <th id="SchoolLogo" style="text-align: center;" colspan="2">
-                <img id="SchoolLogo" src="images/sanawbar.jpg" style="width: 10%;">
-            </th>
-        </tr>
-        <tr>
-            <th id="SchoolName" style="text-align: center;" colspan="2">
-                Al Sanawbar School
-            </th>
-        </tr>
-        <tr>
-            <th id="Performance">
-                Performance Indicator levels: Summary
-            </th>
-            <th id="Attainment" style="text-align: right;">
-                Attainment Progress Analysis
-            </th>
-        </tr>
-    </table>
-</div>
+<div id="divprint">
+        <br>
+        <table id="PageTitle">
+            <tr>
+                <th id="SchoolLogoTH" colspan="2">
+                    <img id="SchoolLogo" src="images/sanawbar.jpg">
+                </th>
+            </tr>
+            <tr>
+                <th id="SchoolName" colspan="2">
+                    Al Sanawbar School
+                </th>
+            </tr>
+        </table>
 <!-- ****************************************************************************************************** -->
 
-    <table id="useroptions" class="w3-card w3-centered w3-table">       <!--Header Table-->
+    <table id="SchoolInfo">       <!--Header Table-->
         <thead>
             <tr>
                 <th class="w3-yellow">School Type:</th>
@@ -295,7 +288,7 @@ if (!isset($_SESSION['login'])) {
     </table>
 
 
-    <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
+    <table id="InDepthDiv">
         <tr>
             <td id="InDepthTD" style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
         </tr>
