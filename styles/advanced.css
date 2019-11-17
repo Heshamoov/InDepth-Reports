@@ -62,3 +62,22 @@ body {
 #Attainment {
   text-align: right;
 }
+
+.rc-green {
+  color: green;
+}
+
+.rc-l-green {
+  color: #8BC34A;
+}
+
+.rc-lime {
+  color: #CDDC39;
+}
+
+.rc-orange {
+  color: orange;
+}
+.rc-red {
+  color: red;
+}

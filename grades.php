@@ -17,6 +17,14 @@ if (!isset($_SESSION['login'])) {
 
 </head>
 
+
+<script type="text/javascript">
+    $( document ).ready(function() {
+        document.getElementById('pp').click();
+});
+</script>
+
+
 <script type="text/javascript">      
     $(function () {
         $('#subject').multiselect({includeSelectAllOption: false});
@@ -151,8 +159,8 @@ if (!isset($_SESSION['login'])) {
                                 type: 'html',
                                 showModal:true,
                                 ignoreElements: ['pp'],
-                                targetStyles: ['*']
-                                // css: 'styles/advanced.css'
+                                // targetStyles: ['*']
+                                css: 'styles/grades.css'
                                 })">
                 </button>                    
             </th>            
@@ -160,146 +168,140 @@ if (!isset($_SESSION['login'])) {
     </div>
 
 
-    <div id="divprint" style="width: 80%; margin: auto;">
-        
-        <table id="PageTitle" style="margin: auto; width: 100%">
-            <tr>
-                <th id="SchoolLogoTH" style="text-align: center;" colspan="2">
-                    <img id="SchoolLogo" src="images/sanawbar.jpg" style="width: 5%;">
-                </th>
-            </tr>
-            <tr>
-                <th id="SchoolName" style="text-align: center;" colspan="2">
-                    Al Sanawbar School
-                </th>
-            </tr>
-            <tr><br><br></tr>
-            <tr>
-                <th id="Performance">
-                    Performance Indicator levels: Summary
-                </th>
-                <th id="Attainment" style="text-align: right;">
-                    Attainment Progress Analysis
-                </th>
-            </tr>
-        </table> 
-
-
+<div id="divprint" class="divprint" style="background-color: gray;">
+<div class="pdfcenter">
+    <table align='center'>
+        <tr>
+            <th id="SchoolLogo" style="text-align: center;" colspan="2">
+                <img id="SchoolLogo" src="images/sanawbar.jpg" style="width: 10%;">
+            </th>
+        </tr>
+        <tr>
+            <th id="SchoolName" style="text-align: center;" colspan="2">
+                Al Sanawbar School
+            </th>
+        </tr>
+        <tr>
+            <th id="Performance">
+                Performance Indicator levels: Summary
+            </th>
+            <th id="Attainment" style="text-align: right;">
+                Attainment Progress Analysis
+            </th>
+        </tr>
+    </table>
+</div>
 <!-- ****************************************************************************************************** -->
 
-        <table id="useroptions" class="w3-card w3-centered w3-table">       <!--Header Table-->
-            <thead>
-                <tr>
-                    <th class="w3-yellow">School Type:</th>
-                    <th colspan="3">KG-12</th>
-                </tr>
-                <tr>
-                    <th class="w3-yellow">School Name</th> <th>Al Sanawbar School</th>
-                    <th class="w3-yellow">ID</th>          <th>12345</th>
-                </tr>
-                <tr>
-                    <th class="w3-yellow">Region</th>      <th>Abu Dhabi - Al Ain</th>
-                    <th class="w3-yellow">Curriculum</th>  <th>US Curriculum</th>
-                </tr>
-            </thead>
-        </table>
-        
-<!-- ****************************************************************************************************** -->        
-        <br>
-
-        <table id="SubjectExam" class="w3-card w3-centered">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th class="w3-yellow" colspan="4">
-                        Subject name                        
-                    </th>
-                    <th colspan="10">
-                       <select id="subject" onchange="search()"></select>                     
-                    </th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th class="w3-yellow" colspan="4">Exam name</th>
-                    <th colspan="8">
-                        <select id="exam" onchange="search()"></select>
-                    </th>
-                    <th class="w3-blue Vtext" rowspan="2" colspan="2">
-                        attainment judgment
-                    </th>
-                </tr>
-                <tr>
-                    <th></th>
-                    <th class="w3-yellow" colspan="4">2017</th>
-                    <th class="w3-yellow" colspan="4">2018</th>
-                    <th class="w3-yellow" colspan="4">2019</th>
-                </tr>
-                <tr>
-                    <td></td>
-                    <td>
-                        Number of Students
-                    </td>
-                    <td class="w3-green Vtext">
-                        % students achieving levels above Expectations
-                    </td>
-                    <td class="w3-yellow Vtext">
-                        % students achieving levels minimum Expectaions
-                    </td>
-                    <td class="w3-red Vtext">
-                        % students achieving levels below Expectaions
-                    </td>
-
-                    <!-- ******************************************** -->
-                    <td>
-                        Number of Students
-                    </td>
-                    <td class="w3-green Vtext">
-                        % students achieving levels above Expectations
-                    </td>
-                    <td class="w3-yellow Vtext">
-                        % students achieving levels minimum Expectaions
-                    </td>
-                    <td class="w3-red Vtext">
-                        % students achieving levels below Expectaions
-                    </td>
-
-                    <!-- ******************************************** -->
-                    <td>
-                        Number of Students
-                    </td>
-                    <td class="w3-green Vtext">
-                        % students achieving levels above Expectations
-                    </td>
-                    <td class="w3-yellow Vtext">
-                        % students achieving levels minimum Expectaions
-                    </td>
-                    <td class="w3-red Vtext">
-                        % students achieving levels below Expectaions
-                    </td>
-
-                    <td class="w3-blue">
-                        Attainment benchmark judgment for tde latest year
-                    </td>
-                    <td class="w3-blue">
-                        Trend in attainment over time
-                    </td>
-                </tr>
-            </thead>
-            <tbody id="result">
-            </tbody>
-            
-        </table>
-
-        <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
+    <table id="useroptions" class="w3-card w3-centered w3-table">       <!--Header Table-->
+        <thead>
             <tr>
-                <td id="InDepthTD" style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
+                <th class="w3-yellow">School Type:</th>
+                <th colspan="3">KG-12</th>
             </tr>
-        </table>
+            <tr>
+                <th class="w3-yellow">School Name</th> <th>Al Sanawbar School</th>
+                <th class="w3-yellow">ID</th>          <th>12345</th>
+            </tr>
+            <tr>
+                <th class="w3-yellow">Region</th>      <th>Abu Dhabi - Al Ain</th>
+                <th class="w3-yellow">Curriculum</th>  <th>US Curriculum</th>
+            </tr>
+        </thead>
+    </table>        
+<!-- ****************************************************************************************************** -->        
 
-        <br><br><br>
-    </div>
-</div>
+    <table id="SubjectExam" class="w3-card w3-centered">
+        <thead>
+            <tr>
+                <th></th>
+                <th class="w3-yellow" colspan="4">
+                    Subject name                        
+                </th>
+                <th colspan="10">
+                   <select id="subject" onchange="search()"></select>
+                </th>
+            </tr>
+            <tr>
+                <th></th>
+                <th class="w3-yellow" colspan="4">Exam name</th>
+                <th colspan="8">
+                    <select id="exam" onchange="search()"></select>
+                </th>
+                <th class="w3-blue Vtext" rowspan="2" colspan="2">
+                    attainment judgment
+                </th>
+            </tr>
+            <tr>
+                <th></th>
+                <th class="w3-yellow" colspan="4">2017</th>
+                <th class="w3-yellow" colspan="4">2018</th>
+                <th class="w3-yellow" colspan="4">2019</th>
+            </tr>
+            <tr>
+                <td></td>
+                <td>
+                    Number of Students
+                </td>
+                <td class="w3-green Vtext">
+                    % students achieving levels above Expectations
+                </td>
+                <td class="w3-yellow Vtext">
+                    % students achieving levels minimum Expectaions
+                </td>
+                <td class="w3-red Vtext">
+                    % students achieving levels below Expectaions
+                </td>
 
+                <!-- ******************************************** -->
+                <td>
+                    Number of Students
+                </td>
+                <td class="w3-green Vtext">
+                    % students achieving levels above Expectations
+                </td>
+                <td class="w3-yellow Vtext">
+                    % students achieving levels minimum Expectaions
+                </td>
+                <td class="w3-red Vtext">
+                    % students achieving levels below Expectaions
+                </td>
+
+                <!-- ******************************************** -->
+                <td>
+                    Number of Students
+                </td>
+                <td class="w3-green Vtext">
+                    % students achieving levels above Expectations
+                </td>
+                <td class="w3-yellow Vtext">
+                    % students achieving levels minimum Expectaions
+                </td>
+                <td class="w3-red Vtext">
+                    % students achieving levels below Expectaions
+                </td>
+
+                <td class="w3-blue">
+                    Attainment benchmark judgment for tde latest year
+                </td>
+                <td class="w3-blue">
+                    Trend in attainment over time
+                </td>
+            </tr>
+        </thead>
+        
+        <tbody id="result"></tbody>
+            
+    </table>
+
+
+    <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
+        <tr>
+            <td id="InDepthTD" style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
+        </tr>
+    </table>
+
+  </div>
 
 <!-- Initialize Academic Years    -->
 <script type="text/javascript">

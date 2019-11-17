@@ -118,9 +118,13 @@ if ($result->num_rows > 0) {
              echo   "<td>" . $row['2019Total']   . "</td>
                     <td>" . $row['2019Above']   . "</td>
                     <td>" . $row['2019Minimum'] . "</td>
-                    <td>" . $row['2019Below']   . "</td>";                    
+                    <td>" . $row['2019Below']   . "</td>
+                    <td></td><td></td>";                    
 
             echo "</tr>";
     }
+    echo "<tr><td class='w3-yellow' colspan=13>Overall judjment</td>
+              <td></td><td></td></tr>";
+
 }	
 $conn->close();

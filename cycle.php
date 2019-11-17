@@ -115,8 +115,8 @@ if (!isset($_SESSION['login'])) {
                                 type: 'html',
                                 showModal:true,
                                 ignoreElements: ['pp'],
-                                targetStyles: ['*']
-                                // css: 'styles/advanced.css'
+                                // targetStyles: ['*']
+                                css: 'styles/advanced.css'
                                 })">
                 </button>                    
             </th>            
