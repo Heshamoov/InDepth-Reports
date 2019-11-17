@@ -27,7 +27,7 @@ body {
   text-align: center;
 }
 
-#SchoolInfo {
+#SchoolInfo, #attainment {
 	margin: auto;
 	width: 40%;
 	border-collapse: collapse;
@@ -39,10 +39,11 @@ body {
 	width: 50%;
 }
 
+
 .bigtext {
 	font-size: 14px;
 }
-#SchoolInfo th, #SchoolInfo td, #SubjectExam th, #SubjectExam td {
+#SchoolInfo th, #SchoolInfo td, #SubjectExam th, #SubjectExam td, #attainment td, #attainment th {	
   border: 1px solid #ddd;
   padding: 0px;
   text-align: center;

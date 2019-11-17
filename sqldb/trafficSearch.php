@@ -125,6 +125,5 @@ if ($result->num_rows > 0) {
     }
     echo "<tr><td class='w3-yellow' colspan=13>Overall judjment</td>
               <td></td><td></td></tr>";
-
 }	
 $conn->close();

@@ -110,14 +110,17 @@ if (!isset($_SESSION['login'])) {
                 var httpsearch = new XMLHttpRequest();
                 httpsearch.onreadystatechange = function () {
                     if (this.readyState === 4) {
-                        document.getElementById("result").innerHTML += this.responseText;
+                        document.getElementById("result").innerHTML = this.responseText;
                     }
                 };
                 
                 // document.getElementById('out').innerHTML += subject;
                 httpsearch.open("POST", "sqldb/trafficSearch.php?subject=" + subject + "&exam=" + exam, false);
                 httpsearch.send();
-            }
+
+                document.getElementById('cellSubject').innerHTML = subject;
+                document.getElementById('cellExam').innerHTML = exam;
+            }           
         }
     }
 </script>
@@ -281,8 +284,27 @@ if (!isset($_SESSION['login'])) {
         </thead>
         
         <tbody id="result"></tbody>
-            
     </table>
+    
+    <br>
+
+    <table id="attainment">
+        <tr>
+            <td class='w3-yellow'>Subject name</td>
+            <td colspan=3 id="cellSubject"></td>
+        </tr>
+        <tr>
+            <td class='w3-yellow'>Exam name</td>
+            <td colspan=2 id="cellExam"></td>
+            <td rowspan=2 class='w3-blue'>attainment judjment</td>
+        </tr>
+        <tr>
+            <td class='w3-yellow'>2017</td>
+            <td class='w3-yellow'>2018</td>
+            <td class='w3-yellow'>2019</td>
+        </tr>
+    </table>";         
+
 
 
     <table id="InDepthDiv">
