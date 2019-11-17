@@ -23,10 +23,10 @@ if (!isset($_SESSION['login'])) {
 
 <script type="text/javascript">      
     $(function () {
-        $('#subject').multiselect({includeSelectAllOption: false});
+        $('#subjectD').multiselect({includeSelectAllOption: false});
         $('#exam').multiselect({includeSelectAllOption: false});
 
-        var select = document.getElementById('subject');
+        var select = document.getElementById('subjectD');
         var httpsubjects = new XMLHttpRequest();
         httpsubjects.onreadystatechange = function () {
             if (this.readyState === 4) {
@@ -38,7 +38,7 @@ if (!isset($_SESSION['login'])) {
         httpsubjects.open("GET", "sqldb/subjects.php", false);
         httpsubjects.send();
 
-        $('#subject').multiselect('destroy');
+        $('#subjectD').multiselect('destroy');
 
         delete subjectsArray[subjectsArray.length - 1];
         
@@ -48,7 +48,7 @@ if (!isset($_SESSION['login'])) {
             select.add(new Option(subjectsArray[i]));
 
          $(function () {
-            $('#subject').multiselect({
+            $('#subjectD').multiselect({
                 includeSelectAllOption: true
             });
         });  
@@ -73,9 +73,10 @@ if (!isset($_SESSION['login'])) {
 
         for (var i in termsArray)
             exam.add(new Option(termsArray[i]));
+
          $(function () {
             $('#exam').multiselect({
-                includeSelectAllOption: true
+                includeSelectAllOption: false
                 });
         });
 
@@ -85,7 +86,7 @@ if (!isset($_SESSION['login'])) {
 
 <script type="text/javascript">
     function search() {
-        var selected_subject = $("#subject option:selected");
+        var selected_subject = $("#subjectD option:selected");
         var subject = "";
         selected_subject.each(function() {   
             subject = $(this).text();
@@ -118,6 +119,9 @@ if (!isset($_SESSION['login'])) {
                 httpsearch.open("POST", "sqldb/trafficSearch.php?subject=" + subject + "&exam=" + exam, false);
                 httpsearch.send();
 
+                
+                document.getElementById('SubjectName').innerHTML = subject;
+                document.getElementById('ExamName').innerHTML = exam;
                 document.getElementById('cellSubject').innerHTML = subject;
                 document.getElementById('cellExam').innerHTML = exam;
             }           
@@ -151,15 +155,21 @@ if (!isset($_SESSION['login'])) {
             </th>
             
             <th>
+                <select id="subjectD" onchange="search()"></select>
+            </th>
+            <th>
+                <select class="dropdown" id="exam" onchange="search()"></select>
+            </th>
+            <th>
                 <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
                         onclick="printJS({
                                 documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
                                 printable: 'divprint',
                                 type: 'html',
                                 showModal:true,
-                                ignoreElements: ['pp'],
+                                ignoreElements: ['pp','subjectD'],
                                 // targetStyles: ['*']
-                                css: 'styles/grades.css'
+                                css: 'styles/gradesPDF.css'
                                 })">
                 </button>                    
             </th>            
@@ -210,17 +220,14 @@ if (!isset($_SESSION['login'])) {
                 <th class="w3-yellow bigtext" colspan="4">
                     Subject name                        
                 </th>
-                <th colspan="10">
-                   <select class="dropdown" id="subject" onchange="search()"></select>
-                </th>
+
+                <th colspan="8" id="SubjectName"></th>
             </tr>
 
             <tr>
                 <th class="HiddenCell"></th>
                 <th class="w3-yellow bigtext" colspan="4">Exam name</th>
-                <th colspan="8">
-                    <select class="dropdown" id="exam" onchange="search()"></select>
-                </th>
+                <th colspan="8" id="ExamName"></th>
                 <th class="w3-blue " rowspan="2" colspan="2">
                     attainment judgment
                 </th>
@@ -290,20 +297,20 @@ if (!isset($_SESSION['login'])) {
 
     <table id="attainment">
         <tr>
-            <td class='w3-yellow'>Subject name</td>
-            <td colspan=3 id="cellSubject"></td>
+            <th class='w3-yellow'>Subject name</th>
+            <th colspan=3 id="cellSubject"></th>
         </tr>
         <tr>
-            <td class='w3-yellow'>Exam name</td>
-            <td colspan=2 id="cellExam"></td>
-            <td rowspan=2 class='w3-blue'>attainment judjment</td>
+            <th class='w3-yellow'>Exam name</th>
+            <th colspan=2 id="cellExam"></th>
+            <th rowspan=2 class='w3-blue'>attainment judjment</th>
         </tr>
         <tr>
-            <td class='w3-yellow'>2017</td>
-            <td class='w3-yellow'>2018</td>
-            <td class='w3-yellow'>2019</td>
+            <th class='w3-yellow'>2017</th>
+            <th class='w3-yellow'>2018</th>
+            <th class='w3-yellow'>2019</th>
         </tr>
-    </table>";         
+    </table>;         
 
 
 
@@ -314,31 +321,6 @@ if (!isset($_SESSION['login'])) {
     </table>
 
   </div>
-
-<!-- Initialize Academic Years    -->
-<script type="text/javascript">
-    var SY  = document.getElementById('Year');
-
-    var httpyear = new XMLHttpRequest();
-    httpyear.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            var str = this.responseText;
-            yearArray = str.split("\t");
-        }
-    };
-    httpyear.open("GET", "sqldb/years.php", false);
-    httpyear.send();  
-
-    $('#Year').multiselect('destroy');
-
-    delete yearArray[yearArray.length - 1];
-
-    SY.add(new Option('Year'));
-
-    for (var i in yearArray) {
-        SY.add(new Option(yearArray[i]));
-    };
-</script>
 
 </body>
 </html>

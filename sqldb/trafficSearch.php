@@ -104,7 +104,7 @@ if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
             echo   "<tr>";
 
-            echo   "<td>" . $row['2017Grade']   . "</td>
+            echo   "<th class='VGrade'>" . $row['2017Grade']   . "</th>
                     <td>" . $row['2017Total']   . "</td>
                     <td>" . $row['2017Above']   . "</td>
                     <td>" . $row['2017Minimum'] . "</td>
@@ -123,7 +123,7 @@ if ($result->num_rows > 0) {
 
             echo "</tr>";
     }
-    echo "<tr><td class='w3-yellow' colspan=13>Overall judjment</td>
+    echo "<tr><th class='w3-yellow' colspan=13>Overall judjment</th>
               <td></td><td></td></tr>";
 }	
 $conn->close();
