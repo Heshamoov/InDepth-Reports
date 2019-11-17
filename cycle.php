@@ -14,9 +14,9 @@ if (!isset($_SESSION['login'])) {
 
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
+<link rel="stylesheet" href="styles/advanced.css">
 
 <title>Attainment Analysis</title>
-
 </head>
 
 <script type="text/javascript">      
@@ -38,11 +38,10 @@ if (!isset($_SESSION['login'])) {
             alert("Select a Year");
         else
         {
-
             var httpCycle = new XMLHttpRequest();
             httpCycle.onreadystatechange = function () {
                 if (this.readyState === 4) {
-                    document.getElementById("useroptions").innerHTML += this.responseText;
+                    document.getElementById("useroptions").innerHTML = this.responseText;
                 }
             };
         
@@ -91,7 +90,7 @@ if (!isset($_SESSION['login'])) {
                 <button class="w3-btn w3-white w3-border w3-round-large w3-hover-green" onclick="Cycle()">Cycle Analysis</button>                    
             </th>            
             <th>
-                <select id="view" onchange="search()">
+                <select id="view" onchange="Cycle()">
                     <option>Attainment</option>
                     <option>Percentage</option>
                     <option>Attainment - Percentage</option>
@@ -113,16 +112,16 @@ if (!isset($_SESSION['login'])) {
         </table>
     </div>
 
-    <div id="divprint" style="width: 70%; margin: auto;">
+    <div id="divprint">
         
-        <table id="PageTitle" style="margin: auto; width: 100%;">
+        <table id="PageTitle">
             <tr>
-                <th id="SchoolLogoTH" style="text-align: center;" colspan="2">
-                    <img id="SchoolLogo" src="images/sanawbar.jpg" style="width: 5%;">
+                <th id="SchoolLogoTH" colspan="2">
+                    <img id="SchoolLogo" src="images/sanawbar.jpg">
                 </th>
             </tr>
             <tr>
-                <th id="SchoolName" style="text-align: center;" colspan="2">
+                <th id="SchoolName" colspan="2">
                     Al Sanawbar School
                 </th>
             </tr>
@@ -131,20 +130,19 @@ if (!isset($_SESSION['login'])) {
                 <th id="Performance">
                     Performance Indicator levels: Summary
                 </th>
-                <th id="Attainment" style="text-align: right;">
+                <th id="Attainment">
                     Attainment Progress Analysis
                 </th>
             </tr>
         </table> 
 
-        <table id="useroptions" class="w3-card w3-table-all w3-centered"></table>
+        <table id="useroptions" class="w3-table-all w3-card"></table>
 
         <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
             <tr>
                 <td id="InDepthTD" style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
             </tr>
         </table>
-
         <br><br><br>
     </div>
 </div>
