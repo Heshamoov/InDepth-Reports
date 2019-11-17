@@ -2,13 +2,13 @@
 
 body {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-size: 10px;
 }
 
 #divprint {
   /*background-color: gray;*/
   margin: auto;
-  width: 90%;
+  width: 80%;
 }
 
 #PageTitle {
@@ -27,15 +27,20 @@ body {
   text-align: center;
 }
 
-#SchoolInfo {
-	width: 100%;
+#SchoolInfo, #SubjectExam {
+	margin: auto;
+	/*width: 50%;*/
 	border-collapse: collapse;
 }
 
-#SchoolInfo th, #SchoolInfo td {
+#SchoolInfo th, #SchoolInfo td, #SubjectExam th, #SubjectExam td {
   border: 1px solid #ddd;
-  padding: 3px;
+  padding: 1px;
   text-align: center;
+}
+
+.HiddenCell, .dropdown {
+	border: none !important;
 }
 
 
@@ -57,7 +62,7 @@ body {
 
 
 #InDepthDiv {
-  width: 70%;
+  width: 100%;
   margin: auto;
   color: gray;
   font-size: 10px;

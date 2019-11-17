@@ -11,12 +11,6 @@ if (!isset($_SESSION['login'])) {
 
 <title>Attainment Analysis</title>
 
-<style type="text/css">
-    #SubjectExam th, #SubjectExam td, #SubjectExam tr {
-        border: 3px solid black;
-    }
-</style>
-
 </head>
 
 
@@ -95,7 +89,7 @@ if (!isset($_SESSION['login'])) {
         var subject = "";
         selected_subject.each(function() {   
             subject = $(this).text();
-            document.getElementById('out').innerHTML = subject;
+            // document.getElementById('out').innerHTML = subject;
         });
 
         if (subject == "Subject")
@@ -107,7 +101,7 @@ if (!isset($_SESSION['login'])) {
             var exam = "";
             selected_exam.each(function() {   
                 exam = $(this).text();
-                document.getElementById('out').innerHTML += exam;
+                // document.getElementById('out').innerHTML += exam;
             });
 
             if (exam == "Exam")
@@ -120,7 +114,7 @@ if (!isset($_SESSION['login'])) {
                     }
                 };
                 
-                document.getElementById('out').innerHTML += subject;
+                // document.getElementById('out').innerHTML += subject;
                 httpsearch.open("POST", "sqldb/trafficSearch.php?subject=" + subject + "&exam=" + exam, false);
                 httpsearch.send();
             }
@@ -135,7 +129,7 @@ if (!isset($_SESSION['login'])) {
         <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
     </div>
 
-    <label id="out"></label>                            <!-- Debug Console -->
+    <!-- <label id="out"></label>  -->
     
     <div class="w3-container">   <!-- DropDowns-->
         <table class="w3-table-all w3-card w3-gray">
@@ -202,31 +196,34 @@ if (!isset($_SESSION['login'])) {
             </tr>
         </thead>
     </table>        
-<!-- ****************************************************************************************************** -->        
 
-    <table id="SubjectExam" class="w3-card w3-centered">
+<!-- ****************************Subject Exam********************************** -->
+
+    <br>
+    <table id="SubjectExam">
         <thead>
             <tr>
-                <th></th>
+                <th class="HiddenCell"></th>
                 <th class="w3-yellow" colspan="4">
                     Subject name                        
                 </th>
                 <th colspan="10">
-                   <select id="subject" onchange="search()"></select>
+                   <select class="dropdown" id="subject" onchange="search()"></select>
                 </th>
             </tr>
+
             <tr>
-                <th></th>
+                <th class="HiddenCell"></th>
                 <th class="w3-yellow" colspan="4">Exam name</th>
                 <th colspan="8">
-                    <select id="exam" onchange="search()"></select>
+                    <select class="dropdown" id="exam" onchange="search()"></select>
                 </th>
                 <th class="w3-blue Vtext" rowspan="2" colspan="2">
                     attainment judgment
                 </th>
             </tr>
             <tr>
-                <th></th>
+                <th class="HiddenCell"></th>
                 <th class="w3-yellow" colspan="4">2017</th>
                 <th class="w3-yellow" colspan="4">2018</th>
                 <th class="w3-yellow" colspan="4">2019</th>
