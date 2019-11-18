@@ -217,17 +217,21 @@ if (!isset($_SESSION['login'])) {
         <thead>
             <tr>
                 <th class="HiddenCell"></th>
+
                 <th class="w3-yellow bigtext" colspan="4">
                     Subject name                        
                 </th>
 
-                <th colspan="8" id="SubjectName"></th>
+                <th colspan="8" id="SubjectName" class="bigtext"></th>
             </tr>
 
             <tr>
                 <th class="HiddenCell"></th>
+
                 <th class="w3-yellow bigtext" colspan="4">Exam name</th>
-                <th colspan="8" id="ExamName"></th>
+
+                <th colspan="8" id="ExamName" class="bigtext"></th>
+
                 <th class="w3-blue " rowspan="2" colspan="2">
                     attainment judgment
                 </th>
@@ -310,9 +314,7 @@ if (!isset($_SESSION['login'])) {
             <th class='w3-yellow'>2018</th>
             <th class='w3-yellow'>2019</th>
         </tr>
-    </table>;         
-
-
+    </table>;
 
     <table id="InDepthDiv">
         <tr>
