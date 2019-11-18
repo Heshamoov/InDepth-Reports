@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="https://www.w3.org/1999/xhtml" >
     <head>
-        <link rel="icon" type="image/png" href="CSS/imges/PageLogo.PNG" />
+        <link rel="icon" type="image/png" href="images/sanawbar.jpg" />
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="css/resultstyle.css">

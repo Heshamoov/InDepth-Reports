@@ -9,7 +9,7 @@ if (!isset($_SESSION['login'])) {
 
 <link rel="stylesheet" href="styles/grades.css">
 
-<title>Attainment Analysis</title>
+<title>Traffic Stop Benchmark</title>
 
 </head>
 
@@ -163,7 +163,7 @@ if (!isset($_SESSION['login'])) {
             <th>
                 <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
                         onclick="printJS({
-                                documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
+                                documentTitle: 'Traffic Stop Benchmark - Al Sanawbar School',
                                 printable: 'divprint',
                                 type: 'html',
                                 showModal:true,
@@ -193,7 +193,7 @@ if (!isset($_SESSION['login'])) {
         </table>
 <!-- ****************************************************************************************************** -->
 
-    <table id="SchoolInfo">       <!--Header Table-->
+    <table id="SchoolInfo" class="w3-card">       <!--Header Table-->
         <thead>
             <tr>
                 <th class="w3-yellow">School Type:</th>
@@ -213,7 +213,7 @@ if (!isset($_SESSION['login'])) {
 <!-- ****************************Subject Exam********************************** -->
 
     <br>
-    <table id="SubjectExam">
+    <table id="SubjectExam" class="w3-card">
         <thead>
             <tr>
                 <th class="HiddenCell"></th>
@@ -299,7 +299,7 @@ if (!isset($_SESSION['login'])) {
     
     <br>
 
-    <table id="attainment">
+    <table id="attainment" class="w3-card">
         <tr>
             <th class='w3-yellow'>Subject name</th>
             <th colspan=3 id="cellSubject"></th>
