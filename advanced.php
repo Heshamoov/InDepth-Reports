@@ -301,7 +301,7 @@ function search() {
         <?php include('navbar.php'); ?>
         <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
     </div>
-    <label id="out"></label>                            <!-- Debug Console -->
+    <!-- <label id="out"></label>                            <!-- Debug Console --> -->
     
     <div class="w3-container">   <!-- DropDowns-->
         <table class="w3-table-all w3-card w3-gray">

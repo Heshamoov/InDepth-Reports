@@ -39,7 +39,7 @@ $sql =   "SELECT academic_years.name 'Year', exam_groups.name 'Exam', CONCAT(cou
         $sql = $sql ."WHERE academic_years.name = $year and courses.course_name = $grades and exam_groups.name = $terms "
                     ."GROUP BY subjects.name ORDER BY `>=75%` DESC, `>=65%` DESC";
 
-echo $sql;
+// echo $sql;
 $result = $conn->query($sql);
 $rownumber = 1;
 if ($result->num_rows > 0) {
