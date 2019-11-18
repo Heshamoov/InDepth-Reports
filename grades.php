@@ -167,7 +167,7 @@ if (!isset($_SESSION['login'])) {
                                 printable: 'divprint',
                                 type: 'html',
                                 showModal:true,
-                                ignoreElements: ['pp','subjectD'],
+                                ignoreElements: ['pp'],
                                 // targetStyles: ['*']
                                 css: 'styles/gradesPDF.css'
                                 })">

@@ -119,7 +119,22 @@ if ($result->num_rows > 0) {
                     <td>" . $row['2019Above']   . "</td>
                     <td>" . $row['2019Minimum'] . "</td>
                     <td>" . $row['2019Below']   . "</td>
-                    <td></td><td></td>";                    
+                    <td>
+                        <input type='text' class='JText' style='width: 100%; 
+                                                  box-sizing: border-box;
+                                                 -webkit-box-sizing:border-box;
+                                                 -moz-box-sizing: border-box;
+                                                 text-align: center;
+                                                 border: none;'>
+                    </td>
+                    <td>
+                        <input type='text' class='JText' style='width: 100%; 
+                                                  box-sizing: border-box;
+                                                 -webkit-box-sizing:border-box;
+                                                 -moz-box-sizing: border-box;
+                                                 text-align: center;
+                                                 border: none;'>
+                    </td>";                    
 
             echo "</tr>";
     }
