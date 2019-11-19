@@ -286,7 +286,7 @@ if (!isset($_SESSION['login'])) {
                 </td>
 
                 <td class="w3-blue">
-                    Attainment benchmark judgment for tde latest year
+                    Attainment benchmark judgment for the latest year
                 </td>
                 <td class="w3-blue">
                     Trend in attainment over time
