@@ -21,7 +21,6 @@ if (!isset($_SESSION['login'])) {
 
     </head>
 
-
     <script type="text/javascript">      
         $(function () {
             $('#academic_year1').multiselect({includeSelectAllOption: false});
@@ -301,23 +300,21 @@ function search() {
         <?php include('navbar.php'); ?>
         <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
     </div>
-    <!-- <label id="out"></label>                            <!-- Debug Console --> -->
-    
+
     <div class="w3-container">   <!-- DropDowns-->
         <table class="w3-table-all w3-card w3-gray">
-        <th>
-            <div class="w3-container">
-              <div class="w3-dropdown-hover">
-                <button class="w3-button w3-green">Benchmark</button>
-                <div class="w3-dropdown-content w3-bar-block w3-border">
-                  <a href="advanced.php" class="w3-bar-item w3-button w3-hover-green">Attainment</a>
-                  <a href="cycle.php" class="w3-bar-item w3-button w3-hover-green">Cycle</a>
-                  <a href="grades.php" class="w3-bar-item w3-button w3-hover-green">Grades</a>
-                </div>
-              </div>
-            </div>            
-        </th>
-
+            <th>
+                <div class="w3-container">
+                  <div class="w3-dropdown-hover">
+                    <button class="w3-button w3-green">Benchmark</button>
+                    <div class="w3-dropdown-content w3-bar-block w3-border">
+                      <a href="advanced.php" class="w3-bar-item w3-button w3-hover-green">Attainment</a>
+                      <a href="cycle.php" class="w3-bar-item w3-button w3-hover-green">Cycle</a>
+                      <a href="grades.php" class="w3-bar-item w3-button w3-hover-green">Grades</a>
+                    </div>
+                  </div>
+                </div>            
+            </th>
             <th>
                 <select style="float:left;" id="studentYear" onchange="FillStudents()"></select> <!-- Year DropDown -->                    
             </th>          
@@ -348,7 +345,8 @@ function search() {
                 </button>                    
             </th>            
         </table>
-    </div> 
+    </div>
+     
     <div id="divprint" style="width: 70%; margin: auto;">
         
         <table id="PageTitle" style="margin: auto; width: 100%;">

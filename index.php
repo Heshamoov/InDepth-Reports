@@ -12,7 +12,7 @@ if (isset($_SESSION['login']))
     <script src="https://s3.amazonaws.com/api_play/src/js/jquery-2.1.1.min.js"></script> 
     <script src="https://s3.amazonaws.com/api_play/src/js/vkbeautify.0.99.00.beta.js"></script>
     <!--===============================================================================================-->	
-    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <link rel="icon" type="image/png" href="images/sanawbar.jpg"/>
     <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
     <!--===============================================================================================-->
@@ -30,8 +30,8 @@ if (isset($_SESSION['login']))
     <!--===============================================================================================-->	
     <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
     <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" href="css/util.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" type="text/css" href="css/unauthorizedl.css">
+    <link rel="stylesheet" type="text/css" href="styles/main.css">
     <!--===============================================================================================-->
 
     <script>

@@ -7,30 +7,31 @@ if (!isset($_SESSION['login'])) {
     include('Header.php');
     ?>
 
-    <title>STATISTICS</title>
+<title>STATISTICS</title>
 
-    </head>
-    <body>
-        <!--loader initialization-->
-        <script>
-            $(window).load(function () {
-                // Animate loader off screen
-                $(".se-pre-con").fadeOut("slow");
-                ;
-            });
-        </script>
+</head>
 
-        <script type="text/javascript">
-            $(function () {
-                $('#academic_year').multiselect({includeSelectAllOption: true});
-                $('#term').multiselect({includeSelectAllOption: true});
-                $('#grade').multiselect({includeSelectAllOption: true});
-                $('#batch').multiselect({includeSelectAllOption: true});
-                $('#subject').multiselect({includeSelectAllOption: true});
-                $('#gender').multiselect({includeSelectAllOption: true});
-                $('#category').multiselect({includeSelectAllOption: true});
+<body>
+<!--loader initialization-->
+    <script>
+        $(window).load(function () {
+        // Animate loader off screen
+        $(".se-pre-con").fadeOut("slow");
+        ;
+        });
+    </script>
 
-                $(document).on("ready click", function () {
+    <script type="text/javascript">
+        $(function () {
+            $('#academic_year').multiselect({includeSelectAllOption: true});
+            $('#term').multiselect({includeSelectAllOption: true});
+            $('#grade').multiselect({includeSelectAllOption: true});
+            $('#batch').multiselect({includeSelectAllOption: true});
+            $('#subject').multiselect({includeSelectAllOption: true});
+            $('#gender').multiselect({includeSelectAllOption: true});
+            $('#category').multiselect({includeSelectAllOption: true});
+
+            $(document).on("ready click", function () {
 
                     google.charts.setOnLoadCallback(drawChart);
                     google.charts.setOnLoadCallback(drawChartSubjects);
@@ -510,6 +511,7 @@ scanstyles: true});" title="Export Students List as PDF">
             </div>
 
             <div class="w3-container w3-col m4 l5 w3-mobile" id="tables" style="overflow: scroll;top: 0;  bottom: 0; height: 100vh;">
+
                 <table align= center; id="StatisticsTitle" style="width: 100%; text-align: center;  border: 1px solid black;">
                     <tr>
                         <td align='left' style="padding:5px; border: 1px solid black;"></td>
@@ -530,8 +532,8 @@ scanstyles: true});" title="Export Students List as PDF">
                     </tr>                    
                 </table>
 
-
-                <!--stable-->   <table class=" w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="stable">
+                <!--stable-->
+                <table class="w3-table-all w3-striped w3-bordered w3-centered w3-card-4" id="stable"  style="width: 100%; text-align: center;">
                     <th colspan="3" class="w3-custom " style="font-size: 16px">
                         STATISTICS
                     </th>
