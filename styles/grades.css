@@ -31,6 +31,7 @@ body {
 	margin: auto;
 	width: 40%;
 	border-collapse: collapse;
+  white-space: nowrap;
 }
 
 #SubjectExam {

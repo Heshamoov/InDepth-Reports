@@ -197,15 +197,54 @@ if (!isset($_SESSION['login'])) {
         <thead>
             <tr>
                 <th class="w3-yellow">School Type:</th>
-                <th colspan="3">KG-12</th>
+                <th colspan="3">
+                    <input type='text' class='JText bigtext' value='American School' style='width: 100%; 
+                                                  box-sizing: border-box;
+                                                 -webkit-box-sizing:border-box;
+                                                 -moz-box-sizing: border-box;
+                                                 text-align: center;
+                                                 border: none;'>
+                </th>
             </tr>
             <tr>
-                <th class="w3-yellow">School Name</th> <th>Al Sanawbar School</th>
-                <th class="w3-yellow">ID</th>          <th>12345</th>
+                <th class="w3-yellow">School Name</th>
+                <th>
+                    <input type='text' class='JText bigtext' value='Al Sanawbar School' style='width: 100%; 
+                                                  box-sizing: border-box;
+                                                 -webkit-box-sizing:border-box;
+                                                 -moz-box-sizing: border-box;
+                                                 text-align: center;
+                                                 border: none;'>
+                </th>
+                <th class="w3-yellow">ID</th>
+                <th>
+                    <input type='text' class='JText bigtext' value='12345' style='width: 100%; 
+                                                  box-sizing: border-box;
+                                                 -webkit-box-sizing:border-box;
+                                                 -moz-box-sizing: border-box;
+                                                 text-align: center;
+                                                 border: none;'>
+                </th>
             </tr>
             <tr>
-                <th class="w3-yellow">Region</th>      <th>Abu Dhabi - Al Ain</th>
-                <th class="w3-yellow">Curriculum</th>  <th>US Curriculum</th>
+                <th class="w3-yellow">Region</th>
+                <th>
+                    <input type='text' class='JText bigtext' value='Abu Dhabi - Al Ain' style='width: 100%; 
+                                                  box-sizing: border-box;
+                                                 -webkit-box-sizing:border-box;
+                                                 -moz-box-sizing: border-box;
+                                                 text-align: center;
+                                                 border: none;'>
+                </th>
+                <th class="w3-yellow">Curriculum</th>
+                <th>
+                    <input type='text' class='JText bigtext' value='US Curriculum' style='width: 100%; 
+                                                  box-sizing: border-box;
+                                                 -webkit-box-sizing:border-box;
+                                                 -moz-box-sizing: border-box;
+                                                 text-align: center;
+                                                 border: none;'>
+                </th>
             </tr>
         </thead>
     </table>        
