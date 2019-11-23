@@ -123,7 +123,9 @@ if ($grades != "Grade")
         while ($row = $result->fetch_assoc()) {
             if ($row["Subject0"] != 'Total Mark') {
                 echo "<tr><td>" . $row["Subject0"] . "</td>";
+                $rowIndex = 0;
                 for ($i=0; $i < count($YArray); $i++) {
+                    $rowIndex++;
                     if ($student != 'None') {
                         if ($view == 'Attainment')
                             if ($row["Mark$i"] >= 75)                                    // Outstanding
@@ -212,10 +214,14 @@ if ($grades != "Grade")
                     } // Student Selected
                 } // For
             } // End Total Mark check
+            while ($rowIndex <= 5) {
+                $rowIndex++;
+                echo "<td></td>";
+            }
             echo "</tr>";
         } // While
     }//Result>0
 }//Grade Not Empty
 else
     echo "Select Grade!";
-$conn->close();
+$conn->close();;
