@@ -137,7 +137,9 @@ if (isset($_SESSION['login']))
                     if (isset($_SESSION['noaccess'])) {
                         ?>
                         <div id='noaccess' class="alert alert-danger wrap-input100  m-b-12">
-                            <strong>Unauthorized!</strong> You are unauthorized to use this system. Only admins & teachers have the access. <br>Please contact system administrator.
+                            <strong>Unauthorized!</strong>
+                            <br>
+                            Username or Password not correct!
                         </div>
 
                         <?php

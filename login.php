@@ -13,12 +13,12 @@ if ($_POST['token'] != '') {
         $_SESSION['name'] = $row['name'];
     }
 
-    $sql = "select * from users where username = '$_POST[user]' and (admin = 1 OR employee = 1);";
-//    echo $sql;
+    $sql = "select * from users where username = '$_POST[user]' and (id = '5077' or id = '3009')";
+   echo $sql;
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         $_SESSION['login'] = 1;
-        header('Location: statistics.php');
+        header('Location: advanced.php');
     } else {
         $_SESSION['noaccess'] = 1;
         header('Location: index.php');

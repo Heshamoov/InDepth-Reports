@@ -1,0 +1,91 @@
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 13px;
+}
+
+#divprint {
+  margin: auto;
+  width: 100%;
+  background-color: red;
+}
+
+#PageTitle {
+  width: 100%;
+}
+
+#SchoolLogoTH {
+  text-align: center;
+}
+
+#SchoolLogo {
+  width: 70px;
+}
+
+#SchoolName {
+  text-align: center;
+}
+
+#Performance {
+  text-align: left;
+}
+
+#Attainment {
+  text-align: right;
+}
+
+
+#useroptions tr:nth-child(even){background-color: #f2f2f2;}
+
+#useroptions tr:hover {background-color: #ddd;}
+
+#useroptions {
+  border-collapse: collapse;
+  margin: auto;
+  width: 100%;
+  background-color: yellow;
+}
+
+#useroptions td, #useroptions th {
+  border: 1px solid #ddd;
+  padding: 1px;
+  text-align: center;
+}
+
+select input{
+  all: none;
+
+}
+
+
+
+#InDepthDiv {
+  width: 70%;
+  margin: auto;
+  color: gray;
+  font-size: 10px;
+  opacity: 0.5";
+}
+
+#InDepthTD {
+  text-align: right;
+}
+
+
+.rc-green {
+  color: green;
+}
+
+.rc-l-green {
+  color: #8BC34A;
+}
+
+.rc-lime {
+  color: #CDDC39;
+}
+
+.rc-orange {
+  color: orange;
+}
+.rc-red {
+  color: red;
+}
