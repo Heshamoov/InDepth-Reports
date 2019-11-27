@@ -163,7 +163,7 @@ if ($result->num_rows > 0) {
         }
 
         // Good
-        elseif ($row[">=75%"] >= 50  and $row[">=75%"] <= 61)
+        elseif ($row[">=75%"] >= 50  and $row[">=75%"] < 61)
         {
 /*Year*/    echo "<tr  class='w3-hover-lime w3-border-0'>"
                     . "<td id='tCol1'>" . $row["Year"]  . "</td>";
