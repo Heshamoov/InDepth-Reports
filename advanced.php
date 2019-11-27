@@ -17,6 +17,8 @@ if (!isset($_SESSION['login'])) {
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
 
+<link rel="stylesheet" type="text/css" href="styles/advanced.css">
+
     <title>Attainment Analysis</title>
 
     </head>
@@ -332,22 +334,24 @@ function search() {
                 </select>
             </th>
             <th>
-                <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
+                <button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge'
+                    onclick="PrintTable()"></button>
+                <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
                         onclick="printJS({
                                 documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
                                 printable: 'divprint',
                                 type: 'html',
                                 showModal:true,
-                                ignoreElements: ['pp'],
-                                targetStyles: ['*']
-                                // css: 'styles/advanced.css'
+                                ignoreElements: [],
+                                // targetStyles: ['*']
+                                css: 'styles/advancedPDF.css'
                                 })">
                 </button>                    
             </th>            
         </table>
     </div>
      
-    <div id="divprint" style="width: 70%; margin: auto;">
+    <div id="divprint">
         
         <table id="PageTitle" style="margin: auto; width: 100%;">
             <tr>
@@ -371,27 +375,57 @@ function search() {
             </tr>
         </table> 
 
-        <table id="useroptions" class="w3-card w3-table-all w3-centered">
+        <table id="useroptions">
             <thead>
                 <tr>
                     <th id="TableTitle" colspan="6" class="w3-center"></th>
                 </tr>
             </thead>
-            <tr>
+            <tr class="dropdownTR">
                 <th><label>Year</label></th>
-                <th><select id="academic_year1" onchange="FillTerm(this, 'term1')"></select></th>
-                <th><select id="academic_year2" onchange="FillTerm(this, 'term2')"></select></th>
-                <th><select id="academic_year3" onchange="FillTerm(this, 'term3')"></select></th>
-                <th><select id="academic_year4" onchange="FillTerm(this, 'term4')"></select></th>
-                <th><select id="academic_year5" onchange="FillTerm(this, 'term5')"></select></th>
+                <th>
+                    <select id="academic_year1" onchange="FillTerm(this, 'term1')" class="dropdown"></select>
+                    <label id="AY1L"></label>
+                </th>
+                <th>
+                    <select id="academic_year2" onchange="FillTerm(this, 'term2')"></select>
+                    <label id="AY2L"></label>
+                </th>
+                <th>
+                    <select id="academic_year3" onchange="FillTerm(this, 'term3')"></select>
+                    <label id="AY3L"></label>
+                </th>
+                <th>
+                    <select id="academic_year4" onchange="FillTerm(this, 'term4')"></select>
+                    <label id="AY4L"></label>
+                </th>
+                <th>
+                    <select id="academic_year5" onchange="FillTerm(this, 'term5')"></select>
+                    <label id="AY5L"></label>
+                </th>
             </tr>
             <tr>
                 <th><label>Term</label></th>
-                <th><select id="term1" onchange="search()"></select></th>
-                <th><select id="term2" onchange="search()"></select></th>
-                <th><select id="term3" onchange="search()"></select></th>
-                <th><select id="term4" onchange="search()"></select></th>
-                <th><select id="term5" onchange="search()"></select></th>
+                <th>
+                    <select id="term1" onchange="search()"></select>
+                    <label id="T1L"></label>
+                </th>
+                <th>
+                    <select id="term2" onchange="search()"></select>
+                    <label id="T2L"></label>
+                </th>
+                <th>
+                    <select id="term3" onchange="search()"></select>
+                    <label id="T3L"></label>
+                </th>
+                <th>
+                    <select id="term4" onchange="search()"></select>
+                    <label id="T4L"></label>
+                </th>
+                <th>
+                    <select id="term5" onchange="search()"></select>
+                    <label id="T5L"></label>
+                </th>
             </tr>
             <tbody id="results"> </tbody>
         </table>
@@ -404,6 +438,100 @@ function search() {
         <br><br><br>
     </div>
 </div>
+
+<script type="text/javascript">
+    function PrintTable () {
+
+        document.getElementById('AY1L').innerHTML = $('#academic_year1').children('option:selected').text();
+        document.getElementById('AY2L').innerHTML = $('#academic_year2').children('option:selected').text();
+        document.getElementById('AY3L').innerHTML = $('#academic_year3').children('option:selected').text();
+        document.getElementById('AY4L').innerHTML = $('#academic_year4').children('option:selected').text();
+        document.getElementById('AY5L').innerHTML = $('#academic_year5').children('option:selected').text();
+
+        document.getElementById('T1L').innerHTML = $('#term1').children('option:selected').text();
+        document.getElementById('T2L').innerHTML = $('#term1').children('option:selected').text();
+        document.getElementById('T3L').innerHTML = $('#term1').children('option:selected').text();
+        document.getElementById('T4L').innerHTML = $('#term1').children('option:selected').text();
+        document.getElementById('T5L').innerHTML = $('#term1').children('option:selected').text();
+
+        $('#academic_year1').multiselect('destroy');
+        $('#academic_year2').multiselect('destroy');
+        $('#academic_year3').multiselect('destroy');
+        $('#academic_year4').multiselect('destroy');
+        $('#academic_year5').multiselect('destroy');
+
+        $('#term1').multiselect('destroy');
+        $('#term2').multiselect('destroy');
+        $('#term3').multiselect('destroy');
+        $('#term4').multiselect('destroy');
+        $('#term5').multiselect('destroy');
+
+        document.getElementById('pp').click();
+
+        document.getElementById('AY1L').innerHTML = "";
+        document.getElementById('AY2L').innerHTML = "";
+        document.getElementById('AY3L').innerHTML = "";
+        document.getElementById('AY4L').innerHTML = "";
+        document.getElementById('AY5L').innerHTML = "";
+
+        document.getElementById('T1L').innerHTML = "";
+        document.getElementById('T2L').innerHTML = "";
+        document.getElementById('T3L').innerHTML = "";
+        document.getElementById('T4L').innerHTML = "";
+        document.getElementById('T5L').innerHTML = "";
+
+
+        FillYears();
+        FillTerms();
+
+    }
+</script>
+
+
+        <script type="text/javascript">
+            function FillTerms() {
+                var selected_terms1 = $("#term1 option:selected");
+                var selected_terms2 = $("#term2 option:selected");
+                var selected_terms3 = $("#term3 option:selected");
+                var selected_terms4 = $("#term4 option:selected");
+                var selected_terms5 = $("#term5 option:selected");
+
+                var term1 = document.getElementById('term1');
+                var term2 = document.getElementById('term2');
+                var term3 = document.getElementById('term3');
+                var term4 = document.getElementById('term4');
+                var term5 = document.getElementById('term5');
+
+                var httpTerms = new XMLHttpRequest();
+                httpTerms.onreadystatechange = function () {
+                    if (this.readyState === 4) {
+                        var str = this.responseText;
+                        termsArray = str.split("\t");
+                    }
+                };
+
+                httpTerms.open("GET", "sqldb/terms.php", false);
+                httpTerms.send();
+
+
+                
+                $('#terms1').multiselect('destroy');
+                $('#terms2').multiselect('destroy');
+                $('#terms3').multiselect('destroy');
+                $('#terms4').multiselect('destroy');
+                $('#terms5').multiselect('destroy');
+
+                delete termsArray[termsArray.length - 1];
+
+                term2.add(new Option('Term'));
+                term3.add(new Option('Term'));
+                term4.add(new Option('Term'));
+                term5.add(new Option('Term'));
+
+                for (var i in termsArray)
+                    term1.add(new Option(termsArray[i]));
+            }    
+        </script>
 
 
         <script type="text/javascript">

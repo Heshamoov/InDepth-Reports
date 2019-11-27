@@ -1,12 +1,13 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 13px;
+  /*background-color: red;*/
 }
 
 #divprint {
   margin: auto;
   width: 100%;
-  background-color: red;
+  /*background-color: red;*/
 }
 
 #PageTitle {
@@ -40,9 +41,8 @@ body {
 
 #useroptions {
   border-collapse: collapse;
-  margin: auto;
-  width: 100%;
-  background-color: yellow;
+  width: 50%;
+  /*background-color: yellow;*/
 }
 
 #useroptions td, #useroptions th {
@@ -71,21 +71,25 @@ select input{
 }
 
 
-.rc-green {
+.rc-green, .w3-text-green {
   color: green;
 }
 
-.rc-l-green {
+.rc-l-green, .w3-text-light-green {
   color: #8BC34A;
 }
 
-.rc-lime {
+.rc-lime, .w3-text-lime {
   color: #CDDC39;
 }
 
-.rc-orange {
+.rc-orange, .w3-text-orange {
   color: orange;
 }
-.rc-red {
+.rc-red, .w3-text-red {
   color: red;
+}
+
+.w3-text-gray {
+  color: gray;
 }

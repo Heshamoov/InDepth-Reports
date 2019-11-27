@@ -214,9 +214,9 @@ if ($grades != "Grade")
                     } // Student Selected
                 } // For
             } // End Total Mark check
-            while ($rowIndex <= 5) {
+            while ($rowIndex <= 4) {
                 $rowIndex++;
-                echo "<td></td>";
+                echo "<td>$rowIndex</td>";
             }
             echo "</tr>";
         } // While
