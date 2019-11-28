@@ -339,12 +339,24 @@ if ($result->num_rows > 0) {
             elseif ($row['2019Minimum'] >= 75)
                 echo "<td class='w3-container w3-text-orange'>Acceptable</td>";
             else
-                echo "<td class='w3-container w3-text-gray'>Not Applicable</td>";
-                    
-                echo "<td>"
-                         . $row['Trend'] .
-                    "</td>";                    
+                echo "<td class='w3-container w3-text-gray'>Weak</td>";
+                
+            $trend = round(($row['#2017Above'] + $row['#2018Above'] + $row['#2019Above']) / ($row['2017Total'] + $row['2018Total'] + $row['2019Total']) * 100);
+            if ($trend >= 75 ) {
+                echo "<td class='w3-text-green'>Outstanding";
+                echo "<div class='tooltip'>Hover over me
+                        <span class='tooltiptext'>Tooltip text</span>
+                     </div></td>";
+                 }
 
+            elseif ($trend >= 61 AND $row['2019Above'] < 75) 
+                echo "<td class='w3-container w3-text-light-green'>Very Good</td>";
+            elseif ($trend >= 51 AND $row['2019Above'] < 61)
+                echo "<td class='w3-container w3-text-blue'>Good</td>";
+            elseif ($trend >= 75)
+                echo "<td class='w3-container w3-text-orange'>Acceptable</td>";
+            else
+                echo "<td class='w3-container w3-text-gray'>Weak</td>";
             echo "</tr>";
     }
     echo "<tr><th class='w3-yellow' colspan=13>Overall judjment</th>

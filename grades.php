@@ -128,9 +128,7 @@ if (!isset($_SESSION['login'])) {
         }
     }
 </script>
-
 <body>
-
     <div class="w3-responsive" >
         <?php include('navbar.php'); ?>
         <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
@@ -178,19 +176,19 @@ if (!isset($_SESSION['login'])) {
 
 
 <div id="divprint">
-        <br>
-        <table id="PageTitle">
-            <tr>
-                <th id="SchoolLogoTH" colspan="2">
-                    <img id="SchoolLogo" src="images/sanawbar.jpg">
-                </th>
-            </tr>
-            <tr>
-                <th id="SchoolName" colspan="2">
-                    Al Sanawbar School
-                </th>
-            </tr>
-        </table>
+    <br>    
+    <table id="PageTitle">
+        <tr>
+            <th id="SchoolLogoTH" colspan="2">
+                <img id="SchoolLogo" src="images/sanawbar.jpg">
+            </th>
+        </tr>
+        <tr>
+            <th id="SchoolName" colspan="2">
+                Al Sanawbar School
+            </th>
+        </tr>
+    </table>
 <!-- ****************************************************************************************************** -->
 
     <table id="SchoolInfo" class="w3-card">       <!--Header Table-->
