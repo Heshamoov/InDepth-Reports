@@ -85,3 +85,8 @@ body {
 #InDepthTD {
   text-align: right;
 }
+
+.select {
+  display: block;
+  background-color: red;
+}

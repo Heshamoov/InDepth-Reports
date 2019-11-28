@@ -342,21 +342,29 @@ if ($result->num_rows > 0) {
                 echo "<td class='w3-container w3-text-gray'>Weak</td>";
                 
             $trend = round(($row['#2017Above'] + $row['#2018Above'] + $row['#2019Above']) / ($row['2017Total'] + $row['2018Total'] + $row['2019Total']) * 100);
-            if ($trend >= 75 ) {
-                echo "<td class='w3-text-green'>Outstanding";
-                echo "<div class='tooltip'>Hover over me
-                        <span class='tooltiptext'>Tooltip text</span>
-                     </div></td>";
-                 }
+            
+            $sum   = "(" . $row['#2017Above'] . " + " . $row['#2018Above'] . " + " . $row['#2019Above'] . ")";
+            $sumresult = $row['#2017Above'] + $row['#2018Above'] + $row['#2019Above'];
 
+            $total = "(" . $row['2017Total']  . " + " . $row['2018Total']  . " + " . $row['2019Total'] . ")";
+            $totalresult = $row['2017Total'] + $row['2018Total'] + $row['2019Total'];
+
+            $sumtotal = $sum . " = " . $sumresult . "\n / \n" . $total . " = " . $totalresult . "\n";
+
+            $sumDividTotal = Round(($sumresult/$totalresult) * 100, 2);
+
+            $sumdtotal = "Round(" . $sumresult . "/" . $totalresult . ") * 100 = " . $sumDividTotal;
+
+            if ($trend >= 75 )
+                echo "<td class='w3-text-green' title='$sumtotal $sumdtotal'>Outstanding</td>";
             elseif ($trend >= 61 AND $row['2019Above'] < 75) 
-                echo "<td class='w3-container w3-text-light-green'>Very Good</td>";
+                echo "<td class='w3-container w3-text-light-green' title='$sumtotal $sumdtotal'>Very Good</td>";
             elseif ($trend >= 51 AND $row['2019Above'] < 61)
-                echo "<td class='w3-container w3-text-blue'>Good</td>";
+                echo "<td class='w3-container w3-text-blue' title='$sumtotal $sumdtotal'>Good</td>";
             elseif ($trend >= 75)
-                echo "<td class='w3-container w3-text-orange'>Acceptable</td>";
+                echo "<td class='w3-container w3-text-orange' title='$sumtotal $sumdtotal'>Acceptable</td>";
             else
-                echo "<td class='w3-container w3-text-gray'>Weak</td>";
+                echo "<td class='w3-container w3-text-gray' title='$sumtotal $sumdtotal'>Weak</td>";
             echo "</tr>";
     }
     echo "<tr><th class='w3-yellow' colspan=13>Overall judjment</th>

@@ -128,6 +128,7 @@ if (!isset($_SESSION['login'])) {
         }
     }
 </script>
+
 <body>
     <div class="w3-responsive" >
         <?php include('navbar.php'); ?>
@@ -350,6 +351,44 @@ if (!isset($_SESSION['login'])) {
             <th class='w3-yellow'>2017</th>
             <th class='w3-yellow'>2018</th>
             <th class='w3-yellow'>2019</th>
+        </tr>
+        <tr>
+            <th>
+                <select id="subjectD">
+                    <option>Outstanding</option>
+                    <option>Very Good</option>
+                    <option>Good</option>
+                    <option>Acceptable</option>
+                    <option>Weak</option>
+                </select>
+            </th>
+            <th>
+                <select>
+                    <option>Outstanding</option>
+                    <option>Very Good</option>
+                    <option>Good</option>
+                    <option>Acceptable</option>
+                    <option>Weak</option>
+                </select>
+            </th>
+            <th>
+                <select>
+                    <option>Outstanding</option>
+                    <option>Very Good</option>
+                    <option>Good</option>
+                    <option>Acceptable</option>
+                    <option>Weak</option>
+                </select>
+            </th>
+            <th>
+                <select>
+                    <option>Outstanding</option>
+                    <option>Very Good</option>
+                    <option>Good</option>
+                    <option>Acceptable</option>
+                    <option>Weak</option>
+                </select>
+            </th>            
         </tr>
     </table>;
 
