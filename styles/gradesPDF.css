@@ -5,6 +5,14 @@ body {
   font-size: 14px;
 }
 
+.select1 { 
+  border:0px;
+  outline:0px;
+  -webkit-appearance: button;
+  width: 100%;
+  text-align-last: center;
+}
+
 #divprint {
   width: 100%;
 }
@@ -51,7 +59,7 @@ body {
 }
 
 td {
-  height: 40px !important;
+  height: 30px !important;
 }
 
 .VGrade {
@@ -115,3 +123,4 @@ td {
       text-align: center;
       border: none;
 }
+

@@ -311,7 +311,7 @@ LEFT JOIN
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-            echo   "<tr>";
+            echo   "<tr class='w3-hover-gray'>";
 
             echo   "<th class='VGrade'>" . $row['2017Grade']   . "</th>
                     <td>" . $row['2017Total']                                  . "</td>
@@ -330,16 +330,21 @@ if ($result->num_rows > 0) {
                     <td>(" . $row['#2019Below']   . ") " . $row['2019Below']   . "%</td>";
                     
             
+
+            $Above2019 = "Round( [" . $row['#2019Above'] . "/" . $row['2019Total'] . "] * 100) = " . $row['2019Above'] . "%";
+            $Minimum2019 = "Round( [" . $row['#2019Minimum'] . "/" . $row['2019Total'] . "] * 100) = " . $row['2019Minimum'] . "%";
+            
+
             if ($row['2019Above'] >= 75 )
-                echo "<td class='w3-text-green'>Outstanding</td>";
+                echo "<td class='w3-text-green tip' title= '$Above2019'>Outstanding</td>";
             elseif ($row['2019Above'] >= 61 AND $row['2019Above'] < 75) 
-                echo "<td class='w3-container w3-text-light-green'>Very Good</td>";
-            elseif ($row['2019Above'] >= 51 AND $row['2019Above'] < 61)
-                echo "<td class='w3-container w3-text-blue'>Good</td>";
+                echo "<td class='w3-container w3-text-light-green' title= '$Above2019'>Very Good</td>";
+            elseif ($row['2019Above'] >= 50 AND $row['2019Above'] < 61)
+                echo "<td class='w3-container w3-text-blue' title= '$Above2019'>Good</td>";
             elseif ($row['2019Minimum'] >= 75)
-                echo "<td class='w3-container w3-text-orange'>Acceptable</td>";
+                echo "<td class='w3-container w3-text-orange' title= '$Minimum2019'>Acceptable</td>";
             else
-                echo "<td class='w3-container w3-text-gray'>Weak</td>";
+                echo "<td class='w3-container' title= '$Minimum2019'>Weak</td>";
                 
             $trend = round(($row['#2017Above'] + $row['#2018Above'] + $row['#2019Above']) / ($row['2017Total'] + $row['2018Total'] + $row['2019Total']) * 100);
             
@@ -351,20 +356,20 @@ if ($result->num_rows > 0) {
 
             $sumtotal = $sum . " = " . $sumresult . "\n / \n" . $total . " = " . $totalresult . "\n";
 
-            $sumDividTotal = Round(($sumresult/$totalresult) * 100, 2);
+            $sumDividTotal = Round(($sumresult/$totalresult) * 100, 0);
 
-            $sumdtotal = "Round(" . $sumresult . "/" . $totalresult . ") * 100 = " . $sumDividTotal;
+            $sumdtotal = "Round( [" . $sumresult . "/" . $totalresult . "] * 100) = " . $sumDividTotal . "%";
 
             if ($trend >= 75 )
                 echo "<td class='w3-text-green' title='$sumtotal $sumdtotal'>Outstanding</td>";
             elseif ($trend >= 61 AND $row['2019Above'] < 75) 
                 echo "<td class='w3-container w3-text-light-green' title='$sumtotal $sumdtotal'>Very Good</td>";
-            elseif ($trend >= 51 AND $row['2019Above'] < 61)
+            elseif ($trend >= 50 AND $row['2019Above'] < 61)
                 echo "<td class='w3-container w3-text-blue' title='$sumtotal $sumdtotal'>Good</td>";
             elseif ($trend >= 75)
                 echo "<td class='w3-container w3-text-orange' title='$sumtotal $sumdtotal'>Acceptable</td>";
             else
-                echo "<td class='w3-container w3-text-gray' title='$sumtotal $sumdtotal'>Weak</td>";
+                echo "<td class='w3-container' title='$sumtotal $sumdtotal'>Weak</td>";
             echo "</tr>";
     }
     echo "<tr><th class='w3-yellow' colspan=13>Overall judjment</th>

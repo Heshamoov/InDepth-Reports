@@ -86,7 +86,34 @@ body {
   text-align: right;
 }
 
-.select {
-  display: block;
-  background-color: red;
+.select1 {
+  width: 100%;
+  text-align-last: center;
+  border:0px;
+  outline:0px;
+}
+
+td.tip {
+    border-bottom: 1px dashed;
+    text-decoration: none
+}
+td.tip:hover {
+    cursor: help;
+    position: relative
+}
+td.tip span {
+    display: none
+}
+td.tip:hover span {
+    border: #c0c0c0 1px dotted;
+    padding: 5px 20px 5px 5px;
+    display: block;
+    z-index: 100;
+    background: url(../images/status-info.png) #f0f0f0 no-repeat 100% 5%;
+    left: 0px;
+    margin: 10px;
+    width: 250px;
+    position: absolute;
+    top: 10px;
+    text-decoration: none
 }

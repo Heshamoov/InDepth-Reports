@@ -354,7 +354,7 @@ if (!isset($_SESSION['login'])) {
         </tr>
         <tr>
             <th>
-                <select id="subjectD">
+                <select class="select1">
                     <option>Outstanding</option>
                     <option>Very Good</option>
                     <option>Good</option>
@@ -363,7 +363,7 @@ if (!isset($_SESSION['login'])) {
                 </select>
             </th>
             <th>
-                <select>
+                <select class="select1">
                     <option>Outstanding</option>
                     <option>Very Good</option>
                     <option>Good</option>
@@ -372,7 +372,7 @@ if (!isset($_SESSION['login'])) {
                 </select>
             </th>
             <th>
-                <select>
+                <select class="select1">
                     <option>Outstanding</option>
                     <option>Very Good</option>
                     <option>Good</option>
@@ -381,7 +381,7 @@ if (!isset($_SESSION['login'])) {
                 </select>
             </th>
             <th>
-                <select>
+                <select class="select1">
                     <option>Outstanding</option>
                     <option>Very Good</option>
                     <option>Good</option>
