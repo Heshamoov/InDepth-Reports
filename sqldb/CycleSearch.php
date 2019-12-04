@@ -193,9 +193,9 @@ ORDER BY ISNULL(Subject0), Subject0, ISNULL(Subject1), Subject1, ISNULL(Subject2
                         echo "<td class='w3-container w3-text-lime w3-hover-lime rc-lime'>Good</td>";
                     elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                         echo "<td class='w3-container w3-text-orange w3-hover-orange rc-orange'>Acceptable</td>";
-                    else                                                          // Not Applicable
+                    else                                                          // Weak
                         echo "<td class='w3-container w3-text-red w3-hover-red rc-red'> 
-                                       Not Applicable</td>";
+                                       Weak</td>";
                 
                 elseif ($view == 'Percentage')
                 	if($row[">=75%$i"] == null)
@@ -208,7 +208,7 @@ ORDER BY ISNULL(Subject0), Subject0, ISNULL(Subject1), Subject1, ISNULL(Subject2
                         echo "<td class='w3-container w3-text-lime w3-hover-lime rc-lime'>".$row[">=75%$i"]. "%</td>";
                     elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                         echo "<td class='w3-container w3-text-orange w3-hover-orange rc-orange'>".$row[">=65%$i"]. "%</td>";
-                    else                                                          // Not Applicable
+                    else                                                          // Weak
                         echo "<td class='w3-container w3-text-red w3-hover-red rc-red'>".$row[">=75%$i"]. "%</td>";
 
                 elseif ($view == 'Attainment - Percentage')
@@ -222,8 +222,8 @@ ORDER BY ISNULL(Subject0), Subject0, ISNULL(Subject1), Subject1, ISNULL(Subject2
                         echo "<td class='w3-container w3-text-lime w3-hover-lime rc-lime'>              Good - ".$row[">=75%$i"]. "%</td>";
                     elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                         echo "<td class='w3-container w3-text-orange w3-hover-orange rc-orange'>          Acceptable - ".$row[">=65%$i"]. "%</td>";
-                    else                                                          // Not Applicable
-                        echo "<td class='w3-container w3-text-red w3-hover-red rc-red'>                Not Applicable - ".$row[">=75%$i"]. "%</td>";                
+                    else                                                          // Weak
+                        echo "<td class='w3-container w3-text-red w3-hover-red rc-red'>                Weak - ".$row[">=75%$i"]. "%</td>";                
             }
             // echo "<td>-</td><td>-</td><td>-</td><td>-</td>";
             echo "</tr>";
