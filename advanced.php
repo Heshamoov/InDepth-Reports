@@ -290,7 +290,7 @@ function search() {
     <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
 </div>
 
-<div id="debug"></div>
+<!-- <div id="debug"></div> -->
 
 <div class="w3-container">   <!-- DropDowns-->
     <table class="w3-table-all w3-card w3-gray">
@@ -361,7 +361,7 @@ function search() {
         </tr>
     </table> 
 
-    <table id="useroptions">
+    <table id="useroptions" class="w3-card">
         <thead>
             <tr>
                 <th id="TableTitle" colspan="6" class="w3-center"></th>
