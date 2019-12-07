@@ -122,7 +122,7 @@ function search() {
             else
                 document.getElementById('TableTitle').innerHTML = currentGrade;
         });
-        currentGrade = "(grade = '" + currentGrade + "')";
+        
 
         // Current View                    
         var currentView = ""; 
@@ -275,9 +275,9 @@ function search() {
         };
         
         // document.getElementById('out').innerHTML += "Before Sending " + years1SQL;
-    httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade + 
-    "&years1=" + years1SQL + "&years2=" + years2SQL + "&years3=" + years3SQL + "&years4=" + years4SQL + "&years5=" + years5SQL + 
-    "&terms1=" + terms1SQL+ "&terms2=" + terms2SQL + "&terms3=" + terms3SQL+ "&terms4=" + terms4SQL +"&terms5=" + terms5SQL + "&view=" + currentView + "&student=" + currentStudent, false);
+    httpSearch.open("POST", "sqldb/newAdvancedSearch.php?grades=" + currentGrade +
+    "&terms1=" + terms1SQL + "&terms2=" + terms2SQL + "&terms3=" + terms3SQL +
+    "&view=" + currentView + "&student=" + currentStudent, false);
 
     httpSearch.send();
 } 
@@ -285,150 +285,132 @@ function search() {
 </script>
 
 <body>   
-    <div class="w3-responsive" >
-        <?php include('navbar.php'); ?>
-        <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
-    </div>
-
-    <div class="w3-container">   <!-- DropDowns-->
-        <table class="w3-table-all w3-card w3-gray">
-            <th>
-                <div class="w3-container">
-                  <div class="w3-dropdown-hover">
-                    <button class="w3-button w3-green">Benchmark</button>
-                    <div class="w3-dropdown-content w3-bar-block w3-border">
-                      <a href="advanced.php" class="w3-bar-item w3-button w3-hover-green">Attainment</a>
-                      <a href="cycle.php" class="w3-bar-item w3-button w3-hover-green">Cycle</a>
-                      <a href="grades.php" class="w3-bar-item w3-button w3-hover-green">Grades</a>
-                    </div>
-                  </div>
-                </div>            
-            </th>
-            <th>
-                <select style="float:left;" id="studentYear" onchange="FillStudents()"></select> <!-- Year DropDown -->                    
-            </th>          
-            <th>
-                <select id="grade" onchange="FillStudents(), search()"></select>     <!-- Grade DropDown -->                    
-            </th>
-            <th>
-                <select id="studentsDropDown" onchange="FillYears(), search()"></select>          <!-- Students DropDown -->                    
-            </th>
-            <th>
-                <select id="view" onchange="search()">
-                    <option>Attainment</option>
-                    <option>Percentage</option>
-                    <option>Attainment - Percentage</option>
-                </select>
-            </th>
-            <th>
-                <button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge'
-                    onclick="PrintTable()"></button>
-                <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
-                        onclick="printJS({
-                                documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
-                                printable: 'divprint',
-                                type: 'html',
-                                showModal:true,
-                                ignoreElements: [],
-                                // targetStyles: ['*']
-                                css: 'styles/advancedPDF.css'
-                                })">
-                </button>                    
-            </th>            
-        </table>
-    </div>
-     
-    <div id="divprint">
-        
-        <table id="PageTitle" style="margin: auto; width: 100%;">
-            <tr>
-                <th id="SchoolLogoTH" style="text-align: center;" colspan="2">
-                    <img id="SchoolLogo" src="images/sanawbar.jpg" style="width: 5%;">
-                </th>
-            </tr>
-            <tr>
-                <th id="SchoolName" style="text-align: center;" colspan="2">
-                    Al Sanawbar School
-                </th>
-            </tr>
-            <tr><br><br></tr>
-            <tr>
-                <th id="Performance">
-                    Performance Indicator levels: Summary
-                </th>
-                <th id="Attainment" style="text-align: right;">
-                    Attainment Progress Analysis
-                </th>
-            </tr>
-        </table> 
-
-        <table id="useroptions">
-            <thead>
-                <tr>
-                    <th id="TableTitle" colspan="6" class="w3-center"></th>
-                </tr>
-            </thead>
-            <tr class="dropdownTR">
-                <th><label>Year</label></th>
-                <th>
-                    <select id="academic_year1" onchange="FillTerm(this, 'term1')" class="dropdown"></select>
-                    <label id="AY1L"></label>
-                </th>
-                <th>
-                    <select id="academic_year2" onchange="FillTerm(this, 'term2')"></select>
-                    <label id="AY2L"></label>
-                </th>
-                <th>
-                    <select id="academic_year3" onchange="FillTerm(this, 'term3')"></select>
-                    <label id="AY3L"></label>
-                </th>
-                <th>
-                    <select id="academic_year4" onchange="FillTerm(this, 'term4')"></select>
-                    <label id="AY4L"></label>
-                </th>
-                <th>
-                    <select id="academic_year5" onchange="FillTerm(this, 'term5')"></select>
-                    <label id="AY5L"></label>
-                </th>
-            </tr>
-            <tr>
-                <th><label>Term</label></th>
-                <th>
-                    <select id="term1" onchange="search()"></select>
-                    <label id="T1L"></label>
-                </th>
-                <th>
-                    <select id="term2" onchange="search()"></select>
-                    <label id="T2L"></label>
-                </th>
-                <th>
-                    <select id="term3" onchange="search()"></select>
-                    <label id="T3L"></label>
-                </th>
-                <th>
-                    <select id="term4" onchange="search()"></select>
-                    <label id="T4L"></label>
-                </th>
-                <th>
-                    <select id="term5" onchange="search()"></select>
-                    <label id="T5L"></label>
-                </th>
-            </tr>
-            <tbody id="results"> </tbody>
-        </table>
-
-        <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
-            <tr>
-                <td id="InDepthTD" style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
-            </tr>
-        </table>
-        <br><br><br>
-    </div>
+<div class="w3-responsive" >
+    <?php include('navbar.php'); ?>
+    <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
 </div>
+
+<div class="w3-container">   <!-- DropDowns-->
+    <table class="w3-table-all w3-card w3-gray">
+        <th>
+            <div class="w3-container">
+              <div class="w3-dropdown-hover">
+                <button class="w3-button w3-green">Benchmark</button>
+                <div class="w3-dropdown-content w3-bar-block w3-border">
+                  <a href="advanced.php" class="w3-bar-item w3-button w3-hover-green">Attainment</a>
+                  <a href="cycle.php" class="w3-bar-item w3-button w3-hover-green">Cycle</a>
+                  <a href="grades.php" class="w3-bar-item w3-button w3-hover-green">Grades</a>
+                </div>
+              </div>
+            </div>            
+        </th>
+        <th>
+            <select style="float:left;" id="studentYear"></select>
+        </th>          
+        <th>
+            <select id="grade" onchange="FillStudents(), search()"></select>
+        </th>
+        <th>
+            <select id="studentsDropDown" onchange="search()"></select>
+        </th>
+        <th>
+            <select id="view" onchange="search()">
+                <option>Attainment</option>
+                <option>Percentage</option>
+                <option>Attainment - Percentage</option>
+            </select>
+        </th>
+<th>
+<button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' onclick="PrintTable()"></button>
+<button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
+    onclick="printJS({
+        documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
+        printable: 'divprint',
+        type: 'html',
+        showModal:true,
+        ignoreElements: [],
+        css: 'styles/advancedPDF.css'
+    })">
+</button>                    
+</th>            
+    </table>
+</div>
+     
+<div id="divprint">
+    <table id="PageTitle" style="margin: auto; width: 100%;">
+        <tr>
+            <th id="SchoolLogoTH" style="text-align: center;" colspan="2">
+                <img id="SchoolLogo" src="images/sanawbar.jpg" style="width: 5%;">
+            </th>
+        </tr>
+        <tr>
+            <th id="SchoolName" style="text-align: center;" colspan="2">
+                Al Sanawbar School
+            </th>
+        </tr>
+        <tr><br><br></tr>
+        <tr>
+            <th id="Performance">
+                Performance Indicator levels: Summary
+            </th>
+            <th id="Attainment" style="text-align: right;">
+                Attainment Progress Analysis
+            </th>
+        </tr>
+    </table> 
+
+    <table id="useroptions">
+        <thead>
+            <tr>
+                <th id="TableTitle" colspan="6" class="w3-center"></th>
+            </tr>
+        </thead>
+        <tr class="dropdownTR">
+            <th><label>Year</label></th>
+            <th>
+                2016 - 2017
+            </th>
+            <th>
+                2017 - 2018
+            </th>
+            <th>
+                2018 - 2019
+            </th>
+        </tr>
+        <tr>
+            <th><label>Term</label></th>
+            <th>
+                <select id="term1" onchange="search()"></select>
+                <label id="T1L"></label>
+            </th>
+            <th>
+                <select id="term2" onchange="search()"></select>
+                <label id="T2L"></label>
+            </th>
+            <th>
+                <select id="term3" onchange="search()"></select>
+                <label id="T3L"></label>
+            </th>
+        </tr>
+        <tbody id="results"> </tbody>
+    </table>
+
+    <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
+        <tr>
+            <td id="InDepthTD" style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
+        </tr>
+    </table>
+</div>
+
+<!-- Initialize Grades    -->                       
+<script src="js/initGrades.js"></script>
+<!-- Initialize Years -->
+<script src="js/initYears.js"></script>
+<!-- Initialize Terms -->
+<script src="js/initTerms.js"></script>
 
 <script type="text/javascript">
     function PrintTable () {
-
         document.getElementById('AY1L').innerHTML = $('#academic_year1').children('option:selected').text();
         document.getElementById('AY2L').innerHTML = $('#academic_year2').children('option:selected').text();
         document.getElementById('AY3L').innerHTML = $('#academic_year3').children('option:selected').text();
@@ -466,7 +448,7 @@ function search() {
 </script>
 
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     function FillTerms() {
         var selected_terms1 = $("#term1 option:selected");
         // var selected_terms2 = $("#term2 option:selected");
@@ -558,8 +540,9 @@ function search() {
         search();
     }
 </script>
+ -->
 
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     function FillYears() {
         var selected_years1 = $("#academic_year1 option:selected");
         var selected_years2 = $("#academic_year2 option:selected");
@@ -651,47 +634,17 @@ function search() {
 
 
     }
+</script> -->
+
+<!-- Print Date -->
+<!-- <script type="text/javascript">
+    n =  new Date();
+    y = n.getFullYear();
+    m = n.getMonth() + 1;
+    d = n.getDate();
+    document.getElementById("date").innerHTML = "Date " + m + "/" + d + "/" + y;
 </script>
-
-
-        <!-- Print Date -->
-        <!-- <script type="text/javascript">
-            n =  new Date();
-            y = n.getFullYear();
-            m = n.getMonth() + 1;
-            d = n.getDate();
-            document.getElementById("date").innerHTML = "Date " + m + "/" + d + "/" + y;
-        </script>
-         -->
-        <!-- Initialize Grades    -->
-        <script type="text/javascript">
-            var select = document.getElementById('grade');
-
-            var httpgrades = new XMLHttpRequest();
-            httpgrades.onreadystatechange = function () {
-                if (this.readyState === 4) {
-                    var str = this.responseText;
-                    gradesArray = str.split("\t");
-                }
-            };
-
-            httpgrades.open("GET", "sqldb/grades.php", false);
-            httpgrades.send();
-
-            $('#grade').multiselect('destroy');
-
-            delete gradesArray[gradesArray.length - 1];
-            
-            select.add(new Option("Grade"));
-            for (var i in gradesArray)
-                select.add(new Option(gradesArray[i]));
-        </script>                
-
-<!-- Initialize Years -->
-<script src="js/initYears.js"></script>
-<!-- Initialize Terms -->
-<script src="js/initTerms.js"></script>
-        
+ -->        
 </body>
 </html>
 
