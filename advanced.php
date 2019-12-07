@@ -69,7 +69,7 @@ if (!isset($_SESSION['login'])) {
 
             delete namesArray[namesArray.length - 1];
 
-            studentsDropDown.add(new Option('None'));
+            studentsDropDown.add(new Option('Student'));
 
             for (var i in namesArray)
                 studentsDropDown.add(new Option(namesArray[i]));
@@ -117,7 +117,7 @@ function search() {
         selected_student.each(function()
         {
             currentStudent = $(this).text();
-            if (currentStudent != "" && currentStudent != "None" )
+            if (currentStudent != "" && currentStudent != "Student" )
                 document.getElementById('TableTitle').innerHTML = currentGrade + "  -  " + currentStudent;
             else
                 document.getElementById('TableTitle').innerHTML = currentGrade;
@@ -128,64 +128,6 @@ function search() {
         var currentView = ""; 
         selected_view.each(function()
             {currentView = $(this).text();});
-
-
-                                            
-        //Generate selected years SQL statement YEARS 2
-        var years2SQL = "";
-        selected_years2.each(function () {
-            var currentYear = $(this).text();
-            if (currentYear != 'Year')
-                if (years2SQL === "")
-                    years2SQL = "(acd_code = '" + currentYear + "' ";
-                else
-                    years2SQL += " OR acd_code = '" + currentYear + "'";
-        });
-
-        if (years2SQL !== "") 
-            years2SQL += ")";                    
-                           
-        //Generate selected years SQL statement YEARS 3
-        var years3SQL = "";
-        selected_years3.each(function () {
-            var currentYear = $(this).text();
-            if (currentYear != 'Year')
-            if (years3SQL === "")
-                years3SQL = "(acd_code = '" + currentYear + "' ";
-            else
-                years3SQL += " OR acd_code = '" + currentYear + "'";
-        });
-
-        if (years3SQL !== "") 
-            years3SQL += ")";                    
-
-        // //Generate selected years SQL statement YEARS 4
-        var years4SQL = "";
-        selected_years4.each(function () {
-            var currentYear = $(this).text();
-            if (currentYear != 'Year')
-            if (years4SQL === "")
-                years4SQL = "(acd_code = '" + currentYear + "' ";
-            else
-                years4SQL += " OR acd_code = '" + currentYear + "'";
-        });
-
-        if (years4SQL !== "") 
-            years4SQL += ")";                    
-
-        // //Generate selected years SQL statement YEARS 5
-        var years5SQL = "";
-        selected_years5.each(function () {
-            var currentYear = $(this).text();
-            if (currentYear != 'Year')
-            if (years5SQL === "")
-                years5SQL = "(acd_code = '" + currentYear + "' ";
-            else
-                years5SQL += " OR acd_code = '" + currentYear + "'";
-        });
-
-        if (years5SQL !== "") 
-            years5SQL += ")";                    
 
 
         //Generate selected years SQL statement TERMS 1
@@ -233,38 +175,7 @@ function search() {
 
         if (terms3SQL !== "")
             terms3SQL += ")";                    
-
-
-        // //Generate selected years SQL statement TERMS 4
-        var terms4SQL = "";
-        selected_terms4.each(function () {
-            var currentTerm = $(this).text();
-            if (currentTerm != 'Term')
-            if (terms4SQL === "")
-                terms4SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
-            else
-                terms4SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
-        });
-
-
-        if (terms4SQL !== "")
-            terms4SQL += ")";                    
-
-
-        // //Generate selected years SQL statement TERMS 5
-        var terms5SQL = "";
-        selected_terms5.each(function () {
-            var currentTerm = $(this).text();
-            if (currentTerm != 'Term')
-            if (terms5SQL === "")
-                terms5SQL = " (REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ','') ";
-            else
-                terms5SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
-        });
-
-
-        if (terms5SQL !== "")
-            terms5SQL += ")";                    
+                    
 
         // Sending to Server
         var httpSearch = new XMLHttpRequest();
@@ -326,7 +237,7 @@ function search() {
 <button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' onclick="PrintTable()"></button>
 <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
     onclick="printJS({
-        documentTitle: 'Grade Progress Analysis - Al Sanawbar School',
+        documentTitle: 'Grade/Student Progress Analysis - Al Sanawbar School',
         printable: 'divprint',
         type: 'html',
         showModal:true,
@@ -356,7 +267,7 @@ function search() {
                 Performance Indicator levels: Summary
             </th>
             <th id="Attainment" style="text-align: right;">
-                Grade Progress Analysis
+                Grade/Student Progress Analysis
             </th>
         </tr>
     </table> 
@@ -367,18 +278,14 @@ function search() {
                 <th id="TableTitle" colspan="6" class="w3-center"></th>
             </tr>
         </thead>
+
         <tr class="dropdownTR">
             <th><label>Year</label></th>
-            <th>
-                2016 - 2017
-            </th>
-            <th>
-                2017 - 2018
-            </th>
-            <th>
-                2018 - 2019
-            </th>
+            <th>2016 - 2017</th>
+            <th>2017 - 2018</th>
+            <th>2018 - 2019</th>
         </tr>
+
         <tr>
             <th><label>Term</label></th>
             <th>
@@ -394,6 +301,7 @@ function search() {
                 <label id="T3L"></label>
             </th>
         </tr>
+        
         <tbody id="results"> </tbody>
     </table>
 

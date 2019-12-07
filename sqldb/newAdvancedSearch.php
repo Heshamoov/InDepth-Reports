@@ -33,7 +33,7 @@ $GInedx = array_search($grade, $GArray);
 
 // echo "Count: " . count($TArray) . "<br>";
 // echo "****************<br>";
-
+// echo $student;
 
 $columns = "
 SELECT subject_name, exam_name, acd_code, grade, section,
@@ -68,10 +68,13 @@ if ($grade != "Grade")
             
             if ($GradeIndex < 11)
                 $GradeIndex = $GInedx + $i;
+
             $WhereArray[$i] = " WHERE acd_code = '$YArray[$i]' AND $TArray[$i] AND grade = '$GArray[$GradeIndex]' ";
 
-            if ($student != '' AND $student != 'None')
-                $WhereArray[$i] .= " AND student_name = '$student' ";
+            if ($student != '' AND $student != 'Student')
+                $WhereArray[$i] = " WHERE acd_code = '$YArray[$i]' AND $TArray[$i] AND student_name = '$student' ";
+            else
+                $WhereArray[$i] = " WHERE acd_code = '$YArray[$i]' AND $TArray[$i] AND grade = '$GArray[$GradeIndex]' ";
 
         $WhereArray[$i] .= " GROUP BY subject_name ORDER BY subject_name ";
     }
@@ -109,26 +112,28 @@ if ($grade != "Grade")
 
 
     // echo "SQL STATEMENT <br> " . $sql;
+
+    $GradeHeader = true;
+
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
-    echo "<tr><th>Grade Progress</th>";
-            $i = $GInedx; $number = 1;
-            While ($number <= 3) {
-                echo "<th>$GArray[$i]</th>";
-                $number++;
-                if ($i < 11)
-                    $i++;
-            }
-            
-    echo "</tr>";        
+
 
         while ($row = $result->fetch_assoc()) {
+            if ($GradeHeader) {
+                echo "<tr><th>Grade Progress</th>";
+                for($i=0; $i<3; $i++)
+                    echo "<th>" . $row["Grade$i"]. "</th>";
+                echo "</tr>";
+                $GradeHeader = false;
+            }
+
             if ($row["Subject0"] != 'Total Mark') {
                 echo "<tr><td>" . $row["Subject0"] . "</td>";
-                $rowIndex = 0;
+
                 for ($i=0; $i < count($TArray); $i++) {
-                    $rowIndex++;
-                    if ($student != 'None') {
+                    // $rowIndex++;
+                    if ($student != 'Student') {
                         if ($view == 'Attainment')
                             if ($row["Mark$i"] >= 75)                                    // Outstanding
                                 echo "<td class='w3-container w3-text-green w3-hover-green'>           Outstanding</td>";
