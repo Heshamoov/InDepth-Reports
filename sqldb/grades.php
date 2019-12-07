@@ -2,7 +2,7 @@
 
 include ('../config/dbConfig.php');
 
-$sql = "SELECT DISTINCT grade FROM new_marks ORDER BY grade";
+$sql = "SELECT DISTINCT grade FROM new_marks WHERE grade like 'GR%' ORDER BY grade";
 
 $result = $conn->query($sql);
 

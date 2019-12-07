@@ -284,11 +284,13 @@ function search() {
 }
 </script>
 
-<body>   
+<body>
 <div class="w3-responsive" >
     <?php include('navbar.php'); ?>
     <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
 </div>
+
+<div id="debug"></div>
 
 <div class="w3-container">   <!-- DropDowns-->
     <table class="w3-table-all w3-card w3-gray">
@@ -324,7 +326,7 @@ function search() {
 <button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' onclick="PrintTable()"></button>
 <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
     onclick="printJS({
-        documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
+        documentTitle: 'Grade Progress Analysis - Al Sanawbar School',
         printable: 'divprint',
         type: 'html',
         showModal:true,
@@ -354,7 +356,7 @@ function search() {
                 Performance Indicator levels: Summary
             </th>
             <th id="Attainment" style="text-align: right;">
-                Attainment Progress Analysis
+                Grade Progress Analysis
             </th>
         </tr>
     </table> 
@@ -411,39 +413,54 @@ function search() {
 
 <script type="text/javascript">
     function PrintTable () {
-        document.getElementById('AY1L').innerHTML = $('#academic_year1').children('option:selected').text();
-        document.getElementById('AY2L').innerHTML = $('#academic_year2').children('option:selected').text();
-        document.getElementById('AY3L').innerHTML = $('#academic_year3').children('option:selected').text();
-        document.getElementById('AY4L').innerHTML = $('#academic_year4').children('option:selected').text();
-        document.getElementById('AY5L').innerHTML = $('#academic_year5').children('option:selected').text();
-
         document.getElementById('T1L').innerHTML = $('#term1').children('option:selected').text();
         document.getElementById('T2L').innerHTML = $('#term2').children('option:selected').text();
         document.getElementById('T3L').innerHTML = $('#term3').children('option:selected').text();
-        document.getElementById('T4L').innerHTML = $('#term4').children('option:selected').text();
-        document.getElementById('T5L').innerHTML = $('#term5').children('option:selected').text();
-
-        $('#academic_year1').multiselect('destroy');
-        $('#academic_year2').multiselect('destroy');
-        $('#academic_year3').multiselect('destroy');
-        $('#academic_year4').multiselect('destroy');
-        $('#academic_year5').multiselect('destroy');
 
         $('#term1').multiselect('destroy');
         $('#term2').multiselect('destroy');
         $('#term3').multiselect('destroy');
-        $('#term4').multiselect('destroy');
-        $('#term5').multiselect('destroy');
 
-        document.getElementById('pp').click();
+document.getElementById('pp').click();
+        
+        $('#term1').multiselect({includeSelectAllOption: false});
+        $('#term2').multiselect({includeSelectAllOption: false});
+        $('#term3').multiselect({includeSelectAllOption: false});
 
-        FillYears();
-        FillTerms();
+        var term1 = document.getElementById('term1');
+        var term2 = document.getElementById('term2');
+        var term3 = document.getElementById('term3');
 
-        document.getElementById('academic_year1').value = document.getElementById('AY1L').innerHTML;
-        document.getElementById('academic_year2').value = document.getElementById('AY2L').innerHTML;
+        var httpTerms = new XMLHttpRequest();
+        httpTerms.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                var str = this.responseText;
+                termsArray = str.split("\t");
+            }
+        };
 
-        // $("#academic_year1").val("val2");
+        httpTerms.open("GET", "sqldb/terms.php", false);
+        httpTerms.send();
+
+        delete termsArray[termsArray.length - 1];
+
+
+        for (var i in termsArray) {
+            term1.add(new Option(termsArray[i]));
+            term2.add(new Option(termsArray[i]));
+            term3.add(new Option(termsArray[i]));
+        }        
+
+        document.getElementById("term1").value = document.getElementById('T1L').textContent;
+        document.getElementById("term2").value = document.getElementById('T2L').textContent;
+        document.getElementById("term3").value = document.getElementById('T3L').textContent;
+
+
+        document.getElementById('T1L').innerHTML = "";
+        document.getElementById('T2L').innerHTML = "";
+        document.getElementById('T3L').innerHTML = "";
+
+        // search();
     }
 </script>
 

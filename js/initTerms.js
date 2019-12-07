@@ -1,3 +1,7 @@
+// $('#term1').multiselect({includeSelectAllOption: false});
+// $('#term2').multiselect({includeSelectAllOption: false});
+// $('#term3').multiselect({includeSelectAllOption: false});
+
 var term1 = document.getElementById('term1');
 var term2 = document.getElementById('term2');
 var term3 = document.getElementById('term3');
@@ -22,8 +26,6 @@ $('#terms3').multiselect('destroy');
 
 delete termsArray[termsArray.length - 1];
 
-term2.add(new Option('Term'));
-term3.add(new Option('Term'));
 
 for (var i in termsArray) {
     term1.add(new Option(termsArray[i]));

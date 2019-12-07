@@ -14,7 +14,7 @@ if ($_REQUEST["terms1"] != "") $TArray[0] = $_REQUEST["terms1"];
 if ($_REQUEST["terms2"] != "") $TArray[1] = $_REQUEST["terms2"];
 if ($_REQUEST["terms3"] != "") $TArray[2] = $_REQUEST["terms3"];
 
-$GArray = array("KG01", "KG02", "GR01", "GR02", "GR03", "GR04", "GR05", "GR06", "GR07", "GR08", "GR09", "GR10", "GR11", "GR12");
+$GArray = array("GR01", "GR02", "GR03", "GR04", "GR05", "GR06", "GR07", "GR08", "GR09", "GR10", "GR11", "GR12");
 $GInedx = array_search($grade, $GArray);
 // echo $GInedx;
 
@@ -62,9 +62,12 @@ if ($grade != "Grade")
         for($i = 1; $i < count($QArray); $i++)
             $TopColumns .= ", " . $QArray[$i];
 
+        $GradeIndex = 0;
         $WhereArray = array();
         for($i = 0; $i < count($TArray); $i++) {
-            $GradeIndex = $GInedx + $i;
+            
+            if ($GradeIndex < 11)
+                $GradeIndex = $GInedx + $i;
             $WhereArray[$i] = " WHERE acd_code = '$YArray[$i]' AND $TArray[$i] AND grade = '$GArray[$GradeIndex]' ";
 
             if ($student != '' AND $student != 'None')
@@ -108,6 +111,17 @@ if ($grade != "Grade")
     // echo "SQL STATEMENT <br> " . $sql;
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
+    echo "<tr><th>Grade Progress</th>";
+            $i = $GInedx; $number = 1;
+            While ($number <= 3) {
+                echo "<th>$GArray[$i]</th>";
+                $number++;
+                if ($i < 11)
+                    $i++;
+            }
+            
+    echo "</tr>";        
+
         while ($row = $result->fetch_assoc()) {
             if ($row["Subject0"] != 'Total Mark') {
                 echo "<tr><td>" . $row["Subject0"] . "</td>";
