@@ -23,78 +23,65 @@ if (!isset($_SESSION['login'])) {
 
     </head>
 
-    <script type="text/javascript">      
-        $(function () {
-            $('#academic_year1').multiselect({includeSelectAllOption: false});
-            $('#academic_year2').multiselect({includeSelectAllOption: false});
-            $('#academic_year3').multiselect({includeSelectAllOption: false});
-            $('#academic_year4').multiselect({includeSelectAllOption: false});
-            $('#academic_year5').multiselect({includeSelectAllOption: false});
-
-            $('#term1').multiselect({includeSelectAllOption: false});
-            $('#term2').multiselect({includeSelectAllOption: false});
-            $('#term3').multiselect({includeSelectAllOption: false});
-            $('#term4').multiselect({includeSelectAllOption: false});
-            $('#term5').multiselect({includeSelectAllOption: false});
-
-            $('#grade').multiselect({includeSelectAllOption: false});
-            
-            $('#studentYear').multiselect({includeSelectAllOption: false});
-            $('#student').multiselect({includeSelectAllOption: false});
-            
-            $('#view').multiselect({includeSelectAllOption: false});
-
-
-        });
+<script type="text/javascript">      
+    $(function () {
+        $('#term1').multiselect({includeSelectAllOption: false});
+        $('#term2').multiselect({includeSelectAllOption: false});
+        $('#term3').multiselect({includeSelectAllOption: false});
+        $('#studentYear').multiselect({includeSelectAllOption: false});
+        $('#grade').multiselect({includeSelectAllOption: false});
+        $('#student').multiselect({includeSelectAllOption: false});
+        $('#view').multiselect({includeSelectAllOption: false});
+    });
         
-        function FillStudents() {
-            var selected_grade = $("#grade option:selected");
-            var selected_year = $("#studentYear option:selected");
+    function FillStudents() {
+        var selected_grade = $("#grade option:selected");
+        var selected_year = $("#studentYear option:selected");
 
-            var currentGrade = "";
-            selected_grade.each(function() {   
-                currentGrade = "(grade = '" + $(this).text() + "')";
-            });
+        var currentGrade = "";
+        selected_grade.each(function() {   
+            currentGrade = "(grade = '" + $(this).text() + "')";
+        });
 
-            var currentYear = "";
-            selected_year.each(function() {   
-                currentYear = "(acd_code = '" + $(this).text() + "')";
-            });
+        var currentYear = "";
+        selected_year.each(function() {   
+            currentYear = "(acd_code = '" + $(this).text() + "')";
+        });
 
-            if (currentYear != "" && currentYear != "Year") {
-                // Sending to Server
-                var httpSearch = new XMLHttpRequest();
-                httpSearch.onreadystatechange = function () {
-                    if (this.readyState === 4) {
-                    // document.getElementById('out').innerHTML = this.responseText;
-                        var str = this.responseText;
-                        namesArray = str.split("\t");
-                    }
-                };      
-                httpSearch.open("POST", "sqldb/studentsNames.php?grade=" + currentGrade + "&year=" + currentYear, false);
-                httpSearch.send();
+        if (currentYear != "" && currentYear != "Year") {
+            // Sending to Server
+            var httpSearch = new XMLHttpRequest();
+            httpSearch.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                // document.getElementById('out').innerHTML = this.responseText;
+                    var str = this.responseText;
+                    namesArray = str.split("\t");
+                }
+            };      
+            httpSearch.open("POST", "sqldb/studentsNames.php?grade=" + currentGrade + "&year=" + currentYear, false);
+            httpSearch.send();
 
-                var studentsDropDown = document.getElementById('studentsDropDown');
-                while (studentsDropDown.length > 0)
-                    studentsDropDown.remove(0);
+            var studentsDropDown = document.getElementById('studentsDropDown');
+            while (studentsDropDown.length > 0)
+                studentsDropDown.remove(0);
 
-                $('#studentsDropDown').multiselect('destroy');
+            $('#studentsDropDown').multiselect('destroy');
 
-                delete namesArray[namesArray.length - 1];
+            delete namesArray[namesArray.length - 1];
 
-                studentsDropDown.add(new Option('None'));
+            studentsDropDown.add(new Option('None'));
 
-                for (var i in namesArray)
-                    studentsDropDown.add(new Option(namesArray[i]));
-                
-                $(function () {
-                    $('#studentsDropDown').multiselect({
-                        includeSelectAllOption: true
-                    });
+            for (var i in namesArray)
+                studentsDropDown.add(new Option(namesArray[i]));
+            
+            $(function () {
+                $('#studentsDropDown').multiselect({
+                    includeSelectAllOption: true
                 });
+            });
 
-            }
         }
+    }
 
 function search() {
     var selected_grades = $("#grade option:selected");
@@ -700,89 +687,12 @@ function search() {
                 select.add(new Option(gradesArray[i]));
         </script>                
 
-        <!-- Initialize Academic Years    -->
-        <script type="text/javascript">
-            var AY1 = document.getElementById('academic_year1');
-            var AY2 = document.getElementById('academic_year2');
-            var AY3 = document.getElementById('academic_year3');
-            var AY4 = document.getElementById('academic_year4');
-            var AY5 = document.getElementById('academic_year5');
-            var SY  = document.getElementById('studentYear');
-
-            var httpyear = new XMLHttpRequest();
-            httpyear.onreadystatechange = function () {
-                if (this.readyState === 4) {
-                    var str = this.responseText;
-                    yearArray = str.split("\t");
-                }
-            };
-            httpyear.open("GET", "sqldb/years.php", false);
-            httpyear.send();  
-
-            $('#academic_year1').multiselect('destroy');
-            $('#academic_year2').multiselect('destroy');
-            $('#academic_year3').multiselect('destroy');
-            $('#academic_year4').multiselect('destroy');
-            $('#academic_year5').multiselect('destroy');
-            $('#studentYear').multiselect('destroy');
-
-            delete yearArray[yearArray.length - 1];
-
-            AY2.add(new Option('Year'));
-            AY3.add(new Option('Year'));
-            AY4.add(new Option('Year'));
-            AY5.add(new Option('Year'));
-            SY.add(new Option('Year'));
-
-            for (var i in yearArray) {
-                AY1.add(new Option(yearArray[i]));
-                AY2.add(new Option(yearArray[i]));
-                AY3.add(new Option(yearArray[i]));
-                AY4.add(new Option(yearArray[i]));
-                AY5.add(new Option(yearArray[i]));
-                SY.add(new Option(yearArray[i]));
-            };
-        </script>
-
-        <!-- Initialize Terms    -->
-        <script type="text/javascript">      
-                var term1 = document.getElementById('term1');
-                var term2 = document.getElementById('term2');
-                var term3 = document.getElementById('term3');
-                var term4 = document.getElementById('term4');
-                var term5 = document.getElementById('term5');
-
-                var httpTerms = new XMLHttpRequest();
-                httpTerms.onreadystatechange = function () {
-                    if (this.readyState === 4) {
-                        var str = this.responseText;
-                        termsArray = str.split("\t");
-                    }
-                };
-
-                httpTerms.open("GET", "sqldb/terms.php", false);
-                httpTerms.send();
-
-
-                
-                $('#terms1').multiselect('destroy');
-                $('#terms2').multiselect('destroy');
-                $('#terms3').multiselect('destroy');
-                $('#terms4').multiselect('destroy');
-                $('#terms5').multiselect('destroy');
-
-                delete termsArray[termsArray.length - 1];
-
-                term2.add(new Option('Term'));
-                term3.add(new Option('Term'));
-                term4.add(new Option('Term'));
-                term5.add(new Option('Term'));
-
-                for (var i in termsArray)
-                    term1.add(new Option(termsArray[i]));
-        </script>
+<!-- Initialize Years -->
+<script src="js/initYears.js"></script>
+<!-- Initialize Terms -->
+<script src="js/initTerms.js"></script>
         
-    </body>
-    </html>
+</body>
+</html>
 
 <?php } 
