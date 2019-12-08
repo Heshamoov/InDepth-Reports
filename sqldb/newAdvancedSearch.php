@@ -7,15 +7,14 @@ $grade = $_REQUEST["grades"];
 $view   = $_REQUEST["view"];
 $student = $_REQUEST["student"];
 
-$YArray = array("2016 / 2017", "2017 / 2018", "2018 / 2019");
+$YearsA = array("2016 / 2017", "2017 / 2018", "2018 / 2019");
 
-$TArray = array();
-if ($_REQUEST["terms1"] != "") $TArray[0] = $_REQUEST["terms1"];
-if ($_REQUEST["terms2"] != "") $TArray[1] = $_REQUEST["terms2"];
-if ($_REQUEST["terms3"] != "") $TArray[2] = $_REQUEST["terms3"];
+$TermsA = array();
+if ($_REQUEST["terms1"] != "") $TermsA[0] = $_REQUEST["terms1"];
+if ($_REQUEST["terms2"] != "") $TermsA[1] = $_REQUEST["terms2"];
+if ($_REQUEST["terms3"] != "") $TermsA[2] = $_REQUEST["terms3"];
 
-$GArray = array("GR01", "GR02", "GR03", "GR04", "GR05", "GR06", "GR07", "GR08", "GR09", "GR10", "GR11", "GR12");
-$GInedx = array_search($grade, $GArray);
+
 // echo $GInedx;
 
 // echo "Years <br>";
@@ -35,83 +34,73 @@ $GInedx = array_search($grade, $GArray);
 // echo "****************<br>";
 // echo $student;
 
-$columns = "
-SELECT subject_name, exam_name, acd_code, grade, section,
+
+
+
+$TopColumns = "
+SELECT
+t0.subject_name 'Subject0', t0.exam_name 'Exam0', t0.acd_code 'Year0', t0.grade 'Grade0', t0.MoreOrEqual65P '>=65%0', t0.MoreOrEqual75P '>=75%0', t0.exam_mark 'Mark0',
+t1.subject_name 'Subject1', t1.exam_name 'Exam1', t1.acd_code 'Year1', t1.grade 'Grade1', t1.MoreOrEqual65P '>=65%1', t1.MoreOrEqual75P '>=75%1', t1.exam_mark 'Mark1',
+t2.subject_name 'Subject2', t2.exam_name 'Exam2', t2.acd_code 'Year2', t2.grade 'Grade2', t2.MoreOrEqual65P '>=65%2', t2.MoreOrEqual75P '>=75%2', t2.exam_mark 'Mark2' 
+";
+
+$InnerColumns = "
+    SELECT subject_name, exam_name, acd_code, grade, section,
         COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) 'Total',
         COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL, 1, NULL)) AS 'MoreOrEqual65',
 
-ROUND(  COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL, 1, NULL)) / 
+        ROUND(COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL, 1, NULL)) / 
         COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100, 0) AS 'MoreOrEqual65P',
 
         COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) AS 'MoreOrEqual75',
-ROUND(  COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) / 
-        COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P', exam_mark 
-                
-FROM new_marks ";
+        ROUND(COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) / 
+        COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P', exam_mark         
+    FROM new_marks ";    
 
+$WhereA = array();
+    $GradesA = array("GR01", "GR02", "GR03", "GR04", "GR05", "GR06", "GR07", "GR08", "GR09", "GR10", "GR11", "GR12");
+    $GradeIndex = array_search($grade, $GradesA);
 
-$QArray = array();
-if ($grade != "Grade")
-{
-    for($i = 0; $i < count($TArray); $i++)        
-        $QArray[$i] = " t$i.subject_name 'Subject$i', t$i.exam_name 'Exam$i', t$i.acd_code 'Year$i', t$i.grade 'Grade$i', t$i.MoreOrEqual65P '>=65%$i', t$i.MoreOrEqual75P '>=75%$i', t$i.exam_mark 'Mark$i'";
+    for($i = 0; $i < count($TermsA); $i++) {
+        if ($student != 'Student')
+            $WhereA[$i] = " WHERE acd_code = '$YearsA[$i]' AND $TermsA[$i] AND student_name = '$student' ";
+        else
+            $WhereA[$i] = " WHERE acd_code = '$YearsA[$i]' AND $TermsA[$i] AND grade = '$GradesA[$GradeIndex]' ";
 
-    
-        $TopColumns = "SELECT " . $QArray[0];
-        
-        for($i = 1; $i < count($QArray); $i++)
-            $TopColumns .= ", " . $QArray[$i];
+        $WhereA[$i] .= " GROUP BY subject_name ORDER BY subject_name ";
 
-        $GradeIndex = 0;
-        $WhereArray = array();
-        for($i = 0; $i < count($TArray); $i++) {
-            
-            if ($GradeIndex < 11)
-                $GradeIndex = $GInedx + $i;
-
-            $WhereArray[$i] = " WHERE acd_code = '$YArray[$i]' AND $TArray[$i] AND grade = '$GArray[$GradeIndex]' ";
-
-            if ($student != '' AND $student != 'Student')
-                $WhereArray[$i] = " WHERE acd_code = '$YArray[$i]' AND $TArray[$i] AND student_name = '$student' ";
-            else
-                $WhereArray[$i] = " WHERE acd_code = '$YArray[$i]' AND $TArray[$i] AND grade = '$GArray[$GradeIndex]' ";
-
-        $WhereArray[$i] .= " GROUP BY subject_name ORDER BY subject_name ";
+        if ($GradeIndex < 11)
+            $GradeIndex++;
     }
 
-    $From  = " FROM ";
-    $Table = "($columns $WhereArray[0]) t0";
 
-    for ($i=1; $i < count($WhereArray); $i++) { 
-        $From .= "(";
-        $Table .= " Left JOIN ($columns $WhereArray[$i]) t$i ON (t0.subject_name = t$i.subject_name) )";
-    }
+$sql = $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
+                               LEFT JOIN ( " . $InnerColumns . "" . $WhereA[1] . ") t1 
+                               ON (t0.subject_name = t1.subject_name)
+                               LEFT JOIN ( " . $InnerColumns . "" . $WhereA[2] . ") t2 
+                               ON (t0.subject_name = t2.subject_name)
+                               )
+                               UNION " .
 
-    $sql = "$TopColumns $From $Table";
+        $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
+                               RIGHT JOIN ( " . $InnerColumns . "" . $WhereA[1] . ") t1 
+                               ON (t0.subject_name = t1.subject_name)
+                               LEFT JOIN ( " . $InnerColumns . "" . $WhereA[2] . ") t2 
+                               ON (t1.subject_name = t2.subject_name)
+                               )
+                               UNION " .
 
-    // $sql = $TopColumns .  " FROM (
-                                
-    //                                 (
-    //                                     (
-    //                                         (
-    //                                             ($columns $WhereArray[0]) t0
-    //                                         INNER JOIN 
-    //                                             ($columns $WhereArray[1]) t1 ON (t0.subject_name = t1.subject_name)
-    //                                         )
+        $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
+                               RIGHT JOIN ( " . $InnerColumns . "" . $WhereA[2] . ") t2 
+                               ON (t0.subject_name = t2.subject_name)
+                               LEFT JOIN ( " . $InnerColumns . "" . $WhereA[1] . ") t1 
+                               ON (t2.subject_name = t1.subject_name)
 
-    //                                     INNER JOIN
-    //                                         ($columns $WhereArray[2]) t2 ON (t0.subject_name = t2.subject_name)
-    //                                     )
-    //                                 INNER JOIN 
-    //                                     ($columns $WhereArray[3]) t3 ON (t0.subject_name = t3.subject_name)
-    //                                 )
-    //                             INNER JOIN 
-    //                                 ($columns $WhereArray[4]) t4 ON (t0.subject_name = t4.subject_name)
-    //                               );";
-                                    
+)
+";
 
 
-    // echo "SQL STATEMENT <br> " . $sql;
+    // echo $sql;
 
     $GradeHeader = true;
 
@@ -128,10 +117,22 @@ if ($grade != "Grade")
                 $GradeHeader = false;
             }
 
-            if ($row["Subject0"] != 'Total Mark') {
-                echo "<tr><td>" . $row["Subject0"] . "</td>";
+                $NewRow = false;
+                if ($row["Subject0"] != null and $row["Subject0"] != "Total Mark") {
+                    echo "<tr><td>" . $row["Subject0"] . "</td>";
+                    $NewRow = true;
+                }
+                elseif ($row["Subject1"] != null and $row["Subject1"] != "Total Mark") {
+                    echo "<tr><td>" . $row["Subject1"] . "</td>";
+                    $NewRow = true;
+                }
+                elseif ($row["Subject2"] != null and $row["Subject2"] != "Total Mark") {
+                    echo "<tr><td>" . $row["Subject2"] . "</td>";
+                    $NewRow = true;
+                }
 
-                for ($i=0; $i < count($TArray); $i++) {
+            if ($NewRow) {
+                for ($i=0; $i < count($TermsA); $i++) {
                     // $rowIndex++;
                     if ($student != 'Student') {
                         if ($view == 'Attainment')
@@ -144,7 +145,7 @@ if ($grade != "Grade")
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable</td>";
                             elseif ($row[">=65%$i"] == null)
-                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          No Marks</td>";    
+                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          - </td>";    
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>                Weak</td>";
                 
@@ -158,7 +159,7 @@ if ($grade != "Grade")
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>".$row[">=65%$i"]. "%</td>";
                             elseif ($row[">=65%$i"] == null)
-                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          No Marks</td>";    
+                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";    
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>".$row["Mark$i"]. "%</td>";
 
@@ -172,7 +173,7 @@ if ($grade != "Grade")
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable - ".$row[">=65%$i"]. "%</td>";
                             elseif ($row[">=65%$i"] == null)
-                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          No Marks</td>";    
+                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";    
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>                Weak - ".$row["Mark$i"]. "%</td>";
                     } //No Student Selected
@@ -187,7 +188,7 @@ if ($grade != "Grade")
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable</td>";
                             elseif ($row[">=65%$i"] == null)
-                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          No Marks</td>";
+                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>                Weak</td>";
                 
@@ -201,7 +202,7 @@ if ($grade != "Grade")
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>".$row[">=65%$i"]. "%</td>";
                             elseif ($row[">=65%$i"] == null)
-                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          No Marks</td>";
+                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>".$row[">=75%$i"]. "%</td>";
 
@@ -215,16 +216,15 @@ if ($grade != "Grade")
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable - ".$row[">=65%$i"]. "%</td>";
                             elseif ($row[">=65%$i"] == null)
-                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          No Marks</td>";    
+                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";    
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>                Weak - ".$row[">=75%$i"]. "%</td>";                
                     } // Student Selected
                 } // For
-            } // End Total Mark check
             echo "</tr>";
+        }// NewRow
         } // While
     }//Result>0
-}//Grade Not Empty
 else
     echo "Select Grade!";
 $conn->close();;
