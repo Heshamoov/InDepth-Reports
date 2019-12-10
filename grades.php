@@ -122,8 +122,8 @@ if (!isset($_SESSION['login'])) {
                 
                 document.getElementById('SubjectName').innerHTML = subject;
                 document.getElementById('ExamName').innerHTML = exam;
-                document.getElementById('cellSubject').innerHTML = subject;
-                document.getElementById('cellExam').innerHTML = exam;
+                // document.getElementById('cellSubject').innerHTML = subject;
+                // document.getElementById('cellExam').innerHTML = exam;
             }           
         }
     }
@@ -195,7 +195,7 @@ if (!isset($_SESSION['login'])) {
     <table id="SchoolInfo" class="w3-card">       <!--Header Table-->
         <thead>
             <tr>
-                <th class="w3-yellow">School Type:</th>
+                <th class="w3-yellow yellowcolor">School Type:</th>
                 <th colspan="3">
                     <input type='text' class='JText bigtext' value='American School' style='width: 100%; 
                                                   box-sizing: border-box;
@@ -334,10 +334,8 @@ if (!isset($_SESSION['login'])) {
         
         <tbody id="result"></tbody>
     </table>
-    
-    <br>
 
-    <table id="attainment" class="w3-card">
+   <!--  <table id="attainment" class="w3-card">
         <tr>
             <th class='w3-yellow'>Subject name</th>
             <th colspan=3 id="cellSubject"></th>
@@ -390,7 +388,7 @@ if (!isset($_SESSION['login'])) {
                 </select>
             </th>            
         </tr>
-    </table>;
+    </table>; -->
 
     <table id="InDepthDiv">
         <tr>
