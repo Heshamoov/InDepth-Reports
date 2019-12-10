@@ -217,7 +217,7 @@ if (!isset($_SESSION['login'])) {
                 </th>
                 <th class="w3-yellow">ID</th>
                 <th>
-                    <input type='text' class='JText bigtext' value='12345' style='width: 100%; 
+                    <input type='text' class='JText bigtext' value='9147' style='width: 100%; 
                                                   box-sizing: border-box;
                                                  -webkit-box-sizing:border-box;
                                                  -moz-box-sizing: border-box;
@@ -228,7 +228,7 @@ if (!isset($_SESSION['login'])) {
             <tr>
                 <th class="w3-yellow">Region</th>
                 <th>
-                    <input type='text' class='JText bigtext' value='Abu Dhabi - Al Ain' style='width: 100%; 
+                    <input type='text' class='JText bigtext' value='Al Ain' style='width: 100%; 
                                                   box-sizing: border-box;
                                                  -webkit-box-sizing:border-box;
                                                  -moz-box-sizing: border-box;
@@ -237,7 +237,7 @@ if (!isset($_SESSION['login'])) {
                 </th>
                 <th class="w3-yellow">Curriculum</th>
                 <th>
-                    <input type='text' class='JText bigtext' value='US Curriculum' style='width: 100%; 
+                    <input type='text' class='JText bigtext' value='American' style='width: 100%; 
                                                   box-sizing: border-box;
                                                  -webkit-box-sizing:border-box;
                                                  -moz-box-sizing: border-box;

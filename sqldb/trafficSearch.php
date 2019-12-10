@@ -310,7 +310,11 @@ LEFT JOIN
 // echo "SQL STATEMENT <br> " . $sql;
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
+    $subjectCount = 0;
+    $lastAVG = 0;
+    $allAVG = 0;
     while ($row = $result->fetch_assoc()) {
+            $subjectCount ++;
             echo   "<tr class='w3-hover-gray'>";
 
             echo   "<th class='VGrade'>" . $row['2017Grade']   . "</th>
@@ -331,20 +335,30 @@ if ($result->num_rows > 0) {
                     
             
 
-            $Above2019 = "Round( [" . $row['#2019Above'] . "/" . $row['2019Total'] . "] * 100) = " . $row['2019Above'] . "%";
-            $Minimum2019 = "Round( [" . $row['#2019Minimum'] . "/" . $row['2019Total'] . "] * 100) = " . $row['2019Minimum'] . "%";
-            
+$Above2019 = "Round( [" . $row['#2019Above'] . "/" . $row['2019Total'] . "] * 100) = " . $row['2019Above'] . "%";
+$Minimum2019 = "Round( [" . $row['#2019Minimum'] . "/" . $row['2019Total'] . "] * 100) = " . $row['2019Minimum'] . "%";
 
-            if ($row['2019Above'] >= 75 )
+            
+            if ($row['2019Above'] >= 75 ) {
                 echo "<td class='w3-text-green tip' title= '$Above2019'>Outstanding</td>";
-            elseif ($row['2019Above'] >= 61 AND $row['2019Above'] < 75) 
+                $lastAVG = $lastAVG + $row['2019Above'];
+            }
+            elseif ($row['2019Above'] >= 61 AND $row['2019Above'] < 75) {
                 echo "<td class='w3-container w3-text-light-green' title= '$Above2019'>Very Good</td>";
-            elseif ($row['2019Above'] >= 50 AND $row['2019Above'] < 61)
+                $lastAVG = $lastAVG + $row['2019Above'];
+            }
+            elseif ($row['2019Above'] >= 50 AND $row['2019Above'] < 61) {
                 echo "<td class='w3-container w3-text-blue' title= '$Above2019'>Good</td>";
-            elseif ($row['2019Minimum'] >= 75)
+                $lastAVG = $lastAVG + $row['2019Above'];
+            }
+            elseif ($row['2019Minimum'] >= 75) {
                 echo "<td class='w3-container w3-text-orange' title= '$Minimum2019'>Acceptable</td>";
-            else
-                echo "<td class='w3-container' title= '$Minimum2019'>Weak</td>";
+                $lastAVG = $lastAVG + $row['2019Above'];
+            }
+            else {
+                echo "<td class='w3-container w3-text-orange' title= '$Minimum2019'>Weak</td>";
+                $lastAVG = $lastAVG + $row['2019Above'];
+            }
                 
             $trend = round(($row['#2017Above'] + $row['#2018Above'] + $row['#2019Above']) / ($row['2017Total'] + $row['2018Total'] + $row['2019Total']) * 100);
             
@@ -360,19 +374,50 @@ if ($result->num_rows > 0) {
 
             $sumdtotal = "Round( [" . $sumresult . "/" . $totalresult . "] * 100) = " . $sumDividTotal . "%";
 
-            if ($trend >= 75 )
+            if ($trend >= 75 ) {
                 echo "<td class='w3-text-green' title='$sumtotal $sumdtotal'>Outstanding</td>";
-            elseif ($trend >= 61 AND $row['2019Above'] < 75) 
+                $allAVG = $allAVG + $trend;
+            }
+            elseif ($trend >= 61 AND $trend < 75) {
                 echo "<td class='w3-container w3-text-light-green' title='$sumtotal $sumdtotal'>Very Good</td>";
-            elseif ($trend >= 50 AND $row['2019Above'] < 61)
+                $allAVG = $allAVG + $trend;
+            }
+            elseif ($trend >= 50 AND $trend < 61) {
                 echo "<td class='w3-container w3-text-blue' title='$sumtotal $sumdtotal'>Good</td>";
-            elseif ($trend >= 75)
-                echo "<td class='w3-container w3-text-orange' title='$sumtotal $sumdtotal'>Acceptable</td>";
-            else
-                echo "<td class='w3-container' title='$sumtotal $sumdtotal'>Weak</td>";
+                $allAVG = $allAVG + $trend;
+            }
+            else {
+                echo "<td class='w3-container w3-text-orange' title='$sumtotal $sumdtotal'>Weak</td>";
+                $allAVG = $allAVG + $trend;
+            }
+            // else
+            //     echo "<td class='w3-container' title='$sumtotal $sumdtotal'>Weak</td>";
             echo "</tr>";
     }
-    echo "<tr><th class='w3-yellow' colspan=13>Overall judjment</th>
-              <td></td><td></td></tr>";
+    echo "<tr><th class='w3-yellow' colspan=13>Overall judjment</th>";
+
+    // echo $lastAVG .'/' . $subjectCount;
+    $lastAVG = ROUND(($lastAVG/$subjectCount),0);
+    // echo $lastAVG;
+
+    if ($lastAVG >= 75 )
+        echo "<td class='w3-text-green'>Outstanding</td>";
+    elseif ($lastAVG >= 61 AND $lastAVG < 75) 
+        echo "<td class='w3-container w3-text-light-green'>Very Good</td>";
+    elseif ($lastAVG >= 50 AND $lastAVG < 61)
+        echo "<td class='w3-container w3-text-blue'>Good</td>";
+    else
+        echo "<td class='w3-container w3-text-orange'>Weak</td>";
+
+    $allAVG = ROUND(($allAVG/$subjectCount),0);
+    if ($allAVG >= 75 )
+        echo "<td class='w3-text-green'>Outstanding</td>";
+    elseif ($allAVG >= 61 AND $allAVG < 75) 
+        echo "<td class='w3-container w3-text-light-green'>Very Good</td>";
+    elseif ($allAVG >= 50 AND $allAVG < 61)
+        echo "<td class='w3-container w3-text-blue'>Good</td>";
+    else
+        echo "<td class='w3-container w3-text-orange'>Weak</td>";
+    echo "</tr>";
 }	
 $conn->close();
