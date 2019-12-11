@@ -16,7 +16,7 @@ if ($_REQUEST["Term1"] != "") $TermsA[0] = $_REQUEST["Term1"];
 if ($_REQUEST["Term2"] != "") $TermsA[1] = $_REQUEST["Term2"];
 if ($_REQUEST["Term3"] != "") $TermsA[2] = $_REQUEST["Term3"];
 
-
+// echo $nationality;
 // echo $GInedx;
 
 // echo "Years <br>";
@@ -76,9 +76,9 @@ for($i = 0; $i<3; $i++) {
     elseif ($gender == 'Girls')
         $WhereA[$i] .= " AND gender = 'Female' ";
 
-    if ($nationality = 'Citizens')
+    if ($nationality == 'Citizens')
         $WhereA[$i] .= " AND nationality = 'U.A.E' ";
-    elseif ($nationality = 'Expacts')
+    elseif ($nationality =='Expacts')
         $WhereA[$i] .= " AND nationality != 'U.A.E' ";
 
     $WhereA[$i] .= " GROUP BY subject_name ORDER BY subject_name ";
