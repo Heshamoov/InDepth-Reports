@@ -4,8 +4,8 @@
         <link rel="icon" type="image/png" href="images/sanawbar.jpg" />
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="css/resultstyle.css">
-        <link rel="stylesheet" href="css/print.min.css">
+        <!-- <link rel="stylesheet" href="css/resultstyle.css"> -->
+        <!-- <link rel="stylesheet" href="css/print.min.css"> -->
         <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">

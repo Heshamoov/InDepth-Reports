@@ -3,16 +3,18 @@
 include ('../config/dbConfig.php');
 
 
-$grade = $_REQUEST["grades"];
-$view   = $_REQUEST["view"];
-$student = $_REQUEST["student"];
+$grade = $_REQUEST["Grade"];
+$gender = $_REQUEST["Gender"];
+$nationality = $_REQUEST["Nationality"];
+$student = $_REQUEST["Student"];
+$view   = $_REQUEST["View"];
 
 $YearsA = array("2016 / 2017", "2017 / 2018", "2018 / 2019");
 
 $TermsA = array();
-if ($_REQUEST["terms1"] != "") $TermsA[0] = $_REQUEST["terms1"];
-if ($_REQUEST["terms2"] != "") $TermsA[1] = $_REQUEST["terms2"];
-if ($_REQUEST["terms3"] != "") $TermsA[2] = $_REQUEST["terms3"];
+if ($_REQUEST["Term1"] != "") $TermsA[0] = $_REQUEST["Term1"];
+if ($_REQUEST["Term2"] != "") $TermsA[1] = $_REQUEST["Term2"];
+if ($_REQUEST["Term3"] != "") $TermsA[2] = $_REQUEST["Term3"];
 
 
 // echo $GInedx;
@@ -33,15 +35,14 @@ if ($_REQUEST["terms3"] != "") $TermsA[2] = $_REQUEST["terms3"];
 // echo "Count: " . count($TArray) . "<br>";
 // echo "****************<br>";
 // echo $student;
-
-
+// echo $grade . "\n" . $gender . "\n" . $nationality . "\n" . $student . "\n" . $view . "\n" . $TermsA[0] . "\n" . $TermsA[1] . "\n" . $TermsA[2];
 
 
 $TopColumns = "
 SELECT
-t0.subject_name 'Subject0', t0.exam_name 'Exam0', t0.acd_code 'Year0', t0.grade 'Grade0', t0.MoreOrEqual65P '>=65%0', t0.MoreOrEqual75P '>=75%0', t0.exam_mark 'Mark0',
-t1.subject_name 'Subject1', t1.exam_name 'Exam1', t1.acd_code 'Year1', t1.grade 'Grade1', t1.MoreOrEqual65P '>=65%1', t1.MoreOrEqual75P '>=75%1', t1.exam_mark 'Mark1',
-t2.subject_name 'Subject2', t2.exam_name 'Exam2', t2.acd_code 'Year2', t2.grade 'Grade2', t2.MoreOrEqual65P '>=65%2', t2.MoreOrEqual75P '>=75%2', t2.exam_mark 'Mark2' 
+t0.subject_name 'Subject0', t0.exam_name 'Exam0', t0.acd_code 'Year0', t0.grade 'Grade0', t0.Total 'Total0', t0.MoreOrEqual65P '>=65%0', t0.MoreOrEqual75P '>=75%0', t0.exam_mark 'Mark0',
+t1.subject_name 'Subject1', t1.exam_name 'Exam1', t1.acd_code 'Year1', t1.grade 'Grade1', t1.Total 'Total1', t1.MoreOrEqual65P '>=65%1', t1.MoreOrEqual75P '>=75%1', t1.exam_mark 'Mark1',
+t2.subject_name 'Subject2', t2.exam_name 'Exam2', t2.acd_code 'Year2', t2.grade 'Grade2', t2.Total 'Total2', t2.MoreOrEqual65P '>=65%2', t2.MoreOrEqual75P '>=75%2', t2.exam_mark 'Mark2' 
 ";
 
 $InnerColumns = "
@@ -58,20 +59,33 @@ $InnerColumns = "
     FROM new_marks ";    
 
 $WhereA = array();
-    $GradesA = array("GR01", "GR02", "GR03", "GR04", "GR05", "GR06", "GR07", "GR08", "GR09", "GR10", "GR11", "GR12");
-    $GradeIndex = array_search($grade, $GradesA);
+$GradesA = array("GR01", "GR02", "GR03", "GR04", "GR05", "GR06", "GR07", "GR08", "GR09", "GR10", "GR11", "GR12");
+$GradeIndex = array_search($grade, $GradesA);
 
-    for($i = 0; $i < count($TermsA); $i++) {
-        if ($student != 'Student')
-            $WhereA[$i] = " WHERE acd_code = '$YearsA[$i]' AND $TermsA[$i] AND student_name = '$student' ";
-        else
-            $WhereA[$i] = " WHERE acd_code = '$YearsA[$i]' AND $TermsA[$i] AND grade = '$GradesA[$GradeIndex]' ";
+for($i = 0; $i<3; $i++) {
+    
+    $WhereA[$i] = "WHERE acd_code = '$YearsA[$i]' AND (REPLACE(exam_name, ' ','') = REPLACE('$TermsA[$i]', ' ', '')) ";
+    
+    if ($student != 'Student' and $student != '')    
+        $WhereA[$i] .= " AND student_name = '$student' ";
+    else
+        $WhereA[$i] .= " AND grade = '$GradesA[$GradeIndex]' ";
+    
+    if ($gender == 'Boys')
+        $WhereA[$i] .= " AND gender = 'Male' ";
+    elseif ($gender == 'Girls')
+        $WhereA[$i] .= " AND gender = 'Female' ";
 
-        $WhereA[$i] .= " GROUP BY subject_name ORDER BY subject_name ";
+    if ($nationality = 'Citizens')
+        $WhereA[$i] .= " AND nationality = 'U.A.E' ";
+    elseif ($nationality = 'Expacts')
+        $WhereA[$i] .= " AND nationality != 'U.A.E' ";
 
-        if ($GradeIndex < 11)
-            $GradeIndex++;
-    }
+    $WhereA[$i] .= " GROUP BY subject_name ORDER BY subject_name ";
+
+    if ($GradeIndex < 11)
+        $GradeIndex++;
+}
 
 
 $sql = $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
@@ -134,7 +148,7 @@ $sql = $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
             if ($NewRow) {
                 for ($i=0; $i < count($TermsA); $i++) {
                     // $rowIndex++;
-                    if ($student != 'Student') {
+                    if ($student != 'Student' AND $student != '') {
                         if ($view == 'Attainment')
                             if ($row["Mark$i"] >= 75)                                    // Outstanding
                                 echo "<td class='w3-container w3-text-green w3-hover-green'>           Outstanding</td>";
@@ -144,8 +158,8 @@ $sql = $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
                                 echo "<td class='w3-container w3-text-lime w3-hover-lime'>              Good</td>";
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable</td>";
-                            elseif ($row[">=65%$i"] == null)
-                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          - </td>";    
+                            elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0)
+                                echo "<td class='w3-container w3-text-gray w3-hover-gray'>          - </td>";   
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>                Weak</td>";
                 
@@ -158,7 +172,7 @@ $sql = $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
                                 echo "<td class='w3-container w3-text-lime w3-hover-lime'>".$row["Mark$i"]. "%</td>";
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>".$row[">=65%$i"]. "%</td>";
-                            elseif ($row[">=65%$i"] == null)
+                            elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0)
                                 echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";    
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>".$row["Mark$i"]. "%</td>";
@@ -172,7 +186,7 @@ $sql = $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
                                 echo "<td class='w3-container w3-text-lime w3-hover-lime'>              Good - ".$row["Mark$i"]. "%</td>";
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable - ".$row[">=65%$i"]. "%</td>";
-                            elseif ($row[">=65%$i"] == null)
+                            elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0)
                                 echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";    
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>                Weak - ".$row["Mark$i"]. "%</td>";
@@ -187,7 +201,7 @@ $sql = $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
                                 echo "<td class='w3-container w3-text-lime w3-hover-lime'>              Good</td>";
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable</td>";
-                            elseif ($row[">=65%$i"] == null)
+                            elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0)
                                 echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>                Weak</td>";
@@ -201,7 +215,7 @@ $sql = $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
                                 echo "<td class='w3-container w3-text-lime w3-hover-lime'>".$row[">=75%$i"]. "%</td>";
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>".$row[">=65%$i"]. "%</td>";
-                            elseif ($row[">=65%$i"] == null)
+                            elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0)
                                 echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>".$row[">=75%$i"]. "%</td>";
@@ -215,7 +229,7 @@ $sql = $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
                                 echo "<td class='w3-container w3-text-lime w3-hover-lime'>              Good - ".$row[">=75%$i"]. "%</td>";
                             elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
                                 echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable - ".$row[">=65%$i"]. "%</td>";
-                            elseif ($row[">=65%$i"] == null)
+                            elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0)
                                 echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";    
                             else                                                          // Weak
                                 echo "<td class='w3-container w3-text-red w3-hover-red'>                Weak - ".$row[">=75%$i"]. "%</td>";                
