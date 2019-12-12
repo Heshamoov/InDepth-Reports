@@ -36,54 +36,40 @@ if (!isset($_SESSION['login'])) {
         $('#term3').multiselect({includeSelectAllOption: false});
     });
         
-// function FillStudents() {
-//     var selected_grade = $("#grade option:selected");
-//     var selected_year = $("#year option:selected");
+function FillStudents() {
+    let Grade = $("#grade option:selected").text();
 
-//     var currentGrade = "";
-//     selected_grade.each(function() {   
-//         currentGrade = "(grade = '" + $(this).text() + "')";
-//     });
+    var httpSearch = new XMLHttpRequest();
+    httpSearch.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            // document.getElementById('debug').innerHTML = this.responseText;
+            var str = this.responseText;
+            namesArray = str.split("\t");
+        }
+    };      
+    httpSearch.open("POST", "sqldb/studentsNames.php?grade=" + Grade, false);
+    httpSearch.send();
 
-//     var currentYear = "";
-//     selected_year.each(function() {   
-//         currentYear = "(acd_code = '" + $(this).text() + "')";
-//     });
+    var studentsDropDown = document.getElementById('student');
+    while (studentsDropDown.length > 0)
+        studentsDropDown.remove(0);
 
-//     if (currentYear != "" && currentYear != "Year") {
-//         // Sending to Server
-//         var httpSearch = new XMLHttpRequest();
-//         httpSearch.onreadystatechange = function () {
-//             if (this.readyState === 4) {
-//             // document.getElementById('out').innerHTML = this.responseText;
-//                 var str = this.responseText;
-//                 namesArray = str.split("\t");
-//             }
-//         };      
-//         httpSearch.open("POST", "sqldb/studentsNames.php?grade=" + currentGrade + "&year=" + currentYear, false);
-//         httpSearch.send();
+    $('#student').multiselect('destroy');
 
-//         var studentsDropDown = document.getElementById('studentsDropDown');
-//         while (studentsDropDown.length > 0)
-//             studentsDropDown.remove(0);
+    delete namesArray[namesArray.length - 1];
 
-//         $('#studentsDropDown').multiselect('destroy');
+    studentsDropDown.add(new Option('Student'));
 
-//         delete namesArray[namesArray.length - 1];
+    for (var i in namesArray)
+        studentsDropDown.add(new Option(namesArray[i]));
+    
+    $(function () {
+        $('#student').multiselect({
+            includeSelectAllOption: true
+        });
+    });
 
-//         studentsDropDown.add(new Option('Student'));
-
-//         for (var i in namesArray)
-//             studentsDropDown.add(new Option(namesArray[i]));
-        
-//         $(function () {
-//             $('#studentsDropDown').multiselect({
-//                 includeSelectAllOption: true
-//             });
-//         });
-
-//     }
-// }
+}
 
 function search() {
     let Grade = $("#grade option:selected").text();
@@ -98,10 +84,14 @@ function search() {
     let Title = "";
 
     if (Grade != "Grade")
-        Title = Grade + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Nationality + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Gender;
-
-    if (Student != "" && Student != "Student" )
+        Title = Grade;
+    if (Student == "" || Student == "Student" )
+        Title = Title + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Nationality + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Gender;
+    else
         Title = Title + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Student;
+         
+
+    
 
     document.getElementById('TableTitle').innerHTML = Title;
     
@@ -146,7 +136,7 @@ function search() {
             <select style="float:left;" id="studentYear"></select>
         </th>          
         <th>
-            <select id="grade" onchange="search()"></select>
+            <select id="grade" onchange="search(), FillStudents()"></select>
         </th>
         <th>
             <select id="nationality" onchange="search()">
