@@ -21,44 +21,35 @@ if (!isset($_SESSION['login'])) {
 
 <script type="text/javascript">      
     $(function () {
-        $('#Year').multiselect({includeSelectAllOption: false});            
         $('#view').multiselect({includeSelectAllOption: false});
+        $('#year1').multiselect({includeSelectAllOption: false});
+        $('#year2').multiselect({includeSelectAllOption: false});
+        $('#year3').multiselect({includeSelectAllOption: false});
+        $('#cycle1').multiselect({includeSelectAllOption: false});
+        $('#cycle2').multiselect({includeSelectAllOption: false});
+        $('#cycle3').multiselect({includeSelectAllOption: false});
     });
 </script>
 
 <script type="text/javascript">
     function Cycle() {
-        var selected_year = $("#Year option:selected");
-        var year = "";
-        selected_year.each(function() {   
-            year = $(this).text();
-        });
+        let view = $("#view option:selected").text();
+        let year1 = $("#year1 option:selected").text();
+        let year2 = $("#year2 option:selected").text();
+        let year3 = $("#year3 option:selected").text();
+        let cycle1 = $("#cycle1 option:selected").text();
+        let cycle2 = $("#cycle2 option:selected").text();
+        let cycle3 = $("#cycle3 option:selected").text();
 
-        if (year == "Year")
-            alert("Select a Year");
-        else
-        {
-            var httpCycle = new XMLHttpRequest();
-            httpCycle.onreadystatechange = function () {
-                if (this.readyState === 4) {
-                    document.getElementById("useroptions").innerHTML = this.responseText;
-                }
-            };
-        
-            var selected_year = $("#Year option:selected");
-            var year = "";
-                selected_year.each(function() {   
-                    year = $(this).text();
-                });
+        var httpCycle = new XMLHttpRequest();
+        httpCycle.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                document.getElementById("useroptions").innerHTML = this.responseText;
+            }
+        };
 
-            var selected_view = $("#view option:selected");
-            var currentView = ""; 
-            selected_view.each(function()
-                {currentView = $(this).text();});
-
-            httpCycle.open("POST", "sqldb/CycleSearch.php?year=" + year + "&view=" + currentView, false);
-            httpCycle.send();
-        }
+httpCycle.open("POST", "sqldb/CycleSearch.php?year1=" + year1 + "&year2=" + year2 + "&year3=" + year3 + "&cycle1=" + cycle1 + "&cycle2=" + cycle2 + "&cycle3=" + cycle3 + "&view=" + view, false);
+httpCycle.send();
     }
 </script>
 
@@ -82,75 +73,114 @@ if (!isset($_SESSION['login'])) {
                 </div>
               </div>
             </div>            
+        </th>         
+        <th>
+            <button class="w3-btn w3-white w3-border w3-round-large w3-hover-green" onclick="Cycle()">Cycle Analysis</button>                    
+        </th>            
+        <th>
+            <select id="view" onchange="Cycle()">
+                <option>Attainment</option>
+                <option>Percentage</option>
+                <option>Attainment - Percentage</option>
+            </select>
         </th>
+        <th>
+            <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
+                    onclick="printJS({
+                            documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
+                            printable: 'divprint',
+                            type: 'html',
+                            showModal:true,
+                            ignoreElements: ['pp'],
+                            // targetStyles: ['*']
+                            css: 'styles/advanced.css'
+                            })">
+            </button>                    
+        </th>            
+    </table>
+</div>
+
+<div id="divprint">
+    <table id="PageTitle" style="margin: auto; width: 100%;">
+        <tr>
+            <th id="SchoolLogoTH" style="text-align: center;" colspan="2">
+                <img id="SchoolLogo" src="images/sanawbar.jpg" style="width: 5%;">
+            </th>
+        </tr>
+        <tr>
+            <th id="SchoolName" style="text-align: center;" colspan="2">
+                Al Sanawbar School
+            </th>
+        </tr>
+        <tr><br><br></tr>
+        <tr>
+            <th id="Performance">
+                Performance Indicator levels: Summary
+            </th>
+            <th id="Attainment" style="text-align: right;">
+                Grade/Student Progress Analysis
+            </th>
+        </tr>
+    </table> 
+
+    <table id="useroptions" class="w3-card">
+        <thead>
+            <tr>
+                <th id="TableTitle" colspan="6" class="w3-center"></th>
+            </tr>
+        </thead>
+
+        <tr class="dropdownTR">
+            <th>Year</th>
+            <th><select id="year1" onchange="Cycle()"></select></th>
+            <th><select id="year2" onchange="Cycle()"></select></th>
+            <th><select id="year3" onchange="Cycle()"></select></th>
+        </tr>
+
+        <tr>
+            <th>Cycle</th>
             <th>
-                <select id="Year"></select> <!-- Year DropDown -->                    
-            </th>            
-            <th>
-                <button class="w3-btn w3-white w3-border w3-round-large w3-hover-green" onclick="Cycle()">Cycle Analysis</button>                    
-            </th>            
-            <th>
-                <select id="view" onchange="Cycle()">
-                    <option>Attainment</option>
-                    <option>Percentage</option>
-                    <option>Attainment - Percentage</option>
+                <select id="cycle1" onchange="search()">
+                    <option>Cycle 1</option>
+                    <option>Cycle 2</option>
+                    <option>Cycle 3</option>
                 </select>
+                <label id="T1L"></label>
             </th>
             <th>
-                <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
-                        onclick="printJS({
-                                documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
-                                printable: 'divprint',
-                                type: 'html',
-                                showModal:true,
-                                ignoreElements: ['pp'],
-                                // targetStyles: ['*']
-                                css: 'styles/advanced.css'
-                                })">
-                </button>                    
-            </th>            
-        </table>
-    </div>
-
-    <div id="divprint">
+                <select id="cycle2" onchange="search()">
+                    <option>Cycle 1</option>
+                    <option>Cycle 2</option>
+                    <option>Cycle 3</option>
+                </select>                
+                <label id="T2L"></label>
+            </th>
+            <th>
+                <select id="cycle3" onchange="search()">
+                    <option>Cycle 1</option>
+                    <option>Cycle 2</option>
+                    <option>Cycle 3</option>
+                </select>
+                <label id="T3L"></label>
+            </th>
+        </tr>
         
-        <table id="PageTitle">
-            <tr>
-                <th id="SchoolLogoTH" colspan="2">
-                    <img id="SchoolLogo" src="images/sanawbar.jpg">
-                </th>
-            </tr>
-            <tr>
-                <th id="SchoolName" colspan="2">
-                    Al Sanawbar School
-                </th>
-            </tr>
-            <tr><br></tr>
-            <tr>
-                <th id="Performance">
-                    Performance Indicator levels: Summary
-                </th>
-                <th id="Attainment">
-                    Attainment Progress Analysis
-                </th>
-            </tr>
-        </table> 
+        <tbody id="results"> </tbody>
+    </table>
 
-        <table id="useroptions" class="w3-table-all w3-card"></table>
-
-        <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
-            <tr>
-                <td id="InDepthTD" style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
-            </tr>
-        </table>
-        <br><br><br>
-    </div>
+    <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
+        <tr>
+            <td id="InDepthTD" style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
+        </tr>
+    </table>
 </div>
 
 
 <!-- Initialize Academic Years    -->
 <script type="text/javascript">
-    var SY  = document.getElementById('Year');
+    var year1  = document.getElementById('year1');
+    var year2  = document.getElementById('year2');
+    var year3  = document.getElementById('year3');
 
     var httpyear = new XMLHttpRequest();
     httpyear.onreadystatechange = function () {
@@ -162,14 +192,18 @@ if (!isset($_SESSION['login'])) {
     httpyear.open("GET", "sqldb/years.php", false);
     httpyear.send();  
 
-    $('#Year').multiselect('destroy');
+    $('#year1').multiselect('destroy');
+    $('#year2').multiselect('destroy');
+    $('#year3').multiselect('destroy');
 
     delete yearArray[yearArray.length - 1];
 
-    SY.add(new Option('Year'));
+    // SY.add(new Option('Year'));
 
     for (var i in yearArray) {
-        SY.add(new Option(yearArray[i]));
+        year1.add(new Option(yearArray[i]));
+        year2.add(new Option(yearArray[i]));
+        year3.add(new Option(yearArray[i]));
     };
 </script>
 

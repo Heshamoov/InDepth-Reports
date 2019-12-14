@@ -2,8 +2,16 @@
 
 include ('../config/dbConfig.php');
 
-$year = $_REQUEST["year"];
 $view   = $_REQUEST["view"];
+$year1 = $_REQUEST["year1"];
+$year2 = $_REQUEST["year2"];
+$year3 = $_REQUEST["year3"];
+$cycle1 = $_REQUEST["cycle1"];
+$cycle2 = $_REQUEST["cycle2"];
+$cycle3 = $_REQUEST["cycle3"];
+
+echo $view . "<br>" . $year1 . "<br>" . $year2 . "<br>" . $year3 . "<br>" . $cycle1 . "<br>" . $cycle2 . "<br>" . $cycle3;
+
 // echo $year;
 
 $sql = "
