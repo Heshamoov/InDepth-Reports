@@ -28,6 +28,7 @@ if (!isset($_SESSION['login'])) {
         $('#cycle1').multiselect({includeSelectAllOption: false});
         $('#cycle2').multiselect({includeSelectAllOption: false});
         $('#cycle3').multiselect({includeSelectAllOption: false});
+        $('#trend').multiselect({includeSelectAllOption: false});
     });
 </script>
 
@@ -40,6 +41,12 @@ if (!isset($_SESSION['login'])) {
         let cycle1 = $("#cycle1 option:selected").text();
         let cycle2 = $("#cycle2 option:selected").text();
         let cycle3 = $("#cycle3 option:selected").text();
+        let trend = $("#trend option:selected").text();
+
+        if (trend == 'Details')
+            document.getElementById('trendheader').innerHTML = 'Trend';
+        else
+            document.getElementById('trendheader').innerHTML = '';
 
         var httpCycle = new XMLHttpRequest();
         httpCycle.onreadystatechange = function () {
@@ -48,7 +55,7 @@ if (!isset($_SESSION['login'])) {
             }
         };
 
-httpCycle.open("POST", "sqldb/CycleSearch.php?year1=" + year1 + "&year2=" + year2 + "&year3=" + year3 + "&cycle1=" + cycle1 + "&cycle2=" + cycle2 + "&cycle3=" + cycle3 + "&view=" + view, false);
+httpCycle.open("POST", "sqldb/CycleSearch.php?year1=" + year1 + "&year2=" + year2 + "&year3=" + year3 + "&cycle1=" + cycle1 + "&cycle2=" + cycle2 + "&cycle3=" + cycle3 + "&view=" + view + "&trend=" + trend, false);
 httpCycle.send();
     }
 </script>
@@ -83,6 +90,12 @@ httpCycle.send();
                 <option>Attainment</option>
                 <option>Percentage</option>
                 <option>Attainment - Percentage</option>
+            </select>
+        </th>
+        <th>
+            <select class="dropdown" id="trend" onchange="Cycle()">
+                <option>Trend</option>
+                <option>Details</option>
             </select>
         </th>
         <th>
@@ -168,8 +181,8 @@ httpCycle.send();
                 </select>
                 <label id="c3l"></label>
             </th>
+            <th id="trendheader"></th>
         </tr>
-        
         <tbody id="results"> </tbody>
     </table>
 

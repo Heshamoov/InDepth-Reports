@@ -231,7 +231,7 @@ FROM (
 
             COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) AS 'MoreOrEqual75',
             ROUND(COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P',
-            AVG(exam_mark) AS 'AVG'
+            TRUNCATE(AVG(exam_mark),0) AS 'AVG'
 
         
         FROM new_marks
