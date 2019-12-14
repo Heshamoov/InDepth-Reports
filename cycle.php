@@ -58,7 +58,8 @@ httpCycle.send();
         <?php include('navbar.php'); ?>
         <script>document.getElementById("navAdvanced").style.backgroundColor = '#009688';</script>
     </div>
-    <label id="out"></label>                            <!-- Debug Console -->
+<!-- Debug Console -->
+<!-- <div id="debug"></div>                             -->
     
     <div class="w3-container">   <!-- DropDowns-->
         <table class="w3-table-all w3-card w3-gray">
@@ -85,7 +86,8 @@ httpCycle.send();
             </select>
         </th>
         <th>
-            <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
+            <button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' onclick="PrintTable()"></button>
+            <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
                     onclick="printJS({
                             documentTitle: 'Attainment Progress Analysis - Al Sanawbar School',
                             printable: 'divprint',
@@ -93,7 +95,7 @@ httpCycle.send();
                             showModal:true,
                             ignoreElements: ['pp'],
                             // targetStyles: ['*']
-                            css: 'styles/advanced.css'
+                            css: 'styles/cyclePDF.css'
                             })">
             </button>                    
         </th>            
@@ -124,17 +126,20 @@ httpCycle.send();
     </table> 
 
     <table id="useroptions" class="w3-card">
-        <thead>
-            <tr>
-                <th id="TableTitle" colspan="6" class="w3-center"></th>
-            </tr>
-        </thead>
-
         <tr class="dropdownTR">
             <th>Year</th>
-            <th><select id="year1" onchange="Cycle()"></select></th>
-            <th><select id="year2" onchange="Cycle()"></select></th>
-            <th><select id="year3" onchange="Cycle()"></select></th>
+            <th>
+                <select id="year1"></select>
+                <label id="y1l"></label>
+            </th>
+            <th>
+                <select id="year2"></select>
+                <label id="y2l"></label>
+            </th>
+            <th>
+                <select id="year3"></select>
+                <label id="y3l"></label>
+            </th>
         </tr>
 
         <tr>
@@ -145,7 +150,7 @@ httpCycle.send();
                     <option>Cycle 2</option>
                     <option>Cycle 3</option>
                 </select>
-                <label id="T1L"></label>
+                <label id="c1l"></label>
             </th>
             <th>
                 <select id="cycle2">
@@ -153,7 +158,7 @@ httpCycle.send();
                     <option>Cycle 2</option>
                     <option>Cycle 3</option>
                 </select>                
-                <label id="T2L"></label>
+                <label id="c2l"></label>
             </th>
             <th>
                 <select id="cycle3">
@@ -161,7 +166,7 @@ httpCycle.send();
                     <option>Cycle 2</option>
                     <option>Cycle 3</option>
                 </select>
-                <label id="T3L"></label>
+                <label id="c3l"></label>
             </th>
         </tr>
         
@@ -207,6 +212,100 @@ httpCycle.send();
     };
 </script>
 
+<script type="text/javascript">
+    function PrintTable () {
+        document.getElementById('y1l').innerHTML = $('#year1').children('option:selected').text();
+        document.getElementById('y2l').innerHTML = $('#year2').children('option:selected').text();
+        document.getElementById('y3l').innerHTML = $('#year3').children('option:selected').text();
+
+        document.getElementById('c1l').innerHTML = $('#cycle1').children('option:selected').text();        
+        document.getElementById('c2l').innerHTML = $('#cycle2').children('option:selected').text();        
+        document.getElementById('c3l').innerHTML = $('#cycle3').children('option:selected').text();        
+
+        // var year1d = document.getElementById('year1');
+        // var year2d = document.getElementById('year2');
+        // var year3d = document.getElementById('year3');
+        // while (year1d.length > 0) year1d.remove(0);
+        // while (year2d.length > 0) year2d.remove(0);
+        // while (year3d.length > 0) year3d.remove(0);
+
+        // var cycle1d = document.getElementById('cycle1');
+        // var cycle1d = document.getElementById('cycle2');
+        // var cycle1d = document.getElementById('cycle3');
+        //  while (cycle1d.length > 0) cycle1d.remove(0);
+        //  while (cycle2d.length > 0) cycle2d.remove(0);
+        //  while (cycle3d.length > 0) cycle3d.remove(0);        
+
+
+        $('#year1').multiselect('destroy');
+        $('#year2').multiselect('destroy');
+        $('#year3').multiselect('destroy');
+        $('#cycle1').multiselect('destroy');
+        $('#cycle2').multiselect('destroy');
+        $('#cycle3').multiselect('destroy');
+
+document.getElementById('pp').click();
+        
+        $('#year1').multiselect({includeSelectAllOption: false});
+        $('#year2').multiselect({includeSelectAllOption: false});
+        $('#year3').multiselect({includeSelectAllOption: false});
+
+        var httpyear = new XMLHttpRequest();
+        httpyear.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                // document.getElementById('debug').innerHTML = this.responseText;
+                var str = this.responseText;
+                yearArray = str.split("\t");
+            }
+        };
+        httpyear.open("GET", "sqldb/years.php", false);
+        httpyear.send();  
+
+        delete yearArray[yearArray.length - 1];
+
+        // SY.add(new Option('Year'));
+
+        for (var i in yearArray) {
+            year1.add(new Option(yearArray[i]));
+            year2.add(new Option(yearArray[i]));
+            year3.add(new Option(yearArray[i]));
+        };        
+
+        document.getElementById("year1").value = document.getElementById('y1l').textContent;
+        document.getElementById("year2").value = document.getElementById('y2l').textContent;
+        document.getElementById("year3").value = document.getElementById('y3l').textContent;
+
+        document.getElementById('y1l').innerHTML = "";
+        document.getElementById('y2l').innerHTML = "";
+        document.getElementById('y3l').innerHTML = "";
+
+
+        $('#cycle1').multiselect({includeSelectAllOption: false});
+        $('#cycle2').multiselect({includeSelectAllOption: false});
+        $('#cycle3').multiselect({includeSelectAllOption: false});
+
+        var cycle1 = document.getElementById('cycle1');
+        var cycle2 = document.getElementById('cycle2');
+        var cycle3 = document.getElementById('cycle3');
+
+        for (i=1;i<4;i++) {
+            cycle1.add(new Option('Cycle ' + i));
+            cycle2.add(new Option('Cycle ' + i));
+            cycle3.add(new Option('Cycle ' + i));
+        }        
+
+        document.getElementById("cycle1").value = document.getElementById('c1l').textContent;
+        document.getElementById("cycle2").value = document.getElementById('c2l').textContent;
+        document.getElementById("cycle3").value = document.getElementById('c3l').textContent;
+
+        document.getElementById('c1l').innerHTML = "";
+        document.getElementById('c2l').innerHTML = "";
+        document.getElementById('c3l').innerHTML = "";
+
+
+        // search();
+    }
+</script>
 </body>
 </html>
 

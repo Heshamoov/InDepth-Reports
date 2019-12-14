@@ -209,7 +209,7 @@ ORDER BY ISNULL(Subject0), Subject0, ISNULL(Subject1), Subject1, ISNULL(Subject2
         //           <th class='w3-container w3-hover-green w3-center'>Cycle 3 / High</th></tr>";
 while ($row = $result->fetch_assoc()) {
 
-    if ($row["Subject0"] != 'Total Mark') {    	
+    if ($row["Subject0"] != 'Total Mark' AND $row["Subject1"] != 'Total Mark' AND $row["Subject2"] != 'Total Mark') {    	
         if ($row["Subject0"] != null)
             	echo "<tr><td>" . $row["Subject0"] . "</td>";
             elseif ($row["Subject1"] != null)
