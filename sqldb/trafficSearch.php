@@ -4,8 +4,9 @@ include ('../config/dbConfig.php');
 
 $subject = $_REQUEST["subject"];
 $exam   = $_REQUEST["exam"];
+$trendD   = $_REQUEST["trend"];
 
-
+// echo $trend;
 // $sql = "
 // SELECT 
 // t1.grade '2017Grade', t1.subject_name '2017Subject', t1.Total '2017Total', t1.MoreOrEqual75 '#2017Above', t1.MoreOrEqual75P '2017Above', t1.MoreOrEqual65 '#2017Minimum', t1.MoreOrEqual65P '2017Minimum', t1.Below65 '#2017Below', t1.Below65P '2017Below',
@@ -392,6 +393,8 @@ $Minimum2019 = "Round( [" . $row['#2019Minimum'] . "/" . $row['2019Total'] . "] 
             }
             // else
             //     echo "<td class='w3-container' title='$sumtotal $sumdtotal'>Weak</td>";
+            if ($trendD == 'Details')
+                echo "<td>" . $row['Trend'] . "</td>";
             echo "</tr>";
     }
     echo "<tr><th class='w3-yellow' colspan=13>Overall judjment</th>";

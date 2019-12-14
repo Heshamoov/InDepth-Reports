@@ -25,6 +25,7 @@ if (!isset($_SESSION['login'])) {
     $(function () {
         $('#subjectD').multiselect({includeSelectAllOption: false});
         $('#exam').multiselect({includeSelectAllOption: false});
+        $('#trend').multiselect({includeSelectAllOption: false});
 
         var select = document.getElementById('subjectD');
         var httpsubjects = new XMLHttpRequest();
@@ -86,46 +87,27 @@ if (!isset($_SESSION['login'])) {
 
 <script type="text/javascript">
     function search() {
-        var selected_subject = $("#subjectD option:selected");
-        var subject = "";
-        selected_subject.each(function() {   
-            subject = $(this).text();
-            // document.getElementById('out').innerHTML = subject;
-        });
-
+        let trend = $("#trend option:selected").text();
+        
+        let subject = $("#subjectD option:selected").text();
         if (subject == "Subject")
             alert("Select a Subject");
         else
-        {
-            
-            var selected_exam = $("#exam option:selected");
-            var exam = "";
-            selected_exam.each(function() {   
-                exam = $(this).text();
-                // document.getElementById('out').innerHTML += exam;
-            });
-
-            if (exam == "Exam")
-                alert("Select a Exam");
-            else {
-                var httpsearch = new XMLHttpRequest();
-                httpsearch.onreadystatechange = function () {
-                    if (this.readyState === 4) {
-                        document.getElementById("result").innerHTML = this.responseText;
-                    }
-                };
+        {  
+            let exam = $("#exam option:selected").text();
+            var httpsearch = new XMLHttpRequest();
+            httpsearch.onreadystatechange = function () {
+                if (this.readyState === 4) {
+                    document.getElementById("result").innerHTML = this.responseText;
+                }
+            };
                 
-                // document.getElementById('out').innerHTML += subject;
-                httpsearch.open("POST", "sqldb/trafficSearch.php?subject=" + subject + "&exam=" + exam, false);
-                httpsearch.send();
-
+            httpsearch.open("POST", "sqldb/trafficSearch.php?subject=" + subject + "&exam=" + exam + "&trend=" + trend, false);
+            httpsearch.send();
                 
-                document.getElementById('SubjectName').innerHTML = subject;
-                document.getElementById('ExamName').innerHTML = exam;
-                // document.getElementById('cellSubject').innerHTML = subject;
-                // document.getElementById('cellExam').innerHTML = exam;
-            }           
-        }
+            document.getElementById('SubjectName').innerHTML = subject;
+            document.getElementById('ExamName').innerHTML = exam;
+        }           
     }
 </script>
 
@@ -158,6 +140,12 @@ if (!isset($_SESSION['login'])) {
             </th>
             <th>
                 <select class="dropdown" id="exam" onchange="search()"></select>
+            </th>
+            <th>
+                <select class="dropdown" id="trend" onchange="search()">
+                    <option>Trend</option>
+                    <option>Details</option>
+                </select>
             </th>
             <th>
                 <button id='pp' class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
