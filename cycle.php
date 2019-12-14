@@ -44,7 +44,7 @@ if (!isset($_SESSION['login'])) {
         var httpCycle = new XMLHttpRequest();
         httpCycle.onreadystatechange = function () {
             if (this.readyState === 4) {
-                document.getElementById("useroptions").innerHTML = this.responseText;
+                document.getElementById("results").innerHTML = this.responseText;
             }
         };
 
@@ -140,7 +140,7 @@ httpCycle.send();
         <tr>
             <th>Cycle</th>
             <th>
-                <select id="cycle1" onchange="search()">
+                <select id="cycle1">
                     <option>Cycle 1</option>
                     <option>Cycle 2</option>
                     <option>Cycle 3</option>
@@ -148,7 +148,7 @@ httpCycle.send();
                 <label id="T1L"></label>
             </th>
             <th>
-                <select id="cycle2" onchange="search()">
+                <select id="cycle2">
                     <option>Cycle 1</option>
                     <option>Cycle 2</option>
                     <option>Cycle 3</option>
@@ -156,7 +156,7 @@ httpCycle.send();
                 <label id="T2L"></label>
             </th>
             <th>
-                <select id="cycle3" onchange="search()">
+                <select id="cycle3">
                     <option>Cycle 1</option>
                     <option>Cycle 2</option>
                     <option>Cycle 3</option>
