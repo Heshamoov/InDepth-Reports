@@ -28,7 +28,7 @@ FROM
         ROUND(COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
         COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) AS 'MoreOrEqual75',
         ROUND(COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P',
-        exam_mark, TRUNCATE(AVG(exam_mark),0) AS 'AVG'
+        exam_mark, ROUND(SUM(exam_mark) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)),0) AS 'AVG'
     FROM new_marks
     WHERE
     
@@ -55,7 +55,7 @@ COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL,1,NULL)) AS 'MoreOrEqual65',
 ROUND(COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
             COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) AS 'MoreOrEqual75',
             ROUND(COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P',
-            exam_mark, TRUNCATE(AVG(exam_mark),0) AS 'AVG'
+            exam_mark, ROUND(SUM(exam_mark) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)),0) AS 'AVG'
         FROM new_marks
         WHERE
             (acd_code = '$year2') AND (exam_name = 'Final Certificate Mark') ";
@@ -83,7 +83,7 @@ elseif ($cycle2 == 'Cycle 3')
             ROUND(COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
             COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) AS 'MoreOrEqual75',
             ROUND(COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P',
-            exam_mark, TRUNCATE(AVG(exam_mark),0) AS 'AVG'
+            exam_mark, ROUND(SUM(exam_mark) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)),0) AS 'AVG'
         FROM new_marks
         WHERE
             (acd_code = '$year3') AND (exam_name = 'Final Certificate Mark') ";
@@ -120,7 +120,7 @@ FROM
             ROUND(COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
             COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) AS 'MoreOrEqual75',
             ROUND(COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P',
-            exam_mark, TRUNCATE(AVG(exam_mark),0) AS 'AVG'
+            exam_mark, ROUND(SUM(exam_mark) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)),0) AS 'AVG'
         FROM new_marks
         WHERE
             (acd_code = '$year1') AND (exam_name = 'Final Certificate Mark') ";
@@ -146,7 +146,7 @@ elseif ($cycle1 == 'Cycle 3')
             ROUND(COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
             COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) AS 'MoreOrEqual75',
             ROUND(COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P',
-            exam_mark, TRUNCATE(AVG(exam_mark),0) AS 'AVG'
+            exam_mark, ROUND(SUM(exam_mark) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)),0) AS 'AVG'
         FROM new_marks
         WHERE
             (acd_code = '$year2') AND (exam_name = 'Final Certificate Mark') ";
@@ -174,7 +174,7 @@ elseif ($cycle2 == 'Cycle 3')
             ROUND(COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
             COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) AS 'MoreOrEqual75',
             ROUND(COUNT(IF(exam_mark >= 75 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P',
-            exam_mark, TRUNCATE(AVG(exam_mark),0) AS 'AVG'
+            exam_mark, ROUND(SUM(exam_mark) / COUNT(IF(exam_mark IS NOT NULL AND exam_mark > 0, 1, NULL)),0) AS 'AVG'
         FROM new_marks
         WHERE
             (acd_code = '$year3') AND (exam_name = 'Final Certificate Mark')  ";
