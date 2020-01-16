@@ -47,6 +47,7 @@ function search() {
     let Term1 = $("#term1 option:selected").text();
     let Term2 = $("#term2 option:selected").text();
     let Term3 = $("#term3 option:selected").text();
+    let Term4 = $("#term4 option:selected").text();
 
     let Title = "";
 
@@ -69,9 +70,9 @@ function search() {
             document.getElementById("results").innerHTML = this.responseText;
         };
         
-    httpSearch.open("POST", "sqldb/newAdvancedSearch.php?Grade=" + Grade + "&Gender=" + Gender +
+    httpSearch.open("POST", "js/2020/SQL/attainment.php?Grade=" + Grade + "&Gender=" + Gender +
     "&Nationality=" + Nationality + "&Student=" + Student +
-    "&Term1=" + Term1 + "&Term2=" + Term2 + "&Term3=" + Term3 +
+    "&Term1=" + Term1 + "&Term2=" + Term2 + "&Term3=" + Term3 + "&Term4=" + Term4 + 
     "&View=" + View, false);
     httpSearch.send();
 }
@@ -100,7 +101,7 @@ function search() {
               </div>
             </div>            
         </th>
-        <th><select id="grade" onchange="students()"></select></th>
+        <th><select id="grade" onchange="students();search()"></select></th>
         <th>
             <select id="nationality" onchange="search()">
                 <option>Nationality: ALL</option>
@@ -182,19 +183,19 @@ function search() {
         <tr>
             <th><label>Term</label></th>
             <th>
-                <select id="term1"></select>
+                <select id="term1" onchange="search()"></select>
                 <label id="T1L"></label>
             </th>
             <th>
-                <select id="term2"></select>
+                <select id="term2" onchange="search()"></select>
                 <label id="T2L"></label>
             </th>
             <th>
-                <select id="term3"></select>
+                <select id="term3" onchange="search()"></select>
                 <label id="T3L"></label>
             </th>
             <th>
-                <select id="term4"></select>
+                <select id="term4" onchange="search()"></select>
                 <label id="T4L"></label>
             </th>
         </tr>
