@@ -17,7 +17,7 @@ if (!isset($_SESSION['login'])) {
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
 
-<link rel="stylesheet" type="text/css" href="/styles/advanced.css">
+<link rel="stylesheet" type="text/css" href="styles/advanced.css">
 
 <title>Attainment Analysis 2020</title>
 

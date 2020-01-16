@@ -31,8 +31,8 @@
         <script src="js/vfs.js"></script>
         <script src="js/ttffont.js"></script>
         <script src="js/print.min.js"></script>
-        <!-- <script src="print.js"></script> -->
-        <!-- <link rel="stylesheet" type="text/css" href="print.css"> -->
+        <script src="print.js"></script>
+        <link rel="stylesheet" type="text/css" href="print.css">
         <style>
             body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
             .w3-bar,h1,button,select {font-family: "Montserrat", sans-serif}
