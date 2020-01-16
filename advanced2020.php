@@ -9,17 +9,17 @@ if (!isset($_SESSION['login'])) {
 
 
 <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css"> -->
 
 <!-- Latest compiled and minified JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script> -->
 
 <!-- (Optional) Latest compiled and minified JavaScript translation files -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/i18n/defaults-*.min.js"></script> -->
 
-<link rel="stylesheet" type="text/css" href="styles/advanced.css">
+<!-- <link rel="stylesheet" type="text/css" href="/styles/advanced.css"> -->
 
-<title>Attainment Analysis</title>
+<title>Attainment Analysis 2020</title>
 
 </head>
 
@@ -34,42 +34,9 @@ if (!isset($_SESSION['login'])) {
         $('#term1').multiselect({includeSelectAllOption: false});
         $('#term2').multiselect({includeSelectAllOption: false});
         $('#term3').multiselect({includeSelectAllOption: false});
+        $('#term4').multiselect({includeSelectAllOption: false});
     });
         
-function FillStudents() {
-    let Grade = $("#grade option:selected").text();
-
-    var httpSearch = new XMLHttpRequest();
-    httpSearch.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            // document.getElementById('debug').innerHTML = this.responseText;
-            var str = this.responseText;
-            namesArray = str.split("\t");
-        }
-    };      
-    httpSearch.open("POST", "sqldb/2020/studentsNames.php?grade=" + Grade, false);
-    httpSearch.send();
-
-    var studentsDropDown = document.getElementById('student');
-    while (studentsDropDown.length > 0)
-        studentsDropDown.remove(0);
-
-    $('#student').multiselect('destroy');
-
-    delete namesArray[namesArray.length - 1];
-
-    studentsDropDown.add(new Option('Student'));
-
-    for (var i in namesArray)
-        studentsDropDown.add(new Option(namesArray[i]));
-    
-    $(function () {
-        $('#student').multiselect({
-            includeSelectAllOption: true
-        });
-    });
-
-}
 
 function search() {
     let Grade = $("#grade option:selected").text();
@@ -133,11 +100,11 @@ function search() {
               </div>
             </div>            
         </th>
-        <th>
+        <!-- <th>
             <select style="float:left;" id="studentYear"></select>
-        </th>          
+        </th>           -->
         <th>
-            <select id="grade" onchange="search(), FillStudents()"></select>
+            <select id="grade" onchange="FillStudents()"></select>
         </th>
         <th>
             <select id="nationality" onchange="search()">
@@ -214,12 +181,13 @@ function search() {
             <th>2016 - 2017</th>
             <th>2017 - 2018</th>
             <th>2018 - 2019</th>
+            <th>2019 - 2020</th>
         </tr>
 
         <tr>
             <th><label>Term</label></th>
             <th>
-                <select id="term1" onchange="search()"></select>
+                <select id="term1" onload="terms('2016 - 2017')" onchange="search()"></select>
                 <label id="T1L"></label>
             </th>
             <th>
@@ -243,12 +211,6 @@ function search() {
 </div>
 
 
-<!-- Initialize Years -->
-<script src="js/initYears.js"></script>
-<!-- Initialize Grades    -->                       
-<script src="js/initGrades.js"></script>
-<!-- Initialize Terms -->
-<script src="js/initTerms.js"></script>
 
 <script type="text/javascript">
     function PrintTable () {
@@ -303,204 +265,9 @@ document.getElementById('pp').click();
     }
 </script>
 
+<script src="js/2020/initGrades.js"></script>
+<script src="js/2020/fillStudents.js"></script>
 
-<!-- <script type="text/javascript">
-    function FillTerms() {
-        var selected_terms1 = $("#term1 option:selected");
-        // var selected_terms2 = $("#term2 option:selected");
-        // var selected_terms3 = $("#term3 option:selected");
-        // var selected_terms4 = $("#term4 option:selected");
-        // var selected_terms5 = $("#term5 option:selected");
-
-        var term1 = document.getElementById('term1');
-        // var term2 = document.getElementById('term2');
-        // var term3 = document.getElementById('term3');
-        // var term4 = document.getElementById('term4');
-        // var term5 = document.getElementById('term5');
-
-        var httpTerms = new XMLHttpRequest();
-        httpTerms.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var str = this.responseText;
-                termsArray = str.split("\t");
-            }
-        };
-
-        httpTerms.open("GET", "sqldb/terms.php", false);
-        httpTerms.send();
-
-
-        
-        $('#terms1').multiselect('destroy');
-        // $('#terms2').multiselect('destroy');
-        // $('#terms3').multiselect('destroy');
-        // $('#terms4').multiselect('destroy');
-        // $('#terms5').multiselect('destroy');
-
-        delete termsArray[termsArray.length - 1];
-
-        term2.add(new Option('Term'));
-        term3.add(new Option('Term'));
-        term4.add(new Option('Term'));
-        term5.add(new Option('Term'));
-
-        for (var i in termsArray)
-            term1.add(new Option(termsArray[i]));
-    }    
-</script>
-
-<script type="text/javascript">
-    function FillTerm(year, term) {
-        var year = $(year).children('option:selected').text();
-
-        var selected_student = $("#studentsDropDown option:selected");      
-        var currentStudent = "";
-            selected_student.each(function()
-            {
-                currentStudent = $(this).text();
-            });                
-
-        var termsArray = "";
-        var httpTerms = new XMLHttpRequest();
-        httpTerms.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var str = this.responseText;
-                // document.getElementById('out').innerHTML += this.responseText;
-                termsArray = str.split("\t");
-            }
-        };
-        httpTerms.open("POST", "sqldb/termsViaYear.php?year=" + year + "&student=" + currentStudent, false);
-        httpTerms.send();
-
-        var termDropdown = document.getElementById(term);
-
-        while (termDropdown.length > 0)
-            termDropdown.remove(0);
-
-
-        var name = '#' + term;
-        $(name).multiselect('destroy');
-
-        delete termsArray[termsArray.length - 1];
-
-        for (var i in termsArray) {
-            termDropdown.add(new Option(termsArray[i]));
-        };
-
-        $(function () {
-            $(name).multiselect({
-                includeSelectAllOption: true
-            });
-        });
-
-        search();
-    }
-</script>
- -->
-
-<!-- <script type="text/javascript">
-    function FillYears() {
-        var selected_years1 = $("#academic_year1 option:selected");
-        var selected_years2 = $("#academic_year2 option:selected");
-        var selected_years3 = $("#academic_year3 option:selected");
-        var selected_years4 = $("#academic_year4 option:selected");
-        var selected_years5 = $("#academic_year5 option:selected");
-
-        var years1 = document.getElementById('academic_year1');
-        var years2 = document.getElementById('academic_year2');
-        var years3 = document.getElementById('academic_year3');
-        var years4 = document.getElementById('academic_year4');
-        var years5 = document.getElementById('academic_year5');
-
-        while (years1.length > 0) years1.remove(0);
-
-        while (years2.length > 0) years2.remove(0);
-        
-        while (years3.length > 0) years3.remove(0);
-        
-        while (years4.length > 0) years4.remove(0);
-
-        while (years5.length > 0) years5.remove(0);
-
-        $('#academic_year1').multiselect('destroy');
-        $('#academic_year2').multiselect('destroy');
-        $('#academic_year3').multiselect('destroy');
-        $('#academic_year4').multiselect('destroy');
-        $('#academic_year5').multiselect('destroy');
-
-        var selected_student = $("#studentsDropDown option:selected");      
-        var currentStudent = "";
-        selected_student.each(function()
-        {
-            currentStudent = $(this).text();
-        });                
-
-        var httpYears = new XMLHttpRequest();
-        httpYears.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var str = this.responseText;
-                // document.getElementById('out').innerHTML += this.responseText;
-                yearsArray = str.split("\t");
-            }
-        };
-        httpYears.open("POST", "sqldb/YearsViaStudent.php?student=" + currentStudent, false);
-        httpYears.send();                
-
-        delete yearsArray[yearsArray.length - 1];
-
-        years2.add(new Option('Year'));
-        years3.add(new Option('Year'));
-        years4.add(new Option('Year'));
-        years5.add(new Option('Year'));
-
-        for (var i in yearsArray) {
-            years1.add(new Option(yearsArray[i]));
-            years2.add(new Option(yearsArray[i]));
-            years3.add(new Option(yearsArray[i]));
-            years4.add(new Option(yearsArray[i]));
-            years5.add(new Option(yearsArray[i]));
-        };
-
-        $(function () {
-            $('#academic_year1').multiselect({
-                includeSelectAllOption: false
-            });
-        });
-        $(function () {
-            $('#academic_year2').multiselect({
-                includeSelectAllOption: false
-            });
-        });
-        $(function () {
-            $('#academic_year3').multiselect({
-                includeSelectAllOption: false
-            });
-        });
-        $(function () {
-            $('#academic_year4').multiselect({
-                includeSelectAllOption: false
-            });
-        });
-        $(function () {
-            $('#academic_year5').multiselect({
-                includeSelectAllOption: false
-            });
-        });
-        // search();
-
-
-    }
-</script> -->
-
-<!-- Print Date -->
-<!-- <script type="text/javascript">
-    n =  new Date();
-    y = n.getFullYear();
-    m = n.getMonth() + 1;
-    d = n.getDate();
-    document.getElementById("date").innerHTML = "Date " + m + "/" + d + "/" + y;
-</script>
- -->        
 </body>
 </html>
 

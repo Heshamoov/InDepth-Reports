@@ -21,7 +21,7 @@
         <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
-        <script type="text/javascript" src="js/html2canvas.js"></script>
+        <!-- <script type="text/javascript" src="js/html2canvas.js"></script> -->
         <script src="js/jspdf.js"></script>
         <script src="js/jspdf.debug.js"></script>
         <script src="js/jspdf.plugin.autotable.js"></script>
@@ -31,8 +31,8 @@
         <script src="js/vfs.js"></script>
         <script src="js/ttffont.js"></script>
         <script src="js/print.min.js"></script>
-        <script src="print.js"></script>
-        <link rel="stylesheet" type="text/css" href="print.css">
+        <!-- <script src="print.js"></script> -->
+        <!-- <link rel="stylesheet" type="text/css" href="print.css"> -->
         <style>
             body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
             .w3-bar,h1,button,select {font-family: "Montserrat", sans-serif}
