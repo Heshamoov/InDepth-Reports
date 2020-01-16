@@ -104,7 +104,7 @@ function search() {
             <select style="float:left;" id="studentYear"></select>
         </th>           -->
         <th>
-            <select id="grade" onchange="FillStudents()"></select>
+            <select id="grade" onchange="students()"></select>
         </th>
         <th>
             <select id="nationality" onchange="search()">
@@ -265,8 +265,8 @@ document.getElementById('pp').click();
     }
 </script>
 
-<script src="js/2020/initGrades.js"></script>
-<script src="js/2020/fillStudents.js"></script>
+<script src="js/2020/JS/grades.js"></script>
+<script src="js/2020/JS/students.js"></script>
 
 </body>
 </html>

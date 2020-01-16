@@ -1,6 +1,6 @@
 <?php
 
-include ('../../config/dbConfig.php');
+include ('../../../config/dbConfig.php');
 
 $sql = "SELECT DISTINCT course_name FROM courses WHERE course_name like 'GR%' ORDER BY course_name";
 

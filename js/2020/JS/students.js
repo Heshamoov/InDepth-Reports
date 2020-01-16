@@ -1,5 +1,6 @@
-function FillStudents() {
-    let Grade = $("#grade option:selected").text();
+function students() {
+    // document.getElementById("debug").innerHTML = "Students Filling";
+    let grade = $("#grade option:selected").text();
     var httpSearch = new XMLHttpRequest();
     httpSearch.onreadystatechange = function () {
         if (this.readyState === 4) {
@@ -7,7 +8,7 @@ function FillStudents() {
             namesArray = str.split("\t");
         }
     };      
-    httpSearch.open("POST", "sqldb/2020/studentsNames.php?grade=" + Grade, false);
+    httpSearch.open("POST", "js/2020/SQL/students.php?grade=" + grade, false);
     httpSearch.send();
 
     var studentsDropDown = document.getElementById('student');

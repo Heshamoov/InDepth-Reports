@@ -8,7 +8,7 @@ httpgrades.onreadystatechange = function () {
     }
 };
 
-httpgrades.open("GET", "js/2020/grades.php", false);
+httpgrades.open("GET", "js/2020/SQL/grades.php", false);
 httpgrades.send();
 
 $('#grade').multiselect('destroy');
