@@ -130,10 +130,15 @@ if ($result->num_rows > 0) {
         if ($GradeHeader) {
             echo "<tr><th>Grade Progress</th>";
             for ($i = 0; $i < 4; $i++) {
-                if ($GradeIndex < 11) {
-                    echo "<th>" . $GradesA[$GradeIndex] . "</th>";
-                    $GradeIndex++;
+                if ($row["Grade$i"] != null) {
+                    echo "<th>" . $row["Grade$i"] . "</th>";
+                    $GradeIndex = array_search($row["Grade$i"], $GradesA);
                 }
+                else
+                    if ($GradeIndex < 11)
+                        echo "<th>" . $GradesA[$GradeIndex + 1] . "</th>";
+                    else
+                        echo "<th>" . $GradesA[$GradeIndex] . "</th>";
             }
             echo "</tr>";
             $GradeHeader = false;
