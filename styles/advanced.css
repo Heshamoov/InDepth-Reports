@@ -35,6 +35,7 @@
 #useroptions {
   border-collapse: collapse;
   width: 100%;
+  /*background-color: red;*/
 }
 
 #useroptions td, #useroptions th {
