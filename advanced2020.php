@@ -7,7 +7,8 @@ if (!isset($_SESSION['login'])) {
     include('Header.php');
     ?>
 
-<!-- Latest compiled and minified CSS -->
+
+    <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
 
 <!-- Latest compiled and minified JavaScript -->
@@ -18,64 +19,8 @@ if (!isset($_SESSION['login'])) {
 
 <link rel="stylesheet" type="text/css" href="styles/advanced.css">
 
-<title>Attainment Analysis 2020</title>
-
-</head>
-
-<script type="text/javascript">      
-    $(function () {
-        $('#year').multiselect({includeSelectAllOption: false});
-        $('#grade').multiselect({includeSelectAllOption: false});
-        $('#gender').multiselect({includeSelectAllOption: false});
-        $('#student').multiselect({includeSelectAllOption: false});
-        $('#nationality').multiselect({includeSelectAllOption: false});
-        $('#view').multiselect({includeSelectAllOption: false});
-        $('#term1').multiselect({includeSelectAllOption: false});
-        $('#term2').multiselect({includeSelectAllOption: false});
-        $('#term3').multiselect({includeSelectAllOption: false});
-        $('#term4').multiselect({includeSelectAllOption: false});
-    });
-        
-
-function search() {
-    let Grade = $("#grade option:selected").text();
-    let Gender = $("#gender option:selected").text();
-    let Nationality = $("#nationality option:selected").text();
-    let Student = $("#student option:selected").text();
-    let View = $("#view option:selected").text();
-    let Term1 = $("#term1 option:selected").text();
-    let Term2 = $("#term2 option:selected").text();
-    let Term3 = $("#term3 option:selected").text();
-    let Term4 = $("#term4 option:selected").text();
-
-    let Title = "";
-
-    if (Grade != "Grade")
-        Title = Grade;
-    if (Student == "" || Student == "Student" )
-        Title = Title + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Nationality + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Gender;
-    else
-        Title = Title + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Student;
-         
-
-    
-
-    document.getElementById('TableTitle').innerHTML = Title;
-    
-    // terms1SQL += " OR REPLACE(exam_name, ' ', '') = REPLACE('" + currentTerm + "', ' ', '')";
-    var httpSearch = new XMLHttpRequest();
-    httpSearch.onreadystatechange = function () {
-        if (this.readyState === 4)
-            document.getElementById("results").innerHTML = this.responseText;
-        };
-        
-    httpSearch.open("POST", "js/2020/SQL/attainment.php?Grade=" + Grade + "&Gender=" + Gender +
-    "&Nationality=" + Nationality + "&Student=" + Student +
-    "&Term1=" + Term1 + "&Term2=" + Term2 + "&Term3=" + Term3 + "&Term4=" + Term4 + 
-    "&View=" + View, false);
-    httpSearch.send();
-}
-</script>
+    <title>Attainment Analysis 2020</title>
+    <script type="text/javascript" src="js/2020/JS/search.js"></script>
 
 <body>
 <div class="w3-responsive" >

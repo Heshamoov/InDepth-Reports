@@ -1,79 +1,84 @@
 #divprint {
-  margin: auto;
-  width: 70%;
+    margin: auto;
+    width: 80%;
+
 }
 
 #PageTitle {
-  width: 100%;
+    width: 100%;
 }
 
 #SchoolLogoTH {
-  text-align: center;
+    text-align: center;
 }
 
 #SchoolLogo {
-  /*width: 80000000px;*/
+    /*width: 80000000px;*/
 }
 
 #SchoolName {
-  text-align: center;
+    text-align: center;
 }
 
 #Performance {
-  text-align: left;
+    text-align: left;
 }
 
 #Attainment {
-  text-align: right;
+    text-align: right;
 }
 
 
-#useroptions tr:nth-child(even){background-color: #f2f2f2;}
+#useroptions tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
 
-#useroptions tr:hover {background-color: #ddd;}
+#useroptions tr:hover {
+    background-color: #ddd;
+}
 
 #useroptions {
-  border-collapse: collapse;
-  width: 100%;
-  /*background-color: red;*/
+    border-collapse: collapse;
+    width: 100%;
+    /*background-color: red;*/
 }
 
 #useroptions td, #useroptions th {
-  border: 1px solid #ddd;
-  padding: 3px;
-  text-align: center;
+    border: 1px solid #ddd;
+    padding: 3px;
+    text-align: center;
 }
-
 
 
 #InDepthDiv {
-  width: 70%;
-  margin: auto;
-  color: gray;
-  font-size: 10px;
-  opacity: 0.5";
+    width: 70%;
+    margin: auto;
+    color: gray;
+    font-size: 10px;
+    opacity: 0.5;
 }
 
 #InDepthTD {
-  text-align: right;
+    text-align: right;
 }
 
 
 .rc-green {
-  color: green;
+    color: green;
 }
 
 .rc-l-green {
-  color: #8BC34A;
+    color: #8BC34A;
 }
 
 .rc-lime {
-  color: #CDDC39;
+    color: #CDDC39;
 }
 
 .rc-orange {
-  color: orange;
+    color: orange;
 }
+
 .rc-red {
-  color: red;
+    color: red;
 }
