@@ -7,7 +7,6 @@ if (!isset($_SESSION['login'])) {
     include('Header.php');
     ?>
 
-
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
 
@@ -127,6 +126,7 @@ function search() {
             </select>
         </th>
 <th>
+
 <button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' onclick="PrintTable()"></button>
 <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
     onclick="printJS({
@@ -137,7 +137,7 @@ function search() {
         ignoreElements: [],
         css: 'styles/advancedPDF.css'
     })">
-</button>                    
+</button>
 </th>            
     </table>
 </div>
@@ -210,62 +210,10 @@ function search() {
     </table>
 </div>
 
-<script type="text/javascript">
-    function PrintTable () {
-        document.getElementById('T1L').innerHTML = $('#term1').children('option:selected').text();
-        document.getElementById('T2L').innerHTML = $('#term2').children('option:selected').text();
-        document.getElementById('T3L').innerHTML = $('#term3').children('option:selected').text();
-
-        $('#term1').multiselect('destroy');
-        $('#term2').multiselect('destroy');
-        $('#term3').multiselect('destroy');
-
-document.getElementById('pp').click();
-        
-        $('#term1').multiselect({includeSelectAllOption: false});
-        $('#term2').multiselect({includeSelectAllOption: false});
-        $('#term3').multiselect({includeSelectAllOption: false});
-
-        var term1 = document.getElementById('term1');
-        var term2 = document.getElementById('term2');
-        var term3 = document.getElementById('term3');
-
-        var httpTerms = new XMLHttpRequest();
-        httpTerms.onreadystatechange = function () {
-            if (this.readyState === 4) {
-                var str = this.responseText;
-                termsArray = str.split("\t");
-            }
-        };
-
-        httpTerms.open("GET", "sqldb/terms.php", false);
-        httpTerms.send();
-
-        delete termsArray[termsArray.length - 1];
-
-
-        for (var i in termsArray) {
-            term1.add(new Option(termsArray[i]));
-            term2.add(new Option(termsArray[i]));
-            term3.add(new Option(termsArray[i]));
-        }        
-
-        document.getElementById("term1").value = document.getElementById('T1L').textContent;
-        document.getElementById("term2").value = document.getElementById('T2L').textContent;
-        document.getElementById("term3").value = document.getElementById('T3L').textContent;
-
-
-        document.getElementById('T1L').innerHTML = "";
-        document.getElementById('T2L').innerHTML = "";
-        document.getElementById('T3L').innerHTML = "";
-
-        // search();
-    }
-</script>
-
 <script src="js/2020/JS/grades.js"></script>
 <script src="js/2020/JS/students.js"></script>
 <script src="js/2020/JS/terms.js"></script>
+<script src="js/2020/JS/print_table.js"></script>
 </body>
 </html>
 

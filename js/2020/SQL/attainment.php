@@ -56,6 +56,8 @@ if ($_REQUEST["Term2"] != "") $TermsA[1] = $_REQUEST["Term2"];
 if ($_REQUEST["Term3"] != "") $TermsA[2] = $_REQUEST["Term3"];
 if ($_REQUEST["Term4"] != "") $TermsA[3] = $_REQUEST["Term4"];
 
+//print_r($TermsA);
+
 $WhereA = array();
 $GradesA = array("GR 1", "GR 2", "GR 3", "GR 4", "GR 5", "GR 6", "GR 7", "GR 8", "GR 9", "GR10", "GR11", "GR12");
 $GradeIndex = array_search($grade, $GradesA);

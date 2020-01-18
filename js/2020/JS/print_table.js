@@ -1,6 +1,24 @@
-// 2016 - 2017
-    let term = document.getElementById('term1');
+function PrintTable () {
+    document.getElementById('T1L').innerHTML = $('#term1').children('option:selected').text();
+    document.getElementById('T2L').innerHTML = $('#term2').children('option:selected').text();
+    document.getElementById('T3L').innerHTML = $('#term3').children('option:selected').text();
+    document.getElementById('T4L').innerHTML = $('#term4').children('option:selected').text();
 
+    $('#term1').multiselect('destroy');
+    $('#term2').multiselect('destroy');
+    $('#term3').multiselect('destroy');
+    $('#term4').multiselect('destroy');
+
+    document.getElementById('pp').click();
+
+    $('#term1').multiselect({includeSelectAllOption: false});
+    $('#term2').multiselect({includeSelectAllOption: false});
+    $('#term3').multiselect({includeSelectAllOption: false});
+    $('#term4').multiselect({includeSelectAllOption: false});
+
+// 2016 - 2017
+    let termsArray = 0;
+    let term = document.getElementById('term1');
     let httpTerms = new XMLHttpRequest();
     httpTerms.onreadystatechange = function () {
         if (this.readyState === 4) {
@@ -17,7 +35,7 @@
 
     delete termsArray[termsArray.length - 1];
 
-    for (var i in termsArray)
+    for (let i in termsArray)
         term.add(new Option(termsArray[i]));
 
 // 2017 - 2018
@@ -40,7 +58,7 @@
 
     delete termsArray[termsArray.length - 1];
 
-    for (var i in termsArray)
+    for (let i in termsArray)
         term.add(new Option(termsArray[i]));
 
 
@@ -64,7 +82,7 @@
 
     delete termsArray[termsArray.length - 1];
 
-    for (var i in termsArray)
+    for (let i in termsArray)
         term.add(new Option(termsArray[i]));
 
 
@@ -89,5 +107,12 @@
 
     delete termsArray[termsArray.length - 1];
 
-    for (var i in termsArray)
+    for (let i in termsArray)
         term.add(new Option(termsArray[i]));
+
+
+    document.getElementById('T1L').innerHTML = "";
+    document.getElementById('T2L').innerHTML = "";
+    document.getElementById('T3L').innerHTML = "";
+    document.getElementById('T4L').innerHTML = "";
+}
