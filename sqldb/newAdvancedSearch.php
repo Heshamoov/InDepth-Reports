@@ -274,6 +274,7 @@ if ($result->num_rows > 0) {
     } // While
     //echo "</table>";
 
+    if ($_REQUEST["Term4"] != "") $term = $_REQUEST["Term4"];
     $RealData = "
 SELECT 
        students.last_name,
@@ -303,7 +304,7 @@ SELECT
          INNER JOIN students ON exam_scores.student_id = students.id
          LEFT JOIN student_categories ON students.student_category_id = student_categories.id
     
-    WHERE academic_years.name = '2019 - 2020' AND (REPLACE(exam_groups.name, ' ','') = REPLACE('Term 1', ' ', '')) 
+    WHERE academic_years.name = '2019 - 2020' AND (REPLACE(exam_groups.name, ' ','') = REPLACE('$term', ' ', '')) 
 ";
     if ($student != 'Student' and $student != '')
         $RealData .= " AND students.last_name = '$student' ";

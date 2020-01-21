@@ -34,6 +34,7 @@ if (!isset($_SESSION['login'])) {
         $('#term1').multiselect({includeSelectAllOption: false});
         $('#term2').multiselect({includeSelectAllOption: false});
         $('#term3').multiselect({includeSelectAllOption: false});
+        $('#term4').multiselect({includeSelectAllOption: false});
     });
         
 function FillStudents() {
@@ -79,6 +80,7 @@ function search() {
     let Term1 = $("#term1 option:selected").text();
     let Term2 = $("#term2 option:selected").text();
     let Term3 = $("#term3 option:selected").text();
+    let Term4 = $("#term4 option:selected").text();
 
     let Title = "";
 
@@ -103,7 +105,7 @@ function search() {
         
     httpSearch.open("POST", "sqldb/newAdvancedSearch.php?Grade=" + Grade + "&Gender=" + Gender +
     "&Nationality=" + Nationality + "&Student=" + Student +
-    "&Term1=" + Term1 + "&Term2=" + Term2 + "&Term3=" + Term3 +
+    "&Term1=" + Term1 + "&Term2=" + Term2 + "&Term3=" + Term3 + "&Term4=" + Term4 +
     "&View=" + View, false);
     httpSearch.send();
 }
@@ -132,9 +134,6 @@ function search() {
               </div>
             </div>            
         </th>
-        <th>
-            <select style="float:left;" id="studentYear"></select>
-        </th>          
         <th>
             <select id="grade" onchange="search(); FillStudents()"></select>
         </th>
@@ -213,6 +212,7 @@ function search() {
             <th>2016 - 2017</th>
             <th>2017 - 2018</th>
             <th>2018 - 2019</th>
+            <th>2019 - 2020</th>
         </tr>
 
         <tr>
@@ -229,6 +229,10 @@ function search() {
                 <select id="term3" onchange="search()"></select>
                 <label id="T3L"></label>
             </th>
+            <th>
+                <select id="term4" onchange="search()"></select>
+                <label id="T4L"></label>
+            </th>
         </tr>
         
         <tbody id="results"> </tbody>
@@ -243,7 +247,7 @@ function search() {
 
 
 <!-- Initialize Years -->
-<script src="js/initYears.js"></script>
+<!--<script src="js/initYears.js"></script>-->
 <!-- Initialize Grades    -->                       
 <script src="js/initGrades.js"></script>
 <!-- Initialize Terms -->
@@ -254,10 +258,12 @@ function search() {
         document.getElementById('T1L').innerHTML = $('#term1').children('option:selected').text();
         document.getElementById('T2L').innerHTML = $('#term2').children('option:selected').text();
         document.getElementById('T3L').innerHTML = $('#term3').children('option:selected').text();
+        document.getElementById('T4L').innerHTML = $('#term4').children('option:selected').text();
 
         $('#term1').multiselect('destroy');
         $('#term2').multiselect('destroy');
         $('#term3').multiselect('destroy');
+        $('#term4').multiselect('destroy');
 
 document.getElementById('pp').click();
         
@@ -293,10 +299,37 @@ document.getElementById('pp').click();
         document.getElementById("term2").value = document.getElementById('T2L').textContent;
         document.getElementById("term3").value = document.getElementById('T3L').textContent;
 
-
         document.getElementById('T1L').innerHTML = "";
         document.getElementById('T2L').innerHTML = "";
         document.getElementById('T3L').innerHTML = "";
+
+        // 2019 - 2020
+
+        term = document.getElementById('term4');
+
+        httpTerms = new XMLHttpRequest();
+        httpTerms.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                let str = this.responseText;
+                // document.getElementById("debug").innerHTML = this.responseText;
+                termsArray = str.split("\t");
+            }
+        };
+
+        httpTerms.open("GET", "js/2020/SQL/terms1920.php?", false);
+        httpTerms.send();
+
+
+        $('#term4').multiselect('destroy');
+
+        delete termsArray[termsArray.length - 1];
+
+        for (let i in termsArray)
+            term.add(new Option(termsArray[i]));
+
+        $('#term4').multiselect({includeSelectAllOption: false});
+        let term4 = document.getElementById('term4');
+
 
         // search();
     }
