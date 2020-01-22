@@ -167,7 +167,7 @@ function search() {
 <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
     onclick="printJS({
         documentTitle: 'Grade/Student Progress Analysis - Al Sanawbar School',
-        printable: 'divprint',
+        printable: 'divPrint',
         type: 'html',
         showModal:true,
         ignoreElements: [],
@@ -271,10 +271,12 @@ document.getElementById('pp').click();
         $('#term1').multiselect({includeSelectAllOption: false});
         $('#term2').multiselect({includeSelectAllOption: false});
         $('#term3').multiselect({includeSelectAllOption: false});
+        $('#term4').multiselect({includeSelectAllOption: false});
 
         let term1 = document.getElementById('term1');
         let term2 = document.getElementById('term2');
         let term3 = document.getElementById('term3');
+        let term4 = document.getElementById('term4');
 
         let httpTerms = new XMLHttpRequest();
         httpTerms.onreadystatechange = function () {
@@ -294,19 +296,9 @@ document.getElementById('pp').click();
             term1.add(new Option(termsArray[i]));
             term2.add(new Option(termsArray[i]));
             term3.add(new Option(termsArray[i]));
-        }        
-
-        document.getElementById("term1").value = document.getElementById('T1L').textContent;
-        document.getElementById("term2").value = document.getElementById('T2L').textContent;
-        document.getElementById("term3").value = document.getElementById('T3L').textContent;
-
-        document.getElementById('T1L').innerHTML = "";
-        document.getElementById('T2L').innerHTML = "";
-        document.getElementById('T3L').innerHTML = "";
+        }
 
         // 2019 - 2020
-
-        term = document.getElementById('term4');
 
         httpTerms = new XMLHttpRequest();
         httpTerms.onreadystatechange = function () {
@@ -319,19 +311,20 @@ document.getElementById('pp').click();
         httpTerms.open("GET", "js/2020/SQL/terms1920.php?", false);
         httpTerms.send();
 
-
-        $('#term4').multiselect('destroy');
-
         delete termsArray[termsArray.length - 1];
 
         for (let i in termsArray)
-            term.add(new Option(termsArray[i]));
+            term4.add(new Option(termsArray[i]));
 
-        $('#term4').multiselect({includeSelectAllOption: false});
-        let term4 = document.getElementById('term4');
+        document.getElementById("term1").value = document.getElementById('T1L').textContent;
+        document.getElementById("term2").value = document.getElementById('T2L').textContent;
+        document.getElementById("term3").value = document.getElementById('T3L').textContent;
+        document.getElementById("term4").value = document.getElementById('T4L').textContent;
 
-
-        // search();
+        document.getElementById('T1L').innerHTML = "";
+        document.getElementById('T2L').innerHTML = "";
+        document.getElementById('T3L').innerHTML = "";
+        document.getElementById('T4L').innerHTML = "";
     }
 </script>
 </body>
