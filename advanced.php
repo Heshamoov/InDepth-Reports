@@ -34,9 +34,11 @@ if (!isset($_SESSION['login'])) {
         $('#term1').multiselect({includeSelectAllOption: false});
         $('#term2').multiselect({includeSelectAllOption: false});
         $('#term3').multiselect({includeSelectAllOption: false});
+        $('#term4').multiselect({includeSelectAllOption: false});
     });
         
 function FillStudents() {
+    let namesArray = "";
     let Grade = $("#grade option:selected").text();
     let httpSearch = new XMLHttpRequest();
     httpSearch.onreadystatechange = function () {
@@ -79,12 +81,13 @@ function search() {
     let Term1 = $("#term1 option:selected").text();
     let Term2 = $("#term2 option:selected").text();
     let Term3 = $("#term3 option:selected").text();
+    let Term4 = $("#term4 option:selected").text();
 
     let Title = "";
 
-    if (Grade != "Grade")
+    if (Grade !== "Grade")
         Title = Grade;
-    if (Student == "" || Student == "Student" )
+    if (Student === "" || Student === "Student" )
         Title = Title + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Nationality + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Gender;
     else
         Title = Title + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Student;
@@ -103,7 +106,7 @@ function search() {
         
     httpSearch.open("POST", "sqldb/newAdvancedSearch.php?Grade=" + Grade + "&Gender=" + Gender +
     "&Nationality=" + Nationality + "&Student=" + Student +
-    "&Term1=" + Term1 + "&Term2=" + Term2 + "&Term3=" + Term3 +
+    "&Term1=" + Term1 + "&Term2=" + Term2 + "&Term3=" + Term3 + "&Term4=" + Term4 +
     "&View=" + View, false);
     httpSearch.send();
 }
@@ -131,11 +134,8 @@ function search() {
                 </div>
               </div>
             </div>            
-        </th>
-        <th>
-            <select style="float:left;" id="studentYear"></select>
-        </th>          
-        <th>
+      </th>   
+      <th>
             <select id="grade" onchange="search(); FillStudents()"></select>
         </th>
         <th>
@@ -167,7 +167,7 @@ function search() {
 <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' 
     onclick="printJS({
         documentTitle: 'Grade/Student Progress Analysis - Al Sanawbar School',
-        printable: 'divprint',
+        printable: 'divPrint',
         type: 'html',
         showModal:true,
         ignoreElements: [],
@@ -178,7 +178,7 @@ function search() {
     </table>
 </div>
      
-<div id="divprint">
+<div id="divPrint">
     <table id="PageTitle" style="margin: auto; width: 100%;">
         <tr>
             <th id="SchoolLogoTH" style="text-align: center;" colspan="2">
@@ -213,6 +213,7 @@ function search() {
             <th>2016 - 2017</th>
             <th>2017 - 2018</th>
             <th>2018 - 2019</th>
+            <th>2019 - 2020</th>
         </tr>
 
         <tr>
@@ -229,6 +230,10 @@ function search() {
                 <select id="term3" onchange="search()"></select>
                 <label id="T3L"></label>
             </th>
+            <th>
+                <select id="term4" onchange="search()"></select>
+                <label id="T4L"></label>
+            </th>
         </tr>
         
         <tbody id="results"> </tbody>
@@ -243,7 +248,7 @@ function search() {
 
 
 <!-- Initialize Years -->
-<script src="js/initYears.js"></script>
+<!--<script src="js/initYears.js"></script>-->
 <!-- Initialize Grades    -->                       
 <script src="js/initGrades.js"></script>
 <!-- Initialize Terms -->
@@ -254,20 +259,24 @@ function search() {
         document.getElementById('T1L').innerHTML = $('#term1').children('option:selected').text();
         document.getElementById('T2L').innerHTML = $('#term2').children('option:selected').text();
         document.getElementById('T3L').innerHTML = $('#term3').children('option:selected').text();
+        document.getElementById('T4L').innerHTML = $('#term4').children('option:selected').text();
 
         $('#term1').multiselect('destroy');
         $('#term2').multiselect('destroy');
         $('#term3').multiselect('destroy');
+        $('#term4').multiselect('destroy');
 
 document.getElementById('pp').click();
         
         $('#term1').multiselect({includeSelectAllOption: false});
         $('#term2').multiselect({includeSelectAllOption: false});
         $('#term3').multiselect({includeSelectAllOption: false});
+        $('#term4').multiselect({includeSelectAllOption: false});
 
         let term1 = document.getElementById('term1');
         let term2 = document.getElementById('term2');
         let term3 = document.getElementById('term3');
+        let term4 = document.getElementById('term4');
 
         let httpTerms = new XMLHttpRequest();
         httpTerms.onreadystatechange = function () {
@@ -287,18 +296,38 @@ document.getElementById('pp').click();
             term1.add(new Option(termsArray[i]));
             term2.add(new Option(termsArray[i]));
             term3.add(new Option(termsArray[i]));
+        }
+
+        // 2019 - 2020
+
+        httpTerms = new XMLHttpRequest();
+        httpTerms.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                let str = this.responseText;
+                termsArray = str.split("\t");
+            }
+        };
+
+        httpTerms.open("GET", "js/2020/SQL/terms1920.php?", false);
+        httpTerms.send();
+
+        delete termsArray[termsArray.length - 1];
+
+        for (let i in termsArray)
+            term4.add(new Option(termsArray[i]));
         }        
 
         document.getElementById("term1").value = document.getElementById('T1L').textContent;
         document.getElementById("term2").value = document.getElementById('T2L').textContent;
         document.getElementById("term3").value = document.getElementById('T3L').textContent;
+        document.getElementById("term4").value = document.getElementById('T4L').textContent;
 
 
         document.getElementById('T1L').innerHTML = "";
         document.getElementById('T2L').innerHTML = "";
         document.getElementById('T3L').innerHTML = "";
+        document.getElementById('T4L').innerHTML = "";
 
-        // search();
     }
 </script>
 </body>
