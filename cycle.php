@@ -29,6 +29,7 @@ if (!isset($_SESSION['login'])) {
         $('#cycle2').multiselect({includeSelectAllOption: false});
         $('#cycle3').multiselect({includeSelectAllOption: false});
         $('#trend').multiselect({includeSelectAllOption: false});
+        $('#nationality').multiselect({includeSelectAllOption: false});
     });
 </script>
 
@@ -42,20 +43,30 @@ if (!isset($_SESSION['login'])) {
         let cycle2 = $("#cycle2 option:selected").text();
         let cycle3 = $("#cycle3 option:selected").text();
         let trend = $("#trend option:selected").text();
+        let nationality = $("#nationality option:selected").text();
 
-        if (trend == 'Details')
+        if (trend === 'Details')
             document.getElementById('trendheader').innerHTML = 'Trend';
         else
             document.getElementById('trendheader').innerHTML = '';
 
-        var httpCycle = new XMLHttpRequest();
+        if (nationality === 'Expats')
+            document.getElementById("nationalityTitle").innerHTML = "Expats Students";
+        else if (nationality === 'Citizens')
+            document.getElementById('nationalityTitle').innerHTML = "Citizens Students";
+        else
+            document.getElementById("nationalityTitle").innerHTML = "";
+
+        let httpCycle = new XMLHttpRequest();
         httpCycle.onreadystatechange = function () {
             if (this.readyState === 4) {
                 document.getElementById("results").innerHTML = this.responseText;
             }
         };
 
-httpCycle.open("POST", "sqldb/CycleSearch.php?year1=" + year1 + "&year2=" + year2 + "&year3=" + year3 + "&cycle1=" + cycle1 + "&cycle2=" + cycle2 + "&cycle3=" + cycle3 + "&view=" + view + "&trend=" + trend, false);
+httpCycle.open("POST", "sqldb/CycleSearch.php?year1=" + year1 + "&year2=" + year2 + "&year3=" + year3 +
+    "&cycle1=" + cycle1 + "&cycle2=" + cycle2 + "&cycle3=" + cycle3 + "&view=" + view + "&trend=" + trend +
+    "&nationality=" + nationality, false);
 httpCycle.send();
     }
 </script>
@@ -81,7 +92,14 @@ httpCycle.send();
                 </div>
               </div>
             </div>            
-        </th>         
+        </th>
+        <th>
+            <select id="nationality" onchange="Cycle()">
+                <option>Nationality: ALL</option>
+                <option>Citizens</option>
+                <option>Expats</option>
+            </select>
+        </th>
         <th>
             <button class="w3-btn w3-white w3-border w3-round-large w3-hover-green" onclick="Cycle()">Cycle Analysis</button>                    
         </th>            
@@ -118,12 +136,12 @@ httpCycle.send();
 <div id="divPrint">
     <table id="PageTitle" style="margin: auto; width: 100%;">
         <tr>
-            <th id="SchoolLogoTH" style="text-align: center;" colspan="2">
+            <th id="SchoolLogoTH" style="text-align: center;" colspan="3">
                 <img id="SchoolLogo" src="images/sanawbar.jpg" style="width: 5%;">
             </th>
         </tr>
         <tr>
-            <th id="SchoolName" style="text-align: center;" colspan="2">
+            <th id="SchoolName" style="text-align: center;" colspan="3">
                 Al Sanawbar School
             </th>
         </tr>
@@ -132,11 +150,12 @@ httpCycle.send();
             <th id="Performance">
                 Performance Indicator levels: Summary
             </th>
+            <th id="nationalityTitle"></th>
             <th id="Attainment" style="text-align: right;">
                 Grade/Student Progress Analysis
             </th>
         </tr>
-    </table> 
+    </table>
 
     <table id="useroptions" class="w3-card">
         <tr class="dropdownTR">

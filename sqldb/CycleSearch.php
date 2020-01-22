@@ -10,7 +10,7 @@ $cycle1 = $_REQUEST["cycle1"];
 $cycle2 = $_REQUEST["cycle2"];
 $cycle3 = $_REQUEST["cycle3"];
 $trendD   = $_REQUEST["trend"];
-
+$nationality = $_REQUEST["nationality"];
 // echo $view . "<br>" . $year1 . "<br>" . $year2 . "<br>" . $year3 . "<br>" . $cycle1 . "<br>" . $cycle2 . "<br>" . $cycle3;
 
 $sql = "
@@ -40,6 +40,11 @@ elseif ($cycle1 == 'Cycle 2')
     $sql .= " AND (grade = 'GR06' OR grade = 'GR07' OR grade = 'GR08' OR grade = 'GR09') ";
 elseif ($cycle1 == 'Cycle 3')
     $sql .= " AND (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12') ";
+
+if ($nationality == 'Citizens')
+    $sql .= " AND nationality = 'U.A.E' ";
+elseif ($nationality =='Expacts')
+    $sql .= " AND nationality != 'U.A.E' ";
         
     $sql .= " GROUP BY subject_name
         ORDER BY subject_name
@@ -65,7 +70,12 @@ ROUND(COUNT(IF(exam_mark >= 65 AND exam_mark IS NOT NULL,1,NULL)) / COUNT(IF(exa
 elseif ($cycle2 == 'Cycle 2')
     $sql .= " AND (grade = 'GR06' OR grade = 'GR07' OR grade = 'GR08' OR grade = 'GR09') ";
 elseif ($cycle2 == 'Cycle 3')
-    $sql .= " AND (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12') ";           
+    $sql .= " AND (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12') ";
+
+if ($nationality == 'Citizens')
+    $sql .= " AND nationality = 'U.A.E' ";
+elseif ($nationality =='Expacts')
+    $sql .= " AND nationality != 'U.A.E' ";
         
     $sql .=" GROUP BY subject_name
              ORDER BY subject_name    
@@ -93,7 +103,12 @@ elseif ($cycle2 == 'Cycle 3')
 elseif ($cycle3 == 'Cycle 2')
     $sql .= " AND (grade = 'GR06' OR grade = 'GR07' OR grade = 'GR08' OR grade = 'GR09') ";
 elseif ($cycle3 == 'Cycle 3')
-    $sql .= " AND (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12') ";           
+    $sql .= " AND (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12') ";
+
+if ($nationality == 'Citizens')
+    $sql .= " AND nationality = 'U.A.E' ";
+elseif ($nationality =='Expacts')
+    $sql .= " AND nationality != 'U.A.E' ";
         
     $sql .=" 
         GROUP BY subject_name
@@ -130,7 +145,12 @@ FROM
 elseif ($cycle1 == 'Cycle 2')
     $sql .= " AND (grade = 'GR06' OR grade = 'GR07' OR grade = 'GR08' OR grade = 'GR09') ";
 elseif ($cycle1 == 'Cycle 3')
-    $sql .= " AND (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12') ";           
+    $sql .= " AND (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12') ";
+
+if ($nationality == 'Citizens')
+    $sql .= " AND nationality = 'U.A.E' ";
+elseif ($nationality =='Expacts')
+    $sql .= " AND nationality != 'U.A.E' ";
         
     $sql .="         
         GROUP BY subject_name
@@ -155,7 +175,12 @@ elseif ($cycle1 == 'Cycle 3')
 elseif ($cycle2 == 'Cycle 2')
     $sql .= " AND (grade = 'GR06' OR grade = 'GR07' OR grade = 'GR08' OR grade = 'GR09') ";
 elseif ($cycle2 == 'Cycle 3')
-    $sql .= " AND (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12') ";           
+    $sql .= " AND (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12') ";
+
+if ($nationality == 'Citizens')
+    $sql .= " AND nationality = 'U.A.E' ";
+elseif ($nationality =='Expacts')
+    $sql .= " AND nationality != 'U.A.E' ";
         
     $sql .="
         GROUP BY subject_name
@@ -183,7 +208,12 @@ elseif ($cycle2 == 'Cycle 3')
 elseif ($cycle3 == 'Cycle 2')
     $sql .= " AND (grade = 'GR06' OR grade = 'GR07' OR grade = 'GR08' OR grade = 'GR09') ";
 elseif ($cycle3 == 'Cycle 3')
-    $sql .= " AND (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12') ";           
+    $sql .= " AND (grade = 'GR10' OR grade = 'GR11' OR grade = 'GR12') ";
+
+if ($nationality == 'Citizens')
+    $sql .= " AND nationality = 'U.A.E' ";
+elseif ($nationality =='Expacts')
+    $sql .= " AND nationality != 'U.A.E' ";
         
     $sql .="     
         GROUP BY subject_name
@@ -199,7 +229,7 @@ ORDER BY ISNULL(Subject0), Subject0, ISNULL(Subject1), Subject1, ISNULL(Subject2
 ";
 
 
-    // echo "SQL STATEMENT <br> " . $sql;
+//     echo "SQL STATEMENT <br> " . $sql;
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         // // echo "<tr>

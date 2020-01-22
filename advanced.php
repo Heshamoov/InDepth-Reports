@@ -134,8 +134,8 @@ function search() {
                 </div>
               </div>
             </div>            
-        </th>
-        <th>
+      </th>   
+      <th>
             <select id="grade" onchange="search(); FillStudents()"></select>
         </th>
         <th>
@@ -315,16 +315,19 @@ document.getElementById('pp').click();
 
         for (let i in termsArray)
             term4.add(new Option(termsArray[i]));
+        }        
 
         document.getElementById("term1").value = document.getElementById('T1L').textContent;
         document.getElementById("term2").value = document.getElementById('T2L').textContent;
         document.getElementById("term3").value = document.getElementById('T3L').textContent;
         document.getElementById("term4").value = document.getElementById('T4L').textContent;
 
+
         document.getElementById('T1L').innerHTML = "";
         document.getElementById('T2L').innerHTML = "";
         document.getElementById('T3L').innerHTML = "";
         document.getElementById('T4L').innerHTML = "";
+
     }
 </script>
 </body>
