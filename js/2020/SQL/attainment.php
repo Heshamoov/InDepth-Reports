@@ -133,8 +133,7 @@ if ($result->num_rows > 0) {
                 if ($row["Grade$i"] != null) {
                     echo "<th>" . $row["Grade$i"] . "</th>";
                     $GradeIndex = array_search($row["Grade$i"], $GradesA);
-                }
-                else
+                } else
                     if ($GradeIndex < 11)
                         echo "<th>" . $GradesA[$GradeIndex + 1] . "</th>";
                     else
@@ -252,4 +251,4 @@ if ($result->num_rows > 0) {
 }//Result>0
 else
     echo "Select Grade!";
-$conn->close();;
+$conn->close();
