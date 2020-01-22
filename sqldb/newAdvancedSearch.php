@@ -94,8 +94,9 @@ $sql = $TopColumns . " FROM ( (" . $InnerColumns . $WhereA[0] . ") t0
 // echo $sql;
 class Subject
 {
-    public function __construct($grade, $subject, $rank)
+    public function __construct($year, $grade, $subject, $rank)
     {
+        $this->year  = $year;
         $this->grade = $grade;
         $this->subject = $subject;
         $this->rank = $rank;
@@ -139,135 +140,135 @@ if ($result->num_rows > 0) {
                     if ($view == 'Attainment')
                         if ($row["Mark$i"] >= 75) {                                   // Outstanding
                             //echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>");
                         } elseif ($row["Mark$i"] >= 61 and $row["Mark$i"] < 75) {      // Very Good
                             //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>");
                         } elseif ($row["Mark$i"] >= 50 and $row["Mark$i"] <= 61) {    // Good
                             //echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>");
                         } elseif ($row[">=65%$i"] >= 65) {                                 // Acceptable
                             //echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>");
                         } elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0) {
                             //echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
                         } else {                                                          // Weak
                             //echo "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>");
                         }
                     elseif ($view == 'Percentage')
                         if ($row["Mark$i"] >= 75) {
                             //echo "<td class='w3-container w3-text-green w3-hover-green'>" . $row["Mark$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>" . $row["Mark$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>" . $row["Mark$i"] . "%</td>");
                         } elseif ($row["Mark$i"] >= 61 and $row["Mark$i"] < 75) {       // Very Good
                             //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row["Mark$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row["Mark$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row["Mark$i"] . "%</td>");
                         } elseif ($row["Mark$i"] >= 50 and $row["Mark$i"] <= 61) {       // Good
                             //echo "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row["Mark$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row["Mark$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row["Mark$i"] . "%</td>");
                         } elseif ($row[">=65%$i"] >= 65) {                                 // Acceptable
                             //echo "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%$i"] . "%</td>");
                         } elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0) {
                             //echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
                         } else {                                                         // Weak
                             //echo "<td class='w3-container w3-text-red w3-hover-red'>" . $row["Mark$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>" . $row["Mark$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>" . $row["Mark$i"] . "%</td>");
                         }
                     elseif ($view == 'Attainment - Percentage')
                         if ($row["Mark$i"] >= 75) {
                             //echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row["Mark$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row["Mark$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row["Mark$i"] . "%</td>");
                         } elseif ($row["Mark$i"] >= 61 and $row["Mark$i"] < 75) {       // Very Good
                             //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row["Mark$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row["Mark$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row["Mark$i"] . "%</td>");
                         } elseif ($row["Mark$i"] >= 50 and $row["Mark$i"] <= 61) {       // Good
                             //echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row["Mark$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row["Mark$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row["Mark$i"] . "%</td>");
                         } elseif ($row[">=65%$i"] >= 65) {                                 // Acceptable
                             //echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%$i"] . "%</td>");
                         } elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0) {
                             //echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
                         } else {                                                          // Weak
                             //echo "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row["Mark$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row["Mark$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row["Mark$i"] . "%</td>");
                         }
                 } //No Student Selected
                 else {
                     if ($view == 'Attainment')
                         if ($row[">=75%$i"] >= 75) {                                    // Outstanding
                             //echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>";
-//                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>");
-                            $subject = new Subject($row["Grade$i"], $subject_name, "Outstanding");
+//                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "Outstanding");
                         } elseif ($row[">=75%$i"] >= 61 and $row[">=75%$i"] < 75) {     // Very Good
                             //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>";
-//                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>");
-                            $subject = new Subject($row["Grade$i"], $subject_name, "Very Good");
+//                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "Very Good");
                         } elseif ($row[">=75%$i"] >= 50 and $row[">=75%$i"] <= 61) {       // Good
                             //echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>";
-//                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>");
-                            $subject = new Subject($row["Grade$i"], $subject_name, "Good");
+//                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "Good");
                         } elseif ($row[">=65%$i"] >= 65) {                                 // Acceptable
                             //echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>";
-//                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>");
-                            $subject = new Subject($row["Grade$i"], $subject_name, "Acceptable");
+//                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "Acceptable");
                         } elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0) {
                             //echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
-//                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
-                            $subject = new Subject($row["Grade$i"], $subject_name, "-");
+//                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "-");
                         } else {                                                          // Weak
                             //echo "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>";
-//                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>");
-                            $subject = new Subject($row["Grade$i"], $subject_name, "Weak");
+//                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "Weak");
                         }
 
                     elseif ($view == 'Percentage')
                         if ($row[">=75%$i"] >= 75) {                                    // Outstanding
                             //echo "<td class='w3-container w3-text-green w3-hover-green'>" . $row[">=75%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>" . $row[">=75%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>" . $row[">=75%$i"] . "%</td>");
                         } elseif ($row[">=75%$i"] >= 61 and $row[">=75%$i"] < 75) {       // Very Good
                             //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row[">=75%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row[">=75%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row[">=75%$i"] . "%</td>");
                         } elseif ($row[">=75%$i"] >= 50 and $row[">=75%$i"] <= 61) {       // Good
                             //echo "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row[">=75%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row[">=75%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row[">=75%$i"] . "%</td>");
                         } elseif ($row[">=65%$i"] >= 65) {                                 // Acceptable
                             //echo "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%$i"] . "%</td>");
                         } elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0) {
                             //echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
                         } else {                                                          // Weak
                             //echo "<td class='w3-container w3-text-red w3-hover-red'>" . $row[">=75%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>" . $row[">=75%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>" . $row[">=75%$i"] . "%</td>");
                         }
 
                     elseif ($view == 'Attainment - Percentage')
                         if ($row[">=75%$i"] >= 75) {                                    // Outstanding
                             //echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row[">=75%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row[">=75%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row[">=75%$i"] . "%</td>");
                         } elseif ($row[">=75%$i"] >= 61 and $row[">=75%$i"] < 75) {      // Very Good
                             //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row[">=75%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row[">=75%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row[">=75%$i"] . "%</td>");
                         } elseif ($row[">=75%$i"] >= 50 and $row[">=75%$i"] <= 61) {      // Good
                             //echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row[">=75%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row[">=75%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row[">=75%$i"] . "%</td>");
                         } elseif ($row[">=65%$i"] >= 65) {                                // Acceptable
                             //echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%$i"] . "%</td>");
                         } elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0) {
                             //echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
                         } else {                                                          // Weak
                             //echo "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row[">=75%$i"] . "%</td>";
-                            $subject = new Subject($row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row[">=75%$i"] . "%</td>");
+                            $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row[">=75%$i"] . "%</td>");
                         }
                 } // Student Selected
-                $subjectsArray[] = $subject;
+                $OldSubjectsArray[] = $subject;
             } // For
             //echo "</tr>";
         }// NewRow
@@ -333,132 +334,132 @@ SELECT
                 if ($view == 'Attainment')
                     if ($row["Mark"] >= 75) {                                   // Outstanding
                         //echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>");
                     } elseif ($row["Mark"] >= 61 and $row["Mark"] < 75) {      // Very Good
                         //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>");
                     } elseif ($row["Mark"] >= 50 and $row["Mark"] <= 61) {    // Good
                         //echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>");
                     } elseif ($row[">=65%"] >= 65) {                                 // Acceptable
                         //echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>");
                     } elseif ($row[">=65%"] == null or $row[">=65%"] == 0) {
                         //echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
                     } else {                                                          // Weak
                         //echo "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>");
                     }
                 elseif ($view == 'Percentage')
                     if ($row["Mark"] >= 75) {
                         //echo "<td class='w3-container w3-text-green w3-hover-green'>" . $row["Mark"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>" . $row["Mark"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>" . $row["Mark"] . "%</td>");
                     } elseif ($row["Mark"] >= 61 and $row["Mark"] < 75) {       // Very Good
                         //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row["Mark"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row["Mark"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row["Mark"] . "%</td>");
                     } elseif ($row["Mark"] >= 50 and $row["Mark"] <= 61) {       // Good
                         //echo "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row["Mark"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row["Mark"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row["Mark"] . "%</td>");
                     } elseif ($row[">=65%"] >= 65) {                                 // Acceptable
                         //echo "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%"] . "%</td>");
                     } elseif ($row[">=65%"] == null or $row[">=65%"] == 0) {
                         //echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
                     } else {                                                         // Weak
                         //echo "<td class='w3-container w3-text-red w3-hover-red'>" . $row["Mark"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>" . $row["Mark"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>" . $row["Mark"] . "%</td>");
                     }
                 elseif ($view == 'Attainment - Percentage')
                     if ($row["Mark"] >= 75) {
                         //echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row["Mark"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row["Mark"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row["Mark"] . "%</td>");
                     } elseif ($row["Mark"] >= 61 and $row["Mark"] < 75) {       // Very Good
                         //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row["Mark"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row["Mark"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row["Mark"] . "%</td>");
                     } elseif ($row["Mark"] >= 50 and $row["Mark"] <= 61) {       // Good
                         //echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row["Mark"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row["Mark"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row["Mark"] . "%</td>");
                     } elseif ($row[">=65%"] >= 65) {                                 // Acceptable
                         //echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%"] . "%</td>");
                     } elseif ($row[">=65%"] == null or $row[">=65%"] == 0) {
                         //echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
                     } else {                                                          // Weak
                         //echo "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row["Mark"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row["Mark"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row["Mark"] . "%</td>");
                     }
             } //No Student Selected
             else {
                 if ($view == 'Attainment')
                     if ($row[">=75%"] >= 75) {                                    // Outstanding
                         //echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>";
-//                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>");
-                        $subject = new Subject($row["Grade"], $row["Subject"], "Outstanding");
+//                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "Outstanding");
                     } elseif ($row[">=75%"] >= 61 and $row[">=75%"] < 75) {     // Very Good
                         //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>";
-//                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>");
-                        $subject = new Subject($row["Grade"], $row["Subject"], "Very Good");
+//                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "Very Good");
                     } elseif ($row[">=75%"] >= 50 and $row[">=75%"] <= 61) {       // Good
                         //echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>";
-//                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>");
-                        $subject = new Subject($row["Grade"], $row["Subject"], "Good");
+//                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "Good");
                     } elseif ($row[">=65%"] >= 65) {                                 // Acceptable
                         //echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>";
-//                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>");
-                        $subject = new Subject($row["Grade"], $row["Subject"], "Acceptable");
+//                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "Acceptable");
                     } elseif ($row[">=65%"] == null or $row[">=65%"] == 0) {
                         //echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
-//                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
-                        $subject = new Subject($row["Grade"], $row["Subject"], "-");
+//                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "-");
                     } else {                                                          // Weak
                         //echo "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>";
-//                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>");
-                        $subject = new Subject($row["Grade"], $row["Subject"], "Weak");
+//                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "Weak");
                     }
 
                 elseif ($view == 'Percentage')
                     if ($row[">=75%"] >= 75) {                                    // Outstanding
                         //echo "<td class='w3-container w3-text-green w3-hover-green'>" . $row[">=75%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>" . $row[">=75%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>" . $row[">=75%"] . "%</td>");
                     } elseif ($row[">=75%"] >= 61 and $row[">=75%"] < 75) {       // Very Good
                         //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row[">=75%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row[">=75%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row[">=75%"] . "%</td>");
                     } elseif ($row[">=75%"] >= 50 and $row[">=75%"] <= 61) {       // Good
                         //echo "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row[">=75%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row[">=75%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row[">=75%"] . "%</td>");
                     } elseif ($row[">=65%"] >= 65) {                                 // Acceptable
                         //echo "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%"] . "%</td>");
                     } elseif ($row[">=65%"] == null or $row[">=65%"] == 0) {
                         //echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
                     } else {                                                          // Weak
                         //echo "<td class='w3-container w3-text-red w3-hover-red'>" . $row[">=75%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>" . $row[">=75%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>" . $row[">=75%"] . "%</td>");
                     }
 
                 elseif ($view == 'Attainment - Percentage')
                     if ($row[">=75%"] >= 75) {                                    // Outstanding
                         //echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row[">=75%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row[">=75%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row[">=75%"] . "%</td>");
                     } elseif ($row[">=75%"] >= 61 and $row[">=75%"] < 75) {      // Very Good
                         //echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row[">=75%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row[">=75%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row[">=75%"] . "%</td>");
                     } elseif ($row[">=75%"] >= 50 and $row[">=75%"] <= 61) {      // Good
                         //echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row[">=75%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row[">=75%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row[">=75%"] . "%</td>");
                     } elseif ($row[">=65%"] >= 65) {                                // Acceptable
                         //echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row[">=65%"] . "%</td>");
                     } elseif ($row[">=65%"] == null or $row[">=65%"] == 0) {
                         //echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>");
                     } else {                                                          // Weak
                         //echo "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row[">=75%"] . "%</td>";
-                        $subject = new Subject($row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row[">=75%"] . "%</td>");
+                        $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row[">=75%"] . "%</td>");
                     }
             } // Student Selected
             $NewSubjectsArray[] = $subject;
@@ -468,65 +469,84 @@ SELECT
     else
         echo "Select Grade!";
 
-//
-//    echo "<table>";
-//    echo "<tr><th>Old Years</th></tr>";
-//    $col = 0;
-//    foreach ($subjectsArray as $s => $cur) {
-//        $col++;
-//        if ($col === 1) echo "<tr><th>" . $cur->subject . "</th>";
-//        echo $cur->rank;
-//        if ($col === 3) {
-//            echo "</tr>";
-//            $col = 0;
-//        }
-//    }
-//    echo "</table>";
-//
-//    echo "<table>";
-//    echo "<tr><th>New Years</th></tr>";
-//    foreach ($NewSubjectsArray as $s => $cur) {
-//        echo "<tr><th>" . $cur->subject . "</th>";
-//        echo $cur->rank . "</tr>";
-//    }
-//    echo "</table>";
-
-
     sort($OldSubjectsArray); sort($NewSubjectsArray);
-    $result = array_merge($OldSubjectsArray,$NewSubjectsArray);
-    sort($result);
+    $result = array_merge($OldSubjectsArray, $NewSubjectsArray);
+
+     $subjects = array();
+    foreach ($result as $o => $cur)
+        if (!array_search(str_replace(" ", "", $cur->subject), str_replace(" ", "", $subjects)))
+            $subjects[] = $cur->subject;
+            sort($subjects);
+            $subjects = array_unique($subjects);
+
+    function cmp($a, $b) {
+        return strcmp($a->subject, $b->subject);
+    }
+
+    usort($result, "cmp");
+
+    $s1617 = []; $s1718 = []; $s1819 = []; $s1920 = [];
+    foreach($result as $s => $cur) {
+        if ($cur->year === '2016 / 2017')
+            $s1617[] = $cur;
+        elseif ($cur->year === '2017 / 2018')
+            $s1718[] = $cur;
+        elseif ($cur->year === '2018 / 2019')
+            $s1819[] = $cur;
+        elseif ($cur->year === '2019 - 2020')
+            $s1920[] = $cur;
+    }
 
     echo "<table>";
-//    echo "<tr><th>Result Years</th></tr>";
-    $col = 0;
-    foreach ($subjectsArray as $s => $cur) {
-        $col++;
-        if ($col === 1) echo "<tr><th>" . $cur->subject . "</th>";
-        echo "<td>" . $cur->grade . " - " . $cur->subject . " - " . $cur->rank . "</td>";
-        if ($col === 4) {
-            echo "</tr>";
-            $col = 0;
-        }
+    foreach ($subjects as $s) {
+        echo "<tr><th>" . $s . "</th>";
+        $hit = false;
+        foreach ($s1617 as $o67 => $cur)
+            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+                $hit = true;
+                break;
+            }
+        if ($hit)
+            echo "<td>" . $cur->year . " - " . $cur->grade . " - " . $cur->subject . " - " . $cur->rank . "</td>";
+        else
+            echo "<td>-</td>";
+
+        $hit = false;
+        foreach ($s1718 as $o78 => $cur)
+            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+                $hit = true;
+                break;
+            }
+        if ($hit)
+            echo "<td>" . $cur->year . " - " . $cur->grade . " - " . $cur->subject . " - " . $cur->rank . "</td>";
+        else
+            echo "<td>-</td>";
+
+        $hit = false;
+        foreach ($s1819 as $o89 => $cur)
+            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+                $hit = true;
+                break;
+            }
+        if ($hit)
+            echo "<td>" . $cur->year . " - " . $cur->grade . " - " . $cur->subject . " - " . $cur->rank . "</td>";
+        else
+            echo "<td>-</td>";
+
+        $hit = false;
+        foreach ($s1920 as $o90 => $cur)
+            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+                $hit = true;
+                break;
+            }
+        if ($hit)
+            echo "<td>" . $cur->year . " - " . $cur->grade . " - " . $cur->subject . " - " . $cur->rank . "</td>";
+        else
+            echo "<td>-</td>";
+
+        echo "</tr>";
     }
     echo "</table>";
-//    while (count($NewSubjectsArray) !== 0){
-//        $curr = 0; $max = 0;
-//        foreach ($NewSubjectsArray as $s =>$new){
-//            foreach ($OldSubjectsArray as $o => $old){
-//                if (strcmp($new->subject, $old->subject) < 0){
-//                    $result[] = $new;
-//                    unset($NewSubjectsArray[$new->subject]);
-//                }
-//                elseif (strcmp($new->subject, $old->subject) == 0){
-//                    $result[] = $old;
-//                    unset($OldSubjectsArray[$old->subject]);
-//                }
-//            }
-//
-//        }
-//    }
-    
-
 
 }//Result>0
 else

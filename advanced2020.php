@@ -87,7 +87,7 @@ if (!isset($_SESSION['login'])) {
     </table>
 </div>
      
-<div id="divprint">
+<div id="divPrint">
     <table id="PageTitle" style="margin: auto; width: 100%;">
         <tr>
             <th id="SchoolLogoTH" style="text-align: center;" colspan="2">

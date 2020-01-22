@@ -38,6 +38,7 @@ if (!isset($_SESSION['login'])) {
     });
         
 function FillStudents() {
+    let namesArray = "";
     let Grade = $("#grade option:selected").text();
     let httpSearch = new XMLHttpRequest();
     httpSearch.onreadystatechange = function () {
@@ -84,9 +85,9 @@ function search() {
 
     let Title = "";
 
-    if (Grade != "Grade")
+    if (Grade !== "Grade")
         Title = Grade;
-    if (Student == "" || Student == "Student" )
+    if (Student === "" || Student === "Student" )
         Title = Title + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Nationality + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Gender;
     else
         Title = Title + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Student;
@@ -177,7 +178,7 @@ function search() {
     </table>
 </div>
      
-<div id="divprint">
+<div id="divPrint">
     <table id="PageTitle" style="margin: auto; width: 100%;">
         <tr>
             <th id="SchoolLogoTH" style="text-align: center;" colspan="2">
@@ -311,7 +312,6 @@ document.getElementById('pp').click();
         httpTerms.onreadystatechange = function () {
             if (this.readyState === 4) {
                 let str = this.responseText;
-                // document.getElementById("debug").innerHTML = this.responseText;
                 termsArray = str.split("\t");
             }
         };
