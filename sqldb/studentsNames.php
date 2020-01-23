@@ -44,7 +44,11 @@ switch ($grade) {
         break;
 }
 
-$sql = "SELECT DISTINCT(last_name) FROM students INNER JOIN courses WHERE course_name = '$grade' ORDER BY last_name\t";
+$sql = "
+    SELECT DISTINCT(last_name) FROM students 
+        INNER JOIN batches ON students.batch_id = batches.id
+        INNER JOIN courses ON batches.course_id = courses.id 
+        WHERE course_name = '$grade' ORDER BY last_name\t";
 $result = $conn->query($sql);
 $newStudents = array();
 while ($row = mysqli_fetch_array($result)) {

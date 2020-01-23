@@ -6,7 +6,25 @@ $grade = $_REQUEST["Grade"];
 $gender = $_REQUEST["Gender"];
 $nationality = $_REQUEST["Nationality"];
 $student = $_REQUEST["Student"];
+$suggested = $_REQUEST["SuggestedName"];
 $view = $_REQUEST["View"];
+
+//echo $student;
+//echo $suggested;
+
+$OldName = $student;
+$nameMatch = "SELECT student_name from new_marks where student_name = '$OldName';";
+$result = $conn->query($nameMatch);
+if ($result->num_rows == 0)
+    $OldName = $suggested;
+
+$NewName = $student;
+$nameMatch = "SELECT last_name from students where last_name = '$NewName';";
+$result = $conn->query($nameMatch);
+if ($result->num_rows == 0)
+    $NewName = $suggested;
+
+
 
 $YearsA = array("2016 / 2017", "2017 / 2018", "2018 / 2019");
 
@@ -44,7 +62,7 @@ for ($i = 0; $i < 3; $i++) {
     $WhereA[$i] = "WHERE acd_code = '$YearsA[$i]' AND (REPLACE(exam_name, ' ','') = REPLACE('$TermsA[$i]', ' ', '')) ";
 
     if ($student != 'Student' and $student != '')
-        $WhereA[$i] .= " AND student_name = '$student' ";
+        $WhereA[$i] .= " AND REPLACE(student_name, ' ', '') = replace('$OldName', ' ', '') ";
     else
         $WhereA[$i] .= " AND grade = '$GradesA[$GradeIndex]' ";
 
@@ -266,6 +284,14 @@ if ($result->num_rows > 0) {
     } // While
     //echo "</table>";
 
+
+//2020
+    $NewGradesA = array("GR 1", "GR 2", "GR 3", "GR 4", "GR 5", "GR 6", "GR 7", "GR 8", "GR 9", "GR10", "GR11", "GR12");
+    if ($GradeIndex < 11)
+        $NewGrade = $NewGradesA[$GradeIndex++];
+    else
+        $NewGrade = $NewGradesA[11];
+
     if ($_REQUEST["Term4"] != "") $term = $_REQUEST["Term4"];
     $RealData = "
 SELECT 
@@ -296,12 +322,12 @@ SELECT
          INNER JOIN students ON exam_scores.student_id = students.id
          LEFT JOIN student_categories ON students.student_category_id = student_categories.id
     
-    WHERE academic_years.name = '2019 - 2020' AND (REPLACE(exam_groups.name, ' ','') = REPLACE('$term', ' ', '')) 
+    WHERE academic_years.name = '2019 - 2020' AND (REPLACE(exam_groups.name, ' ','') = REPLACE('$term', ' ', ''))
 ";
     if ($student != 'Student' and $student != '')
-        $RealData .= " AND students.last_name = '$student' ";
+        $RealData .= " AND REPLACE(students.last_name, ' ', '') = REPLACE('$NewName', ' ', '') ";
     else
-        $RealData .= " AND courses.course_name = '$GradesA[$GradeIndex]' ";
+        $RealData .= " AND courses.course_name = '$NewGrade' ";
 
     if ($gender == 'Boys')
         $RealData .= " AND students.gender = 'Male' ";
@@ -453,6 +479,17 @@ SELECT
                         $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row[">=75%"] . "%</td>");
                     }
             } // Student Selected
+            if ($subject->subject == "Arabic")
+                $subject->subject = "Arabic Language";
+            if ($subject->subject == "English")
+                $subject->subject = "English Language";
+            if ($subject->subject == "Math")
+                $subject->subject = "Mathematics";
+            if ($subject->subject == "PE")
+                $subject->subject = "Physical Education";
+            if ($subject->subject == "SSA")
+                $subject->subject = "S.Studies";
+
             $NewSubjectsArray[] = $subject;
         } // WHILE
         //echo "</tr>";
@@ -469,12 +506,6 @@ SELECT
             $subjects[] = $cur->subject;
             sort($subjects);
             $subjects = array_unique($subjects);
-
-    function cmp($a, $b) {
-        return strcmp($a->subject, $b->subject);
-    }
-
-    usort($result, "cmp");
 
     $s1617 = []; $s1718 = []; $s1819 = []; $s1920 = [];
     foreach($result as $s => $cur) {

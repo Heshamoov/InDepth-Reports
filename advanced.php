@@ -29,6 +29,7 @@ if (!isset($_SESSION['login'])) {
         $('#grade').multiselect({includeSelectAllOption: false});
         $('#gender').multiselect({includeSelectAllOption: false});
         $('#student').multiselect({includeSelectAllOption: false});
+        $('#suggestedNames').multiselect({includeSelectAllOption: false});
         $('#nationality').multiselect({includeSelectAllOption: false});
         $('#view').multiselect({includeSelectAllOption: false});
         $('#term1').multiselect({includeSelectAllOption: false});
@@ -71,12 +72,46 @@ function FillStudents() {
     });
 
 }
+function suggestNames(){
+    let Student = $("#student option:selected").text();
+    let namesArray = "";
+    let httpSearch = new XMLHttpRequest();
+    httpSearch.onreadystatechange = function () {
+        if (this.readyState === 4) {
+            // document.getElementById('debug').innerHTML = this.responseText;
+            let str = this.responseText;
+            namesArray = str.split("\t");
+        }
+    };
+    httpSearch.open("POST", "sqldb/suggestNames.php?student=" + Student, false);
+    httpSearch.send();
 
+    let studentsDropDown = document.getElementById('suggestedNames');
+    while (studentsDropDown.length > 0)
+        studentsDropDown.remove(0);
+
+    $('#suggestedNames').multiselect('destroy');
+
+    delete namesArray[namesArray.length - 1];
+
+    studentsDropDown.add(new Option('Best Match'));
+
+    for (let i in namesArray)
+        studentsDropDown.add(new Option(namesArray[i]));
+
+    $(function () {
+        $('#suggestedNames').multiselect({
+            includeSelectAllOption: true
+        });
+    });
+
+}
 function search() {
     let Grade = $("#grade option:selected").text();
     let Gender = $("#gender option:selected").text();
     let Nationality = $("#nationality option:selected").text();
     let Student = $("#student option:selected").text();
+    let SuggestedStudent = $("#suggestedNames option:selected").text();
     let View = $("#view option:selected").text();
     let Term1 = $("#term1 option:selected").text();
     let Term2 = $("#term2 option:selected").text();
@@ -105,7 +140,7 @@ function search() {
         };
         
     httpSearch.open("POST", "sqldb/newAdvancedSearch.php?Grade=" + Grade + "&Gender=" + Gender +
-    "&Nationality=" + Nationality + "&Student=" + Student +
+    "&Nationality=" + Nationality + "&Student=" + Student + "&SuggestedName=" + SuggestedStudent +
     "&Term1=" + Term1 + "&Term2=" + Term2 + "&Term3=" + Term3 + "&Term4=" + Term4 +
     "&View=" + View, false);
     httpSearch.send();
@@ -151,9 +186,12 @@ function search() {
                 <option>Boys</option>
                 <option>Girls</option>
             </select>
-        </th>                
+        </th>
         <th>
-            <select id="student" onchange="search()"></select>
+            <select id="student" onchange="suggestNames()"></select>
+        </th>
+        <th>
+            <select id="suggestedNames" onchange="search()"></select>
         </th>
         <th>
             <select id="view" onchange="search()">
@@ -315,7 +353,6 @@ document.getElementById('pp').click();
 
         for (let i in termsArray)
             term4.add(new Option(termsArray[i]));
-        }        
 
         document.getElementById("term1").value = document.getElementById('T1L').textContent;
         document.getElementById("term2").value = document.getElementById('T2L').textContent;
