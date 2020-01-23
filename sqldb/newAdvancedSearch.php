@@ -479,6 +479,17 @@ SELECT
                         $subject = new Subject($row["Year"], $row["Grade"], $row["Subject"], "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row[">=75%"] . "%</td>");
                     }
             } // Student Selected
+            if ($subject->subject == "Arabic")
+                $subject->subject = "Arabic Language";
+            if ($subject->subject == "English")
+                $subject->subject = "English Language";
+            if ($subject->subject == "Math")
+                $subject->subject = "Mathematics";
+            if ($subject->subject == "PE")
+                $subject->subject = "Physical Education";
+            if ($subject->subject == "SSA")
+                $subject->subject = "S.Studies";
+
             $NewSubjectsArray[] = $subject;
         } // WHILE
         //echo "</tr>";
