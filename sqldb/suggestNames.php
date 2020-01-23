@@ -14,3 +14,4 @@ $result = $conn->query($sql);
 while ($row = mysqli_fetch_array($result)) {
     echo $row["student_name"] . "\t";
 }
+
