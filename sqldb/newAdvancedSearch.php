@@ -276,6 +276,16 @@ if ($result->num_rows > 0) {
                             $subject = new Subject($row["Year$i"], $row["Grade$i"], $subject_name, "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row[">=75%$i"] . "%</td>");
                         }
                 } // Student Selected
+                if ($subject->subject == "Arabic")
+                    $subject->subject = "Arabic Language";
+                if ($subject->subject == "English")
+                    $subject->subject = "English Language";
+                if ($subject->subject == "Math")
+                    $subject->subject = "Mathematics";
+                if ($subject->subject == "PE")
+                    $subject->subject = "Physical Education";
+                if ($subject->subject == "SSA" or str_replace(" ", "", strtolower($subject->subject)) == "s.studies")
+                    $subject->subject = "Social Studies";
                 $OldSubjectsArray[] = $subject;
             } // For
             //echo "</tr>";
@@ -486,7 +496,7 @@ SELECT
                 $subject->subject = "Mathematics";
             if ($subject->subject == "PE")
                 $subject->subject = "Physical Education";
-            if ($subject->subject == "SSA" or $subject->subject == "S.Studies")
+            if ($subject->subject == "SSA" or str_replace(" ", "", strtolower($subject->subject)) == "s.studies")
                 $subject->subject = "Social Studies";
 
             $NewSubjectsArray[] = $subject;
@@ -496,6 +506,7 @@ SELECT
     else
         echo "Select Grade!";
 
+//    Sorting Subjects Arrays into one array
     sort($OldSubjectsArray);
     sort($NewSubjectsArray);
     $result = array_merge($OldSubjectsArray, $NewSubjectsArray);
@@ -505,12 +516,10 @@ SELECT
         if (!array_search(str_replace(" ", "", strtolower($cur->subject)), str_replace(" ", "", array_map('strtolower', $subjects))))
             $subjects[] = $cur->subject;
     sort($subjects);
-    $subjects = array_unique($subjects);
+    $subjects = array_unique(array_map('strtolower',$subjects));
+    $subjects = array_unique(array_map('ucwords',$subjects));
 
-    $s1617 = [];
-    $s1718 = [];
-    $s1819 = [];
-    $s1920 = [];
+    $s1617 = []; $s1718 = []; $s1819 = []; $s1920 = [];
     foreach ($result as $s => $cur) {
         if ($cur->year === '2016 / 2017')
             $s1617[] = $cur;
