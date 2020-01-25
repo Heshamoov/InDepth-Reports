@@ -542,7 +542,7 @@ SELECT
         echo "<tr><th>" . $s . "</th>";
         $hit = false;
         foreach ($s1617 as $o67 => $cur)
-            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+            if (strcmp(str_replace(" ", "", strtolower($cur->subject)), str_replace(" ", "", strtolower($s))) == 0) {
                 $hit = true;
                 break;
             }
@@ -554,7 +554,7 @@ SELECT
 
         $hit = false;
         foreach ($s1718 as $o78 => $cur)
-            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+            if (strcmp(str_replace(" ", "", strtolower($cur->subject)), str_replace(" ", "", strtolower($s))) == 0) {
                 $hit = true;
                 break;
             }
@@ -566,7 +566,7 @@ SELECT
 
         $hit = false;
         foreach ($s1819 as $o89 => $cur)
-            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+            if (strcmp(str_replace(" ", "", strtolower($cur->subject)), str_replace(" ", "", strtolower($s))) == 0) {
                 $hit = true;
                 break;
             }
@@ -578,7 +578,7 @@ SELECT
 
         $hit = false;
         foreach ($s1920 as $o90 => $cur)
-            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+            if (strcmp(str_replace(" ", "", strtolower($cur->subject)), str_replace(" ", "", strtolower($s))) == 0) {
                 $hit = true;
                 break;
             }
