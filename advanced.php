@@ -279,11 +279,20 @@ function search() {
 
     <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
         <tr>
+            <td id="today"></td>
             <td id="InDepthTD" style="text-align: right;">Powered By <a href="https://www.indepth.ae">InDepth</a></td>
         </tr>
     </table>
 </div>
+<script>
+    let d = new Date();
+    let year = d.getFullYear();
+    let month = d.getMonth() + 1;
+    let day = d.getDate();
+    let date = day + "/" + month + "/" + year;
 
+    document.getElementById("today").innerHTML = date;
+</script>
 
 <!-- Initialize Years -->
 <!--<script src="js/initYears.js"></script>-->
