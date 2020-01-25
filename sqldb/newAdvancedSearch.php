@@ -25,7 +25,6 @@ if ($result->num_rows == 0)
     $NewName = $suggested;
 
 
-
 $YearsA = array("2016 / 2017", "2017 / 2018", "2018 / 2019");
 
 $TermsA = array();
@@ -114,7 +113,7 @@ class Subject
 {
     public function __construct($year, $grade, $subject, $rank)
     {
-        $this->year  = $year;
+        $this->year = $year;
         $this->grade = $grade;
         $this->subject = $subject;
         $this->rank = $rank;
@@ -497,18 +496,22 @@ SELECT
     else
         echo "Select Grade!";
 
-    sort($OldSubjectsArray); sort($NewSubjectsArray);
+    sort($OldSubjectsArray);
+    sort($NewSubjectsArray);
     $result = array_merge($OldSubjectsArray, $NewSubjectsArray);
 
-     $subjects = array();
+    $subjects = array();
     foreach ($result as $o => $cur)
         if (!array_search(str_replace(" ", "", strtolower($cur->subject)), str_replace(" ", "", array_map('strtolower', $subjects))))
             $subjects[] = $cur->subject;
-            sort($subjects);
-            $subjects = array_unique($subjects);
+    sort($subjects);
+    $subjects = array_unique($subjects);
 
-    $s1617 = []; $s1718 = []; $s1819 = []; $s1920 = [];
-    foreach($result as $s => $cur) {
+    $s1617 = [];
+    $s1718 = [];
+    $s1819 = [];
+    $s1920 = [];
+    foreach ($result as $s => $cur) {
         if ($cur->year === '2016 / 2017')
             $s1617[] = $cur;
         elseif ($cur->year === '2017 / 2018')
@@ -542,7 +545,7 @@ SELECT
         echo "<tr><th>" . $s . "</th>";
         $hit = false;
         foreach ($s1617 as $o67 => $cur)
-            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+            if (strcmp(str_replace(" ", "", strtolower($cur->subject)), str_replace(" ", "", strtolower($s))) == 0) {
                 $hit = true;
                 break;
             }
@@ -554,7 +557,7 @@ SELECT
 
         $hit = false;
         foreach ($s1718 as $o78 => $cur)
-            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+            if (strcmp(str_replace(" ", "", strtolower($cur->subject)), str_replace(" ", "", strtolower($s))) == 0) {
                 $hit = true;
                 break;
             }
@@ -566,7 +569,7 @@ SELECT
 
         $hit = false;
         foreach ($s1819 as $o89 => $cur)
-            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+            if (strcmp(str_replace(" ", "", strtolower($cur->subject)), str_replace(" ", "", strtolower($s))) == 0) {
                 $hit = true;
                 break;
             }
@@ -578,7 +581,7 @@ SELECT
 
         $hit = false;
         foreach ($s1920 as $o90 => $cur)
-            if (strcmp(str_replace(" ", "", $cur->subject), str_replace(" ", "", $s)) == 0) {
+            if (strcmp(str_replace(" ", "", strtolower($cur->subject)), str_replace(" ", "", strtolower($s))) == 0) {
                 $hit = true;
                 break;
             }
