@@ -487,8 +487,8 @@ SELECT
                 $subject->subject = "Mathematics";
             if ($subject->subject == "PE")
                 $subject->subject = "Physical Education";
-            if ($subject->subject == "SSA")
-                $subject->subject = "S.Studies";
+            if ($subject->subject == "SSA" or $subject->subject == "S.Studies")
+                $subject->subject = "Social Studies";
 
             $NewSubjectsArray[] = $subject;
         } // WHILE
@@ -502,7 +502,7 @@ SELECT
 
      $subjects = array();
     foreach ($result as $o => $cur)
-        if (!array_search(str_replace(" ", "", $cur->subject), str_replace(" ", "", $subjects)))
+        if (!array_search(str_replace(" ", "", strtolower($cur->subject)), str_replace(" ", "", array_map('strtolower', $subjects))))
             $subjects[] = $cur->subject;
             sort($subjects);
             $subjects = array_unique($subjects);
@@ -520,11 +520,24 @@ SELECT
     }
 
     echo "<tr><th>Grade Progress</th>";
-    echo "<th>" . $s1617[0]->grade . "</th>";
-    echo "<th>" . $s1718[0]->grade . "</th>";
-    echo "<th>" . $s1819[0]->grade . "</th>";
-    echo "<th>" . $s1920[0]->grade . "</th>";
+    if (count($s1617) > 0)
+        echo "<th>" . $s1617[0]->grade . "</th>";
+    else
+        echo "<th>-</th>";
+    if (count($s1718) > 0)
+        echo "<th>" . $s1718[0]->grade . "</th>";
+    else
+        echo "<th>-</th>";
+    if (count($s1819) > 0)
+        echo "<th>" . $s1819[0]->grade . "</th>";
+    else
+        echo "<th>-</th>";
+    if (count($s1920) > 0)
+        echo "<th>" . $s1920[0]->grade . "</th>";
+    else
+        echo "<th>-</th>";
     echo "</tr>";
+
     foreach ($subjects as $s) {
         echo "<tr><th>" . $s . "</th>";
         $hit = false;
