@@ -63,11 +63,14 @@ select input{
   margin: auto;
   color: gray;
   font-size: 10px;
-  opacity: 0.5;
 }
 
 #InDepthTD {
   text-align: right;
+  opacity: 0.5;
+}
+#today{
+  color: black;
 }
 
 
