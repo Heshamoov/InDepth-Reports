@@ -291,18 +291,17 @@ if ($result->num_rows > 0) {
             //echo "</tr>";
         }// NewRow
     } // While
-    //echo "</table>";
-
+}
 
 //2020
-    $NewGradesA = array("GR 1", "GR 2", "GR 3", "GR 4", "GR 5", "GR 6", "GR 7", "GR 8", "GR 9", "GR10", "GR11", "GR12");
-    if ($GradeIndex < 11)
-        $NewGrade = $NewGradesA[$GradeIndex++];
-    else
-        $NewGrade = $NewGradesA[11];
+$NewGradesA = array("GR 1", "GR 2", "GR 3", "GR 4", "GR 5", "GR 6", "GR 7", "GR 8", "GR 9", "GR10", "GR11", "GR12");
+if ($GradeIndex < 11)
+    $NewGrade = $NewGradesA[$GradeIndex++];
+else
+    $NewGrade = $NewGradesA[11];
 
-    if ($_REQUEST["Term4"] != "") $term = $_REQUEST["Term4"];
-    $RealData = "
+if ($_REQUEST["Term4"] != "") $term = $_REQUEST["Term4"];
+$RealData = "
 SELECT 
        students.last_name,
        courses.course_name Grade,
@@ -349,7 +348,6 @@ SELECT
         $RealData .= " AND students.birth_place != 'U.A.E' ";
 
     $RealData .= " GROUP BY subjects.name ORDER BY subjects.name ";
-
 
 //    echo $RealData;
     $NewSubjectsArray = [];
@@ -550,6 +548,7 @@ SELECT
         echo "<th>-</th>";
     echo "</tr>";
 
+//    Print Subject Name
     foreach ($subjects as $s) {
         echo "<tr><th>" . $s . "</th>";
         $hit = false;
@@ -603,7 +602,4 @@ SELECT
         echo "</tr>";
     }
 
-}//Result>0
-else
-    echo "Select Grade!";
-$conn->close();;
+    $conn->close();;

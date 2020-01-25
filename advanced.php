@@ -188,7 +188,7 @@ function search() {
             </select>
         </th>
         <th>
-            <select id="student" onchange="suggestNames()"></select>
+            <select id="student" onchange="search(); suggestNames()"></select>
         </th>
         <th>
             <select id="suggestedNames" onchange="search()"></select>
