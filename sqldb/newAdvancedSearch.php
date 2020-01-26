@@ -530,8 +530,12 @@ SELECT
     }
 
     echo "<tr><th>Grade Progress</th>";
-    if (count($s1617) > 0)
+    if (count($s1617) > 0) {
         echo "<th>" . $s1617[0]->grade . "</th>";
+//        foreach ($s1617 as $t => $item)
+//            echo "<td>" . $item->year . " - " . $item->grade . " - " . $item->subject . " - " . count($s1617) . "</td>";
+    }
+
     else
         echo "<th>-</th>";
     if (count($s1718) > 0)
