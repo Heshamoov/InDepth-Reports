@@ -36,6 +36,7 @@ if (!isset($_SESSION['login'])) {
         $('#term2').multiselect({includeSelectAllOption: false});
         $('#term3').multiselect({includeSelectAllOption: false});
         $('#term4').multiselect({includeSelectAllOption: false});
+        $('#term1d').multiselect({includeSelectAllOption: false});
     });
         
 function FillStudents() {
@@ -248,27 +249,27 @@ function search() {
 
         <tr class="dropdownTR">
             <th><label>Year</label></th>
-            <th>2016 - 2017</th>
-            <th>2017 - 2018</th>
-            <th>2018 - 2019</th>
-            <th>2019 - 2020</th>
+            <th class="c67">2016 - 2017</th>
+            <th class="c78">2017 - 2018</th>
+            <th class="c89">2018 - 2019</th>
+            <th class="c90">2019 - 2020</th>
         </tr>
 
         <tr>
             <th><label>Term</label></th>
-            <th>
+            <th class="c67">
                 <select id="term1" onchange="search()"></select>
                 <label id="T1L"></label>
             </th>
-            <th>
+            <th class="c78">
                 <select id="term2" onchange="search()"></select>
                 <label id="T2L"></label>
             </th>
-            <th>
+            <th class="c89">
                 <select id="term3" onchange="search()"></select>
                 <label id="T3L"></label>
             </th>
-            <th>
+            <th class="c92">
                 <select id="term4" onchange="search()"></select>
                 <label id="T4L"></label>
             </th>
@@ -284,6 +285,7 @@ function search() {
         </tr>
     </table>
 </div>
+
 <script>
     let d = new Date();
     let year = d.getFullYear();
@@ -312,6 +314,15 @@ function search() {
         $('#term2').multiselect('destroy');
         $('#term3').multiselect('destroy');
         $('#term4').multiselect('destroy');
+
+        if(document.getElementById('c67').innerHTML === "-")
+            $('.c67').remove();
+        if(document.getElementById('c78').innerHTML === "-")
+            $('.c78').remove();
+        if(document.getElementById('c89').innerHTML === "-")
+            $('.c89').remove();
+        if(document.getElementById('c90').innerHTML === "-")
+            $('.c90').remove();
 
 document.getElementById('pp').click();
         

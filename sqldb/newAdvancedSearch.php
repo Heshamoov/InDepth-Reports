@@ -530,26 +530,26 @@ SELECT
     }
 
     echo "<tr><th>Grade Progress</th>";
-    if (count($s1617) > 0) {
-        echo "<th>" . $s1617[0]->grade . "</th>";
-//        foreach ($s1617 as $t => $item)
-//            echo "<td>" . $item->year . " - " . $item->grade . " - " . $item->subject . " - " . count($s1617) . "</td>";
-    }
+    if (count($s1617) > 0)
+        echo "<th id='c67' class='c67'>" . $s1617[0]->grade . "</th>";
+    else
+        echo "<th id='c67' class='c67'>-</th>";
 
-    else
-        echo "<th>-</th>";
     if (count($s1718) > 0)
-        echo "<th>" . $s1718[0]->grade . "</th>";
+        echo "<th id='c78' class='c78'>" . $s1718[0]->grade . "</th>";
     else
-        echo "<th>-</th>";
+        echo "<th id='c78' class='c78'>-</th>";
+
     if (count($s1819) > 0)
-        echo "<th>" . $s1819[0]->grade . "</th>";
+        echo "<th id='c89' class='c89'>" . $s1819[0]->grade . "</th>";
     else
-        echo "<th>-</th>";
+        echo "<th id='c89' class='c89'>-</th>";
+
     if (count($s1920) > 0)
-        echo "<th>" . $s1920[0]->grade . "</th>";
+        echo "<th id='c90' class='c90'>" . $s1920[0]->grade . "</th>";
     else
-        echo "<th>-</th>";
+        echo "<th id='c90' class='c90'>-</th>";
+
     echo "</tr>";
 
 //    Print Subject Name
@@ -565,7 +565,7 @@ SELECT
 //            echo "<td>" . $cur->year . " - " . $cur->grade . " - " . $cur->subject . " - " . $cur->rank . "</td>";
             echo $cur->rank;
         else
-            echo "<td>-</td>";
+            echo "<td class='c67'>-</td>";
 
         $hit = false;
         foreach ($s1718 as $o78 => $cur)
@@ -577,7 +577,7 @@ SELECT
 //            echo "<td>" . $cur->year . " - " . $cur->grade . " - " . $cur->subject . " - " . $cur->rank . "</td>";
             echo $cur->rank;
         else
-            echo "<td>-</td>";
+            echo "<td class='c78'>-</td>";
 
         $hit = false;
         foreach ($s1819 as $o89 => $cur)
@@ -589,7 +589,7 @@ SELECT
 //            echo "<td>" . $cur->year . " - " . $cur->grade . " - " . $cur->subject . " - " . $cur->rank . "</td>";
             echo $cur->rank;
         else
-            echo "<td>-</td>";
+            echo "<td  class='c89'>-</td>";
 
         $hit = false;
         foreach ($s1920 as $o90 => $cur)
@@ -601,7 +601,7 @@ SELECT
 //            echo "<td>" . $cur->year . " - " . $cur->grade . " - " . $cur->subject . " - " . $cur->rank . "</td>";
             echo $cur->rank;
         else
-            echo "<td>-</td>";
+            echo "<td class='c90'>-</td>";
 
         echo "</tr>";
     }

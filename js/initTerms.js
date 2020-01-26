@@ -15,13 +15,11 @@ httpTerms.send();
 
 
 
-$('#terms1').multiselect('destroy');
-$('#terms2').multiselect('destroy');
-$('#terms3').multiselect('destroy');
-
+$('#term1').multiselect('destroy');
+$('#term2').multiselect('destroy');
+$('#term3').multiselect('destroy');
 
 delete termsArray[termsArray.length - 1];
-
 
 for (let i in termsArray) {
     term1.add(new Option(termsArray[i]));

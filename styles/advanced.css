@@ -82,3 +82,13 @@
 .rc-red {
     color: red;
 }
+
+#myTable {
+    border: 1px solid #2b669a;
+    width: 80%;
+    margin: auto;
+}
+#myTable td {
+    margin: auto;
+
+}
