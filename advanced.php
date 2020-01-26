@@ -337,6 +337,7 @@ document.getElementById('pp').click();
         let term4 = document.getElementById('term4');
 
         let httpTerms = new XMLHttpRequest();
+        let termsArray = [];
         httpTerms.onreadystatechange = function () {
             if (this.readyState === 4) {
                 let str = this.responseText;
@@ -348,7 +349,6 @@ document.getElementById('pp').click();
         httpTerms.send();
 
         delete termsArray[termsArray.length - 1];
-
 
         for (let i in termsArray) {
             term1.add(new Option(termsArray[i]));
@@ -374,17 +374,15 @@ document.getElementById('pp').click();
         for (let i in termsArray)
             term4.add(new Option(termsArray[i]));
 
-        document.getElementById("term1").value = document.getElementById('T1L').textContent;
-        document.getElementById("term2").value = document.getElementById('T2L').textContent;
-        document.getElementById("term3").value = document.getElementById('T3L').textContent;
-        document.getElementById("term4").value = document.getElementById('T4L').textContent;
-
+        $('#term1').children('option:selected').text(document.getElementById('T1L').textContent);
+        $('#term2').children('option:selected').text(document.getElementById('T2L').textContent);
+        $('#term3').children('option:selected').text(document.getElementById('T3L').textContent);
+        $('#term4').children('option:selected').text(document.getElementById('T4L').textContent);
 
         document.getElementById('T1L').innerHTML = "";
         document.getElementById('T2L').innerHTML = "";
         document.getElementById('T3L').innerHTML = "";
         document.getElementById('T4L').innerHTML = "";
-
     }
 </script>
 </body>
