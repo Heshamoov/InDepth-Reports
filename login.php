@@ -13,7 +13,7 @@ if ($_POST['token'] != '') {
         $_SESSION['name'] = $row['name'];
     }
 
-    $sql = "select * from users where username = '$_POST[user]' and (id = '5077' or id = '3009')";
+    $sql = "select * from users where username = '$_POST[user]' and (id = '5077' or id = '3009' or id = '5112')";
    echo $sql;
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
