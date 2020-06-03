@@ -54,6 +54,10 @@
 
     <form name="frm" style="float: right" action="statistics.php" method="POST">
         <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navStatistics" value="Statistics" type="submit">
+    </form>
+
+    <form name="frm" style="float: right" action="grade_performance.php" method="POST">
+        <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navGradePerformance" value="Grade Performance" type="submit">
     </form>   
     <!--     <form name="frm" style="float: right"action="import.php" method="POST">
                     <input class="w3-bar-item w3-button w3-hide-small  w3-right-align w3-hover-white w3-mobile" value="Home" type="submit">
