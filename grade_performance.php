@@ -45,45 +45,12 @@ if (!isset($_SESSION['login'])) {
                     </div>
                 </div>
             </th>
-            <th><select id="grade" onchange="students();search()"></select></th>
+        <form class="row" method="post" target="_blank">
+            <th><select id="grade" onchange="search()"></select></th>
             <th>
-                <select id="nationality" onchange="search()">
-                    <option>Nationality: ALL</option>
-                    <option>Citizens</option>
-                    <option>Expats</option>
-                </select>
+                <button class="btn btn-sm" formaction="js\2020\SQL\grade_performance_pdf.php" title="Print Report ">PRINT</button>
             </th>
-            <th>
-                <select id="gender" onchange="search()">
-                    <option>Gender: ALL</option>
-                    <option>Boys</option>
-                    <option>Girls</option>
-                </select>
-            </th>
-            <th>
-                <select id="student" onchange="search()"></select>
-            </th>
-            <th>
-                <select id="view" onchange="search()">
-                    <option>Attainment</option>
-                    <option>Percentage</option>
-                    <option>Attainment - Percentage</option>
-                </select>
-            </th>
-            <th>
-
-                <button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge' onclick="PrintTable()"></button>
-                <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge'
-                        onclick="printJS({
-        documentTitle: 'Grade/Student Progress Analysis - Al Sanawbar School',
-        printable: 'divprint',
-        type: 'html',
-        showModal:true,
-        ignoreElements: [],
-        css: 'styles/advancedPDF.css'
-    })">
-                </button>
-            </th>
+        </form>
         </table>
     </div>
 

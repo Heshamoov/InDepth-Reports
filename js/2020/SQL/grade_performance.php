@@ -81,16 +81,14 @@ if ($result->num_rows > 0) {
     echo "</tr>";
     while ($subject = $subjects->fetch_assoc()) {
         echo "<td colspan='2'>" . $subject['name'] . "</td>";
+    }  echo "<tr><th>Student Name</th><th>Exams</th>";
+    for ($i = 1; $i <= $subjects_count; $i++) {
+        echo "<td>C.E.1</td><td>T.E.1</td>";
     }
-            echo "</tr></thead><tbody>";
-            echo "<tr><th>Student Name</th><th>Exams</th>";
-            for ($i = 1; $i <= $subjects_count; $i++) {
-                echo "<td>C.E.1</td><td>T.E.1</td>";
-            }
     echo "</tr></thead><tbody>";
 
     $prev_id = 0;  $first_line = true; $new_line = false;
-    echo "<tr>";
+    echo "</tr></thead><tbody>";
     while ($row = $result->fetch_assoc()) {
         if ($row['id'] != $prev_id) { // New Student
             if ($first_line)
