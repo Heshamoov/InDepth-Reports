@@ -34,7 +34,7 @@ if ($term == 'Term 2' OR $term == 'Term 2 - Class Evaluation')
 if ($term == 'Term 3' OR $term == 'Term 3 - Class Evaluation')
     $condition = " AND exam_groups.name in ('Term 3', 'Term 3 - Class Evaluation') ";
 
-$order = " ORDER BY batches.name, students.first_name, subject, term DESC;";
+$order = " ORDER BY batches.name, students.first_name, subjects.name, exam_groups.name DESC;";
 
 $sql .= $condition . $order;
 //echo $sql;
@@ -55,7 +55,7 @@ FROM ((((((((
 WHERE academic_years.name = '2019 - 2020'
   AND courses.course_name = '$grade'" . $condition . "ORDER BY batches.name, students.first_name, subjects.name, exam_groups.name";
 
-//echo $subjects_query;
+echo $subjects_query;
 
 $count_subjects = "SELECT DISTINCT (subjects.name)
 FROM ((((((((
@@ -104,33 +104,33 @@ class PDF extends TCPDF
         $this->Cell(38, 10, 'Tel: 03 767 98889', 0, '2', 'L');
         $this->Cell(38, 0, 'www.alsanawbarschool.com', 0, '', 'L');
         $this->SetLineWidth(0.1);
-        $this->Line(30, 45, 250, 45);
+//        $this->Line(30, 45, 250, 45);
         $this->Ln(10);
     }
 
 // Page footer
-    public function Footer()
-    {
-        $date = date('d-m-Y');
-        $this->SetFont('times', 'I', 10);
-        $this->SetY(-60);
-//        $this->Cell(0, 10, '__________________   ', 0, 0, 'R');
-        $this->SetY(-55);
-//        $this->Cell(0, 10, 'Accountant Signature   ', 0, 0, 'R');
-        $this->SetY(-15);
-        // times italic 8
-        $this->SetFont('times', 'I', 8);
-        // Page number
-//            $this->Cell(0, 10, 'Printed by ' . $_SESSION['name'], 0, 0, 'L');
-//            $this->Cell(0, 10, 'Printed on ' . $date, 0, 0, 'R');
-    }
+//    public function Footer()
+//    {
+//        $date = date('d-m-Y');
+//        $this->SetFont('times', 'I', 10);
+//        $this->SetY(-60);
+////        $this->Cell(0, 10, '__________________   ', 0, 0, 'R');
+//        $this->SetY(-55);
+////        $this->Cell(0, 10, 'Accountant Signature   ', 0, 0, 'R');
+//        $this->SetY(-15);
+//        // times italic 8
+//        $this->SetFont('times', 'I', 8);
+//        // Page number
+////            $this->Cell(0, 10, 'Printed by ' . $_SESSION['name'], 0, 0, 'L');
+////            $this->Cell(0, 10, 'Printed on ' . $date, 0, 0, 'R');
+//    }
 }
 
 $pdf = new PDF();
 $pdf->SetTitle('Grade Performance');
 $pdf->SetMargins(10, 45, 10);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
-$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
+//$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
 $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 $pdf->setFontSubsetting(true);
@@ -140,38 +140,40 @@ $fontSize = 7; // float, in point
 
 
 
-$html2 = '<h3 style="text-align: center">Academic Year: 2019 - 2020  / ' . $grade . '</h3><table border="1" style="border-collapse: collapse; padding-left: 4px;">';
+$html2 = '<h3 style="text-align: center">Academic Year: 2019 - 2020  / ' . $grade.' - '. $term . '</h3><table border="1" style="border-collapse: collapse; font-size: 10px; padding-left: 4px;">';
 
 $pdf->SetFont($fontFamily, $fontStyle, $fontSize);
 $pdf->AddPage('l');
 
 if ($result->num_rows > 0) {
     $html2 .= '<tr>
-<th width="90" rowspan="2" colspan="2" style="text-align: right;font-weight: bold;">Courses</th>';
+<th  rowspan="2" colspan="6" style="text-align: right;font-weight: bold;">Courses</th>';
     for ($i = 1; $i <= $subjects_count; $i++)
-        $html2 .= '<td colspan="2" style="text-align: center">' . $i . '</td>';
+        $html2 .= '<td  colspan="2" style="text-align: center">' . $i . '</td>';
 
     $html2 .= '</tr><tr>';
 
     while ($subject = $subjects->fetch_assoc())
         $html2 .= '<td colspan="2" style="font-weight: bold; text-align: center">' . $subject['name'] . '</td>';
 
-    $html2 .= '</tr><tr><th style="font-weight: bold">Student Name</th><th style="font-weight: bold">Grade</th>';
+    $html2 .= '</tr><tr><th style="font-weight: bold" colspan="4">Student Name</th>
+<th style="font-weight: bold" colspan="2">Grade</th>';
 
-    if (strcmp($term, 'Term 1') or strcmp($term, 'Term 1 - Class Evaluation'))  {
+    if (strcmp($term, 'Term 1') == 0 )  {
         for ($i = 1; $i <= $subjects_count; $i++)
             $html2 .= '<td style="text-align: center">C.E.1</td><td style="text-align: center">T.E.1</td>';
     }
 
-    if (strcmp($term, 'Term 2')  or strcmp($term, 'Term 2 - Class Evaluation')) {
+    else if (strcmp($term, 'Term 2') == 0  ) {
         for ($i = 1; $i <= $subjects_count; $i++)
             $html2 .= '<td style="text-align: center">C.E.2</td><td style="text-align: center">T.E.2</td>';
     }
 
-    if (strcmp($term, 'Term 3')  or strcmp($term, 'Term 3 - Class Evaluation')) {
+    else if (strcmp($term, 'Term 3') == 0   ) {
         for ($i = 1; $i <= $subjects_count; $i++)
             $html2 .= '<td style="text-align: center">C.E.3</td><td style="text-align: center">T.E.3</td>';
     }
+
 
     $html2 .= '</tr>';
 
@@ -189,9 +191,9 @@ if ($result->num_rows > 0) {
                     $html2 .= '</tr><tr>';
                 $prev_id = $row['id'];
             }
-            $html2 .= '<td>' . $row['name'] . '</td><td>' . $row['grade'] . '</td><td>'. $row['marks'] . '</td>';
+            $html2 .= '<td colspan="4">' . $row['name'] . '</td><td colspan="2">' . $row['grade'] . '</td><td style="font-size: 10px;text-align: center">'. $row['marks'] . '</td>';
         } else
-            $html2 .= '<td>' . $row['marks'] . '</td>';
+            $html2 .= '<td style="font-size: 10px; text-align: center">' . $row['marks'] . '</td>';
     }
     $html2 .= '</tr></table>';
 }
