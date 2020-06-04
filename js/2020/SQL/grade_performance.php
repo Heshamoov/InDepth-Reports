@@ -8,7 +8,7 @@ $year = "2019 - 2020";
 $grade = $_REQUEST["Grade"];
 $term = $_REQUEST["Term"];
 
-$sql = "SELECT students.id, students.last_name name, concat(courses.course_name, ' - ', batches.name) as Grade,
+$sql = "SELECT students.id, students.last_name name, concat(courses.course_name, ' - ', batches.name) as grade,
        exam_groups.name term, round(exam_scores.marks) marks, subjects.name subject
 FROM ((((((((
     academic_years
@@ -27,7 +27,7 @@ WHERE academic_years.name = '2019 - 2020'
 if ($term == 'Term 1' OR $term == 'Term 1 - Class Evaluation') $condition = " AND exam_groups.name in ('Term 1', 'Term 1 - Class Evaluation') ";
 if ($term == 'Term 2' OR $term == 'Term 2 - Class Evaluation') $condition = " AND exam_groups.name in ('Term 2', 'Term 2 - Class Evaluation') ";
 if ($term == 'Term 3' OR $term == 'Term 3 - Class Evaluation') $condition = " AND exam_groups.name in ('Term 3', 'Term 3 - Class Evaluation') ";
-$order = " ORDER BY name, subject, term DESC;";
+$order = " ORDER BY batches.name, name, subject, term DESC;";
 
 $sql .= $condition . $order;
 //echo $sql;
@@ -46,7 +46,7 @@ FROM ((((((((
     LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
 
 WHERE academic_years.name = '2019 - 2020'
-  AND courses.course_name = '$grade'" . $condition . "ORDER BY students.last_name, subjects.name, exam_groups.name";
+  AND courses.course_name = '$grade'" . $condition . "ORDER BY batches.name, students.last_name, subjects.name, exam_groups.name";
 
 //echo $subjects_query;
 
@@ -85,9 +85,18 @@ if ($result->num_rows > 0) {
     echo "</tr>";
     while ($subject = $subjects->fetch_assoc()) {
         echo "<td colspan='2'>" . $subject['name'] . "</td>";
-    }  echo "<tr><th>Student Name</th><th>Exams</th>";
-    for ($i = 1; $i <= $subjects_count; $i++) {
-        echo "<td>C.E.1</td><td>T.E.1</td>";
+    }  echo "<tr><th>Student Name</th><th>Grade</th>";
+
+
+    if ($term == 'Term 1') {
+        for ($i = 1; $i <= $subjects_count; $i++)
+            echo '<td style="text-align: center">C.E.1</td><td style="text-align: center">T.E.1</td>';
+    } elseif ($term == 'Term 2') {
+        for ($i = 1; $i <= $subjects_count; $i++)
+            echo '<td style="text-align: center">C.E.2</td><td style="text-align: center">T.E.2</td>';
+    } elseif ($term == 'Term 3') {
+        for ($i = 1; $i <= $subjects_count; $i++)
+            $html2 .= '<td style="text-align: center">C.E.3</td><td style="text-align: center">T.E.3</td>';
     }
     echo "</tr></thead><tbody>";
 
@@ -100,7 +109,7 @@ if ($result->num_rows > 0) {
             else
                 {if ($row['id'] != $prev_id) echo "</tr><tr>"; $prev_id = $row['id'];}
 
-            echo "<td colspan='2'>" . $row['name'] . "</td>";
+            echo "<td colspan='1'>" . $row['name'] . "</td><td>" . $row['grade'] . "</td>";
             echo "<td>" . $row['marks'] . "</td>";
         } else
             {echo "<td>" . $row['marks'] . "</td>";}

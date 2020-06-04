@@ -7,7 +7,7 @@ $grade = $_POST["grade"];
 $term = $_POST["term"];
 
 
-$sql = "SELECT students.id, students.last_name name, concat(courses.course_name, ' - ', batches.name) as Grade,
+$sql = "SELECT students.id, students.last_name name, concat(courses.course_name, ' - ', batches.name) as grade,
        exam_groups.name term, round(exam_scores.marks) marks, subjects.name subject
 FROM ((((((((
     academic_years
@@ -34,7 +34,7 @@ if ($term == 'Term 2' OR $term == 'Term 2 - Class Evaluation')
 if ($term == 'Term 3' OR $term == 'Term 3 - Class Evaluation')
     $condition = " AND exam_groups.name in ('Term 3', 'Term 3 - Class Evaluation') ";
 
-$order = " ORDER BY name, subject, term DESC;";
+$order = " ORDER BY batches.name, name, subject, term DESC;";
 
 $sql .= $condition . $order;
 //echo $sql;
@@ -53,7 +53,7 @@ FROM ((((((((
     LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
 
 WHERE academic_years.name = '2019 - 2020'
-  AND courses.course_name = '$grade'" . $condition . "ORDER BY students.last_name, subjects.name, exam_groups.name";
+  AND courses.course_name = '$grade'" . $condition . "ORDER BY batches.name, students.last_name, subjects.name, exam_groups.name";
 
 //echo $subjects_query;
 
@@ -136,7 +136,7 @@ $pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 $pdf->setFontSubsetting(true);
 $fontFamily = 'Times'; // 'Courier', 'Helvetica', 'Arial', 'Times', 'Symbol', 'ZapfDingbats'
 $fontStyle = ''; // 'B', 'I', 'U', 'BI', 'BU', 'IU', 'BIU'
-$fontSize = 8; // float, in point
+$fontSize = 7; // float, in point
 
 
 
@@ -156,7 +156,7 @@ if ($result->num_rows > 0) {
     while ($subject = $subjects->fetch_assoc())
         $html2 .= '<td colspan="2" style="font-weight: bold; text-align: center">' . $subject['name'] . '</td>';
 
-    $html2 .= '</tr><tr><th style="font-weight: bold">Student Name</th><th style="font-weight: bold">Exams</th>';
+    $html2 .= '</tr><tr><th style="font-weight: bold">Student Name</th><th style="font-weight: bold">Grade</th>';
 
     if (strcmp($term, 'Term 1') or strcmp($term, 'Term 1 - Class Evaluation'))  {
         for ($i = 1; $i <= $subjects_count; $i++)
@@ -189,8 +189,7 @@ if ($result->num_rows > 0) {
                     $html2 .= '</tr><tr>';
                 $prev_id = $row['id'];
             }
-
-            $html2 .= '<td colspan="2">' . $row['name'] . '</td><td>' . $row['marks'] . '</td>';
+            $html2 .= '<td>' . $row['name'] . '</td><td>' . $row['grade'] . '</td><td>'. $row['marks'] . '</td>';
         } else
             $html2 .= '<td>' . $row['marks'] . '</td>';
     }
