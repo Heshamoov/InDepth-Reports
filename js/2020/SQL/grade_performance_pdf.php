@@ -34,7 +34,7 @@ if ($term == 'Term 2' OR $term == 'Term 2 - Class Evaluation')
 if ($term == 'Term 3' OR $term == 'Term 3 - Class Evaluation')
     $condition = " AND exam_groups.name in ('Term 3', 'Term 3 - Class Evaluation') ";
 
-$order = " ORDER BY batches.name, name, subject, term DESC;";
+$order = " ORDER BY batches.name, students.first_name, subject, term DESC;";
 
 $sql .= $condition . $order;
 //echo $sql;
@@ -53,7 +53,7 @@ FROM ((((((((
     LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
 
 WHERE academic_years.name = '2019 - 2020'
-  AND courses.course_name = '$grade'" . $condition . "ORDER BY batches.name, students.last_name, subjects.name, exam_groups.name";
+  AND courses.course_name = '$grade'" . $condition . "ORDER BY batches.name, students.first_name, subjects.name, exam_groups.name";
 
 //echo $subjects_query;
 
