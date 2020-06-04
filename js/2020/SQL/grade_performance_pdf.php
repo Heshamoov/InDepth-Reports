@@ -2,9 +2,84 @@
 
 include('../../../config/dbConfig.php');
 include('../../../libs/tcpdf/tcpdf.php');
+$year = "2019 - 2020";
+$grade = $_POST["grade"];
+$term = $_POST["term"];
 
-//if (isset($_POST['print_btn']))
 
+$sql = "SELECT students.id, students.last_name name, concat(courses.course_name, ' - ', batches.name) as Grade,
+       exam_groups.name term, round(exam_scores.marks) marks, subjects.name subject
+FROM ((((((((
+    academic_years
+    INNER JOIN batches ON academic_years.id = batches.academic_year_id)
+    INNER JOIN courses ON batches.course_id = courses.id)
+    INNER JOIN exam_groups ON batches.id = exam_groups.batch_id)
+    INNER JOIN exams ON exam_groups.id = exams.exam_group_id)
+    INNER JOIN subjects ON exams.subject_id = subjects.id)
+    INNER JOIN exam_scores ON exams.id = exam_scores.exam_id)
+    INNER JOIN students ON exam_scores.student_id = students.id)
+    LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
+
+WHERE academic_years.name = '2019 - 2020'
+  AND courses.course_name = '$grade' ";
+
+//echo $term;
+//echo $grade;
+$condition = '';
+
+if ($term == 'Term 1' OR $term == 'Term 1 - Class Evaluation')
+    $condition = " AND exam_groups.name in ('Term 1', 'Term 1 - Class Evaluation') ";
+if ($term == 'Term 2' OR $term == 'Term 2 - Class Evaluation')
+    $condition = " AND exam_groups.name in ('Term 2', 'Term 2 - Class Evaluation') ";
+if ($term == 'Term 3' OR $term == 'Term 3 - Class Evaluation')
+    $condition = " AND exam_groups.name in ('Term 3', 'Term 3 - Class Evaluation') ";
+
+$order = " ORDER BY name, subject, term DESC;";
+
+$sql .= $condition . $order;
+//echo $sql;
+
+
+$subjects_query = "SELECT distinct (subjects.name)
+FROM ((((((((
+    academic_years
+    INNER JOIN batches ON academic_years.id = batches.academic_year_id)
+    INNER JOIN courses ON batches.course_id = courses.id)
+    INNER JOIN exam_groups ON batches.id = exam_groups.batch_id)
+    INNER JOIN exams ON exam_groups.id = exams.exam_group_id)
+    INNER JOIN subjects ON exams.subject_id = subjects.id)
+    INNER JOIN exam_scores ON exams.id = exam_scores.exam_id)
+    INNER JOIN students ON exam_scores.student_id = students.id)
+    LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
+
+WHERE academic_years.name = '2019 - 2020'
+  AND courses.course_name = '$grade'" . $condition . "ORDER BY students.last_name, subjects.name, exam_groups.name";
+
+//echo $subjects_query;
+
+$count_subjects = "SELECT DISTINCT (subjects.name)
+FROM ((((((((
+    academic_years
+    INNER JOIN batches ON academic_years.id = batches.academic_year_id)
+    INNER JOIN courses ON batches.course_id = courses.id)
+    INNER JOIN exam_groups ON batches.id = exam_groups.batch_id)
+    INNER JOIN exams ON exam_groups.id = exams.exam_group_id)
+    INNER JOIN subjects ON exams.subject_id = subjects.id)
+    INNER JOIN exam_scores ON exams.id = exam_scores.exam_id)
+    INNER JOIN students ON exam_scores.student_id = students.id)
+    LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
+
+WHERE academic_years.name = '2019 - 2020'
+  AND courses.course_name = '$grade'" . $condition;
+
+
+$number_of_subjects = $conn->query($count_subjects);
+$subjects_count = mysqli_num_rows($number_of_subjects);
+
+//echo $subjects_query;
+$subjects = $conn->query($subjects_query);
+
+$result = $conn->query($sql);
 
 class PDF extends TCPDF
 {
@@ -51,71 +126,6 @@ class PDF extends TCPDF
     }
 }
 
-
-$year = "2019 - 2020";
-//    $grade = $_REQUEST["Grade"];
-$grade = 'GR 1';
-
-
-$sql = "SELECT students.id, (students.last_name) name, concat(courses.course_name, ' - ', batches.name) as Grade,
-       exam_groups.name term, round(exam_scores.marks) marks, subjects.name subject
-FROM ((((((((
-    academic_years
-    INNER JOIN batches ON academic_years.id = batches.academic_year_id)
-    INNER JOIN courses ON batches.course_id = courses.id)
-    INNER JOIN exam_groups ON batches.id = exam_groups.batch_id)
-    INNER JOIN exams ON exam_groups.id = exams.exam_group_id)
-    INNER JOIN subjects ON exams.subject_id = subjects.id)
-    INNER JOIN exam_scores ON exams.id = exam_scores.exam_id)
-    INNER JOIN students ON exam_scores.student_id = students.id)
-    LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
-
-WHERE academic_years.name = '2019 - 2020'
-  AND courses.course_name = 'GR 1'
-
-ORDER BY name, subject, term DESC;";
-
-$subjects_query = "SELECT distinct (subjects.name)
-FROM ((((((((
-    academic_years
-    INNER JOIN batches ON academic_years.id = batches.academic_year_id)
-    INNER JOIN courses ON batches.course_id = courses.id)
-    INNER JOIN exam_groups ON batches.id = exam_groups.batch_id)
-    INNER JOIN exams ON exam_groups.id = exams.exam_group_id)
-    INNER JOIN subjects ON exams.subject_id = subjects.id)
-    INNER JOIN exam_scores ON exams.id = exam_scores.exam_id)
-    INNER JOIN students ON exam_scores.student_id = students.id)
-    LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
-
-WHERE academic_years.name = '2019 - 2020'
-  AND courses.course_name = 'GR 1'
-
-ORDER BY students.last_name, subjects.name, exam_groups.name DESC";
-
-$count_subjects = "SELECT DISTINCT (subjects.name)
-FROM ((((((((
-    academic_years
-    INNER JOIN batches ON academic_years.id = batches.academic_year_id)
-    INNER JOIN courses ON batches.course_id = courses.id)
-    INNER JOIN exam_groups ON batches.id = exam_groups.batch_id)
-    INNER JOIN exams ON exam_groups.id = exams.exam_group_id)
-    INNER JOIN subjects ON exams.subject_id = subjects.id)
-    INNER JOIN exam_scores ON exams.id = exam_scores.exam_id)
-    INNER JOIN students ON exam_scores.student_id = students.id)
-    LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
-
-WHERE academic_years.name = '2019 - 2020'
-  AND courses.course_name = 'GR 1'";
-
-
-$number_of_subjects = $conn->query($count_subjects);
-$subjects_count = mysqli_num_rows($number_of_subjects);
-
-//echo $subjects_query;
-$subjects = $conn->query($subjects_query);
-
-$result = $conn->query($sql);
-
 $pdf = new PDF();
 $pdf->SetTitle('Grade Performance');
 $pdf->SetMargins(10, 45, 10);
@@ -130,7 +140,7 @@ $fontSize = 8; // float, in point
 
 
 
-$html2 = '<h3 style="text-align: center">Academic Year: 2019 - 2020</h3><table border="1" style="border-collapse: collapse; padding-left: 4px;">';
+$html2 = '<h3 style="text-align: center">Academic Year: 2019 - 2020  / ' . $grade . '</h3><table border="1" style="border-collapse: collapse; padding-left: 4px;">';
 
 $pdf->SetFont($fontFamily, $fontStyle, $fontSize);
 $pdf->AddPage('l');
@@ -142,13 +152,26 @@ if ($result->num_rows > 0) {
         $html2 .= '<td colspan="2" style="text-align: center">' . $i . '</td>';
 
     $html2 .= '</tr><tr>';
+
     while ($subject = $subjects->fetch_assoc())
         $html2 .= '<td colspan="2" style="font-weight: bold; text-align: center">' . $subject['name'] . '</td>';
 
     $html2 .= '</tr><tr><th style="font-weight: bold">Student Name</th><th style="font-weight: bold">Exams</th>';
 
-    for ($i = 1; $i <= $subjects_count; $i++)
-        $html2 .= '<td style="text-align: center">C.E.1</td><td style="text-align: center">T.E.1</td>';
+    if (strcmp($term, 'Term 1') or strcmp($term, 'Term 1 - Class Evaluation'))  {
+        for ($i = 1; $i <= $subjects_count; $i++)
+            $html2 .= '<td style="text-align: center">C.E.1</td><td style="text-align: center">T.E.1</td>';
+    }
+
+    if (strcmp($term, 'Term 2')  or strcmp($term, 'Term 2 - Class Evaluation')) {
+        for ($i = 1; $i <= $subjects_count; $i++)
+            $html2 .= '<td style="text-align: center">C.E.2</td><td style="text-align: center">T.E.2</td>';
+    }
+
+    if (strcmp($term, 'Term 3')  or strcmp($term, 'Term 3 - Class Evaluation')) {
+        for ($i = 1; $i <= $subjects_count; $i++)
+            $html2 .= '<td style="text-align: center">C.E.3</td><td style="text-align: center">T.E.3</td>';
+    }
 
     $html2 .= '</tr>';
 
@@ -173,7 +196,7 @@ if ($result->num_rows > 0) {
     }
     $html2 .= '</tr></table>';
 }
-//echo $html;
+//echo $html2;
 
 
 $pdf->writeHTML($html2, true, false, true, false, '');

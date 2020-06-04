@@ -31,6 +31,7 @@ if (!isset($_SESSION['login'])) {
     <div id="debug"></div>
 
     <div class="w3-container">   <!-- DropDowns-->
+        <form method="post" target="_blank">
         <table class="w3-table-all w3-card w3-gray">
             <th>
                 <div class="w3-container">
@@ -45,13 +46,13 @@ if (!isset($_SESSION['login'])) {
                     </div>
                 </div>
             </th>
-        <form class="row" method="post" target="_blank">
-            <th><select id="grade" onchange="search()"></select></th>
+            <th><select id="grade" name="grade" onchange="search()"></select></th>
+            <th><select id="term" name="term" onchange="search()"></select></th>
             <th>
-                <button class="btn btn-sm" formaction="js\2020\SQL\grade_performance_pdf.php" title="Print Report ">PRINT</button>
+                <button class="btn btn-sm" formaction="js\2020\SQL\grade_performance_pdf.php">PRINT</button>
             </th>
-        </form>
         </table>
+        </form>
     </div>
 
     <div id="divPrint">
@@ -89,9 +90,7 @@ if (!isset($_SESSION['login'])) {
     </div>
 
     <script src="js/2020/JS/grades.js"></script>
-    <script src="js/2020/JS/students.js"></script>
-    <script src="js/2020/JS/terms.js"></script>
-    <script src="js/2020/JS/print_table.js"></script>
+    <script src="js/2020/JS/terms1920.js"></script>
     </body>
     </html>
 

@@ -6,11 +6,7 @@ include('../../../config/dbConfig.php');
 
 $year = "2019 - 2020";
 $grade = $_REQUEST["Grade"];
-$gender = $_REQUEST["Gender"];
-$nationality = $_REQUEST["Nationality"];
-$student = $_REQUEST["Student"];
-$view = $_REQUEST["View"];
-
+$term = $_REQUEST["Term"];
 
 $sql = "SELECT students.id, students.last_name name, concat(courses.course_name, ' - ', batches.name) as Grade,
        exam_groups.name term, round(exam_scores.marks) marks, subjects.name subject
@@ -26,9 +22,16 @@ FROM ((((((((
     LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
 
 WHERE academic_years.name = '2019 - 2020'
-  AND courses.course_name = 'GR 1'
+  AND courses.course_name = '$grade' ";
 
-ORDER BY name, subject, term DESC;";
+if ($term == 'Term 1' OR $term == 'Term 1 - Class Evaluation') $condition = " AND exam_groups.name in ('Term 1', 'Term 1 - Class Evaluation') ";
+if ($term == 'Term 2' OR $term == 'Term 2 - Class Evaluation') $condition = " AND exam_groups.name in ('Term 2', 'Term 2 - Class Evaluation') ";
+if ($term == 'Term 3' OR $term == 'Term 3 - Class Evaluation') $condition = " AND exam_groups.name in ('Term 3', 'Term 3 - Class Evaluation') ";
+$order = " ORDER BY name, subject, term DESC;";
+
+$sql .= $condition . $order;
+//echo $sql;
+
 
 $subjects_query = "SELECT distinct (subjects.name)
 FROM ((((((((
@@ -43,9 +46,9 @@ FROM ((((((((
     LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
 
 WHERE academic_years.name = '2019 - 2020'
-  AND courses.course_name = 'GR 1'
+  AND courses.course_name = '$grade'" . $condition . "ORDER BY students.last_name, subjects.name, exam_groups.name";
 
-ORDER BY students.last_name, subjects.name, exam_groups.name DESC";
+//echo $subjects_query;
 
 $count_subjects = "SELECT DISTINCT (subjects.name)
 FROM ((((((((
@@ -60,7 +63,7 @@ FROM ((((((((
     LEFT JOIN student_categories ON students.student_category_id = student_categories.id)
 
 WHERE academic_years.name = '2019 - 2020'
-  AND courses.course_name = 'GR 1'";
+  AND courses.course_name = '$grade'" . $condition;
 
 
 $number_of_subjects = $conn->query($count_subjects);
@@ -69,6 +72,7 @@ $subjects_count = mysqli_num_rows($number_of_subjects);
 //echo $subjects_query;
 $subjects = $conn->query($subjects_query);
 
+//echo $sql;
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {

@@ -69,25 +69,23 @@
 
 
 // 2019 - 2020
+let termsArray = [];
+let select = document.getElementById('term4');
+let httpterms = new XMLHttpRequest();
+httpterms.onreadystatechange = function () {
+    if (this.readyState === 4) {
+        let str = this.responseText;
+        termsArray = str.split("\t");
+    }
+};
 
-    term = document.getElementById('term4');
+httpterms.open("GET", "js/2020/SQL/grades.php", false);
+httpterms.send();
 
-    httpTerms = new XMLHttpRequest();
-    httpTerms.onreadystatechange = function () {
-        if (this.readyState === 4) {
-            let str = this.responseText;
-            // document.getElementById("debug").innerHTML = this.responseText;
-            termsArray = str.split("\t");
-        }
-    };
+$('#term4').multiselect('destroy');
 
-    httpTerms.open("GET", "js/2020/SQL/terms1920.php?", false);
-    httpTerms.send();
+delete termsArray[gradesArray.length - 1];
 
-
-    $('#term').multiselect('destroy');
-
-    delete termsArray[termsArray.length - 1];
-
-    for (var i in termsArray)
-        term.add(new Option(termsArray[i]));
+select.add(new Option("Grade", "Grade"));
+for (let i in termsArray)
+    select.add(new Option(termsArray[i], termsArray[i]));

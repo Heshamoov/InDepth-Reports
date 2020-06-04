@@ -15,6 +15,6 @@ $('#grade').multiselect('destroy');
 
 delete gradesArray[gradesArray.length - 1];
 
-select.add(new Option("Grade"));
+select.add(new Option("Grade", "Grade"));
 for (let i in gradesArray)
-    select.add(new Option(gradesArray[i]));
+    select.add(new Option(gradesArray[i], gradesArray[i]));
