@@ -128,7 +128,7 @@ class PDF extends TCPDF
 
 $pdf = new PDF();
 $pdf->SetTitle('Grade Performance');
-$pdf->SetMargins(10, 45, 10);
+$pdf->SetMargins(10, 35, 10);
 $pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
 //$pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
 $pdf->SetAutoPageBreak(true, PDF_MARGIN_BOTTOM);
