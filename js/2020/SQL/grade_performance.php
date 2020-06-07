@@ -9,7 +9,7 @@ $grade = $_REQUEST["Grade"];
 $term = $_REQUEST["Term"];
 
 $sql = "SELECT students.id, students.last_name name, concat(courses.course_name, ' - ', batches.name) as grade,
-       exam_groups.name term, round(exam_scores.marks) marks, subjects.name subject
+       exam_groups.name term, round(exam_scores.marks) mark, subjects.name subject
 FROM ((((((((
     academic_years
     INNER JOIN batches ON academic_years.id = batches.academic_year_id)
@@ -30,7 +30,7 @@ if ($term == 'Term 3' OR $term == 'Term 3 - Class Evaluation') $condition = " AN
 $order = " ORDER BY batches.name, students.first_name, subject, term DESC;";
 
 $sql .= $condition . $order;
-//echo $sql;
+// echo $sql;
 
 
 $subjects_query = "SELECT distinct (subjects.name)
@@ -69,52 +69,118 @@ WHERE academic_years.name = '2019 - 2020'
 $number_of_subjects = $conn->query($count_subjects);
 $subjects_count = mysqli_num_rows($number_of_subjects);
 
-//echo $subjects_query;
 $subjects = $conn->query($subjects_query);
-
-//echo $sql;
 $result = $conn->query($sql);
+
 
 if ($result->num_rows > 0) {
     echo "<thead>
             <tr><th>Grade: " . $grade . "</th><th colspan='". strval($subjects_count  * 2 + 1) ."'>Academic Year: 2019 - 2020</th></tr>" .
             "<tr><th rowspan='2'></th><th rowspan='2'>Courses</th>";
+
     for ($i = 1; $i <= $subjects_count; $i++) {
         echo "<td colspan='2'>" . $i . "</td>";
     }
     echo "</tr>";
+
+    $subjects_array = array();
     while ($subject = $subjects->fetch_assoc()) {
         echo "<td colspan='2'>" . $subject['name'] . "</td>";
+        $subjects_array[] = $subject['name'];
     }  echo "<tr><th>Student Name</th><th>Grade</th>";
 
 
+    $terms_array = array();
+
     if ($term == 'Term 1') {
+        $terms_array[0] = "Term 1 - Class Evaluation"; $terms_array[1] = "Term 1"; 
         for ($i = 1; $i <= $subjects_count; $i++)
             echo '<td style="text-align: center">C.E.1</td><td style="text-align: center">T.E.1</td>';
     } elseif ($term == 'Term 2') {
+        $terms_array[0] = "Term 2 - Class Evaluation"; $terms_array[1] = "Term 2"; 
         for ($i = 1; $i <= $subjects_count; $i++)
             echo '<td style="text-align: center">C.E.2</td><td style="text-align: center">T.E.2</td>';
     } elseif ($term == 'Term 3') {
+        $terms_array[0] = "Term 3 - Class Evaluation"; $terms_array[1] = "Term 3"; 
         for ($i = 1; $i <= $subjects_count; $i++)
             $html2 .= '<td style="text-align: center">C.E.3</td><td style="text-align: center">T.E.3</td>';
     }
     echo "</tr></thead><tbody>";
 
-    $prev_id = 0;  $first_line = true; $new_line = false;
-    echo "</tr></thead><tbody>";
-    while ($row = $result->fetch_assoc()) {
-        if ($row['id'] != $prev_id) { // New Student
-            if ($first_line)
-                { $first_line = false; $prev_id = $row['id'];}
-            else
-                {if ($row['id'] != $prev_id) echo "</tr><tr>"; $prev_id = $row['id'];}
 
-            echo "<td colspan='1'>" . $row['name'] . "</td><td>" . $row['grade'] . "</td>";
-            echo "<td>" . $row['marks'] . "</td>";
-        } else
-            {echo "<td>" . $row['marks'] . "</td>";}
+    class Exam {
+        
+        public $term;
+        public $subject;
+        public $mark;
+
+        function __construct($term,$subject,$mark) {
+            $this->term = $term;
+            $this->subject = $subject;
+            $this->mark = $mark;
+        }
     }
-    echo "</tbody>";
+
+    class Student {
+        public $name;
+        public $grade;
+        public $exams = array();
+
+    
+        function __construct($name,$grade,$exam, $i) {
+            $this->name = $name;
+            $this->grade = $grade;
+            $this->exams[$i] = $exam;
+        }
+    }
+
+    $prev_id = 0; $i=0; $push = false; $students = array();
+
+    while ($row = $result->fetch_assoc()) {
+        if ($prev_id != $row['id']) { //New Student
+            
+            if ($push) { $students[] = $student; $push = false;}
+
+            $prev_id = $row['id']; $i=0;
+            
+            $exam = new Exam($row['term'], $row['subject'],$row['mark']);
+            $student = new Student($row['name'],$row['grade'], $exam, $i);
+            $i++;
+        }
+        else {
+            $exam = new Exam($row['term'], $row['subject'],$row['mark']);
+            $student->exams[$i] = $exam;
+            $i++; $push= true;
+        }   
+        // print_r($student);echo "<br><br>";
+    }
+
+
+    $prev_name = '';  $first_line = true; $new_line = false;
+
+    for($i=0; $i<count($students); $i++) {
+        echo "<td>" . $students[$i]->name . "</td><td>" . $students[$i]->grade . "</td>";
+
+        $print_mark = "<td>-</td>";
+        for($s=0; $s<count($subjects_array); $s++) { // Subjects
+            for ($t=0;$t<2;$t++) {
+                
+                for ($e=0; $e < 2 * count($subjects_array); $e++) { // Exams array in student
+                    if ($e < count($students[$i]->exams)) {
+                        if ($subjects_array[$s] == $students[$i]->exams[$e]->subject) {  //Subject HIT
+                            if ($terms_array[$t] == $students[$i]->exams[$e]->term)
+                                $print_mark =  "<td>" . $students[$i]->exams[$e]->subject . " - "
+                                        . $students[$i]->exams[$e]->term    . " - " 
+                                        . $students[$i]->exams[$e]->mark    . "</td>";
+                        }
+                    }
+                }
+                echo $print_mark; $print_mark = "<td>-</td>";
+            }
+            
+        } 
+        echo "</tr><tr>" ;
+    }
 } else {
     echo "No Data Found! Try another search.";
 }
