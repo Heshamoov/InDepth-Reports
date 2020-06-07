@@ -48,6 +48,12 @@ if (!isset($_SESSION['login'])) {
             </th>
             <th><select id="grade" name="grade" onchange="search()"></select></th>
             <th><select id="term" name="term" onchange="search()"></select></th>
+            <!-- <th>
+                <select id="view" name="view" onchange="search()">
+                    <option>Marks</option>
+                    <option>Detailed</option>
+                </select>
+            </th> -->
             <th>
                 <button class="btn btn-sm" formaction="js\2020\SQL\grade_performance_pdf.php">PRINT</button>
             </th>
