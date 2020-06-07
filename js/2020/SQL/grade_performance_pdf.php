@@ -140,27 +140,27 @@ $fontSize = 7; // float, in point
 
 
 
-$html = '<h3 style="text-align: center">Academic Year: 2019 - 2020  / ' . $grade.' - '. $term . '</h3><table border="1" style="border-collapse: collapse; font-size: 10px; padding-left: 4px;">';
+$head = '<h3 style="text-align: center">Academic Year: 2019 - 2020  / ' . $grade.' - '. $term . '</h3><table border="1" style="border-collapse: collapse; font-size: 10px; padding-left: 4px;">';
 
 $pdf->SetFont($fontFamily, $fontStyle, $fontSize);
 $pdf->AddPage('l');
 
 if ($result->num_rows > 0) {
 
-    $html .= '<tr>
+    $head .= '<tr>
                 <th  rowspan="2" colspan="6" style="text-align: right;font-weight: bold;">Courses</th>';
     for ($i = 1; $i <= $subjects_count; $i++)
-        $html .= '<td  colspan="2" style="text-align: center">' . $i . '</td>';
+        $head .= '<td  colspan="2" style="text-align: center">' . $i . '</td>';
 
-    $html .= '</tr><tr>';
+    $head .= '</tr><tr>';
 
     $subjects_array = array();
     while ($subject = $subjects->fetch_assoc()) {
-        $html .= '<td colspan="2" style="font-weight: bold; text-align: center">' . $subject['name'] . '</td>';
+        $head .= '<td colspan="2" style="font-weight: bold; text-align: center">' . $subject['name'] . '</td>';
         $subjects_array[] = $subject['name'];
     }  
     
-    $html .= '</tr><tr><th style="font-weight: bold" colspan="4">Student Name</th>
+    $head .= '</tr><tr><th style="font-weight: bold" colspan="4">Student Name</th>
     <th style="font-weight: bold" colspan="2">Grade</th>';
 
 
@@ -169,17 +169,17 @@ if ($result->num_rows > 0) {
     if ($term == 'Term 1') {
         $terms_array[0] = "Term 1 - Class Evaluation"; $terms_array[1] = "Term 1"; 
         for ($i = 1; $i <= $subjects_count; $i++)
-            $html .= '<td style="text-align: center">C.E.1</td><td style="text-align: center">T.E.1</td>';
+            $head .= '<td style="text-align: center">C.E.1</td><td style="text-align: center">T.E.1</td>';
     } elseif ($term == 'Term 2') {
         $terms_array[0] = "Term 2 - Class Evaluation"; $terms_array[1] = "Term 2"; 
         for ($i = 1; $i <= $subjects_count; $i++)
-            $html .= '<td style="text-align: center">C.E.2</td><td style="text-align: center">T.E.2</td>';
+            $head .= '<td style="text-align: center">C.E.2</td><td style="text-align: center">T.E.2</td>';
     } elseif ($term == 'Term 3') {
         $terms_array[0] = "Term 3 - Class Evaluation"; $terms_array[1] = "Term 3"; 
         for ($i = 1; $i <= $subjects_count; $i++)
-            $html .= '<td style="text-align: center">C.E.3</td><td style="text-align: center">T.E.3</td>';
+            $head .= '<td style="text-align: center">C.E.3</td><td style="text-align: center">T.E.3</td>';
     }
-    $html .= "</tr></thead><tbody>";
+    $head .= "</tr>";
 
 
     class Exam {
@@ -231,8 +231,10 @@ if ($result->num_rows > 0) {
 
 
     $prev_name = '';  $first_line = true; $new_line = false;
-
+    $html = $head; $number_of_rows = 0;
     for($i=0; $i<count($students); $i++) {
+        $number_of_rows++;
+        if (fmod($number_of_rows,21) == 0) $html .= "</table>" . $head;
         $html .= '<tr><td colspan="4">' . $students[$i]->name . '</td><td colspan="2">' . $students[$i]->grade . '</td>';
 
         $print_mark = "<td>-</td>";
