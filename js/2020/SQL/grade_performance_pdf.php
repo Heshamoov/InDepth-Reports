@@ -240,7 +240,7 @@ if ($result->num_rows > 0) {
             // $pdf->AddPage();
             // $pdf->writeHTML($html, true, false, true, false, '');
             $prev_section = $students[$i]->grade;
-            $html .= "</table>" . $head;
+            $html .= "</table><br pagebreak='true'/>" . $head;
         }
 
         $html .= '<tr><td colspan="4">' . $students[$i]->name . '</td><td colspan="2">' . $students[$i]->grade . '</td>';
