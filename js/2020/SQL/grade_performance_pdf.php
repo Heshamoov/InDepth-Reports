@@ -230,11 +230,19 @@ if ($result->num_rows > 0) {
     }
 
 
-    $prev_name = '';  $first_line = true; $new_line = false;
-    $html = $head; $number_of_rows = 0;
+    $prev_name = '';  $first_line = true; $new_line = false; $prev_section = $students[0]->grade;
+    $html = $head; $number_of_rows = 0; 
     for($i=0; $i<count($students); $i++) {
         $number_of_rows++;
-        if (fmod($number_of_rows,21) == 0) $html .= "</table>" . $head;
+        
+        if ($students[$i]->grade != $prev_section) {
+            // $pdf->SetFont($fontFamily, $fontStyle, $fontSize);
+            // $pdf->AddPage();
+            // $pdf->writeHTML($html, true, false, true, false, '');
+            $prev_section = $students[$i]->grade;
+            $html .= "</table>" . $head;
+        }
+
         $html .= '<tr><td colspan="4">' . $students[$i]->name . '</td><td colspan="2">' . $students[$i]->grade . '</td>';
 
         $print_mark = "<td>-</td>";
