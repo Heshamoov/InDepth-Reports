@@ -5,7 +5,7 @@ if (!isset($_SESSION['login'])) {
     header('Location: index.php');
 } else {
     include('Header.php');
-    ?>
+?>
 
 
     <!-- Latest compiled and minified CSS -->
@@ -83,10 +83,12 @@ if (!isset($_SESSION['login'])) {
                 </th>
             </tr>
         </table>
-
+    
+    <div style="overflow-x:auto; width=100%;">
         <table id="useroptions" class="w3-card">
             <tbody id="results"> </tbody>
         </table>
+    </div>
 
         <table id="InDepthDiv" style="width: 100%; margin: auto; color: gray; font-size: 10px; opacity: 0.5">
             <tr>

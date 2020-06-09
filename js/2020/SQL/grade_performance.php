@@ -89,6 +89,10 @@ if ($result->num_rows > 0) {
         $subjects_array[] = $subject['name'];
     }  echo "<tr><th>Student Name</th><th>Grade</th>";
 
+    // echo "Subjects Array<br>";
+    // for ($i=0; $i < count($subjects_array); $i++)
+    //     echo $subjects_array[$i] . "<br>";
+    
 
     $terms_array = array();
 
@@ -159,16 +163,17 @@ if ($result->num_rows > 0) {
     $prev_name = '';  $first_line = true; $new_line = false;
 
     for($i=0; $i<count($students); $i++) {
+        // print_r($students[$i]);
         echo "<td>" . $students[$i]->name . "</td><td>" . $students[$i]->grade . "</td>";
-
         $print_mark = "<td>-</td>";
         for($s=0; $s<count($subjects_array); $s++) { // Subjects
-            for ($t=0;$t<2;$t++) {
-                
+            for ($t=0;$t<2;$t++) {     
                 for ($e=0; $e < 2 * count($subjects_array); $e++) { // Exams array in student
                     if ($e < count($students[$i]->exams)) {
-                        if ($subjects_array[$s] == $students[$i]->exams[$e]->subject) {  //Subject HIT
-                            if ($terms_array[$t] == $students[$i]->exams[$e]->term)
+                        if (str_replace(" ", "", $subjects_array[$s]) == str_replace(" ","",$students[$i]->exams[$e]->subject)) {  //Subject HIT
+                            // echo "<br>*" . str_replace(" ", "", $subjects_array[$s]) . "* => *" . str_replace(" ","",$students[$i]->exams[$e]->subject) . "*<br><br>";
+                            // echo str_replace(" ", "", $terms_array[$t]) . "*=>*" . str_replace(" ", "", $students[$i]->exams[$e]->term) . "*<br>";
+                            if (str_replace(" ", "", $terms_array[$t]) == str_replace(" ", "", $students[$i]->exams[$e]->term))
                                 $print_mark =  "<td>" . $students[$i]->exams[$e]->subject . " - "
                                         . $students[$i]->exams[$e]->term    . " - " 
                                         . $students[$i]->exams[$e]->mark    . "</td>";
