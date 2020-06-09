@@ -107,7 +107,7 @@ if ($result->num_rows > 0) {
     } elseif ($term == 'Term 3') {
         $terms_array[0] = "Term 3 - Class Evaluation"; $terms_array[1] = "Term 3"; 
         for ($i = 1; $i <= $subjects_count; $i++)
-            $html2 .= '<td style="text-align: center">C.E.3</td><td style="text-align: center">T.E.3</td>';
+            echo '<td style="text-align: center">C.E.3</td><td style="text-align: center">T.E.3</td>';
     }
     echo "</tr></thead><tbody>";
 
@@ -141,9 +141,13 @@ if ($result->num_rows > 0) {
     $prev_id = 0; $i=0; $push = false; $students = array();
 
     while ($row = $result->fetch_assoc()) {
+        
         if ($prev_id != $row['id']) { //New Student
             
-            if ($push) { $students[] = $student; $push = false;}
+            if ($push) { 
+                $students[] = $student; $push = false;
+                // echo $row['id'] . " - " . $row['name'] . " PUSHED => " . $student ->name . "*<br>";
+            }
 
             $prev_id = $row['id']; $i=0;
             
@@ -158,12 +162,16 @@ if ($result->num_rows > 0) {
         }   
         // print_r($student);echo "<br><br>";
     }
+    $students[] = $student; /// Push Last Object
 
 
     $prev_name = '';  $first_line = true; $new_line = false;
 
+    
+    // echo "Befor Last Object" . $students[count($students) - 2]->name . " - " . $students[count($students) - 2]->grade . "<br>";
+    // echo "Last Object" . $students[count($students) - 1]->name . " - " . $students[count($students) - 1]->grade . "<br>";
+
     for($i=0; $i<count($students); $i++) {
-        // print_r($students[$i]);
         echo "<td>" . $students[$i]->name . "</td><td>" . $students[$i]->grade . "</td>";
         $print_mark = "<td>-</td>";
         for($s=0; $s<count($subjects_array); $s++) { // Subjects

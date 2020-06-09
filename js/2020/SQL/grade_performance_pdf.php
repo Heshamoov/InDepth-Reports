@@ -228,7 +228,7 @@ if ($result->num_rows > 0) {
         }   
         // print_r($student);html .= "<br><br>";
     }
-
+    $students[] = $student; /// Push Last Object
 
     $prev_name = '';  $first_line = true; $new_line = false; $prev_section = $students[0]->grade;
     $html = $head; $number_of_rows = 0; 
