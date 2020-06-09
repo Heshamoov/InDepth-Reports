@@ -251,8 +251,8 @@ if ($result->num_rows > 0) {
                 
                 for ($e=0; $e < 2 * count($subjects_array); $e++) { // Exams array in student
                     if ($e < count($students[$i]->exams)) {
-                        if (str_replace(" ", "", $subjects_array[$s]) == str_replace(" ","",$students[$i]->exams[$e]->subject)) {  //Subject HIT
-                            if (str_replace(" ", "", $terms_array[$t]) == str_replace(" ", "", $students[$i]->exams[$e]->term))
+                        if (strtolower(str_replace(" ", "", $subjects_array[$s])) == strtolower(str_replace(" ","",$students[$i]->exams[$e]->subject))) {  //Subject HIT
+                            if (strtolower(str_replace(" ", "", $terms_array[$t])) == strtolower(str_replace(" ", "", $students[$i]->exams[$e]->term)))
                                 $print_mark =  "<td>" . $students[$i]->exams[$e]->mark    . "</td>";
                         }
                     }

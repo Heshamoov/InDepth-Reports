@@ -84,7 +84,7 @@ if (!isset($_SESSION['login'])) {
             </tr>
         </table>
     
-    <div style="overflow-x:auto; width=100%;">
+    <div style="overflow-x:auto; overflow-y:auto; width=100%;">
         <table id="useroptions" class="w3-card">
             <tbody id="results"> </tbody>
         </table>

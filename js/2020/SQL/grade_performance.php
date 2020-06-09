@@ -48,7 +48,7 @@ FROM ((((((((
 WHERE academic_years.name = '2019 - 2020'
   AND courses.course_name = '$grade'" . $condition . "ORDER BY batches.name, students.first_name, subjects.name, exam_groups.name";
 
-//echo $subjects_query;
+// echo $subjects_query;
 
 $count_subjects = "SELECT DISTINCT (subjects.name)
 FROM ((((((((
@@ -170,10 +170,12 @@ if ($result->num_rows > 0) {
             for ($t=0;$t<2;$t++) {     
                 for ($e=0; $e < 2 * count($subjects_array); $e++) { // Exams array in student
                     if ($e < count($students[$i]->exams)) {
-                        if (str_replace(" ", "", $subjects_array[$s]) == str_replace(" ","",$students[$i]->exams[$e]->subject)) {  //Subject HIT
-                            // echo "<br>*" . str_replace(" ", "", $subjects_array[$s]) . "* => *" . str_replace(" ","",$students[$i]->exams[$e]->subject) . "*<br><br>";
+                        // if ($subjects_array[$s] == 'Islamic Studies')
+                        // echo "<br>*" . str_replace(" ", "", $subjects_array[$s]) . "* => *" . str_replace(" ","",$students[$i]->exams[$e]->subject) . "*<br><br>";
+                        if (strtolower(str_replace(" ", "", $subjects_array[$s])) == strtolower(str_replace(" ","",$students[$i]->exams[$e]->subject))) {  //Subject HIT
+                            // if ($subjects_array[$s] == 'Islamic Studies') echo "HIT";
                             // echo str_replace(" ", "", $terms_array[$t]) . "*=>*" . str_replace(" ", "", $students[$i]->exams[$e]->term) . "*<br>";
-                            if (str_replace(" ", "", $terms_array[$t]) == str_replace(" ", "", $students[$i]->exams[$e]->term))
+                            if (strtolower(str_replace(" ", "", $terms_array[$t])) == strtolower(str_replace(" ", "", $students[$i]->exams[$e]->term)))
                                 $print_mark =  "<td>" . $students[$i]->exams[$e]->subject . " - "
                                         . $students[$i]->exams[$e]->term    . " - " 
                                         . $students[$i]->exams[$e]->mark    . "</td>";
