@@ -67,10 +67,11 @@ for ($i = 0; $i < 4; $i++) {
 
     $WhereA[$i] = "WHERE academic_years.name = '$YearsA[$i]' AND (REPLACE(exam_groups.name, ' ','') = REPLACE('$TermsA[$i]', ' ', '')) ";
 
-    if ($student != 'Student' and $student != '')
-        $WhereA[$i] .= " AND students.last_name = '$student' ";
-    else
+    if (stristr($student, 'students'))
         $WhereA[$i] .= " AND courses.course_name = '$GradesA[$GradeIndexGUI]' ";
+    else
+        $WhereA[$i] .= " AND students.last_name = '$student' ";
+
 
     if ($gender == 'Boys')
         $WhereA[$i] .= " AND students.gender = 'Male' ";
@@ -124,8 +125,6 @@ $GradeHeader = true;
 
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
-
-
     while ($row = $result->fetch_assoc()) {
         if ($GradeHeader) {
             echo "<tr><th>Grade Progress</th>";
@@ -158,7 +157,7 @@ if ($result->num_rows > 0) {
         if ($NewRow) {
             for ($i = 0; $i < count($TermsA); $i++) {
                 // $rowIndex++;
-                if ($student != 'Student' AND $student != '') {
+                if ($student != 'Student' and $student != '') {
                     if ($view == 'Attainment')
                         if ($row["Mark$i"] >= 75)                                    // Outstanding
                             echo "<td class='w3-container w3-text-green w3-hover-green'>           Outstanding</td>";

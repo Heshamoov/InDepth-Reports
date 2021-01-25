@@ -1,33 +1,38 @@
 let gradesArray = [];
-let select = document.getElementById('grade');
-let httpgrades = new XMLHttpRequest();
-httpgrades.onreadystatechange = function () {
+let GradesQuery = new XMLHttpRequest();
+GradesQuery.onreadystatechange = function () {
     if (this.readyState === 4) {
         let str = this.responseText;
         gradesArray = str.split("\t");
     }
 };
+GradesQuery.open("POST", "js/2020/SQL/grades.php", false);
+GradesQuery.send();
 
-httpgrades.open("GET", "js/2020/SQL/grades.php", false);
-httpgrades.send();
 
-$('#grade').multiselect('destroy');
-
+let select = document.getElementById('grade');
+while (select.length > 0) select.remove(0);
 delete gradesArray[gradesArray.length - 1];
+for (let i in gradesArray) select.add(new Option(gradesArray[i], gradesArray[i]));
 
-select.add(new Option("Grade", "Grade"));
-// for (let i in gradesArray){
-    // select.add(new Option(gradesArray[i], gradesArray[i]));
-    select.add(new Option('GR 1', 'GR 1'));
-    select.add(new Option('GR 2', 'GR 2'));
-    select.add(new Option('GR 3', 'GR 3'));
-    select.add(new Option('GR 4', 'GR 4'));
-    select.add(new Option('GR 5', 'GR 5'));
-    select.add(new Option('GR 6', 'GR 6'));
-    select.add(new Option('GR 7', 'GR 7'));
-    select.add(new Option('GR 8', 'GR 8'));
-    select.add(new Option('GR 9', 'GR 9'));
-    select.add(new Option('GR10', 'GR10'));
-    select.add(new Option('GR11', 'GR11'));
-    select.add(new Option('GR12', 'GR12'));
+
+let grade1 = document.getElementById('grade1');
+while (grade1.length > 0) grade1.remove(0);
+for (let i in gradesArray) grade1.add(new Option(gradesArray[i], gradesArray[i]));
+
+let grade2 = document.getElementById('grade2');
+while (grade2.length > 0) grade2.remove(0);
+for (let i in gradesArray) grade2.add(new Option(gradesArray[i], gradesArray[i]));
+
+let grade3 = document.getElementById('grade3');
+while (grade3.length > 0) grade3.remove(0);
+for (let i in gradesArray) grade3.add(new Option(gradesArray[i], gradesArray[i]));
+
+let grade4 = document.getElementById('grade4');
+while (grade4.length > 0) grade4.remove(0);
+for (let i in gradesArray) grade4.add(new Option(gradesArray[i], gradesArray[i]));
+
+let grade5 = document.getElementById('grade5');
+while (grade5.length > 0) grade5.remove(0);
+for (let i in gradesArray) grade5.add(new Option(gradesArray[i], gradesArray[i]));
 
