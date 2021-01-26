@@ -41,7 +41,7 @@
 
 
     <form name="frm" style="float: right" action="advanced2020.php" method="POST">
-        <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navAdvanced" value="Advanced Analysis" type="submit">
+        <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navAdvanced" value="Attainment Report" type="submit">
     </form>   
 
     <form name="frm" style="float: right" action="attainment.php" method="POST">
