@@ -9,8 +9,7 @@ if (!isset($_SESSION['login'])) {
 
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
@@ -46,7 +45,7 @@ if (!isset($_SESSION['login'])) {
                     </div>
                 </div>
             </th>
-            <th><select id="grade" onchange="fill_students();search()"></select></th>
+            <th style="display: none"><select id="grade" onchange="fill_students();search()"></select></th>
             <th>
                 <select id="nationality" onchange="search()">
                     <option>Nationality: ALL</option>
@@ -61,9 +60,9 @@ if (!isset($_SESSION['login'])) {
                     <option>Girls</option>
                 </select>
             </th>
-            <th>
+            <!--<th>
                 <select id="student" onchange="search()"></select>
-            </th>
+            </th>-->
             <th>
                 <select id="view" onchange="search()">
                     <option>Attainment</option>

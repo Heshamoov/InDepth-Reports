@@ -38,13 +38,7 @@ function search() {
 
     let Title = "";
 
-    if (Grade !== "Grade")
-        Title = Grade;
-    if (Student === "" || Student === "Student")
-        Title = Title + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Nationality + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Gender;
-    else
-        Title = Title + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Student;
-
+    Title = Nationality + "&nbsp&nbsp&nbsp-&nbsp&nbsp&nbsp" + Gender;
 
     document.getElementById('TableTitle').innerHTML = Title;
 

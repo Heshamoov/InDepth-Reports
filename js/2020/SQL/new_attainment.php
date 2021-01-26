@@ -72,77 +72,78 @@ $GradeHeader = true;
 $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     $year_index = 0;
+    $subject_printed = false;
     while ($row = $result->fetch_assoc()) {
-        if ($GradeHeader) {
-            echo "<tr><th>Grade Progress</th>";
-            for ($i = 0; $i < 5; $i++) {
-                if ($row["Grade$i"] != null) {
-                    echo "<th>" . $row["Grade$i"] . "</th>";
-                    $GradeIndex = array_search($row["Grade$i"], $GradesA);
-                } else
-                    if ($GradeIndex < 11)
-                        echo "<th>" . $GradesA[$GradeIndex + 1] . "</th>";
-                    else
-                        echo "<th>" . $GradesA[$GradeIndex] . "</th>";
-            }
-            echo "</tr>";
-            $GradeHeader = false;
+
+        if ($year_index == 0) {
+            echo "<tr><td>" . $row['subject'] . "</td>";
+            $subject_printed = true;
         }
 
-        while ($year_index < 6) {
-            if ($year_index == 0) echo "<tr>";
+        if (!$subject_printed) {
+            echo "<td>" . $row['subject'] . "</td>";
+            $subject_printed = true;
+        }
 
-            if ($row["year"] == $YearsA[$year_index]) {
-                echo "<td>" . $row['subject'] . "</td>";
-                if ($view == 'Attainment')
-                    if ($row["MoreOrEqual75P"] >= 75)                                    // Outstanding
-                        echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>";
-                    elseif ($row["MoreOrEqual75P"] >= 61 and $row["MoreOrEqual75P"] < 75)       // Very Good
-                        echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>";
-                    elseif ($row["MoreOrEqual75P"] >= 50 and $row["MoreOrEqual75P"] <= 61)       // Good
-                        echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>";
-                    elseif ($row["MoreOrEqual65P"] >= 65)                                 // Acceptable
-                        echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>";
-                    elseif ($row["MoreOrEqual65P"] == null or $row["MoreOrEqual65P"] == 0)
-                        echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
-                    else                                                          // Weak
-                        echo "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>";
-                elseif ($view == 'Percentage')
-                    if ($row[">=75%$i"] >= 75)                                    // Outstanding
-                        echo "<td class='w3-container w3-text-green w3-hover-green'>" . $row[">=75%$i"] . "%</td>";
-                    elseif ($row[">=75%$i"] >= 61 and $row[">=75%$i"] < 75)       // Very Good
-                        echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row[">=75%$i"] . "%</td>";
-                    elseif ($row[">=75%$i"] >= 50 and $row[">=75%$i"] <= 61)       // Good
-                        echo "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row[">=75%$i"] . "%</td>";
-                    elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
-                        echo "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row[">=65%$i"] . "%</td>";
-                    elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0)
-                        echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";
-                    else                                                          // Weak
-                        echo "<td class='w3-container w3-text-red w3-hover-red'>" . $row[">=75%$i"] . "%</td>";
-
-                elseif ($view == 'Attainment - Percentage')
-                    if ($row[">=75%$i"] >= 75)                                    // Outstanding
-                        echo "<td class='w3-container w3-text-green w3-hover-green'>           Outstanding - " . $row[">=75%$i"] . "%</td>";
-                    elseif ($row[">=75%$i"] >= 61 and $row[">=75%$i"] < 75)       // Very Good
-                        echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row[">=75%$i"] . "%</td>";
-                    elseif ($row[">=75%$i"] >= 50 and $row[">=75%$i"] <= 61)       // Good
-                        echo "<td class='w3-container w3-text-lime w3-hover-lime'>              Good - " . $row[">=75%$i"] . "%</td>";
-                    elseif ($row[">=65%$i"] >= 65)                                 // Acceptable
-                        echo "<td class='w3-container w3-text-orange w3-hover-orange'>          Acceptable - " . $row[">=65%$i"] . "%</td>";
-                    elseif ($row[">=65%$i"] == null or $row[">=65%$i"] == 0)
-                        echo "<td class='w3-container w3-text-gray w3-hover-gray'>          -</td>";
-                    else                                                          // Weak
-                        echo "<td class='w3-container w3-text-red w3-hover-red'>                Weak - " . $row[">=75%$i"] . "%</td>";
-            } else {
-                echo "<td>-</td>";
-                $year_index ++;
-            }
-
+        while ($YearsA[$year_index] != $row['year']) {
+            echo "<td>-</td>";
+            $year_index++;
             if ($year_index == 5) {
                 echo "</tr>";
                 $year_index = 0;
+                echo "<td>" . $row['subject'] . "</td>";
+                $subject_printed = true;
             }
+        }
+
+        if ($view == 'Attainment')
+            if ($row["MoreOrEqual75P"] >= 75)                                    // Outstanding
+                echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding</td>";
+            elseif ($row["MoreOrEqual75P"] >= 61 and $row["MoreOrEqual75P"] < 75)       // Very Good
+                echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good</td>";
+            elseif ($row["MoreOrEqual75P"] >= 50 and $row["MoreOrEqual75P"] <= 61)       // Good
+                echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good</td>";
+            elseif ($row["MoreOrEqual65P"] >= 65)                                 // Acceptable
+                echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable</td>";
+            elseif ($row["MoreOrEqual65P"] == null or $row["MoreOrEqual65P"] == 0)
+                echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
+            else                                                          // Weak
+                echo "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>";
+        elseif ($view == 'Percentage')
+            if ($row["MoreOrEqual75P"] >= 75)                                    // Outstanding
+                echo "<td class='w3-container w3-text-green w3-hover-green'>" . $row["MoreOrEqual75P"] . "%</td>";
+            elseif ($row["MoreOrEqual75P"] >= 61 and $row["MoreOrEqual75P"] < 75)       // Very Good
+                echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>" . $row["MoreOrEqual75P"] . "%</td>";
+            elseif ($row["MoreOrEqual75P"] >= 50 and $row["MoreOrEqual75P"] <= 61)       // Good
+                echo "<td class='w3-container w3-text-lime w3-hover-lime'>" . $row["MoreOrEqual75P"] . "%</td>";
+            elseif ($row["MoreOrEqual65P"] >= 65)                                 // Acceptable
+                echo "<td class='w3-container w3-text-orange w3-hover-orange'>" . $row["MoreOrEqual65P"] . "%</td>";
+            elseif ($row["MoreOrEqual65P"] == null or $row["MoreOrEqual65P"] == 0)
+                echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
+            else                                                          // Weak
+                echo "<td class='w3-container w3-text-red w3-hover-red'>" . $row["MoreOrEqual75P"] . "%</td>";
+
+        elseif ($view == 'Attainment - Percentage')
+            if ($row["MoreOrEqual75P"] >= 75)                                    // Outstanding
+                echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - " . $row["MoreOrEqual75P"] . "%</td>";
+            elseif ($row["MoreOrEqual75P"] >= 61 and $row["MoreOrEqual75P"] < 75)       // Very Good
+                echo "<td class='w3-container w3-text-light-green w3-hover-light-green'>Very Good - " . $row["MoreOrEqual75P"] . "%</td>";
+            elseif ($row["MoreOrEqual75P"] >= 50 and $row["MoreOrEqual75P"] <= 61)       // Good
+                echo "<td class='w3-container w3-text-lime w3-hover-lime'>Good - " . $row["MoreOrEqual75P"] . "%</td>";
+            elseif ($row["MoreOrEqual65P"] >= 65)                                 // Acceptable
+                echo "<td class='w3-container w3-text-orange w3-hover-orange'>Acceptable - " . $row["MoreOrEqual65P"] . "%</td>";
+            elseif ($row["MoreOrEqual65P"] == null or $row["MoreOrEqual65P"] == 0)
+                echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
+            else                                                          // Weak
+                echo "<td class='w3-container w3-text-red w3-hover-red'>Weak - " . $row["MoreOrEqual75P"] . "%</td>";
+
+        $year_index++;
+
+
+        if ($year_index == 5) {
+            echo "</tr>";
+            $year_index = 0;
+            $subject_printed = false;
         }
 
     }// NewRow
