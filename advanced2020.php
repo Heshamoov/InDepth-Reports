@@ -9,7 +9,8 @@ if (!isset($_SESSION['login'])) {
 
 
     <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
 
     <!-- Latest compiled and minified JavaScript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
@@ -74,7 +75,8 @@ if (!isset($_SESSION['login'])) {
                 <button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge'
                         onclick="PrintTable()"></button>
                 <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge'
-                        onclick="printJS({documentTitle: 'Grade/Student Progress Analysis - Al Sanawbar School', printable: 'divprint',type: 'html',showModal:true,ignoreElements: [],css: 'styles/advancedPDF.css'})">
+                        onclick="printJS({documentTitle: 'Grade/Student Progress Analysis - Al Sanawbar School', printable: 'divPrint',type: 'html',showModal:true,
+                        ignoreElements: ['term1','term2','term3','term4','term5','grade1','grade2','grade3','grade4','grade5'],css: 'styles/advancedPDF.css'})">
                 </button>
             </th>
         </table>
@@ -120,11 +122,26 @@ if (!isset($_SESSION['login'])) {
             </tr>
             <tr>
                 <th><label>Grade</label></th>
-                <th><select id="grade1" onchange="search()"></select></th>
-                <th><select id="grade2" onchange="search()"></select></th>
-                <th><select id="grade3" onchange="search()"></select></th>
-                <th><select id="grade4" onchange="search()"></select></th>
-                <th><select id="grade5" onchange="search()"></select></th>
+                <th>
+                    <select id="grade1" onchange="search()"></select>
+                    <label id="G1L"></label>
+                </th>
+                <th>
+                    <select id="grade2" onchange="search()"></select>
+                    <label id="G2L"></label>
+                </th>
+                <th>
+                    <select id="grade3" onchange="search()"></select>
+                    <label id="G3L"></label>
+                </th>
+                <th>
+                    <select id="grade4" onchange="search()"></select>
+                    <label id="G4L"></label>
+                </th>
+                <th>
+                    <select id="grade5" onchange="search()"></select>
+                    <label id="G5L"></label>
+                </th>
             </tr>
             <tr>
                 <th><label>Term</label></th>
@@ -162,7 +179,7 @@ if (!isset($_SESSION['login'])) {
     </div>
 
     <script src="js/2020/JS/grades.js"></script>
-    <script src="js/2020/JS/students.js"></script>
+    <!--    <script src="js/2020/JS/students.js"></script>-->
     <script src="js/2020/JS/terms.js"></script>
     <script src="js/2020/JS/print_table.js"></script>
     </body>
