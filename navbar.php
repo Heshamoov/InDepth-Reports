@@ -40,7 +40,7 @@
 
 
 
-    <form name="frm" style="float: right" action="advanced.php" method="POST">
+    <form name="frm" style="float: right" action="advanced2020.php" method="POST">
         <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navAdvanced" value="Advanced Analysis" type="submit">
     </form>   
 

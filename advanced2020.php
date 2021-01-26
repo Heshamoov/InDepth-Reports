@@ -31,55 +31,41 @@ if (!isset($_SESSION['login'])) {
 
     <div id="debug"></div>
 
-    <div class="w3-container">   <!-- DropDowns-->
-        <table class="w3-table-all w3-card w3-gray">
-            <th>
-                <div class="w3-container">
-                    <div class="w3-dropdown-hover">
-                        <button class="w3-button w3-green">Benchmark</button>
-                        <div class="w3-dropdown-content w3-bar-block w3-border">
-<!--                            <a href="advanced.php" class="w3-bar-item w3-button w3-hover-green">Attainment</a>-->
-                            <a href="advanced2020.php" class="w3-bar-item w3-button w3-hover-green">Attainment</a>
-                            <a href="cycle.php" class="w3-bar-item w3-button w3-hover-green">Cycle</a>
-                            <a href="grades.php" class="w3-bar-item w3-button w3-hover-green">Grades</a>
-                        </div>
-                    </div>
-                </div>
-            </th>
-            <th style="display: none"><select id="grade" onchange="fill_students();search()"></select></th>
-            <th>
-                <select id="nationality" onchange="search()">
-                    <option>Nationality: ALL</option>
-                    <option>Citizens</option>
-                    <option>Expats</option>
-                </select>
-            </th>
-            <th>
-                <select id="gender" onchange="search()">
-                    <option>Gender: ALL</option>
-                    <option>Boys</option>
-                    <option>Girls</option>
-                </select>
-            </th>
-            <!--<th>
-                <select id="student" onchange="search()"></select>
-            </th>-->
-            <th>
-                <select id="view" onchange="search()">
-                    <option>Attainment</option>
-                    <option>Percentage</option>
-                    <option>Attainment - Percentage</option>
-                </select>
-            </th>
-            <th>
-                <button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge'
-                        onclick="PrintTable()"></button>
-                <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge'
-                        onclick="printJS({documentTitle: 'Grade/Student Progress Analysis - Al Sanawbar School', printable: 'divPrint',type: 'html',showModal:true,
+    <?php include('inc/benchmarks.php') ?>
+    <th style="display: none"><select id="grade" onchange="fill_students();search()"></select></th>
+    <th>
+        <select id="nationality" onchange="search()">
+            <option>Nationality: ALL</option>
+            <option>Citizens</option>
+            <option>Expats</option>
+        </select>
+    </th>
+    <th>
+        <select id="gender" onchange="search()">
+            <option>Gender: ALL</option>
+            <option>Boys</option>
+            <option>Girls</option>
+        </select>
+    </th>
+    <!--<th>
+        <select id="student" onchange="search()"></select>
+    </th>-->
+    <th>
+        <select id="view" onchange="search()">
+            <option>Attainment</option>
+            <option>Percentage</option>
+            <option>Attainment - Percentage</option>
+        </select>
+    </th>
+    <th>
+        <button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge'
+                onclick="PrintTable()"></button>
+        <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge'
+                onclick="printJS({documentTitle: 'Grade/Student Progress Analysis - Al Sanawbar School', printable: 'divPrint',type: 'html',showModal:true,
                         ignoreElements: ['term1','term2','term3','term4','term5','grade1','grade2','grade3','grade4','grade5'],css: 'styles/advancedPDF.css'})">
-                </button>
-            </th>
-        </table>
+        </button>
+    </th>
+    </table>
     </div>
 
     <div id="divPrint">
