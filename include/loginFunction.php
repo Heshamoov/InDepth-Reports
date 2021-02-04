@@ -13,7 +13,7 @@ require 'config/dbConfig.php';
     }
 
     $sql = "select * from users where username = '$_POST[user]' and (admin = 1 OR employee = 1) ;";
-    echo $sql;
+//    echo $sql;
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         $_SESSION['login'] = 1;
