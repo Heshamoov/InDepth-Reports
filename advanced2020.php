@@ -55,6 +55,7 @@ if (!isset($_SESSION['login'])) {
             <option>Attainment</option>
             <option>Percentage</option>
             <option>Attainment - Percentage</option>
+            <option>Average</option>
         </select>
     </th>
     <th>

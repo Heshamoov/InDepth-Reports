@@ -8,6 +8,7 @@ $gender = $_REQUEST["Gender"];
 $nationality = $_REQUEST["Nationality"];
 $student = $_REQUEST["Student"];
 $view = $_REQUEST["View"];
+echo $view;
 
 $YearsA = array("2016 - 2017", "2017 - 2018", "2018 - 2019", "2019 - 2020", "2020 - 2021");
 $TermsA = array();
@@ -35,6 +36,7 @@ SELECT academic_years.name                                                      
        exam_scores.marks                                                                  mark,
        students.birth_place,
        COUNT(IF(exam_scores.marks IS NOT NULL AND exam_scores.marks > 0, 1, NULL))        'Total',
+       COUNT(students.id)        'TotalWithAbsent',
        COUNT(IF(exam_scores.marks >= 65 AND exam_scores.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual65',
        ROUND(COUNT(IF(exam_scores.marks >= 65 AND exam_scores.marks IS NOT NULL, 1, NULL)) /
              COUNT(IF(exam_scores.marks IS NOT NULL AND exam_scores.marks > 0, 1, NULL)) * 100,
@@ -42,7 +44,10 @@ SELECT academic_years.name                                                      
        COUNT(IF(exam_scores.marks >= 75 AND exam_scores.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual75',
        ROUND(COUNT(IF(exam_scores.marks >= 75 AND exam_scores.marks IS NOT NULL, 1, NULL)) /
              COUNT(IF(exam_scores.marks IS NOT NULL AND exam_scores.marks > 0, 1, NULL)) * 100,
-             0)                                                                        AS 'MoreOrEqual75P'
+             0)                                                                        AS 'MoreOrEqual75P',
+       SUM(exam_scores.marks) AS 'SUM',
+       ROUND(AVG(exam_scores.marks),2) AS 'AVGR',
+       ROUND(SUM(exam_scores.marks)/COUNT(students.id),2) AS 'AVGRA'
 FROM academic_years
          INNER JOIN batches ON academic_years.id = batches.academic_year_id
          INNER JOIN courses ON batches.course_id = courses.id
@@ -122,6 +127,11 @@ if ($result->num_rows > 0) {
                 echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
             else                                                          // Weak
                 echo "<td class='w3-container w3-text-red w3-hover-red'>" . $row["MoreOrEqual65P"] . "%</td>";
+        elseif ($view == 'Average')
+            echo "<td class='w3-container'><div>Without absents<br>" .
+                    $row["SUM"] . '/' . $row["Total"] . ' = ' . $row["AVGR"] . "</div><br><div>With absents<br>".
+                    $row["SUM"] . '/' . $row["TotalWithAbsent"] . ' = ' . $row["AVGRA"] .
+                "</div></td>";
         elseif ($view == 'Attainment - Percentage')
             if ($row["MoreOrEqual75P"] >= 75)                                    // Outstanding
                 echo "<td class='w3-container w3-text-green w3-hover-green'>Outstanding - (75%) " . $row["MoreOrEqual75P"] . "%</td>";
