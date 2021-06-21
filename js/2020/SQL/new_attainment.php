@@ -9,6 +9,7 @@ $nationality = $_REQUEST["Nationality"];
 $student = $_REQUEST["Student"];
 $view = $_REQUEST["View"];
 //echo $view;
+//echo $nationality + '<br>' + $gender;
 
 $YearsA = array("2016 - 2017", "2017 - 2018", "2018 - 2019", "2019 - 2020", "2020 - 2021");
 $TermsA = array();
@@ -56,7 +57,8 @@ FROM academic_years
          INNER JOIN subjects ON exams.subject_id = subjects.id
          INNER JOIN exam_scores ON exams.id = exam_scores.exam_id
          INNER JOIN students ON exam_scores.student_id = students.id
-         LEFT JOIN student_categories ON students.student_category_id = student_categories.id 
+         INNER JOIN countries ON students.nationality_id = countries.id
+         LEFT JOIN student_categories ON students.student_category_id = student_categories.id
          WHERE ";
 
 for ($i = 0; $i < 5; $i++) {
@@ -64,6 +66,16 @@ for ($i = 0; $i < 5; $i++) {
     if ($i < 4)
         $sql .= " OR ";
 }
+
+if ($nationality == 'Citizens')
+    $sql .= " AND countries.name = 'United Arab Emirates'";
+elseif ($nationality == 'Expats')
+    $sql .= " AND countries.name != 'United Arab Emirates'";
+
+if ($gender == 'Boys')
+    $sql .= " AND students.gender = 'm' ";
+elseif ($gender == 'Girls')
+    $sql .= " AND students.gender = 'f' ";
 
 $sql .= "
 GROUP BY year, subject_code
