@@ -62,8 +62,11 @@ if (!isset($_SESSION['login'])) {
         <button class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge'
                 onclick="PrintTable()"></button>
         <button id='pp' hidden class='w3-button w3-ripple w3-hover-green w3-round-xxlarge fa fa-print w3-xlarge'
-                onclick="printJS({documentTitle: 'Grade/Student Progress Analysis - Al Sanawbar School', printable: 'divPrint',type: 'html',showModal:true,
-                        ignoreElements: ['term1','term2','term3','term4','term5','grade1','grade2','grade3','grade4','grade5'],css: 'styles/advancedPDF.css'})">
+                onclick="printJS({
+                documentTitle: 'Progress Analysis Attainment Report - Al Sanawbar School',
+                printable: 'divPrint',type: 'html', showModal:true,
+                ignoreElements: ['term1','term2','term3','term4','term5','grade1','grade2','grade3','grade4','grade5'],
+                css: 'styles/advancedPDF.css'})">
         </button>
     </th>
     </table>

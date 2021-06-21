@@ -8,7 +8,7 @@ $gender = $_REQUEST["Gender"];
 $nationality = $_REQUEST["Nationality"];
 $student = $_REQUEST["Student"];
 $view = $_REQUEST["View"];
-echo $view;
+//echo $view;
 
 $YearsA = array("2016 - 2017", "2017 - 2018", "2018 - 2019", "2019 - 2020", "2020 - 2021");
 $TermsA = array();
@@ -114,6 +114,7 @@ if ($result->num_rows > 0) {
                 echo "<td class='w3-container w3-text-gray w3-hover-gray'>-</td>";
             else                                                          // Weak
                 echo "<td class='w3-container w3-text-red w3-hover-red'>Weak</td>";
+
         elseif ($view == 'Percentage')
             if ($row["MoreOrEqual75P"] >= 75)                                    // Outstanding
                 echo "<td class='w3-container w3-text-green w3-hover-green'>" . $row["MoreOrEqual75P"] . "%</td>";

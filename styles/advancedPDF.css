@@ -1,13 +1,13 @@
 body {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 13px;
+  /*font-size: 13px;*/
   /*background-color: red;*/
 }
 
 #divPrint {
   margin: auto;
   width: 100%;
-  /*background-color: red;*/
+  font-size: 1rem;
 }
 
 #PageTitle {
@@ -35,25 +35,21 @@ body {
 }
 
 
-#useroptions tr:nth-child(even){background-color: #f2f2f2;}
-
-#useroptions tr:hover {background-color: #ddd;}
-
 #useroptions {
+  border: 1px solid #ddd;
   border-collapse: collapse;
-  width: 50%;
-  /*background-color: yellow;*/
+  font-size: 0.8rem;
 }
 
 #useroptions td, #useroptions th {
   border: 1px solid #ddd;
-  padding: 1px;
   text-align: center;
+  horiz-align: center;
+  /*padding: 1px;*/
 }
 
 select input{
   all: none;
-
 }
 
 

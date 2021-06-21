@@ -44,17 +44,17 @@
         <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navAdvanced" value="Attainment Report" type="submit">
     </form>   
 
-    <form name="frm" style="float: right" action="attainment.php" method="POST">
-        <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navAttainment" value="Attainment Analysis" type="submit">
-    </form>   
+<!--    <form name="frm" style="float: right" action="attainment.php" method="POST">-->
+<!--        <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navAttainment" value="Attainment Analysis" type="submit">-->
+<!--    </form>   -->
 
-    <form name="frm" style="float: right" action="subject_wise.php" method="POST">
-        <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navSubjectWise" value="Subject Wise" type="submit">
-    </form>  
+<!--    <form name="frm" style="float: right" action="subject_wise.php" method="POST">-->
+<!--        <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navSubjectWise" value="Subject Wise" type="submit">-->
+<!--    </form>  -->
 
-    <form name="frm" style="float: right" action="statistics.php" method="POST">
-        <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navStatistics" value="Statistics" type="submit">
-    </form>
+<!--    <form name="frm" style="float: right" action="statistics.php" method="POST">-->
+<!--        <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navStatistics" value="Statistics" type="submit">-->
+<!--    </form>-->
 
     <form name="frm" style="float: right" action="grade_performance.php" method="POST">
         <input class="w3-bar-item w3-button w3-hide-small w3-hover-white w3-mobile" id="navGradePerformance" value="Grade Performance" type="submit">
