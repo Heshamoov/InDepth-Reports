@@ -17,4 +17,5 @@ $result = $conn->query($sql);
 while ($row = mysqli_fetch_array($result))
     echo $row['name'] . "\t";
 
+echo "Final Mark\t";
 $conn->close();
