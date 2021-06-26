@@ -26,7 +26,7 @@ if ($_REQUEST["Grade3"] != "") $GradesA[2] = $_REQUEST["Grade3"];
 if ($_REQUEST["Grade4"] != "") $GradesA[3] = $_REQUEST["Grade4"];
 if ($_REQUEST["Grade5"] != "") $GradesA[4] = $_REQUEST["Grade5"];
 
-if ($_REQUEST["Term5"] == 'Final Mark' OR $_REQUEST["Term4"] == 'Final Mark') {
+if ($_REQUEST["Term5"] == 'Final Mark' OR $_REQUEST["Term4"] == 'Final Mark' OR $_REQUEST["Term3"] == 'Final Mark') {
         $conditions = '';
     if ($nationality == 'Citizens')
         $conditions .= " AND countries.name = 'United Arab Emirates'";
