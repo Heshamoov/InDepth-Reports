@@ -26,150 +26,287 @@ if ($_REQUEST["Grade3"] != "") $GradesA[2] = $_REQUEST["Grade3"];
 if ($_REQUEST["Grade4"] != "") $GradesA[3] = $_REQUEST["Grade4"];
 if ($_REQUEST["Grade5"] != "") $GradesA[4] = $_REQUEST["Grade5"];
 
-if ($_REQUEST["Term5"] == 'Final Mark') {
-
+if ($_REQUEST["Term5"] == 'Final Mark' OR $_REQUEST["Term4"] == 'Final Mark') {
+        $conditions = '';
     if ($nationality == 'Citizens')
-        $sql .= " AND countries.name = 'United Arab Emirates'";
+        $conditions .= " AND countries.name = 'United Arab Emirates'";
     elseif ($nationality == 'Expats')
-        $sql .= " AND countries.name != 'United Arab Emirates'";
+        $conditions .= " AND countries.name != 'United Arab Emirates'";
 
     if ($gender == 'Boys')
-        $sql .= " AND students.gender = 'm' ";
+        $conditions .= " AND s.gender = 'm' ";
     elseif ($gender == 'Girls')
-        $sql .= " AND students.gender = 'f' ";
+        $conditions .= " AND s.gender = 'f' ";
 
     $sql = "
-        SELECT TE1.year,TE1.term,TE1.subject,TE1.mark,CE1.year,CE1.term,CE1.subject,CE1.mark, TE1.studentsCount,
-                ROUND(((IF(TE1.mark IS NULL,0, TE1.mark) * 0.3) / TE1.studentsCount) + ((IF(CE1.mark IS NULL, 0, CE1.mark) * 0.7) / CE1.studentsCount), 0) T1FinalMark,
+    SELECT TE1.year year, TE1.term,TE1.grade grade,TE1.subject subject,TE1.sCount,TE1.mark,
+       CE1.term,CE1.grade,CE1.subject,CE1.sCount,CE1.mark,
 
-                TE2.year,TE2.term,TE2.subject,TE2.mark,CE2.year,CE2.term,CE2.subject,CE2.mark, TE2.studentsCount,
-                ROUND(((IF(TE2.mark IS NULL,0, TE2.mark) * 0.3) / TE2.studentsCount) + ((IF(CE2.mark IS NULL, 0, CE2.mark) * 0.7) / CE2.studentsCount), 0) T2FinalMark,
+       TE2.term,TE2.grade,TE2.subject,TE2.sCount,TE2.mark,
+       CE2.term,CE2.grade,CE2.subject,CE2.sCount,CE2.mark,
 
-                TE3.year,TE3.term,TE3.subject,TE3.mark,CE3.year,CE3.term,CE3.subject,CE3.mark, TE3.studentsCount,
-                ROUND(((IF(TE3.mark IS NULL,0, TE3.mark) * 0.3) / TE3.studentsCount) + ((IF(CE3.mark IS NULL, 0, CE3.mark) * 0.7) / CE3.studentsCount), 0) T3FinalMark
-        FROM (
-                (   
-                    SELECT academic_years.name year, exam_groups.name term, subjects.code subject, SUM(marks) mark, count(distinct (student_id)) studentsCount
-                     FROM academic_years
-                        INNER JOIN batches ON academic_years.id = batches.academic_year_id
-                        INNER JOIN courses ON batches.course_id = courses.id
-                        INNER JOIN exam_groups ON batches.id = exam_groups.batch_id
-                        INNER JOIN exams ON exam_groups.id = exams.exam_group_id
-                        INNER JOIN subjects ON exams.subject_id = subjects.id
-                        INNER JOIN exam_scores ON exams.id = exam_scores.exam_id
-                     WHERE
-                           (academic_years.name = '2016 - 2017' AND courses.course_name = '$GradesA[0]' AND exam_groups.name like '%Term 1')
-                        OR (academic_years.name = '2017 - 2018' AND courses.course_name = '$GradesA[1]' AND exam_groups.name like '%Term 1')
-                        OR (academic_years.name = '2018 - 2019' AND courses.course_name = '$GradesA[2]' AND exam_groups.name like '%Term 1')
-                        OR (academic_years.name = '2019 - 2020' AND courses.course_name = '$GradesA[3]' AND exam_groups.name like '%Term 1')
-                        OR (academic_years.name = '2020 - 2021' AND courses.course_name = '$GradesA[4]' AND exam_groups.name like '%Term 1')
-                    GROUP BY year, term, subject
-                    ORDER BY year, subject, term
-                ) TE1
+       TE3.term,TE3.grade,TE3.subject,TE3.sCount,TE3.mark,
+       CE3.term,CE3.grade,CE3.subject,CE3.sCount,CE3.mark,
+       TE1.sCount Total, TE1.sCount 'TotalWithAbsent',
+       
+       ROUND(((IF(TE1.mark IS NULL, 0, TE1.mark * 0.3) + IF(CE1.mark IS NULL, 0, CE1.mark * 0.7)) / (IF(TE1.sCount IS NULL, TE2.sCount, TE1.sCount))) * 0.33 +
+             ((IF(TE2.mark IS NULL, 0, TE2.mark * 0.3) + IF(CE2.mark IS NULL, 0, CE2.mark * 0.7)) / (IF(TE2.sCount IS NULL, TE1.sCount, TE2.sCount))) * 0.33 +
+             ((IF(TE3.mark IS NULL, 0, TE3.mark * 0.3) + IF(CE3.mark IS NULL, 0, CE3.mark * 0.7)) / (IF(TE3.sCount IS NULL, TE1.sCount, TE3.sCount))) * 0.34,
+             0)                           FinalMark,
+       
+       ROUND(
+                   (
+                           IF(TE1.MoreOrEqual75P IS NULL, 0, TE1.MoreOrEqual75P) +
+                           IF(CE1.MoreOrEqual75P IS NULL, 0, CE1.MoreOrEqual75P) +
+                           IF(TE2.MoreOrEqual75P IS NULL, 0, TE2.MoreOrEqual75P) +
+                           IF(CE2.MoreOrEqual75P IS NULL, 0, CE2.MoreOrEqual75P) +
+                           IF(TE3.MoreOrEqual75P IS NULL, 0, TE3.MoreOrEqual75P) +
+                           IF(CE3.MoreOrEqual75P IS NULL, 0, CE3.MoreOrEqual75P)
+                       ) / 6
+           , 0)    MoreOrEqual75P,
 
-        LEFT JOIN
-                (   
-                    SELECT academic_years.name year, exam_groups.name term, subjects.code subject, SUM(marks) mark, count(distinct (student_id)) studentsCount
-                     FROM academic_years
-                        INNER JOIN batches ON academic_years.id = batches.academic_year_id
-                        INNER JOIN courses ON batches.course_id = courses.id
-                        INNER JOIN exam_groups ON batches.id = exam_groups.batch_id
-                        INNER JOIN exams ON exam_groups.id = exams.exam_group_id
-                        INNER JOIN subjects ON exams.subject_id = subjects.id
-                        INNER JOIN exam_scores ON exams.id = exam_scores.exam_id
-                     WHERE
-                           (academic_years.name = '2016 - 2017' AND courses.course_name = '$GradesA[0]' AND exam_groups.name like '%Term 1 - Class Evaluation%')
-                        OR (academic_years.name = '2017 - 2018' AND courses.course_name = '$GradesA[1]' AND exam_groups.name like '%Term 1 - Class Evaluation%')
-                        OR (academic_years.name = '2018 - 2019' AND courses.course_name = '$GradesA[2]' AND exam_groups.name like '%Term 1 - Class Evaluation%')
-                        OR (academic_years.name = '2019 - 2020' AND courses.course_name = '$GradesA[3]' AND exam_groups.name like '%Term 1 - Class Evaluation%')
-                        OR (academic_years.name = '2020 - 2021' AND courses.course_name = '$GradesA[4]' AND exam_groups.name like '%Term 1 - Class Evaluation%')
-                    GROUP BY year, term, subject
-                    ORDER BY year, subject, term
-                ) CE1 ON TE1.subject = CE1.subject AND TE1.year = CE1.year
+       ROUND(
+                   (
+                           IF(TE1.MoreOrEqual65P IS NULL, 0, TE1.MoreOrEqual65P) +
+                           IF(CE1.MoreOrEqual65P IS NULL, 0, CE1.MoreOrEqual65P) +
+                           IF(TE2.MoreOrEqual65P IS NULL, 0, TE2.MoreOrEqual65P) +
+                           IF(CE2.MoreOrEqual65P IS NULL, 0, CE2.MoreOrEqual65P) +
+                           IF(TE3.MoreOrEqual65P IS NULL, 0, TE3.MoreOrEqual65P) +
+                           IF(CE3.MoreOrEqual65P IS NULL, 0, CE3.MoreOrEqual65P)
+                       ) / 6
+           , 0)    MoreOrEqual65P,
+      
+    TE1.MoreOrEqual65,TE1.MoreOrEqual75,
+    CE1.MoreOrEqual65,CE1.MoreOrEqual75,
+    TE2.MoreOrEqual65,TE2.MoreOrEqual75,
+    CE2.MoreOrEqual65,CE2.MoreOrEqual75,
+    TE3.MoreOrEqual65,TE3.MoreOrEqual75,
+    CE3.MoreOrEqual65,CE3.MoreOrEqual75
 
-        LEFT JOIN
-                (
-                    SELECT academic_years.name year, exam_groups.name term, subjects.code subject, SUM(marks) mark, count(distinct (student_id)) studentsCount
-                     FROM academic_years
-                        INNER JOIN batches ON academic_years.id = batches.academic_year_id
-                        INNER JOIN courses ON batches.course_id = courses.id
-                        INNER JOIN exam_groups ON batches.id = exam_groups.batch_id
-                        INNER JOIN exams ON exam_groups.id = exams.exam_group_id
-                        INNER JOIN subjects ON exams.subject_id = subjects.id
-                        INNER JOIN exam_scores ON exams.id = exam_scores.exam_id
-                     WHERE
-                           (academic_years.name = '2016 - 2017' AND courses.course_name = '$GradesA[0]' AND exam_groups.name like '%Term 2')
-                        OR (academic_years.name = '2017 - 2018' AND courses.course_name = '$GradesA[1]' AND exam_groups.name like '%Term 2')
-                        OR (academic_years.name = '2018 - 2019' AND courses.course_name = '$GradesA[2]' AND exam_groups.name like '%Term 2')
-                        OR (academic_years.name = '2019 - 2020' AND courses.course_name = '$GradesA[3]' AND exam_groups.name like '%Term 2')
-                        OR (academic_years.name = '2020 - 2021' AND courses.course_name = '$GradesA[4]' AND exam_groups.name like '%Term 2')
-                    GROUP BY year, term, subject
-                    ORDER BY year, subject, term
-                ) TE2 ON TE1.subject = TE2.subject AND TE1.year = TE2.year
+FROM (
+      (
+          SELECT ay.name                            year,
+                 eg.name                            term,
+                 s.id                               sid,
+                 s.admission_no,
+                 concat(c.course_name, '-', b.name) grade,
+                 sub.code                           subject,
+                 sub.id                             subid,
+                 es.id                              mark_id,
+                 SUM(marks)                         mark,
+                 COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL))                        sCount,
 
-    LEFT JOIN
-                (
-                    SELECT academic_years.name year, exam_groups.name term, subjects.code subject, SUM(marks) mark, count(distinct (student_id)) studentsCount
-                     FROM academic_years
-                        INNER JOIN batches ON academic_years.id = batches.academic_year_id
-                        INNER JOIN courses ON batches.course_id = courses.id
-                        INNER JOIN exam_groups ON batches.id = exam_groups.batch_id
-                        INNER JOIN exams ON exam_groups.id = exams.exam_group_id
-                        INNER JOIN subjects ON exams.subject_id = subjects.id
-                        INNER JOIN exam_scores ON exams.id = exam_scores.exam_id
-                     WHERE
-                           (academic_years.name = '2016 - 2017' AND courses.course_name = '$GradesA[0]' AND exam_groups.name like '%Term 2 - Class Evaluation%')
-                        OR (academic_years.name = '2017 - 2018' AND courses.course_name = '$GradesA[1]' AND exam_groups.name like '%Term 2 - Class Evaluation%')
-                        OR (academic_years.name = '2018 - 2019' AND courses.course_name = '$GradesA[2]' AND exam_groups.name like '%Term 2 - Class Evaluation%')
-                        OR (academic_years.name = '2019 - 2020' AND courses.course_name = '$GradesA[3]' AND exam_groups.name like '%Term 2 - Class Evaluation%')
-                        OR (academic_years.name = '2020 - 2021' AND courses.course_name = '$GradesA[4]' AND exam_groups.name like '%Term 2 - Class Evaluation%')
-                    GROUP BY year, term, subject
-                    ORDER BY year, subject, term
-                ) CE2 ON TE2.subject = CE2.subject AND TE2.year = CE2.year
+COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual65',
+ROUND(COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
 
-    LEFT JOIN
-                (
-                    SELECT academic_years.name year, exam_groups.name term, subjects.code subject, SUM(marks) mark, count(distinct (student_id)) studentsCount
-                     FROM academic_years
-                        INNER JOIN batches ON academic_years.id = batches.academic_year_id
-                        INNER JOIN courses ON batches.course_id = courses.id
-                        INNER JOIN exam_groups ON batches.id = exam_groups.batch_id
-                        INNER JOIN exams ON exam_groups.id = exams.exam_group_id
-                        INNER JOIN subjects ON exams.subject_id = subjects.id
-                        INNER JOIN exam_scores ON exams.id = exam_scores.exam_id
-                     WHERE
-                           (academic_years.name = '2016 - 2017' AND courses.course_name = '$GradesA[0]' AND exam_groups.name like '%Term 3')
-                        OR (academic_years.name = '2017 - 2018' AND courses.course_name = '$GradesA[1]' AND exam_groups.name like '%Term 3')
-                        OR (academic_years.name = '2018 - 2019' AND courses.course_name = '$GradesA[2]' AND exam_groups.name like '%Term 3')
-                        OR (academic_years.name = '2019 - 2020' AND courses.course_name = '$GradesA[3]' AND exam_groups.name like '%Term 3')
-                        OR (academic_years.name = '2020 - 2021' AND courses.course_name = '$GradesA[4]' AND exam_groups.name like '%Term 3')
-                    GROUP BY year, term, subject
-                    ORDER BY year, subject, term
-                ) TE3 ON TE1.subject = TE3.subject AND TE1.year = TE3.year
+COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual75',
+ROUND(COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P'
 
-    LEFT JOIN
-                (
-                    SELECT academic_years.name year, exam_groups.name term, subjects.code subject, SUM(marks) mark, count(distinct (student_id)) studentsCount
-                     FROM academic_years
-                        INNER JOIN batches ON academic_years.id = batches.academic_year_id
-                        INNER JOIN courses ON batches.course_id = courses.id
-                        INNER JOIN exam_groups ON batches.id = exam_groups.batch_id
-                        INNER JOIN exams ON exam_groups.id = exams.exam_group_id
-                        INNER JOIN subjects ON exams.subject_id = subjects.id
-                        INNER JOIN exam_scores ON exams.id = exam_scores.exam_id
-                     WHERE
-                           (academic_years.name = '2016 - 2017' AND courses.course_name = '$GradesA[0]' AND exam_groups.name like '%Term 3 - Class Evaluation%')
-                        OR (academic_years.name = '2017 - 2018' AND courses.course_name = '$GradesA[1]' AND exam_groups.name like '%Term 3 - Class Evaluation%')
-                        OR (academic_years.name = '2018 - 2019' AND courses.course_name = '$GradesA[2]' AND exam_groups.name like '%Term 3 - Class Evaluation%')
-                        OR (academic_years.name = '2019 - 2020' AND courses.course_name = '$GradesA[3]' AND exam_groups.name like '%Term 3 - Class Evaluation%')
-                        OR (academic_years.name = '2020 - 2021' AND courses.course_name = '$GradesA[4]' AND exam_groups.name like '%Term 3 - Class Evaluation%')
-                    GROUP BY year, term, subject
-                    ORDER BY year, subject, term
-                ) CE3 ON TE3.subject = CE3.subject AND TE3.year = CE3.year
-    )";
+          FROM academic_years ay
+                   INNER JOIN batches b ON ay.id = b.academic_year_id
+                   INNER JOIN courses c ON b.course_id = c.id
+                   INNER JOIN exam_groups eg ON b.id = eg.batch_id
+                   INNER JOIN exams e ON eg.id = e.exam_group_id
+                   INNER JOIN subjects sub ON e.subject_id = sub.id
+                   INNER JOIN exam_scores es ON e.id = es.exam_id
+                   INNER JOIN students s ON es.student_id = s.id
+                   INNER JOIN countries ON s.nationality_id = countries.id
+                   LEFT JOIN student_categories sc ON s.student_category_id = sc.id
+          WHERE
+          (ay.name = '2018 - 2019' AND c.course_name = '$GradesA[2]' AND 
+            (LOWER(REPLACE(eg.name, ' ','')) = REPLACE('Term1-2019',' ','')) $conditions) OR
+          (ay.name = '2019 - 2020' AND c.course_name = '$GradesA[3]' AND eg.name like '%Term 1' $conditions) OR
+          (ay.name = '2020 - 2021' AND c.course_name = '$GradesA[4]' AND eg.name like '%Term 1' $conditions)
+          GROUP BY year, subject
+      ) TE1
+
+         LEFT JOIN
+     (
+         SELECT ay.name                            year,
+                eg.name                            term,
+                s.id                               sid,
+                s.admission_no,
+                concat(c.course_name, '-', b.name) grade,
+                sub.code                           subject,
+                sub.id                             subid,
+                SUM(marks)                         mark,
+                COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL))                        sCount,
+
+                COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual65',
+                ROUND(COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
+
+                COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual75',
+                ROUND(COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P'
+
+         FROM academic_years ay
+                  INNER JOIN batches b ON ay.id = b.academic_year_id
+                  INNER JOIN courses c ON b.course_id = c.id
+                  INNER JOIN exam_groups eg ON b.id = eg.batch_id
+                  INNER JOIN exams e ON eg.id = e.exam_group_id
+                  INNER JOIN subjects sub ON e.subject_id = sub.id
+                  INNER JOIN exam_scores es ON e.id = es.exam_id
+                  INNER JOIN students s ON es.student_id = s.id
+                  INNER JOIN countries ON s.nationality_id = countries.id
+                  LEFT JOIN student_categories sc ON s.student_category_id = sc.id
+         WHERE
+         (ay.name = '2018 - 2019' AND c.course_name = '$GradesA[2]' AND 
+            (LOWER(REPLACE(eg.name, ' ','')) = REPLACE('Assessment 1-T1-2019',' ','')) $conditions) OR
+         (ay.name = '2019 - 2020' AND c.course_name = '$GradesA[3]' AND eg.name like '%Term 1 - Class Evaluation' $conditions) OR
+         (ay.name = '2020 - 2021' AND c.course_name = '$GradesA[4]' AND eg.name like '%Term 1 - Class Evaluation' $conditions)
+         GROUP BY year, subject
+     ) CE1 ON TE1.subject = CE1.subject AND TE1.year = CE1.year
+
+         LEFT JOIN (
+    SELECT ay.name                            year,
+           eg.name                            term,
+           s.id                               sid,
+           s.admission_no,
+           concat(c.course_name, '-', b.name) grade,
+           sub.code                           subject,
+           sub.id                             subid,
+           es.id                              mark_id,
+           SUM(marks)                         mark,
+           COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL))                        sCount,
+
+           COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual65',
+           ROUND(COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
+
+           COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual75',
+           ROUND(COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P'
+
+    FROM academic_years ay
+             INNER JOIN batches b ON ay.id = b.academic_year_id
+             INNER JOIN courses c ON b.course_id = c.id
+             INNER JOIN exam_groups eg ON b.id = eg.batch_id
+             INNER JOIN exams e ON eg.id = e.exam_group_id
+             INNER JOIN subjects sub ON e.subject_id = sub.id
+             INNER JOIN exam_scores es ON e.id = es.exam_id
+             INNER JOIN students s ON es.student_id = s.id
+             INNER JOIN countries ON s.nationality_id = countries.id
+             LEFT JOIN student_categories sc ON s.student_category_id = sc.id
+    WHERE 
+    (ay.name = '2018 - 2019' AND c.course_name = '$GradesA[2]' AND 
+        (LOWER(REPLACE(eg.name, ' ','')) = REPLACE('Term 2 exam 2019',' ','')) $conditions) OR
+    (ay.name = '2019 - 2020' AND c.course_name = '$GradesA[3]' AND eg.name like '%Term 2' $conditions) OR
+    (ay.name = '2020 - 2021' AND c.course_name = '$GradesA[4]' AND eg.name like '%Term 2' $conditions)
+    GROUP BY year, subject
+) TE2 ON TE1.subject = TE2.subject AND TE1.year = TE2.year
+
+         LEFT JOIN
+     (
+         SELECT ay.name                            year,
+                eg.name                            term,
+                s.id                               sid,
+                s.admission_no,
+                concat(c.course_name, '-', b.name) grade,
+                sub.code                           subject,
+                sub.id                             subid,
+                SUM(marks)                         mark,
+                COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL))                        sCount,
+
+                COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual65',
+                ROUND(COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
+
+                COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual75',
+                ROUND(COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P'
 
 
-    echo $sql;
+         FROM academic_years ay
+                  INNER JOIN batches b ON ay.id = b.academic_year_id
+                  INNER JOIN courses c ON b.course_id = c.id
+                  INNER JOIN exam_groups eg ON b.id = eg.batch_id
+                  INNER JOIN exams e ON eg.id = e.exam_group_id
+                  INNER JOIN subjects sub ON e.subject_id = sub.id
+                  INNER JOIN exam_scores es ON e.id = es.exam_id
+                  INNER JOIN students s ON es.student_id = s.id
+                  INNER JOIN countries ON s.nationality_id = countries.id
+                  LEFT JOIN student_categories sc ON s.student_category_id = sc.id
+         WHERE 
+         (ay.name = '2018 - 2019' AND c.course_name = '$GradesA[2]' AND 
+            (LOWER(REPLACE(eg.name, ' ','')) = LOWER(REPLACE('CLASS EVALUATION 2-2019',' ',''))) $conditions) OR
+         (ay.name = '2019 - 2020' AND c.course_name = '$GradesA[3]' AND eg.name like '%Term 2 - Class Evaluation' $conditions) OR
+         (ay.name = '2020 - 2021' AND c.course_name = '$GradesA[4]' AND eg.name like '%Term 2 - Class Evaluation' $conditions)
+         GROUP BY year, subject
+     ) CE2 ON TE1.subject = CE2.subject AND TE1.year = CE2.year
+
+    LEFT JOIN (
+    SELECT ay.name                            year,
+           eg.name                            term,
+           s.id                               sid,
+           s.admission_no,
+           concat(c.course_name, '-', b.name) grade,
+           sub.code                           subject,
+           sub.id                             subid,
+           es.id                              mark_id,
+           SUM(marks)                         mark,
+           COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL))                        sCount,
+
+           COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual65',
+           ROUND(COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
+
+           COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual75',
+           ROUND(COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P'
+
+    FROM academic_years ay
+             INNER JOIN batches b ON ay.id = b.academic_year_id
+             INNER JOIN courses c ON b.course_id = c.id
+             INNER JOIN exam_groups eg ON b.id = eg.batch_id
+             INNER JOIN exams e ON eg.id = e.exam_group_id
+             INNER JOIN subjects sub ON e.subject_id = sub.id
+             INNER JOIN exam_scores es ON e.id = es.exam_id
+             INNER JOIN students s ON es.student_id = s.id
+             INNER JOIN countries ON s.nationality_id = countries.id
+             LEFT JOIN student_categories sc ON s.student_category_id = sc.id
+    WHERE 
+    (ay.name = '2018 - 2019' AND c.course_name = '$GradesA[2]' AND 
+        (LOWER(REPLACE(eg.name, ' ','')) = LOWER(REPLACE('Term 3 Exam 2019',' ',''))) $conditions) OR
+    (ay.name = '2019 - 2020' AND c.course_name = '$GradesA[3]' AND eg.name like '%Term 3' $conditions) OR
+    (ay.name = '2020 - 2021' AND c.course_name = '$GradesA[4]' AND eg.name like '%Term 3' $conditions)
+    GROUP BY year, subject
+) TE3 ON TE1.subject = TE3.subject AND TE1.year = TE3.year
+
+         LEFT JOIN
+     (
+         SELECT ay.name                            year,
+                eg.name                            term,
+                s.id                               sid,
+                s.admission_no,
+                concat(c.course_name, '-', b.name) grade,
+                sub.code                           subject,
+                sub.id                             subid,
+                SUM(marks)                         mark,
+                COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL))                        sCount,
+
+                COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual65',
+                ROUND(COUNT(IF(es.marks >= 65 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual65P',
+
+                COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) AS 'MoreOrEqual75',
+                ROUND(COUNT(IF(es.marks >= 75 AND es.marks IS NOT NULL, 1, NULL)) / COUNT(IF(es.marks IS NOT NULL AND es.marks > 0, 1, NULL)) * 100,0) AS 'MoreOrEqual75P'
+
+
+         FROM academic_years ay
+                  INNER JOIN batches b ON ay.id = b.academic_year_id
+                  INNER JOIN courses c ON b.course_id = c.id
+                  INNER JOIN exam_groups eg ON b.id = eg.batch_id
+                  INNER JOIN exams e ON eg.id = e.exam_group_id
+                  INNER JOIN subjects sub ON e.subject_id = sub.id
+                  INNER JOIN exam_scores es ON e.id = es.exam_id
+                  INNER JOIN students s ON es.student_id = s.id
+                  INNER JOIN countries ON s.nationality_id = countries.id
+                  LEFT JOIN student_categories sc ON s.student_category_id = sc.id
+         WHERE 
+         (ay.name = '2018 - 2019' AND c.course_name = '$GradesA[2]' AND 
+            (LOWER(REPLACE(eg.name, ' ','')) = LOWER(REPLACE('C.E 3',' ',''))) $conditions) OR
+         (ay.name = '2019 - 2020' AND c.course_name = '$GradesA[3]' AND eg.name like '%Term 3 - Class Evaluation' $conditions) OR
+         (ay.name = '2020 - 2021' AND c.course_name = '$GradesA[4]' AND eg.name like '%Term 3 - Class Evaluation' $conditions)
+         GROUP BY year, subject
+     ) CE3 ON TE1.subject = CE3.subject AND TE1.year = CE3.year
+         )
+         ORDER BY TE1.subject, TE1.year
+       ";
+
+
+//    echo $sql;
 } else {
 
     $sql = "
